@@ -26,22 +26,22 @@
 
 #include "config.h"
 
-    double jetmin = 0, jetmax = 50;
-    double jetplotmin = 2, jetplotmax = 50;
-    bool isEta = 0;
-    double jetEta = 0.4;
+    Double_t jetmin = 0, jetmax = 50;
+    Double_t jetplotmin = 2, jetplotmax = 50;
+    Bool_t isEta = 0;
+    Double_t jetEta = 0.4;
 
-    bool savePlots = 1;
-    bool bEff = 0;
-    bool isptcut = 1;
-    bool isdetails = 0;
+    Bool_t savePlots = 1;
+    Bool_t bEff = 0;
+    Bool_t isptcut = 1;
+    Bool_t isdetails = 0;
 
     TString fReflFilename;
     TString plotsDir;
     // mass fit params
 
     //------- efficiency
-    double *efficiency = 0x0;
+    Double_t *efficiency = nullptr;
 
     TH1F* hmass[fptbinsDN];
     TH1F *hmass_l[fptbinsDN];
@@ -72,10 +72,12 @@
     TH3D* hInvMassptD;
     TH1F* hReflRS;
 
-    setHistoDetails(TH1 *h, Color_t color, Style_t Mstyle, Width_t width);
+    void setHistoDetails(TH1 *h, int scale, Color_t color, Style_t Mstyle, Size_t size = 0.9f, Width_t width=2);
     Bool_t rawJetSpectra(TString outdir, TString prod);
     void  saveSpectraPlots(TString outdir,TString prod);
     void  saveFitParams(TString outdir,TString prod);
-    Bool_t SetReflection(AliHFInvMassFitter* &fitter, Int_t iBin, Float_t fLeftFitRange, Float_t fRightFitRange,Float_t &RS);
+    Bool_t SetReflection(AliHFInvMassFitter* &fitter, Float_t fLeftFitRange, Float_t fRightFitRange, Float_t &RS, Int_t iBin);
+    Bool_t SetReflection(AliHFInvMassFitter* &fitter, Float_t fLeftFitRange, Float_t fRightFitRange, Float_t &RS, Int_t ptmin, Int_t ptmax);
+    void SaveCanvas(TCanvas *c, TString name = "tmp");
 
 #endif
