@@ -1,6 +1,5 @@
 #if !defined (__CINT__) || defined (__CLING__)
 #include "AliAnalysisTaskFlavourJetCorrelationsQA.h"
-#include "AliAnalysisTaskSEDmesonsFilterCJQA.h"
 #include "AliAnalysisManager.h"
 #include "TFile.h"
 #include "AliRDHFCutsD0toKpi.h"
@@ -63,7 +62,8 @@ AliAnalysisTaskFlavourJetCorrelationsQA *AddTaskDFilterAndCorrelationsQA(
   }
   
   if (!analysiscuts) { // mm let's see if everything is ok
-    AliFatal("Specific AliRDHFCuts not found");
+    //AliFatal("Specific AliRDHFCuts not found");
+     std::cout<<"Specific AliRDHFCuts not found"<<std::endl;
     return nullptr;
   } 
 
@@ -101,7 +101,8 @@ AliAnalysisTaskFlavourJetCorrelationsQA *AddTaskDFilterAndCorrelationsQA(
     
   if(!jetArrBkgname.IsNull())
   {
-      AliParticleContainer *trackContBkg  = taskCorr->AddParticleContainer(trackArrBkgname);
+     // AliParticleContainer *trackContBkg  = taskCorr->AddParticleContainer(trackArrBkgname); //is this change OK?
+      AliMCParticleContainer *trackContBkg  = taskCorr->AddMCParticleContainer(trackArrBkgname);
       if(CorrMethod == AliAnalysisTaskFlavourJetCorrelationsQA::kResponseMatrix)
       {
           trackContBkg->SelectPhysicalPrimaries(kTRUE);

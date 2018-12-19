@@ -1,6 +1,6 @@
 #if !defined (__CINT__) || defined (__CLING__)
-#include "AliVEvent.h"
 #include "AliAnalysisManager.h"
+#include "AliVEvent.h"
 #include "TROOT.h"
 #include <iostream>
 #include "AliEmcalJetTask.h"
@@ -10,9 +10,10 @@ R__ADD_INCLUDE_PATH($ALICE_ROOT)
 R__ADD_INCLUDE_PATH($ALICE_PHYSICS)
 #include "OADB/macros/AddTaskPhysicsSelection.C"
 #include "AliAnalysisTaskSEDmesonsFilterCJQA.h"
-#include "AddTaskSEDmesonsFilterCJQA.C"
 #include "PWGJE/EMCALJetTasks/macros/AddTaskEmcalJet.C"
+#include "AliAnalysisTaskFlavourJetCorrelationsQA.h"
 #include "AddTaskDFilterAndCorrelationsQA.C"
+#include "AddTaskSEDmesonsFilterCJQA.C"
 #endif
 
 void AddTasksFlavourJetMCQA(const Int_t iCandType = 1 /*0 = D0, 1=Dstar...*/,
