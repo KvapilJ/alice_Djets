@@ -139,7 +139,7 @@ void runAnalysis()
            //   std::cout<<"TUUUUUUUUUUUU"<<iCandType<<sCutFile<<bIsMC<<bIsReco<<TaskText<<std::endl;
            //   std::cout<<"TUUUUUUUUUUUU"<<param<<std::endl;
      //   AliAnalysisTaskSEDmesonsFilterCJQA *filter = reinterpret_cast<AliAnalysisTaskSEDmesonsFilterCJQA *>(sednadd.Exec(param));
-        AliAnalysisTaskSEDmesonsFilterCJQA *filter = reinterpret_cast<AliAnalysisTaskSEDmesonsFilterCJQA*>(gInterpreter->ProcessLine(Form(".x %s ((AliAnalysisTaskSEDmesonsFilterCJQA::ECandidateType)%d,\"%s\",%d,%d,\"%s\")",gSystem->ExpandPathName("AddTaskSEDmesonsFilterCJQA.C"),AliAnalysisTaskSEDmesonsFilterCJQA::kD0toKpi, "alien:///alice/cern.ch/user/b/btrzecia/pp5TeV/CutsDzero/D0toKpiCuts_pp5TeV_pPbBase.root",isRunOnMC,isReco,TaskText.Data())));
+        AliAnalysisTaskSEDmesonsFilterCJQA *filter = reinterpret_cast<AliAnalysisTaskSEDmesonsFilterCJQA*>(gInterpreter->ProcessLine(Form(".x %s ((AliAnalysisTaskSEDmesonsFilterCJQA::ECandidateType)%d,\"%s\",%d,%d,\"%s\")",gSystem->ExpandPathName("AddTaskSEDmesonsFilterCJQA.C"),AliAnalysisTaskSEDmesonsFilterCJQA::kD0toKpi, "../cuts_pp/Dzero/D0toKpiCuts_pp13TeV_pPbBase_newNorm.root",isRunOnMC,isReco,TaskText.Data())));
         filter->SetCombineDmesons(kTRUE);
         filter->SetMultipleCandidates(kTRUE); //Analyse one candidate per event
         filter->SetAnalysedCandidate(i); //Number of the candidate that will be analysed (0 = first candidate)
@@ -215,6 +215,45 @@ void runAnalysis()
     //    AliEmcalJetTask *taskFJMCDandTracks = AddTaskEmcalJet(MCDcandAndTracks,"",AliJetContainer::antikt_algorithm,aRadius[0],AliJetContainer::kFullJet,0.0,0.0,0.005,AliJetContainer::pt_scheme,AKTJet,0.,kFALSE,kFALSE);
         AliEmcalJetTask *taskFJMCDandTracks =reinterpret_cast<AliEmcalJetTask*>(gInterpreter->ProcessLine(Form(".x %s (\"%s\",\"%s\",(AliJetContainer::EJetAlgo_t)%d,%f,(AliJetContainer::EJetType_t)%d,%f,%f,%f,(AliJetContainer::ERecoScheme_t)%d,\"%s\",%f,%d,%d)",gSystem->ExpandPathName("$ALICE_PHYSICS/PWGJE/EMCALJetTasks/macros/AddTaskEmcalJet.C"),MCDcandAndTracks.Data(),"",AliJetContainer::antikt_algorithm,aRadius[0],AliJetContainer::kFullJet,0.0,0.0,0.005,AliJetContainer::pt_scheme,AKTJet.Data(),0.,kFALSE,kFALSE)));
         taskFJMCDandTracks->SelectCollisionCandidates(pSel);
+
+
+
+        AliAnalysisTaskFlavourJetCorrelationsQA *CorrTask = reinterpret_cast<AliAnalysisTaskFlavourJetCorrelationsQA*>(gInterpreter->ProcessLine(Form(".x %s ((AliAnalysisTaskFlavourJetCorrelationsQA::ECandidateType)%d,\"%s\",%d,%d,\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",%f,%f,\"%s\",%f,(AliAnalysisTaskFlavourJetCorrelationsQA::ECorrelationMethod)%d)",gSystem->ExpandPathName("AddTaskDFilterAndCorrelationsQA.C"),AliAnalysisTaskSEDmesonsFilterCJQA::kD0toKpi,
+                                                                                                                                                      "../cuts_pp/Dzero/D0toKpiCuts_pp13TeV_pPbBase_newNorm.root",
+                                                                                                                                                      isRunOnMC,
+                                                                                                                                                      isReco,
+                                                                                                                                                      TaskText.Data(),
+                                                                                                                                                      taskFJDandTracks->GetName(),
+                                                                                                                                                      DcandAndTracks.Data(),
+                                                                                                                                                      "",
+                                                                                                                                                      "",
+                                                                                                                                                      "",
+                                                                                                                                                      "",
+                                                                                                                                                      "",
+                                                                                                                                                      "",
+                                                                                                                                                      aRadius[0],
+                                                                                                                                                      0.0,
+                                                                                                                                                      "TPC",
+                                                                                                                                                      0.0,
+                                                                                                                                                      AliAnalysisTaskFlavourJetCorrelationsQA::kConstituent)));
+
+
+
+                //Flag to build the Response Matrix
+                CorrTask->SetBuildResponseMatrix(bRM);
+                CorrTask->SetBuildResponseMatrixEff(bRMEff);
+                //if to use only Pythia tracks for MC
+                CorrTask->SetUsePythia(bPythia);
+
+                //Container with generated level particles and D meson instead of the daughters
+                AliMCParticleContainer *MCpartCont  = CorrTask->AddMCParticleContainer(MCDcandAndTracks);
+                AliJetContainer *jetContMC = CorrTask->AddJetContainer(taskFJMCDandTracks->GetName(),"TPC",aRadius[0]);
+                if(jetContMC) {
+                    jetContMC->ConnectParticleContainer(MCpartCont);
+                    jetContMC->SetJetPtCut(0.0);
+                    jetContMC->SetPercAreaCut(0.0);
+                }
+
     }
 #else
 
