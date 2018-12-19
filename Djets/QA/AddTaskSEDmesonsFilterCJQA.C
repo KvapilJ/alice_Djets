@@ -5,6 +5,7 @@
 #include "TFile.h"
 #include "AliRDHFCutsD0toKpi.h"
 #include "AliRDHFCutsDStartoKpipi.h"
+#include "AliNormalizationCounter.h"
 #endif
 
 AliAnalysisTaskSEDmesonsFilterCJQA *AddTaskSEDmesonsFilterCJQA(AliAnalysisTaskSEDmesonsFilterCJQA::ECandidateType cand = AliAnalysisTaskSEDmesonsFilterCJQA::kDstartoKpipi,
