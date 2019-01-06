@@ -57,7 +57,7 @@ ClassImp(AliAnalysisTaskFlavourJetCorrelationsQA)
 //_______________________________________________________________________________
 
 AliAnalysisTaskFlavourJetCorrelationsQA::AliAnalysisTaskFlavourJetCorrelationsQA() :
-AliAnalysisTaskEmcalJet("AliAnalysisTaskFlavourJetCorrelationsQA",kTRUE),
+AliAnalysisTaskEmcalJet("AliAnalysisTaskFlavourJetCorrelations",kTRUE),
 fUseMCInfo(kTRUE),
 fUseReco(kTRUE),
 fUsePythia(kFALSE),
@@ -91,7 +91,15 @@ fhDiffSideBand(),
 fhInvMassptDbg(),
 fhPtPion(),
 fhsDphiz(),
-fResponseMatrix()
+fResponseMatrix(),
+fhPhiJetPtJet(),
+fhPhiJetTrksPtJet(),
+fhAreaJetPtJet(),
+fhJetTrksPtJet(),
+fhPhiJetPtJetD(),
+fhPhiJetTrksPtJetD(),
+fhAreaJetPtJetD(),
+fhJetTrksPtJetD()
 
 {
    //
@@ -135,13 +143,21 @@ fhDiffSideBand(),
 fhInvMassptDbg(),
 fhPtPion(),
 fhsDphiz(),
-fResponseMatrix()
+fResponseMatrix(),
+fhPhiJetPtJet(),
+fhPhiJetTrksPtJet(),
+fhAreaJetPtJet(),
+fhJetTrksPtJet(),
+fhPhiJetPtJetD(),
+fhPhiJetTrksPtJetD(),
+fhAreaJetPtJetD(),
+fhJetTrksPtJetD()
 {
    //
    // Constructor. Initialization of Inputs and Outputs
    //
 
-   Info("AliAnalysisTaskFlavourJetCorrelationsQA","Calling Constructor");
+   Info("AliAnalysisTaskFlavourJetCorrelations","Calling Constructor");
    fCuts=cuts;
    fCandidateType=candtype;
    const Int_t nptbins=fCuts->GetNPtBins();
@@ -194,7 +210,7 @@ AliAnalysisTaskFlavourJetCorrelationsQA::~AliAnalysisTaskFlavourJetCorrelationsQ
    // destructor
    //
 
-   Info("~AliAnalysisTaskFlavourJetCorrelationsQA","Calling Destructor");
+   Info("~AliAnalysisTaskFlavourJetCorrelations","Calling Destructor");
 
    delete fCuts;
 
@@ -370,7 +386,13 @@ if(fUseMCInfo && fBuildRMEff){
         fhEtaJet->Fill(jet->Eta());
         fhPtJet->Fill(jet->Pt());
 
+        fhPhiJetPtJet->Fill(jet->Pt(),jet->Phi());
+
+        fhAreaJetPtJet->Fill(jet->Pt(),jet->Area());
+
+
         Int_t ntrjet=  jet->GetNumberOfTracks();
+        fhJetTrksPtJet->Fill(jet->Pt(),ntrjet);
 
         for(Int_t itrk=0;itrk<ntrjet;itrk++)
         {
@@ -379,6 +401,7 @@ if(fUseMCInfo && fBuildRMEff){
             fhPtJetTrks->Fill(jetTrk->Pt());
             fhPhiJetTrks->Fill(jetTrk->Phi());
             fhEtaJetTrks->Fill(jetTrk->Eta());
+            fhPhiJetTrksPtJet->Fill(jet->Pt(),jetTrk->Phi());
         } //end loop on jet tracks
 
     } // end loop on mc jets
@@ -609,6 +632,9 @@ void AliAnalysisTaskFlavourJetCorrelationsQA::CreateMCResponseMatrix(AliEmcalJet
     Double_t DYGen = DTrk->Y();
     Int_t pdg = DTrk->GetPdgCode();
 
+    Double_t JetPhiGen = MCjet->Phi();
+    Double_t JetNTracksGen = MCjet->GetNumberOfTracks();
+
     Double_t zRec = -999;
     Double_t JetPtRec = -999;
     Double_t JetEtaRec = -999;
@@ -616,6 +642,9 @@ void AliAnalysisTaskFlavourJetCorrelationsQA::CreateMCResponseMatrix(AliEmcalJet
     Double_t DYRec = -999;
     Double_t pTRes = -999;
     Double_t zRes = -999;
+
+    Double_t JetPhiRec = -999;
+    Double_t JetNTracksRec = -999;
 
     AliJetContainer* JetContRec = GetJetContainer(0);
     if(JetContRec){
@@ -635,6 +664,8 @@ void AliAnalysisTaskFlavourJetCorrelationsQA::CreateMCResponseMatrix(AliEmcalJet
             else zRec = Z(Drec,jet);
             JetPtRec = jet->Pt() - rho*jet->Area();
             JetEtaRec = jet->Eta();
+            JetPhiRec = jet->Phi();
+            JetNTracksRec = jet->GetNumberOfTracks();
             DPtRec = Drec->Pt();
             pTRes = JetPtGen ? ((JetPtRec - JetPtGen) / JetPtGen) : -999;
             zRes = zGen ? ((zRec - zGen) / zGen) : -999;
@@ -658,10 +689,22 @@ void AliAnalysisTaskFlavourJetCorrelationsQA::CreateMCResponseMatrix(AliEmcalJet
             Bool_t bDInEMCalAcc=InEMCalAcceptance(Drec);
             Bool_t bJetInEMCalAcc=InEMCalAcceptance(jet);
 
+            fhPhiJetPtJetD->Fill(JetPtRec,jet->Phi());
+
+            fhAreaJetPtJetD->Fill(JetPtRec,jet->Area());
+            fhJetTrksPtJetD->Fill(JetPtRec,jet->GetNumberOfTracks());
+
+            for(Int_t i=0;i<jet->GetNumberOfTracks();i++)
+            {
+                AliVParticle* jetTrk= jet->Track(i);
+                if (!jetTrk) continue;
+                fhPhiJetTrksPtJetD->Fill(JetPtRec,jetTrk->Phi());
+            }
+
             if(fCandidateType==kD0toKpi)
             {
                 AliAODRecoDecayHF* dzero=(AliAODRecoDecayHF*)Drec;
-                FillHistogramsD0JetCorr(dzero,zRec,Drec->Pt(),JetPtRec,JetEtaRec,kFALSE,bDInEMCalAcc,bJetInEMCalAcc,aodEvent,pdg);
+                FillHistogramsD0JetCorr(dzero,zRec,Drec->Pt(),JetPtRec,JetEtaRec,kFALSE,bDInEMCalAcc,bJetInEMCalAcc,aodEvent,pdg,JetPhiGen,JetNTracksGen,JetPhiRec,JetNTracksRec);
             }
             else if(fCandidateType==kDstartoKpipi)
             {
@@ -697,7 +740,7 @@ void AliAnalysisTaskFlavourJetCorrelationsQA::FillDJetHistograms(AliEmcalJet* je
     if(fCandidateType==kD0toKpi)
     {
         AliAODRecoDecayHF* dzero=(AliAODRecoDecayHF*)Dmeson;
-        FillHistogramsD0JetCorr(dzero,z,Dmeson->Pt(),JetPtCorr,JetEtaRec,IsBkg,bDInEMCalAcc,bJetInEMCalAcc,aodEvent,-999);
+        FillHistogramsD0JetCorr(dzero,z,Dmeson->Pt(),JetPtCorr,JetEtaRec,IsBkg,bDInEMCalAcc,bJetInEMCalAcc,aodEvent,-999,-999,-999,-999,-999);
     }
     else if(fCandidateType==kDstartoKpipi)
     {
@@ -986,12 +1029,39 @@ Bool_t  AliAnalysisTaskFlavourJetCorrelationsQA::DefineHistoForAnalysis(){
    fhPtJet      = new TH1F("hPtJet",  "Jet Pt distribution; p_{T} (GeV/c)",nbinsptjet,ptjetlims[0],ptjetlims[1]);
    fhPtJet->Sumw2();
 
+   fhPhiJetPtJet  = new TH2F("fhPhiJetPtJet","Jet #phi distribution vs Jet p_{T}; Jet p_{T};#phi (rad)",nbinsptjet,ptjetlims[0],ptjetlims[1], nbinsphi,philims[0],philims[1]);
+   fhPhiJetTrksPtJet = new TH2F("fhPhiJetTrksPtJet","Jet tracks #phi distribution vs Jet p_{T}; Jet p_{T};#phi (rad)",nbinsptjet,ptjetlims[0],ptjetlims[1], nbinsphi,philims[0],philims[1]);
+   fhAreaJetPtJet= new TH2F("fhAreaJetPtJet","Jet area distribution vs Jet p_{T}; Jet p_{T};Area",nbinsptjet,ptjetlims[0],ptjetlims[1], 10,0,1);
+   fhJetTrksPtJet= new TH2F("fhJetTrksPtJet","Jet N tracks distribution vs Jet p_{T}; Jet p_{T};N tracks",nbinsptjet,ptjetlims[0],ptjetlims[1], 50,0,50);
+   fhPhiJetPtJetD = new TH2F("fhPhiJetPtJetD","D Jet #phi distribution vs Jet p_{T}; Jet p_{T};#phi (rad)",nbinsptjet,ptjetlims[0],ptjetlims[1], nbinsphi,philims[0],philims[1]);
+   fhPhiJetTrksPtJetD= new TH2F("fhPhiJetTrksPtJetD","D Jet tracks #phi distribution vs Jet p_{T}; Jet p_{T};#phi (rad)",nbinsptjet,ptjetlims[0],ptjetlims[1], nbinsphi,philims[0],philims[1]);
+   fhAreaJetPtJetD= new TH2F("fhAreaJetPtJetD","D Jet area distribution vs Jet p_{T}; Jet p_{T};Area",nbinsptjet,ptjetlims[0],ptjetlims[1], 10,0,1);
+   fhJetTrksPtJetD= new TH2F("fhJetTrksPtJetD","D Jet N tracks distribution vs Jet p_{T}; Jet p_{T};N tracks",nbinsptjet,ptjetlims[0],ptjetlims[1], 50,0,50);
+
+   fhPhiJetPtJet->Sumw2();
+   fhPhiJetTrksPtJet->Sumw2();
+   fhAreaJetPtJet->Sumw2();
+   fhJetTrksPtJet->Sumw2();
+   fhPhiJetPtJetD->Sumw2();
+   fhPhiJetTrksPtJetD->Sumw2();
+   fhAreaJetPtJetD->Sumw2();
+   fhJetTrksPtJetD->Sumw2();
+
    fOutput->Add(fhPhiJetTrks);
    fOutput->Add(fhEtaJetTrks);
    fOutput->Add(fhPtJetTrks);
    fOutput->Add(fhPhiJet);
    fOutput->Add(fhEtaJet);
    fOutput->Add(fhPtJet);
+
+   fOutput->Add(fhPhiJetPtJet);
+   fOutput->Add(fhPhiJetTrksPtJet);
+   fOutput->Add(fhAreaJetPtJet);
+   fOutput->Add(fhJetTrksPtJet);
+   fOutput->Add(fhPhiJetPtJetD);
+   fOutput->Add(fhPhiJetTrksPtJetD);
+   fOutput->Add(fhAreaJetPtJetD);
+   fOutput->Add(fhJetTrksPtJetD);
 
       if(fCandidateType==kDstartoKpipi)
       {
@@ -1045,12 +1115,12 @@ Bool_t  AliAnalysisTaskFlavourJetCorrelationsQA::DefineHistoForAnalysis(){
 
         }
         else{
-          const Int_t nAxis=11;
-          const Int_t nbinsSparse[nAxis]={nbinsSpsz,nbinsSpsptjet,nbinsSpsptD,nbinsSpsmass,nbinsSpsy,nbinsSpsy,nbinsSpsmass,nbinsSpsmass, 2, 2, 2};
-          const Double_t minSparse[nAxis]={zlims[0],ptjetlims[0],ptDlims[0],fMinMass,etalims[0],etalims[0],fMinMass,fMinMass, -0.5,-0.5,-0.5};
-          const Double_t maxSparse[nAxis]={zlims[1],ptjetlims[1],ptDlims[1],fMaxMass,etalims[1],etalims[1],fMaxMass,fMaxMass, 1.5, 1.5 , 1.5};
+          const Int_t nAxis=15;
+          const Int_t nbinsSparse[nAxis]={nbinsSpsz,nbinsSpsptjet,nbinsSpsptD,nbinsSpsmass,nbinsSpsy,nbinsSpsy,nbinsSpsmass,nbinsSpsmass, 2, 2, 2,nbinsphi,50,nbinsphi,50};
+          const Double_t minSparse[nAxis]={zlims[0],ptjetlims[0],ptDlims[0],fMinMass,etalims[0],etalims[0],fMinMass,fMinMass, -0.5,-0.5,-0.5,philims[0],0,philims[0],0};
+          const Double_t maxSparse[nAxis]={zlims[1],ptjetlims[1],ptDlims[1],fMaxMass,etalims[1],etalims[1],fMaxMass,fMaxMass, 1.5, 1.5 , 1.5,philims[1],50,philims[1],50};
           fNAxesBigSparse=nAxis;
-          fhsDphiz=new THnSparseF("hsDphiz","Z, p_{T}^{jet}, p_{T}^{D}, mass., y^{D}, #eta^{jet}, mass_{true}, mass_{refl}, Bkg?, D in EMCal acc?, jet in EMCal acc?", nAxis, nbinsSparse, minSparse, maxSparse);
+          fhsDphiz=new THnSparseF("hsDphiz","Z, p_{T}^{jet}, p_{T}^{D}, mass., y^{D}, #eta^{jet}, mass_{true}, mass_{refl}, Bkg?, D in EMCal acc?, jet in EMCal acc?, Jet #Phi gen, Jet N tracks gen, Jet #Phi rec, Jet N tracks rec", nAxis, nbinsSparse, minSparse, maxSparse);
         }
 
     } else{
@@ -1086,7 +1156,7 @@ Bool_t  AliAnalysisTaskFlavourJetCorrelationsQA::DefineHistoForAnalysis(){
 
 //_______________________________________________________________________________
 
-void AliAnalysisTaskFlavourJetCorrelationsQA::FillHistogramsD0JetCorr(AliAODRecoDecayHF* candidate, Double_t z, Double_t ptD, Double_t ptj, Double_t jetEta, Bool_t IsBkg, Bool_t bDInEMCalAcc, Bool_t bJetInEMCalAcc, AliAODEvent* aodEvent, Int_t pdgTrue){
+void AliAnalysisTaskFlavourJetCorrelationsQA::FillHistogramsD0JetCorr(AliAODRecoDecayHF* candidate, Double_t z, Double_t ptD, Double_t ptj, Double_t jetEta, Bool_t IsBkg, Bool_t bDInEMCalAcc, Bool_t bJetInEMCalAcc, AliAODEvent* aodEvent, Int_t pdgTrue,Double_t JetPhiGen,Double_t JetNTracksGen,Double_t JetPhiRec,Double_t JetNTracksRec){
 
 
    Double_t masses[2]={0.,0.};
@@ -1112,7 +1182,7 @@ void AliAnalysisTaskFlavourJetCorrelationsQA::FillHistogramsD0JetCorr(AliAODReco
    }
    else
    {
-      point=new Double_t[11];
+      point=new Double_t[15];
       point[0]=z;
       point[1]=ptj;
       point[2]=ptD;
@@ -1124,6 +1194,10 @@ void AliAnalysisTaskFlavourJetCorrelationsQA::FillHistogramsD0JetCorr(AliAODReco
       point[8]=static_cast<Double_t>(IsBkg ? 1 : 0);
       point[9]=static_cast<Double_t>(bDInEMCalAcc ? 1 : 0);
       point[10]=static_cast<Double_t>(bJetInEMCalAcc ? 1 : 0);
+      point[11]=JetPhiGen;
+      point[12]=JetNTracksGen;
+      point[13]=JetPhiRec;
+      point[14]=JetNTracksRec;
 
    }
     Int_t isselected=fCuts->IsSelected(candidate,AliRDHFCuts::kAll,aodEvent);

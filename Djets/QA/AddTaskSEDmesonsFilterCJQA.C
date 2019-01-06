@@ -69,7 +69,7 @@ AliAnalysisTaskSEDmesonsFilterCJQA *AddTaskSEDmesonsFilterCJQA(AliAnalysisTaskSE
   taskFiltername += suffix;
   if (theMCon) taskFiltername += "MC";
   if (!reco)   taskFiltername += "gen";
-  
+
   AliAnalysisTaskSEDmesonsFilterCJQA* task = (AliAnalysisTaskSEDmesonsFilterCJQA*)mgr->GetTask(taskFiltername.Data());
   if (task) {
     ::Info("AddTaskSEDmesonsFilterCJQA", Form("Task %s already exist, continue",taskFiltername.Data()));
@@ -121,7 +121,7 @@ AliAnalysisTaskSEDmesonsFilterCJQA *AddTaskSEDmesonsFilterCJQA(AliAnalysisTaskSE
   AliAnalysisDataContainer *cinput0  = mgr->GetCommonInputContainer();
   
   // ----- output data -----
-  
+
   AliAnalysisDataContainer *coutput1 = mgr->CreateContainer(nameContainer0, TList::Class(), AliAnalysisManager::kOutputContainer, outputfile.Data());
   AliAnalysisDataContainer *coutput2 = mgr->CreateContainer(nameContainer1, AliRDHFCuts::Class(), AliAnalysisManager::kOutputContainer, outputfile.Data());
   AliAnalysisDataContainer *coutput3 = mgr->CreateContainer(nameContainer2, TClonesArray::Class(), AliAnalysisManager::kExchangeContainer, outputfile.Data()); // exchange

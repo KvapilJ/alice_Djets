@@ -26,6 +26,7 @@
 
 #include "AliAnalysisTaskEmcal.h"
 
+
 class TH2;
 class TString;
 class TRandom3;
@@ -206,7 +207,7 @@ class AliAnalysisTaskSEDmesonsFilterCJQA : public AliAnalysisTaskEmcal
   AliAnalysisTaskSEDmesonsFilterCJQA(const AliAnalysisTaskSEDmesonsFilterCJQA &source);
   AliAnalysisTaskSEDmesonsFilterCJQA& operator=(const AliAnalysisTaskSEDmesonsFilterCJQA& source);
 
-  ClassDef(AliAnalysisTaskSEDmesonsFilterCJQA, 7); // task for selecting D mesons to be used as an input for D-Jet correlations
+  ClassDef(AliAnalysisTaskSEDmesonsFilterCJQA, 1); // task for selecting D mesons to be used as an input for D-Jet correlations
 };
 
 #endif
