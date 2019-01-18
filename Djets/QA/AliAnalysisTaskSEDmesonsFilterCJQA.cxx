@@ -459,9 +459,9 @@ void AliAnalysisTaskSEDmesonsFilterCJQA::ExecOnce()
   }
   else {
     AliError(Form("Could not find array %s, skipping the event. Task '%s' will be disabled!", fBranchName.Data(), GetName()));
-    //DISABLED CHECK TO WORK WITH D0 MUST BE FIXED- jkvapil
-//    fInhibitTask = kTRUE;
-//    return;
+    fInhibitTask = kTRUE;
+    return;
+
   }
 
   if (fUseMCInfo) {

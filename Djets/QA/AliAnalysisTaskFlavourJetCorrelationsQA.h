@@ -20,7 +20,8 @@
 //          A. Grelli,  Utrecht University
 //          C. Bianchin, Utrecht University
 //          X. Zhang, LBNL
-//	    B. Trzeciak, Utrecht Univeristy
+//	        B. Trzeciak, Utrecht Univeristy
+//          J. Kvapil, University of Birmingham
 //-----------------------------------------------------------------------
 
 
@@ -93,7 +94,7 @@ public:
    void CreateMCResponseMatrix(AliEmcalJet* MCjet, AliAODEvent* aodEvent);
    void FillDJetHistograms(AliEmcalJet* jet, Double_t rho, Bool_t IsBkg, AliAODEvent* aodEvent);
    void GetHFJet(AliEmcalJet*& jet, Bool_t IsBkg);
-   void FillHistogramsD0JetCorr(AliAODRecoDecayHF* candidate, Double_t z, Double_t ptD, Double_t ptj, Double_t jetEta, Bool_t IsBkg, Bool_t bDInEMCalAcc, Bool_t bJetInEMCalAcc, AliAODEvent* aodEvent, Int_t pdg,Double_t JetPhiGen,Double_t JetNTracksGen,Double_t JetPhiRec,Double_t JetNTracksRec);
+   void FillHistogramsD0JetCorr(AliAODRecoDecayHF* candidate, Double_t z, Double_t ptD, Double_t ptj, Double_t jetEta, Bool_t IsBkg, Bool_t bDInEMCalAcc, Bool_t bJetInEMCalAcc, AliAODEvent* aodEvent, Int_t pdg,Double_t JetPhiRec,Double_t JetNTracksRec);
    void FillHistogramsDstarJetCorr(AliAODRecoCascadeHF* dstar, Double_t z, Double_t ptD, Double_t ptj, Double_t jetEta, Bool_t IsBkg, Bool_t bDInEMCalAcc, Bool_t bJetInEMCalAcc);
    void FillHistogramsMCGenDJetCorr(Double_t z,Double_t ptD,Double_t ptjet, Double_t yD, Double_t jetEta, Bool_t bDInEMCalAcc, Bool_t bJetInEMCalAcc);
    void FindMCJet(AliEmcalJet*& mcjet);
@@ -170,16 +171,22 @@ private:
    THnSparse* fResponseMatrix;      //!
 
    //Added for QA
-   TH2F* fhPhiJetPtJet;            //!
-   TH2F* fhPhiJetTrksPtJet;            //!
-   TH2F* fhAreaJetPtJet;            //!
-   TH2F* fhJetTrksPtJet;            //!
+   TH2F* fhPhiJetPtJetMC;           //!
+   TH2F* fhPhiJetTrksPtJetMC;       //!
+   TH2F* fhEtaJetTrksPtJetMC;       //!
+   TH2F* fhEtaJetPtJetMC;           //!
+   TH2F* fhAreaJetPtJetMC;          //!
+   TH2F* fhJetTrksPtJetMC;          //!
+   TH2F* fhPhiJetPtJetreco;         //!
+   TH2F* fhPhiJetTrksPtJetreco;     //!
+   TH2F* fhEtaJetTrksPtJetreco;     //!
+   TH2F* fhEtaJetPtJetreco;         //!
+   TH2F* fhAreaJetPtJetreco;        //!
+   TH2F* fhJetTrksPtJetreco;        //!
    TH2F* fhPhiJetPtJetD;            //!
-   TH2F* fhPhiJetTrksPtJetD;            //!
-   TH2F* fhAreaJetPtJetD;            //!
-   TH2F* fhJetTrksPtJetD;            //!
-
-
+   TH2F* fhPhiJetTrksPtJetD;        //!
+   TH2F* fhAreaJetPtJetD;           //!
+   TH2F* fhJetTrksPtJetD;           //!
 
    ClassDef(AliAnalysisTaskFlavourJetCorrelationsQA,1); // class for charm-jet CorrelationsExch
 };

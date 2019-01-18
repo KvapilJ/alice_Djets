@@ -39,8 +39,8 @@ TString gridDataPattern="AOD";
 
 
 // Alien output director
-TString gridWorkingDir="outputMCfull";
-TString gridOutputDir="outputADD";
+TString gridWorkingDir="outputMC_LHC18l4a_10%";
+TString gridOutputDir="output";
 
 //run numbers
 const Int_t nruns = 131;
@@ -108,6 +108,7 @@ void runAnalysis()
 
     //currently failing when i>1 at AliAnalysisTaskSEDmesonsFilterCJQA *filter = reinterpret_cast<AliAnalysisTaskSEDmesonsFilterCJQA*>(gInterpreter->ProcessLine
     //dont even enter AddTask...error somewhere in preprocessor???
+
     for(Int_t i=0; i<1  ; i++){
         TString TaskText = "MB";
         TaskText += Form("N%d",i);
@@ -115,7 +116,6 @@ void runAnalysis()
 
     //                        gInterpreter->ProcessLine(Form(".x %s (%d)",
     //                        gSystem->ExpandPathName("AddTasksFlavourJetMCQA.C"),0);
-
 
         AliAnalysisTaskSEDmesonsFilterCJQA *filter = reinterpret_cast<AliAnalysisTaskSEDmesonsFilterCJQA*>(
                     gInterpreter->ProcessLine(Form(".x %s ((AliAnalysisTaskSEDmesonsFilterCJQA::ECandidateType)%d,\"%s\",%d,%d,\"%s\")",
@@ -201,7 +201,7 @@ void runAnalysis()
         taskFJMCDandTracks->SelectCollisionCandidates(pSel);
         taskFJMCDandTracks->SetNeedEmcalGeom(kFALSE);
 
-
+std::cout<<"BBB"<<std::endl;
         AliAnalysisTaskFlavourJetCorrelationsQA *CorrTask = reinterpret_cast<AliAnalysisTaskFlavourJetCorrelationsQA*>(
                     gInterpreter->ProcessLine(Form(".x %s ((AliAnalysisTaskFlavourJetCorrelationsQA::ECandidateType)%d,\"%s\",%d,%d,\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",%f,%f,\"%s\",%f,(AliAnalysisTaskFlavourJetCorrelationsQA::ECorrelationMethod)%d)",gSystem->ExpandPathName("AddTaskDFilterAndCorrelationsQA.C"),AliAnalysisTaskSEDmesonsFilterCJQA::kD0toKpi,
                     cutFile.Data(),
@@ -337,8 +337,8 @@ void runAnalysis()
         // after re-running the jobs in SetRunMode("terminate")
         // (see below) mode, set SetMergeViaJDL(kFALSE)
         // to collect final results
-        alienHandler->SetMaxMergeStages(1); //2, 3
-        alienHandler->SetMergeViaJDL(kTRUE);
+        alienHandler->SetMaxMergeStages(3); //2, 3
+        alienHandler->SetMergeViaJDL(kFALSE);
 
         // define the output folders
         alienHandler->SetGridWorkingDir(gridWorkingDir.Data());
