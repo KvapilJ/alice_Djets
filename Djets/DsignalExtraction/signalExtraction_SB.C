@@ -30,7 +30,7 @@ static Double_t refScale = 1.5;
 
 void signalExtraction_SB(
   TString data = "$HOME/Work/alice/analysis/out/AnalysisResults.root",
-  Bool_t isEff = 0, TString efffile = "../efficiency/DjetEff_prompt.root",
+  Bool_t isEff = 1, TString efffile = "../efficiency/DjetEff_prompt.root",
   Bool_t isRef = 0, TString refFile = "test.root",
   Bool_t postfix = 0, TString listName = "Cut",
   TString out = "signalExtraction",
@@ -106,7 +106,9 @@ void signalExtraction_SB(
     efficiency = new double[fptbinsDN];
     if(bEff){
         TFile *FileEff = new TFile(efffile.Data(),"read");
-        TH1F *hEff = dynamic_cast<TH1F*>(FileEff->Get("hEff_reb"));
+        if(!FileEff)std::cout<<"no file"<<std::endl;
+        TH1D *hEff = dynamic_cast<TH1D*>(FileEff->Get("hEff_reb"));//must be double
+        if(!hEff)std::cout<<"no eff"<<std::endl;
         for(int i=0;i<fptbinsDN;i++){
             double pt = (fptbinsDA[i]+fptbinsDA[i+1]) / 2.;
             efficiency[i] = hEff->GetBinContent(hEff->GetXaxis()->FindBin(pt));

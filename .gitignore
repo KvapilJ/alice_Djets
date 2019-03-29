@@ -6,6 +6,8 @@
 *.d
 *.root
 *.zip
+*.pcm
+*.swp
 confCommands
 Djets/runGrid/*
 Djets/DsignalExtraction/signalExtraction_MC.C

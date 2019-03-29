@@ -7,7 +7,7 @@
 #include "config.h"
 
 void DetRM(bool isPrompt = 1, TString datafile = "../outMC/AnalysisResults_fast_D0MCPythia_SMQcorr2.root", TString outDir = "plots",
-bool postfix = 0, TString listName = "FD" )
+bool postfix = 0, TString listName = "FD", bool isprefix=0 )
 {
 
     gStyle->SetOptStat(0000); //Mean and RMS shown
@@ -17,9 +17,14 @@ bool postfix = 0, TString listName = "FD" )
 
     TFile *File = new TFile(datafile,"read");
     TDirectoryFile* dir=(TDirectoryFile*)File->Get("DmesonsForJetCorrelations");
-    TString histName;
-  	if(fDmesonSpecie) histName = "histosDStarMBN";
-  	else histName = "histosD0MBN";
+        TString histName;
+        if(!isprefix){
+                if(fDmesonSpecie) histName = "histosDStarMBN";
+                else histName = "histosD0MBN";}
+        else{
+                if(fDmesonSpecie) histName = "histosDStarMBN";
+                else histName = "histosD0";}
+
 
     float jetmin = 0, jetmax = 60;
     float Dptmin = fptbinsDA[0], Dptmax = fptbinsDA[fptbinsDN];
@@ -30,25 +35,36 @@ bool postfix = 0, TString listName = "FD" )
     pv2->AddText(Form("R=0.%d",Rpar));
 
     TH1F *hMCpt;
-	  TH1F *hMCpt_reco;
+      TH1F *hMCpt_reco;
     TH2F *hPtJet[NDMC];
     TH1F *hPtG[NDMC];
     TH1F *hPtR[NDMC];
 
-	  TList *histList[NDMC];
-	  THnSparseF *sparseMC[NDMC];
-	  THnSparseF *sparsereco[NDMC];
+      TList *histList[NDMC];
+      THnSparseF *sparseMC[NDMC];
 
     TH2F *hPtJet2d;
     TH1F *hPtJetGen;
     TH1F *hPtJetRec;
 
-	  for(int i=0; i<NDMC; i++){
-        if(postfix) { histList[i] =  (TList*)dir->Get(Form("%s%d%sMCrec",histName.Data(),i,listName.Data())); }
-        else {
-    			 if(isPrompt) histList[i] =  (TList*)dir->Get(Form("%s%dMCrec",histName.Data(),i));
-    			 else histList[i] =  (TList*)dir->Get(Form("%s%dFDMCrec",histName.Data(),i));
-    		}
+
+        for(int i=0; i<NDMC; i++){
+           if(!isprefix){
+                if(postfix) {
+            histList[i] =  (TList*)dir->Get(Form("%s%d%sMCrec",histName.Data(),i,listName.Data())); }
+                else {
+                         if(isPrompt) histList[i] =  (TList*)dir->Get(Form("%s%dMCrec",histName.Data(),i));
+                         else histList[i] =  (TList*)dir->Get(Form("%s%dFDMCrec",histName.Data(),i));
+                }
+           }
+           else{
+                if(postfix) {
+                        if(isPrompt){ histList[i] =  (TList*)dir->Get(Form("%s%sMBN%dMCrec",histName.Data(),listName.Data(),i)); }
+                        else{    histList[i] =  (TList*)dir->Get(Form("%s%sMBN%dFDMCrec",histName.Data(),listName.Data(),i)); }
+                }
+                else { std::cout<<"-----postfix has to be true if prefix is true!! check again----------------"<<std::endl; return;       }
+           }
+
 
         sparseMC[i] = (THnSparseF*)histList[i]->FindObject("ResponseMatrix");
 
@@ -60,6 +76,11 @@ bool postfix = 0, TString listName = "FD" )
 
         if(fDmesonSpecie) sparseMC[i]->GetAxis(5)->SetRangeUser(jetmin,jetmax); // Dstar tmp
         else sparseMC[i]->GetAxis(6)->SetRangeUser(jetmin,jetmax);
+
+    if(!fDmesonSpecie) {
+        sparseMC[i]->GetAxis(4)->SetRangeUser(-(0.9-fRpar),0.9-fRpar);
+        sparseMC[i]->GetAxis(9)->SetRangeUser(-(0.9-fRpar),0.9-fRpar);
+    }
 
         if(fDmesonSpecie) hPtJet[i] = (TH2F*)sparseMC[i]->Projection(5,1,"E"); //Dstar tmp
         else hPtJet[i] = (TH2F*)sparseMC[i]->Projection(6,1,"E");
@@ -76,21 +97,21 @@ bool postfix = 0, TString listName = "FD" )
         hPtG[i]->Sumw2();
         hPtR[i]->Sumw2();
 
-		    if (!i){
-  			     hPtJet2d = (TH2F*)hPtJet[0]->Clone("hPtJet2d");
-  			     hPtJetGen = (TH1F*)hPtG[0]->Clone("hPtJetGen");
-  			     hPtJetRec = (TH1F*)hPtR[0]->Clone("hPtJetRec");
+            if (!i){
+                 hPtJet2d = (TH2F*)hPtJet[0]->Clone("hPtJet2d");
+                 hPtJetGen = (TH1F*)hPtG[0]->Clone("hPtJetGen");
+                 hPtJetRec = (TH1F*)hPtR[0]->Clone("hPtJetRec");
         }
         else {
             hPtJet2d->Add(hPtJet[i]);
-      			hPtJetGen->Add(hPtG[i]);
-      			hPtJetRec->Add(hPtR[i]);
+                hPtJetGen->Add(hPtG[i]);
+                hPtJetRec->Add(hPtR[i]);
         }
 
-	}
+    }
 
 
-    hPtJet2d->SetTitle();
+    hPtJet2d->SetTitle("");
     hPtJet2d->SetName("hPtJet2d");
     hPtJet2d->GetXaxis()->SetTitle("p_{T,ch jet}^{rec.} (GeV/#it{c})");
     hPtJet2d->GetYaxis()->SetTitle("p_{T,ch jet}^{gen.} (GeV/#it{c})");
@@ -133,7 +154,6 @@ bool postfix = 0, TString listName = "FD" )
             //proj[i-1]->SetMarkerStyle(20);
             proj[i]->SetMarkerColor(2);
             proj[i]->SetLineColor(2);
-
     }
 */
 

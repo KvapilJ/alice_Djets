@@ -39,9 +39,9 @@ enum DMesonSpecies {kD0toKpi=0, kDStarD0pi=1};
     TString       fDmesonDsc = "Dzero";
     TString       fDmesonS = "D^{0}";
     const double  fRpar = 0.4;           //-----! jet R parameter for your studies (the one that you use in your jet finder!)
-    const int     Rpar = 3;
+    const int     Rpar = 4;
     const int     ND = 4;                //-----!  change these numbers based on how many D mesons you analyse in data !
-    const int     NDMC = 3;              //-----!  change these numbers based on how many D mesons you analyse in MC !
+    const int     NDMC = 1;              //-----!  change these numbers based on how many D mesons you analyse in MC !
 
     const double  sigma_in = 0.0512;       //-----! inelastic x-section in bars
     const double  nEvScale = 1.063;      //-----! scaling factor from the number of selected events to the number of events needed for the nomrmalization, taken from the D2H normalization counter
@@ -50,8 +50,8 @@ enum DMesonSpecies {kD0toKpi=0, kDStarD0pi=1};
     const int     APb = 208;
 
     //====== D pT bins ---- set up your D pT bins ======
-    const int     fptbinsDN = 10;
-    double        fptbinsDA[fptbinsDN+1] = { 3,4,5,6,7,8,10,12,16,24,36 };
+    const int     fptbinsDN = 11;
+    double        fptbinsDA[fptbinsDN+1] = {2, 3,4,5,6,7,8,10,12,16,24,36 };
     //====== jet pT bins ---- set up your jet pT bins ======
     const int     fptbinsJetTrueN = 9;
     double        fptbinsJetTrueA[fptbinsJetTrueN+1] = { 3,4,5,6,8,10,14,20,30,50 };
@@ -65,7 +65,7 @@ enum DMesonSpecies {kD0toKpi=0, kDStarD0pi=1};
     //====== signal extraction config ======
     Bool_t        fUseRefl = 1;                      //-----! if to use reflections (for D0, you must have reflections files ready)
     Int_t         fbkgtype = 0;                      //-----! kExpo=0, kLin=1, kPol2=2, kNoBk=3, kPow=4, kPowEx=5
-    Float_t       fsigmaSignal = 3;                  //-----! sigma for the signal region
+    Float_t       fsigmaSignal = 2;                  //-----! sigma for the signal region
     Float_t       fsigmaBkg[] = {-9,-4,4,9};         //-----! sigma for the SB region (both left and right side from the fit)
     Float_t       fDmass = 1.864, fDsigma = 0.010;   //-----! initial values for D mass and sigma
     Float_t       minf = 1.71, maxf = 2.1;           //-----! min/mass of the inv. mass distributions

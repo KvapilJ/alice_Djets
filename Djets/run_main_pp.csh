@@ -29,7 +29,7 @@ doRawCutVarSys=0
 ############### Default
 doRawSignal=0
 # run your run_analysis_*.csh script
-./run_analysis_pp.csh $unfType $regPar $isPrior $priorType $bkgRMtype $doRawSignal $doCutVar $doRawCutVarSys $doJESSys $doFDSys $doSys
+./run_analysis_JK.csh $unfType $regPar $isPrior $priorType $bkgRMtype $doRawSignal $doCutVar $doRawCutVarSys $doJESSys $doFDSys $doSys
 
 exit 1
 

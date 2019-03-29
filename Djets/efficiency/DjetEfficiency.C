@@ -7,6 +7,9 @@
 #include "config.h"
 
 using namespace std;
+//forward declaration
+void setHistoDetails(TH1 *h, Color_t color, Style_t Mstyle, Size_t size = 0.9, Width_t width=2);
+void SaveCanvas(TCanvas *c, TString name = "tmp");
 
 float ptmin = fptbinsDA[0], ptmax = fptbinsDA[fptbinsDN];
 
@@ -19,13 +22,13 @@ float jetptmin = 2, float jetptmax = 50, bool recoPt = 0, bool postfix = 0, TStr
 
 	// get analysis output file
 	TFile *File = new TFile(effFile,"read");
-	TDirectoryFile* dir=(TDirectoryFile*)File->Get("DmesonsForJetCorrelations");
+    TDirectoryFile* dir=dynamic_cast<TDirectoryFile*>(File->Get("DmesonsForJetCorrelations"));
 
 	TString histName;
-	if(fDmesonSpecie) histName = "histosDStarMBN";
-	else histName = "histosD0MBN";
+    if(fDmesonSpecie) histName = "histosDStarMBN";
+    else histName = "histosD0MBN";
 
-	TH1F *hMCpt;
+    TH1F *hMCpt;
 	TH1F *hMCpt_reco;
 
 	TH1F *hMC[NDMC];
@@ -34,23 +37,27 @@ float jetptmin = 2, float jetptmax = 50, bool recoPt = 0, bool postfix = 0, TStr
 	THnSparseF *sparseMC[NDMC];
 	THnSparseF *sparsereco[NDMC];
 
-	for(int i=0; i<NDMC; i++){
+    for(int i=0; i<NDMC; i++){
 
 		if(postfix) { histList[i] =  (TList*)dir->Get(Form("%s%d%sMCrec",histName.Data(),i,listName.Data())); }
     else {
-			 if(isPrompt) histList[i] =  (TList*)dir->Get(Form("%s%dMCrec",histName.Data(),i));
-			 else histList[i] =  (TList*)dir->Get(Form("%s%dFDMCrec",histName.Data(),i));
-		}
+             if(isPrompt) histList[i] =  (TList*)dir->Get(Form("%s%dMCrec",histName.Data(),i));
+             else histList[i] =  (TList*)dir->Get(Form("%s%dFDMCrec",histName.Data(),i));
+        }
 
-		sparseMC[i] = (THnSparseF*)histList[i]->FindObject("ResponseMatrix");
-    if(fDmesonSpecie) sparseMC[i]->GetAxis(5)->SetRangeUser(jetptmin,jetptmax); // Dstar tmp
-    else sparseMC[i]->GetAxis(6)->SetRangeUser(jetptmin,jetptmax); // jet pT gen
+    THnSparseF* sMC = (THnSparseF*)histList[i]->FindObject("ResponseMatrix");
+            sparseMC[i] = (THnSparseF*)sMC->Clone(Form("sparseMC_%d",i));
+            if(fDmesonSpecie) sparseMC[i]->GetAxis(5)->SetRangeUser(jetptmin,jetptmax); // Dstar tmp
+                else { 	sparseMC[i]->GetAxis(6)->SetRangeUser(jetptmin,jetptmax); // jet pT gen
+                sparseMC[i]->GetAxis(9)->SetRangeUser(-(0.9-fRpar),0.9-fRpar); // MC jet eta
+    }
 
     if(fDmesonSpecie) hMC[i] = (TH1F*)sparseMC[i]->Projection(6); // Dstar tmp
     else hMC[i] = (TH1F*)sparseMC[i]->Projection(7); // Dpt gen
     hMC[i]->SetName(Form("hMC_%d",i));
 
-		sparsereco[i] = (THnSparseF*)histList[i]->FindObject("ResponseMatrix");
+    THnSparseF* sreco = (THnSparseF*)histList[i]->FindObject("ResponseMatrix");
+    sparsereco[i] = (THnSparseF*)sreco->Clone(Form("sparsereco_%d",i));
     if(recoPt) {
       sparsereco[i]->GetAxis(1)->SetRangeUser(ptmin,ptmax); // jet pT reco
     }
@@ -135,21 +142,21 @@ return;
 
 }
 
-void setHistoDetails(TH1 *h, Color_t color, Style_t Mstyle, Size_t size = 0.9, Width_t width=2){
+void setHistoDetails(TH1 *h, Color_t color, Style_t Mstyle, Size_t size, Width_t width){
 
     h->SetMarkerStyle(Mstyle);
     h->SetMarkerColor(color);
     h->SetMarkerSize(size);
     h->SetLineColor(color);
     h->SetLineWidth(width);
-    h->SetTitle(0);
+    h->SetTitle("");
     h->GetXaxis()->SetTitle("p_{T,D^{0}}(GeV/c)");
 
     return;
 
 }
 
-void SaveCanvas(TCanvas *c, TString name = "tmp"){
+void SaveCanvas(TCanvas *c, TString name){
 
     c->SaveAs(Form("%s.png",name.Data()));
     c->SaveAs(Form("%s.pdf",name.Data()));

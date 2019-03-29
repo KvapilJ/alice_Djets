@@ -10,8 +10,8 @@
 
 #include "config.h"
 
-int promptColor = kRed+1;
-int nonpromptColor = kBlue+1;
+Color_t promptColor = kRed+1;
+Color_t nonpromptColor = kBlue+1;
 
 void drawEff(TString promptFile = "DjetEff_prompt_jetpt2_50", TString nonpromptFile = "DjetEff_nonPrompt_jetpt2_50",
 TString outDir = "plots",
@@ -26,10 +26,10 @@ double plotmin = 2, double plotmax = 36)
     TFile *inFilePrompt = new TFile(promptFile.Data(),"read");
     TFile *inFileFD = new TFile(nonpromptFile.Data(),"read");
 
-    TH1F *hEffPrompt = (TH1F*)inFilePrompt->Get("hEff_reb");
-    TH1F *hEffNonPrompt = (TH1F*)inFileFD->Get("hEff_reb");
+    TH1D *hEffPrompt = (TH1D*)inFilePrompt->Get("hEff_reb");
+    TH1D *hEffNonPrompt = (TH1D*)inFileFD->Get("hEff_reb");
 
-    hEffPrompt->SetTitle();
+    hEffPrompt->SetTitle("");
     hEffPrompt->SetMarkerColor(promptColor);
     hEffPrompt->SetLineColor(promptColor);
     hEffPrompt->SetMarkerStyle(20);
@@ -46,7 +46,7 @@ double plotmin = 2, double plotmax = 36)
     //if(fSystem) hEffPrompt->SetMaximum(hEffPrompt->GetMaximum()*1.6);
     //else hEffPrompt->SetMaximum(hEffNonPrompt->GetMaximum()*1.6);
 
-    hEffNonPrompt->SetTitle();
+    hEffNonPrompt->SetTitle("");
     hEffNonPrompt->SetMarkerColor(nonpromptColor);
     hEffNonPrompt->SetLineColor(nonpromptColor);
     hEffNonPrompt->SetMarkerStyle(21);
