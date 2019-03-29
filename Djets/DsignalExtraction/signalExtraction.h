@@ -26,10 +26,12 @@
 
 #include "config.h"
 
-    Double_t jetmin = 0, jetmax = 50;
-    Double_t jetplotmin = 2, jetplotmax = 50;
+    Double_t jetmin = fptbinsJetMeasA[0], jetmax = fptbinsJetMeasA[fptbinsJetMeasN];
+    Double_t jetplotmin = fptbinsJetMeasA[0], jetplotmax = fptbinsJetMeasA[fptbinsJetMeasN];
+
     Bool_t isEta = 0;
     Double_t jetEta = 0.4;
+
 
     Bool_t savePlots = 1;
     Bool_t bEff = 0;

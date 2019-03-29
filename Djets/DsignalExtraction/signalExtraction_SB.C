@@ -30,13 +30,17 @@ static Double_t refScale = 1.5;
 
 void signalExtraction_SB(
   TString data = "$HOME/Work/alice/analysis/out/AnalysisResults.root",
-  Bool_t isEff = 1, TString efffile = "../efficiency/DjetEff_prompt.root",
-  Bool_t isRef = 0, TString refFile = "test.root",
-  Bool_t postfix = 0, TString listName = "Cut",
+  Bool_t isEff = 0,
+  TString efffile = "../efficiency/DjetEff_prompt.root",
+  Bool_t isRef = 0,
+  TString refFile = "test.root",
+  Bool_t postfix = 0,
+  TString listName = "Cut",
   TString out = "signalExtraction",
   Bool_t save = 1,
   Bool_t isMoreFiles = 0,
-  TString prod = "kl"   // for more than 1 file, for one file leave it empty)
+  TString prod = "kl",   // for more than 1 file, for one file leave it empty)
+  Bool_t isprefix=0
 )
 {
 
@@ -55,8 +59,14 @@ void signalExtraction_SB(
     Int_t nFiles = static_cast<Int_t>(prod.Length());
 
     TString histName;
-    if(fDmesonSpecie) histName = "histosDStarMBN";
-    else histName = "histosD0MBN";
+		if(!isprefix){
+		    if(fDmesonSpecie) histName = "histosDStarMBN";
+		    else histName = "histosD0MBN";
+		}
+		else{
+		    if(fDmesonSpecie) histName = "histosDStarMBN";
+		    else histName = "histosD0";
+		}
     // get analysis output file
     TString datafile;
     TFile *File;
@@ -71,8 +81,14 @@ void signalExtraction_SB(
       dir=dynamic_cast<TDirectoryFile*>(File->Get("DmesonsForJetCorrelations"));
 
       for(int i=0;i<ND; i++){
-          if(postfix) histList =  dynamic_cast<TList*>(dir->Get(Form("%s%d%s",histName.Data(),i,listName.Data())));
-          else histList =  dynamic_cast<TList*>(dir->Get(Form("%s%d",histName.Data(),i)));
+
+		if(!isprefix){
+                  if(postfix) histList =  dynamic_cast<TList*>(dir->Get(Form("%s%d%s",histName.Data(),i,listName.Data())));
+                  else histList =  dynamic_cast<TList*>(dir->Get(Form("%s%d",histName.Data(),i)));
+		}
+        else{    if(postfix){ histList =  dynamic_cast<TList*>(dir->Get(Form("%s%sMBN%d",histName.Data(),listName.Data(),i)));}
+                  else {std::cout<<postfix<<"----dude! something's wrong, postfix has to be true if prefix is, check again-----"<<std::endl; return;}
+		}
           sparse = dynamic_cast<THnSparseF*>(histList->FindObject("hsDphiz"));
           sparse->GetAxis(0)->SetRangeUser(zmin,zmax);
           sparse->GetAxis(1)->SetRangeUser(jetmin,jetmax);
@@ -91,10 +107,15 @@ void signalExtraction_SB(
           dir=dynamic_cast<TDirectoryFile*>(File->Get("DmesonsForJetCorrelations"));
 
           for(int i=0;i<ND; i++){
-              if(postfix) histList =  dynamic_cast<TList*>(dir->Get(Form("%s%d%s",histName.Data(),i,listName.Data())));
-              else histList =  dynamic_cast<TList*>(dir->Get(Form("%s%d",histName.Data(),i)));
+
+            if(!isprefix){          if(postfix) histList =  dynamic_cast<TList*>(dir->Get(Form("%s%d%s",histName.Data(),i,listName.Data())));
+                      else histList =  dynamic_cast<TList*>(dir->Get(Form("%s%d",histName.Data(),i)));
+            }
+            else {          if(postfix) histList =  dynamic_cast<TList*>(dir->Get(Form("%s%sMBN%d",histName.Data(),listName.Data(),i)));
+                              else {std::cout<<postfix<<"----dude! something's wrong,again! postfix has to be true if prefix is, check again-----"<<std::endl; return;}
+            }
               sparse = dynamic_cast<THnSparseF*>(histList->FindObject("hsDphiz"));
-              sparse->GetAxis(0)->SetRangeUser(zmin,zmax);
+              //sparse->GetAxis(0)->SetRangeUser(zmin,zmax);
               sparse->GetAxis(1)->SetRangeUser(jetmin,jetmax);
               if(isEta) sparse->GetAxis(5)->SetRangeUser(-jetEta,jetEta);
               if(j==0 && i==0) hInvMassptD=dynamic_cast<TH3D*>(sparse->Projection(3,1,2));
@@ -270,6 +291,7 @@ Bool_t rawJetSpectra(TString outdir, TString prod){
         fitterp->SetInitialGaussianMean(static_cast<Double_t>(fDmass));
         fitterp->SetInitialGaussianSigma(static_cast<Double_t>(fDsigma));
 
+
         if(fUseRefl && fDmesonSpecie == 0) {
           if(fSystem) SetReflection(fitterp,hmin,hmax,RS,i+firstPtBin); // older way from Fabio's templates for p-Pb
           else SetReflection(fitterp,hmin,hmax,RS,static_cast<Int_t>(fptbinsDA[i]),static_cast<Int_t>(fptbinsDA[i+1])); // new for pp (new templates from D-jet code)
@@ -373,12 +395,12 @@ Bool_t rawJetSpectra(TString outdir, TString prod){
         if(soberr*100. > 35.) twodigits=kFALSE;
         //if(twodigits) pv->AddText(Form("S/B (3#sigma) = (%.2f #pm %.2f)", sob,soberr));
         //else pv->AddText(Form("S/B (3#sigma) = (%.1f #pm %.1f)", sob,soberr));
-        if(twodigits) pvSig->AddText(Form("S (3#sigma) = %.2f #pm %.2f", s,serr));
-        else pvSig->AddText(Form("S (3#sigma) = %.1f #pm %.1f", s,serr));
-        if(twodigits) pvSig->AddText(Form("B (3#sigma) = %.2f #pm %.2f", bkg,bkgerr));
-        else pvSig->AddText(Form("B (3#sigma) = %.1f #pm %.1f", bkg,bkgerr));
-        pvSig->AddText(Form("Signif.(3#sigma) = %.1f #pm %.1f", signf,signferr));
-        pvSig->AddText(Form("S/B(3#sigma) = %.2f #pm %.2f", sob,soberr));
+        if(twodigits) pvSig->AddText(Form("S (2#sigma) = %.2f #pm %.2f", s,serr));
+        else pvSig->AddText(Form("S (2#sigma) = %.1f #pm %.1f", s,serr));
+        if(twodigits) pvSig->AddText(Form("B (2#sigma) = %.2f #pm %.2f", bkg,bkgerr));
+        else pvSig->AddText(Form("B (2#sigma) = %.1f #pm %.1f", bkg,bkgerr));
+        pvSig->AddText(Form("Signif.(2#sigma) = %.1f #pm %.1f", signf,signferr));
+        pvSig->AddText(Form("S/B(2#sigma) = %.2f #pm %.2f", sob,soberr));
         if(fUseRefl && fDmesonSpecie == 0) pvSig->AddText(Form("R/S = %.2f", RS));
         pvSig->Draw("same");
         //if(isdetails) pvProd->Draw("same");

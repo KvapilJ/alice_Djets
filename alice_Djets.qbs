@@ -39,7 +39,7 @@ Project {
                 pDQA+"AliAnalysisTaskSEDmesonsFilterCJQA.cxx",
                 pDQA+"AliAnalysisTaskSEDmesonsFilterCJQA.h",
                 pDQA+"AnalysisTrainCorrJetsLocalQA.C",
-                pDQA+"runMCQA.C",
+                pDQA+"runOnGrid.C",
                 "/home/kvapil/work/analysis/pp_run2/D0jet/SignalComparisonM/comparePeriods.cxx",
                 "/home/kvapil/work/analysis/pp_run2/D0jet/SignalComparison/comparePeriods.cxx",
                 "/home/kvapil/work/analysis/pp_run2/D0jet/data/basicQA.cxx",

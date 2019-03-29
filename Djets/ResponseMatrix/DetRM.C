@@ -43,6 +43,7 @@ bool postfix = 0, TString listName = "FD", bool isprefix=0 )
       TList *histList[NDMC];
       THnSparseF *sparseMC[NDMC];
 
+
     TH2F *hPtJet2d;
     TH1F *hPtJetGen;
     TH1F *hPtJetRec;
@@ -52,6 +53,7 @@ bool postfix = 0, TString listName = "FD", bool isprefix=0 )
            if(!isprefix){
                 if(postfix) {
             histList[i] =  (TList*)dir->Get(Form("%s%d%sMCrec",histName.Data(),i,listName.Data())); }
+
                 else {
                          if(isPrompt) histList[i] =  (TList*)dir->Get(Form("%s%dMCrec",histName.Data(),i));
                          else histList[i] =  (TList*)dir->Get(Form("%s%dFDMCrec",histName.Data(),i));
@@ -63,6 +65,7 @@ bool postfix = 0, TString listName = "FD", bool isprefix=0 )
                         else{    histList[i] =  (TList*)dir->Get(Form("%s%sMBN%dFDMCrec",histName.Data(),listName.Data(),i)); }
                 }
                 else { std::cout<<"-----postfix has to be true if prefix is true!! check again----------------"<<std::endl; return;       }
+
            }
 
 
@@ -81,6 +84,7 @@ bool postfix = 0, TString listName = "FD", bool isprefix=0 )
         sparseMC[i]->GetAxis(4)->SetRangeUser(-(0.9-fRpar),0.9-fRpar);
         sparseMC[i]->GetAxis(9)->SetRangeUser(-(0.9-fRpar),0.9-fRpar);
     }
+
 
         if(fDmesonSpecie) hPtJet[i] = (TH2F*)sparseMC[i]->Projection(5,1,"E"); //Dstar tmp
         else hPtJet[i] = (TH2F*)sparseMC[i]->Projection(6,1,"E");
