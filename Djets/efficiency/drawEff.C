@@ -26,21 +26,21 @@ double plotmin = 2, double plotmax = 36)
     TFile *inFilePrompt = new TFile(promptFile.Data(),"read");
     TFile *inFileFD = new TFile(nonpromptFile.Data(),"read");
 
-    TH1D *hEffPrompt = (TH1D*)inFilePrompt->Get("hEff_reb");
-    TH1D *hEffNonPrompt = (TH1D*)inFileFD->Get("hEff_reb");
+    TH1D *hEffPrompt = dynamic_cast<TH1D*>(inFilePrompt->Get("hEff_reb"));
+    TH1D *hEffNonPrompt = dynamic_cast<TH1D*>(inFileFD->Get("hEff_reb"));
 
     hEffPrompt->SetTitle("");
     hEffPrompt->SetMarkerColor(promptColor);
     hEffPrompt->SetLineColor(promptColor);
     hEffPrompt->SetMarkerStyle(20);
-    hEffPrompt->SetMarkerSize(1.2);
+    hEffPrompt->SetMarkerSize(1.2f);
     hEffPrompt->GetXaxis()->SetTitle(Form("#it{p}_{T,%s} (GeV/#it{c})",fDmesonS.Data()));
     hEffPrompt->GetYaxis()->SetTitle("Acceptance #times Efficiency");
-    hEffPrompt->GetXaxis()->SetLabelSize(0.04);
-    hEffPrompt->GetXaxis()->SetTitleSize(0.04);
+    hEffPrompt->GetXaxis()->SetLabelSize(0.04f);
+    hEffPrompt->GetXaxis()->SetTitleSize(0.04f);
     hEffPrompt->GetXaxis()->SetTitleOffset(1.);
-    hEffPrompt->GetYaxis()->SetLabelSize(0.045);
-    hEffPrompt->GetYaxis()->SetTitleSize(0.05);
+    hEffPrompt->GetYaxis()->SetLabelSize(0.045f);
+    hEffPrompt->GetYaxis()->SetTitleSize(0.05f);
     hEffPrompt->GetXaxis()->SetRangeUser(plotmin,plotmax);
     hEffPrompt->SetMaximum(hEffPrompt->GetMaximum()*1.6);
     //if(fSystem) hEffPrompt->SetMaximum(hEffPrompt->GetMaximum()*1.6);
@@ -50,20 +50,20 @@ double plotmin = 2, double plotmax = 36)
     hEffNonPrompt->SetMarkerColor(nonpromptColor);
     hEffNonPrompt->SetLineColor(nonpromptColor);
     hEffNonPrompt->SetMarkerStyle(21);
-    hEffNonPrompt->SetMarkerSize(1.2);
+    hEffNonPrompt->SetMarkerSize(1.2f);
     hEffNonPrompt->GetXaxis()->SetTitle(Form("#it{p}_{T,%s} (GeV/#it{c})",fDmesonS.Data()));
     hEffNonPrompt->GetYaxis()->SetTitle("Acceptance #times Efficiency");
-    hEffNonPrompt->GetXaxis()->SetLabelSize(0.04);
-    hEffNonPrompt->GetXaxis()->SetTitleSize(0.05);
+    hEffNonPrompt->GetXaxis()->SetLabelSize(0.04f);
+    hEffNonPrompt->GetXaxis()->SetTitleSize(0.05f);
     hEffNonPrompt->GetXaxis()->SetTitleOffset(1.);
-    hEffNonPrompt->GetYaxis()->SetLabelSize(0.045);
-    hEffNonPrompt->GetYaxis()->SetTitleSize(0.05);
+    hEffNonPrompt->GetYaxis()->SetLabelSize(0.045f);
+    hEffNonPrompt->GetYaxis()->SetTitleSize(0.05f);
     hEffNonPrompt->GetXaxis()->SetRangeUser(plotmin,plotmax);
     hEffNonPrompt->SetMaximum(hEffNonPrompt->GetMaximum()*3);
 
 
     TLegend *leg = new TLegend(0.5,0.22,0.85,0.35);
-    leg->SetTextSize(0.045);
+    leg->SetTextSize(0.045f);
     leg->AddEntry(hEffPrompt,Form("Prompt %s",fDmesonS.Data()),"p");
     leg->AddEntry(hEffNonPrompt,Form("Feed-down %s",fDmesonS.Data()),"p");
 
@@ -71,7 +71,7 @@ double plotmin = 2, double plotmax = 36)
     pvALICE->SetFillStyle(0);
     pvALICE->SetBorderSize(0);
     pvALICE->SetTextFont(42);
-    pvALICE->SetTextSize(0.045);
+    pvALICE->SetTextSize(0.045f);
     pvALICE->SetTextAlign(11);
     pvALICE->AddText("ALICE Preliminary");
 
@@ -79,7 +79,7 @@ double plotmin = 2, double plotmax = 36)
     pvEn->SetFillStyle(0);
     pvEn->SetBorderSize(0);
     pvEn->SetTextFont(42);
-    pvEn->SetTextSize(0.045);
+    pvEn->SetTextSize(0.045f);
     pvEn->SetTextAlign(11);
     pvEn->AddText(Form("%s",fSystemS.Data()));
    // pvEn->AddText("PYTHIA6+HIJING, p-Pb, #sqrt{#it{s}_{NN}} = 5.02 TeV");
@@ -89,7 +89,7 @@ double plotmin = 2, double plotmax = 36)
     pvD->SetFillStyle(0);
     pvD->SetBorderSize(0);
     pvD->SetTextFont(42);
-    pvD->SetTextSize(0.045);
+    pvD->SetTextSize(0.045f);
     pvD->SetTextAlign(11);
     if(fDmesonSpecie) pvD->AddText("D^{*+} #rightarrow D^{0}#pi^{+} and charge conj.");
     else pvD->AddText("D^{0} #rightarrow K^{-}#pi^{+} and charge conj.");
@@ -98,7 +98,7 @@ double plotmin = 2, double plotmax = 36)
     pvJet->SetFillStyle(0);
     pvJet->SetBorderSize(0);
     pvJet->SetTextFont(42);
-    pvJet->SetTextSize(0.045);
+    pvJet->SetTextSize(0.045f);
     pvJet->SetTextAlign(11);
     pvJet->AddText(Form("in Charged Jets, Anti-#it{k}_{T}, #it{R} = 0.%d",Rpar));
 
@@ -106,7 +106,7 @@ double plotmin = 2, double plotmax = 36)
     pvEta->SetFillStyle(0);
     pvEta->SetBorderSize(0);
     pvEta->SetTextFont(42);
-    pvEta->SetTextSize(0.045);
+    pvEta->SetTextSize(0.045f);
     pvEta->SetTextAlign(11);
     pvEta->AddText(Form("|#it{#eta}_{jet}| < 0.%d",9-Rpar));
 
@@ -114,7 +114,7 @@ double plotmin = 2, double plotmax = 36)
     pvJetPt->SetFillStyle(0);
     pvJetPt->SetBorderSize(0);
     pvJetPt->SetTextFont(42);
-    pvJetPt->SetTextSize(0.045);
+    pvJetPt->SetTextSize(0.045f);
     pvJetPt->SetTextAlign(11);
     pvJetPt->AddText(Form("%.0f < p_{T.ch jet} < %.0f GeV/#it{c}",jetptmin,jetptmax));
 
@@ -134,6 +134,7 @@ double plotmin = 2, double plotmax = 36)
 
         cEff->SaveAs(Form("%s/DjetEff_Sim_log.pdf",outDir.Data()));
         cEff->SaveAs(Form("%s/DjetEff_Sim_log.png",outDir.Data()));
+        cEff->SaveAs(Form("%s/DjetEff_Sim_log.svg",outDir.Data()));
 
 
     TCanvas *cEff2 = new TCanvas("cEff2","cEff2",800,600);
@@ -144,5 +145,6 @@ double plotmin = 2, double plotmax = 36)
 
     cEff2->SaveAs(Form("%s/DjetEff_Sim.pdf",outDir.Data()));
     cEff2->SaveAs(Form("%s/DjetEff_Sim.png",outDir.Data()));
+    cEff2->SaveAs(Form("%s/DjetEff_Sim.svg",outDir.Data()));
 
 }

@@ -5,14 +5,14 @@ OLoader::OLoader(const TString &fileName, bool fusion, bool debug):
     fusion_ = fusion;
     if(!TFile_)errorTerminate_ = true;
     if(errorTerminate_) return;
-    std::cout<<"Initiating OLoader for "<<fileName<<"..."<<std::endl;
+  //  std::cout<<"Initiating OLoader for "<<fileName<<"..."<<std::endl;
     TIter nextkey(TFile_->GetListOfKeys());
     TKey *key;
     while((key=(TKey*)nextkey())){ //iter over all objects in file
         TObject *obj = key->ReadObj();
         OLoad(obj,""); //pass these elements into loader switch function
     }
-    std::cout<<"OLoader sequence complete..."<<std::endl;
+ //   std::cout<<"OLoader sequence complete..."<<std::endl;
 }
 
 ///
@@ -40,6 +40,7 @@ void OLoader::OLoad(TObject *obj, TString p){
 void OLoader::OLoadNorm(TObject *obj){
     if(debug_)std::cout<<"Linking norm: "<<obj->GetName()<<std::endl;
     Nevents_ = ((AliNormalizationCounter*)obj)->GetNEventsForNorm();
+    //std::cout<<"Nev: "<<Nevents_<<std::endl;
 }
 
 void OLoader::OLoadTHX(TObject *obj, TString p){
@@ -118,7 +119,7 @@ void OLoader::OLoadSparse(TObject *obj, TString p){
    if(errorTerminate_) return;
    if(debug_) std::cout<<"Linking THnSparse: "<<p<<std::endl;
     if(p.Contains("MBN0") || fusion_ == false){
-        if(p.Contains("MBN0")) p.ReplaceAll("MBN0","MBNX");
+        //if(p.Contains("MBN0")) p.ReplaceAll("MBN0","MBNX");
         if(obj->InheritsFrom(THnSparseF::Class()))((THnSparseF*)obj)->SetName(this->OGetDataName()+obj->GetName());
         if(obj->InheritsFrom(THnSparseF::Class())) THnSparseF_.insert(std::make_pair(p,(THnSparseF*)obj));
     }
@@ -325,6 +326,7 @@ void OLoader::OProjectSparse(TString p, Int_t axis){
         TH1F_.find(p+axis+TString::Itoa(c,10))->second->SetName(this->OGetDataName()+p+axis+c);
 
     }
+    else std::cout<<"sparse "<<p<<" not found"<<std::endl;
 }
 
 

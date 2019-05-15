@@ -42,7 +42,7 @@ void runQAMC(){
    // kBlue   = 600, kYellow = 400, kMagenta = 616,  kCyan   = 432,  kOrange = 800,
     //kSpring = 820, kTeal   = 840, kAzure   =  860, kViolet = 880,  kPink   = 900
 
-    TString MCfileList = "MCFileList";
+ /*   TString MCfileList = "DATAFileListEv";
 
     std::ifstream fileList;
     fileList.open (MCfileList);
@@ -56,9 +56,9 @@ void runQAMC(){
        MC.insert(std::make_pair(p,new OLoader(name,true)));
        MC.find(p)->second->OSetDataName(p);
     }
-       fileList.close();
+       fileList.close();*/
 
-    TString DATAfileList = "DATAFileList";
+    TString DATAfileList = "DATAFileList16";
 
     std::ifstream DfileList;
     DfileList.open (DATAfileList);
@@ -69,8 +69,15 @@ void runQAMC(){
     while ( std::getline(DfileList, DATAname)){
       TString p(DATAname);
       p=((TObjString *)p.Tokenize("/")->Last())->String().ReplaceAll("AnalysisResults_","").ReplaceAll(".root","");
-      DATA.insert(std::make_pair(p,new OLoader(DATAname,true)));
+      std::cout<<"name "<<p<<std::endl;
+      DATA.insert(std::make_pair(p,new OLoader(DATAname,false)));
       DATA.find(p)->second->OSetDataName(p);
+      DATA.find(p)->second->OSetNameSpace("DmesonsForJetCorrelations.histosD0MBN0.");
+      DATA.find(p)->second->OProjectSparse("hsDphiz",2);
+      std::cout<<"nEv no pt cut: ";
+      std::cout<<DATA.find(p)->second->OGetHisto1("hsDphiz20")->Integral(1,100);
+      std::cout<<" D pt > 2 GeV: ";
+      std::cout<<DATA.find(p)->second->OGetHisto1("hsDphiz20")->Integral(5,100)<<std::endl;;
     }
       DfileList.close();
 
@@ -93,7 +100,7 @@ void runQAMC(){
     MC.insert(std::make_pair("MC_LHC17e_hadronPID",new OLoader("MC/AnalysisResults_MC_LHC17e_hadronPID.root",true)));
     MC.find("MC_LHC17c_hadronPID")->second->OSetDataName("MC_LHC17c_hadronPID");
     MC.find("MC_LHC17e_hadronPID")->second->OSetDataName("MC_LHC17e_hadronPID");*/
-
+/*
     Int_t id = -1;
     TString year[2] = {"LHC17","LHC18"};
     for(auto mc : MC){
@@ -266,7 +273,7 @@ if(scale.Contains("nevents")){
     csparse->OFlush("ResultsMC/SPARSE","eps");
     }
 
-
+*/
     //******************************************************************
     //******************************************************************
     //***********************DATA***************************************
@@ -277,7 +284,7 @@ if(scale.Contains("nevents")){
     DATA.insert(std::make_pair("LHC17e_pass1",new OLoader("DATA/AnalysisResults_LHC17e_pass1.root",true)));
     DATA.find("LHC17c_pass1")->second->OSetDataName("LHC17c_pass1");
     DATA.find("LHC17e_pass1")->second->OSetDataName("LHC17e_pass1");*/
-
+/*
     OCanvas *datac = new OCanvas();
     OCanvas *datacproj[2];
     datacproj[0]= new OCanvas();
@@ -307,12 +314,12 @@ if(scale.Contains("nevents")){
              data.second->ODo1DprojectionY(list2DName[h]+list2D[i],ptint,2);
              if(!(datacproj[y]->OGetCanvas(year[y]+"_"+list2DName[h]+list2D[i]+"_proj"))){
                  datacproj[y]->OCreate(year[y]+"_"+list2DName[h]+list2D[i]+"_proj",3,3);
-                 if(h==0)datacproj2[y]->OCreate(year[y]+"_"+list2D[i]+"_proj",4,2);
-             }
+                 if(h==0)datacproj2[y]->OCreate(year[y]+"_"+list2D[i]+"_proj",4,2);*/
+        //     }
              /*if(id==0){
                  datacproj[y]->OCreate(year[y]+"_"+list2DName[h]+list2D[i]+"_proj",3,3);
                  if(h==0)datacproj2[y]->OCreate(year[y]+"_"+list2D[i]+"_proj",4,2);
-             }*/
+             }*//*
              if(h==0 || h==3)data.second->OSetProp(data.second->OGetHisto1(list2DName[h]+list2D[i]+"_px_"+ptint[0]+"_"+ptint[1]), scale, 0);
              else data.second->OSetProp(data.second->OGetHisto1(list2DName[h]+list2D[i]+"_px_"+ptint[0]+"_"+ptint[1]), scale, 2);
              data.second->OSetColor(list2DName[h]+list2D[i]+"_px_"+ptint[0]+"_"+ptint[1],colorWheel[id],2);
@@ -411,7 +418,7 @@ if(scale.Contains("nevents")){
     datacint->OFlush("ResultsDATA/1D","pdf");
     datacint->OFlush("ResultsDATA/1D","eps");
 }
-
+*/
     //******************************************************************
     //******************************************************************
     //***********************MC-DATA COMPARISON*************************
@@ -419,7 +426,7 @@ if(scale.Contains("nevents")){
     //******************************************************************
 
 //
-
+/*
     OCanvas *ccomp= new OCanvas();
     OCanvas *ccompINT= new OCanvas();
 if(scale.Contains("nentries")){
@@ -472,5 +479,5 @@ ccompINT->OFlush("COMPARISON_INT","pdf");
 ccompINT->OFlush("COMPARISON_INT","eps");
 }
 
-
+*/
 }

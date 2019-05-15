@@ -25,8 +25,6 @@
 
 #include "signalExtraction.h"
 
-static Bool_t isRefSys=0;
-static Double_t refScale = 1.5;
 
 void signalExtraction_SB(
   TString data = "$HOME/Work/alice/analysis/out/AnalysisResults.root",
@@ -40,12 +38,16 @@ void signalExtraction_SB(
   Bool_t save = 1,
   Bool_t isMoreFiles = 0,
   TString prod = "kl",   // for more than 1 file, for one file leave it empty)
-  Bool_t isprefix=0
+  Bool_t isprefix=0,
+  Bool_t isRefSys=0,
+  Double_t refScale = 1.5
 )
 {
 
     fUseRefl = isRef;
     if(fUseRefl) fReflFilename = refFile;
+    if(fUseRefl) fisRefSys = isRefSys;
+    if(fUseRefl) frefScale = refScale;
 
     savePlots = save;
     bEff = isEff;
@@ -71,6 +73,7 @@ void signalExtraction_SB(
     TString datafile;
     TFile *File;
     TDirectoryFile* dir;
+    TDirectoryFile *dir2;
     TList *histList;
     THnSparseF *sparse;
 
@@ -79,6 +82,9 @@ void signalExtraction_SB(
       File = new TFile(datafile,"read");
       if(!File) { std::cout << "==== WRONG FILE WITH DATA =====\n\n"; return ;}
       dir=dynamic_cast<TDirectoryFile*>(File->Get("DmesonsForJetCorrelations"));
+      dir2 = dynamic_cast<TDirectoryFile*>(File->Get("PWG3_D2H_DmesonsForJetCorrelationsMBN0"));
+      AliNormalizationCounter *c = (AliNormalizationCounter*)dir2->Get("NormalizationCounter");
+      nEvents = c->GetNEventsForNorm();
 
       for(int i=0;i<ND; i++){
 
@@ -164,9 +170,13 @@ void signalExtraction_SB(
     hSignal->Write();
     hrelErr->Write();
 
+    hSignalEffcor->Write();
+    hReflRS->Write();
+
     hjetptspectrum->Write();
     hjetptspectrumReb->Write();
     hjetptspectrumRebScaled->Write();
+    hjetptspectrumRebEvntScaled->Write();
     hjetptspectrumRebUnc->Write();
 
     for(int i=0; i<fptbinsDN; i++){
@@ -199,6 +209,8 @@ Bool_t rawJetSpectra(TString outdir, TString prod){
     hSignal = new TH1F("hSignal","hSignal",fptbinsDN,fptbinsDA);
     hSignal->Sumw2();
     hReflRS = new TH1F("hReflRS","hReflRS",fptbinsDN,fptbinsDA);
+    hSignalEffcor = new TH1F("hSignalEffcor","hSignalEffcor",fptbinsDN,fptbinsDA);
+    hSignalEffcor->Sumw2();
 
     if(fDmesonSpecie) hInvMassptD->GetXaxis()->SetTitle(Form("m(%s)(GeV/c^{2})","K#pi#pi-K#pi"));
     else hInvMassptD->GetXaxis()->SetTitle(Form("m(%s)(GeV/c^{2})","K#pi"));
@@ -436,6 +448,12 @@ Bool_t rawJetSpectra(TString outdir, TString prod){
         hSignal->SetBinContent(i+1,s);
         hSignal->SetBinError(i+1,serr);
 
+
+        hSignalEffcor->SetBinContent(i+1,hSignal->GetBinContent(i+1)/(efficiency[i]*nEvents));
+        hSignalEffcor->SetBinError(i+1,hSignal->GetBinError(i+1)/(efficiency[i]*nEvents));
+
+
+
         // ---------------- side-band drawing
        hmass_l[i] = static_cast<TH1F*>(hmass[i]->Clone("hmass_l"));
         hmass_l[i]->GetXaxis()->SetRangeUser(signal_l_min,signal_l_max);
@@ -583,7 +601,7 @@ Bool_t SetReflection(AliHFInvMassFitter* &fitter, Float_t fLeftFitRange, Float_t
 
   fitter->SetTemplateReflections(histRefl,"template",static_cast<Double_t>(fLeftFitRange),static_cast<Double_t>(fRightFitRange));
   Double_t RoverS = histRefl->Integral(histRefl->FindBin(static_cast<Double_t>(fLeftFitRange)),histRefl->FindBin(static_cast<Double_t>(fRightFitRange)))/histSign->Integral(histSign->FindBin(static_cast<Double_t>(fLeftFitRange)),histSign->FindBin(static_cast<Double_t>(fRightFitRange)));
-  if(isRefSys) RoverS*=refScale;
+  if(fisRefSys) RoverS*=frefScale;
   printf("R/S ratio in fit range for bin %d = %1.3f\n",iBin,RoverS);
   fitter->SetFixReflOverS(RoverS);
 
@@ -602,15 +620,15 @@ Bool_t SetReflection(AliHFInvMassFitter* &fitter, Float_t fLeftFitRange, Float_t
 
   TString fHistnameRefl = "histRflFittedDoubleGaus_pt";
   TString fHistnameSign = "histSgn_";
-  TH1F *histRefl = dynamic_cast<TH1F*>(fileRefl->Get(Form("%s%d_%d",fHistnameRefl.Data(),ptmin,ptmax)));
-  TH1F *histSign = dynamic_cast<TH1F*>(fileRefl->Get(Form("%s%d_%d",fHistnameSign.Data(),ptmin,ptmax)));
+  TH1D *histRefl = dynamic_cast<TH1D*>(fileRefl->Get(Form("%s%d_%d",fHistnameRefl.Data(),ptmin,ptmax)));
+  TH1D *histSign = dynamic_cast<TH1D*>(fileRefl->Get(Form("%s%d_%d",fHistnameSign.Data(),ptmin,ptmax)));
   if(!histRefl || !histSign){
     std::cout << "Error in loading the template/signal histrograms! Exiting..." << std::endl; return kFALSE;
   }
 
   fitter->SetTemplateReflections(histRefl,"template",static_cast<Double_t>(fLeftFitRange),static_cast<Double_t>(fRightFitRange));
   Double_t RoverS = histRefl->Integral(histRefl->FindBin(static_cast<Double_t>(fLeftFitRange)),histRefl->FindBin(static_cast<Double_t>(fRightFitRange)))/histSign->Integral(histSign->FindBin(static_cast<Double_t>(fLeftFitRange)),histSign->FindBin(static_cast<Double_t>(fRightFitRange)));
-  if(isRefSys) RoverS*=refScale;
+  if(fisRefSys) RoverS*=frefScale;
   //printf("R/S ratio in fit range for bin %d = %1.3f\n",iBin,RoverS);
   fitter->SetFixReflOverS(RoverS);
 
@@ -708,10 +726,15 @@ void  saveSpectraPlots(TString outdir,TString prod){
       TH1F *hjetptspectrumReb_tmp = static_cast<TH1F*>(hjetptspectrum->Clone("hjetptspectrumReb_tmp"));
       hjetptspectrumReb = static_cast<TH1F*>(hjetptspectrumReb_tmp->Rebin(fptbinsJetMeasN,"hjetptspectrumReb",fptbinsJetMeasA));
       hjetptspectrumRebScaled = static_cast<TH1F*>(hjetptspectrumReb_tmp->Rebin(fptbinsJetMeasN,"hjetptspectrumRebScaled",fptbinsJetMeasA));
+      hjetptspectrumRebEvntScaled = static_cast<TH1F*>(hjetptspectrumReb_tmp->Rebin(fptbinsJetMeasN,"hjetptspectrumRebEvntScaled",fptbinsJetMeasA));
+      hjetptspectrumRebEvntScaled->Scale(1./nEvents);
       setHistoDetails(hjetptspectrumReb,0,kBlue,20,static_cast<Size_t>(1.2)); // with bin width scaling
       setHistoDetails(hjetptspectrumRebScaled,1,kBlue,20,static_cast<Size_t>(1.2)); // with bin width scaling
+      setHistoDetails(hjetptspectrumRebEvntScaled,1,kBlue,20,static_cast<Size_t>(1.2)); // with bin width scaling
+      setHistoDetails(hSignalEffcor,1,kBlue,20,static_cast<Size_t>(1.2));
       hjetptspectrumReb->GetXaxis()->SetTitle("p_{T,ch jet} (GeV/c)");
       hjetptspectrumRebScaled->GetXaxis()->SetTitle("p_{T,ch jet} (GeV/c)");
+      hjetptspectrumRebEvntScaled->GetXaxis()->SetTitle("p_{T,ch jet} (GeV/c)");
       TCanvas *cSpectrumRebin = new TCanvas("cSpectrumRebin","cSpectrumRebin",800,600);
       cSpectrumRebin->SetLogy();
       hjetptspectrumRebScaled->Draw();
@@ -900,7 +923,11 @@ void  saveFitParams(TString outdir,TString prod){
 }
 void setHistoDetails(TH1 *h, int scale, Color_t color, Style_t Mstyle, Size_t size, Width_t width){
 
-    if(scale)h->Scale(1,"width");
+    if(scale==1)h->Scale(1,"width");
+    else if(scale==2){
+        h->Scale(1./h->Integral());
+        h->Scale(1,"width");
+    }
     h->SetMarkerStyle(Mstyle);
     h->SetMarkerColor(color);
     h->SetMarkerSize(size);
@@ -917,6 +944,7 @@ void SaveCanvas(TCanvas *c, TString name){
 
     c->SaveAs(Form("%s_pTD%d.png",name.Data(),static_cast<Int_t>(fptbinsDA[0])));
     c->SaveAs(Form("%s_pTD%d.pdf",name.Data(),static_cast<Int_t>(fptbinsDA[0])));
+    c->SaveAs(Form("%s_pTD%d.svg",name.Data(),static_cast<Int_t>(fptbinsDA[0])));
 }
 
 void setStyle(){

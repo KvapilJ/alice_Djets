@@ -14,7 +14,7 @@ Int_t linestyle2[] = {1,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
 const int nFiles = 3;
 TString inDir[nFiles] = {
   "","_FDsysUp","_FDsysDown"
-}
+};
 /*
 const int nFiles = 3;
 TString inDir[nFiles] = {
@@ -30,14 +30,16 @@ TString desc[nFiles] = {
   "FD Down"
 };
 
-double plotmin = 3, plotmax = 50;
-const int ptbinsN = 9;
-double ptbinsA[ptbinsN+1] = { 3,4,5,6,8,10,14,20,30,50 };
+//double plotmin = 3, plotmax = 50;
+//const int ptbinsN = 9;
+//double ptbinsA[ptbinsN+1] = { 3,4,5,6,8,10,14,20,30,50 };
 
-int nJetBins2 = 7;
-double ptJetbins2[] = { 5,6,8,10,14,20,30,50 };
+//int nJetBins2 = 7;
+//double ptJetbins2[] = { 5,6,8,10,14,20,30,50 };
 
-void sys_Bfeeddown(int reg=4,  TString inDirBase = "/home/jackbauer/Work/alice/analysis/pp5TeV/D0jet/results/DzeroR03_pPbCuts_0", TString inName = "systematics/doFDSys", bool isChain = 0,  int measmin=3, int measmax=50, int truemin=5, int truemax=50)
+void yieldSys(TString inName, TString inDirBase, TString unfold);
+
+void sys_Bfeeddown(TString unfold = "Bayes_5", TString inDirBase = "/home/jackbauer/Work/alice/analysis/pp5TeV/D0jet/results/DzeroR03_pPbCuts_0", TString inName = "systematics/doFDSys")
 //void rawYield_reflections(int reg=3,  TString inDirBase = "/home/basia/Work/alice/analysis/pPb_run2/DzeroR03_RefDPt3PythiaEff_BaseCuts", TString inName = "Default_jetMeas3_50_jetTrue3_50_PbPbbinning/systematics", bool isChain = 0,  int measmin=3, int measmax=50, int truemin=5, int truemax=50)
 {
 
@@ -46,13 +48,13 @@ void sys_Bfeeddown(int reg=4,  TString inDirBase = "/home/jackbauer/Work/alice/a
 //  inDir += input;
   gSystem->Exec(Form("mkdir %s/%s",inputDir.Data(),inName.Data()));
 
- yieldSys(inName,inDirBase,measmin,measmax,truemin,truemax);
+ yieldSys(inName,inDirBase,unfold);
 
 
 return;
 }
 
-void yieldSys(TString inName, TString inDirBase, int measmin, int measmax, int truemin, int truemax)
+void yieldSys(TString inName, TString inDirBase, TString unfold)
 {
 
             TString out = inDirBase;
@@ -66,9 +68,7 @@ void yieldSys(TString inName, TString inDirBase, int measmin, int measmax, int t
             for (int i=0; i<nFiles; i++){
                 dirName[i] = inDirBase;
                 dirName[i] += "/";
-                dirName[i] += "Default_249_doFDSys";
-                dirName[i] += "/";
-                dirName[i] += "unfolding_Bayes_4";
+                dirName[i] += unfold;
                 dirName[i] += inDir[i];
 
             }
@@ -80,11 +80,11 @@ void yieldSys(TString inName, TString inDirBase, int measmin, int measmax, int t
 //              fproj[i] = new TFile(Form("%s/unfoldedSpectrum_unfoldedJetSpectrum.root",dirName[i].Data()),"READ");
               fproj[i] = new TFile(Form("%s/unfoldedSpectrum_unfoldedJetSpectrum.root",dirName[i].Data()),"READ");
 
-              if(!fproj[i]) { cout << "NO FILE !!!!!" << endl; return; }
+              if(!fproj[i]) { std::cout << "NO FILE !!!!!" << std::endl; return; }
             }
 
-cout<<"================---------------------------------===================="<<endl;
-cout<<dirName[0].Data()<<endl;
+std::cout<<"================---------------------------------===================="<<std::endl;
+std::cout<<dirName[0].Data()<<std::endl;
 	    TCanvas *cspec = new TCanvas("cspec","cspec",800,800);
             cspec->SetLogy();
 
@@ -98,12 +98,12 @@ cout<<dirName[0].Data()<<endl;
                 spec[i] = (TH1F*)fproj[i]->Get("unfoldedSpectrum");
                 spec[i]->Sumw2();
                 spec[i] -> Scale(1,"width");
-                spec[i]->SetTitle();
+                spec[i]->SetTitle("");
                 spec[i]->SetLineColor(colors2[i]);
                 spec[i]->SetMarkerColor(colors2[i]);
                 spec[i]->SetMarkerStyle(markers2[i]);
 
-                specReb[i] = new TH1F(Form("specReb%d",i),"specReb",ptbinsN,ptbinsA);
+                specReb[i] = new TH1F(Form("specReb%d",i),"specReb",fptbinsJetMeasN,fptbinsJetMeasA);
                 for(int j=1;j<specReb[i]->GetNbinsX()+1;j++){
                     double pt = specReb[i]->GetBinCenter(j);
                     int bin = spec[i]->GetXaxis()->FindBin(pt);
@@ -113,12 +113,12 @@ cout<<dirName[0].Data()<<endl;
                     specReb[i]->SetBinError(j,error);
                 }
 
-                specReb[i]->SetTitle();
+                specReb[i]->SetTitle("");
                 specReb[i]->SetLineColor(colors2[i]);
                 specReb[i]->SetMarkerColor(colors2[i]);
                 specReb[i]->SetMarkerStyle(markers2[i]);
 
-                spec[i]->GetXaxis()->SetRangeUser(plotmin,plotmax);
+                spec[i]->GetXaxis()->SetRangeUser(fptbinsJetMeasA[0],fptbinsJetMeasA[fptbinsJetMeasN]);
                 if(!i) spec[i]->Draw();
                 else spec[i]->Draw("same");
                 leg->AddEntry(spec[i],desc[i].Data());
@@ -137,8 +137,8 @@ cout<<dirName[0].Data()<<endl;
                 hratio[i]->Divide(spec[0]);
                 hratio[i]->SetLineStyle(linestyle2[i]);
                 hratio[i]->SetLineWidth(2);
-                hratio[i]->GetXaxis()->SetRangeUser(ptbinsA[0],ptbinsA[ptbinsN]);
-                hratio[i]->GetYaxis()->SetRangeUser(0.80,1.25);
+                hratio[i]->GetXaxis()->SetRangeUser(fptbinsJetMeasA[0],fptbinsJetMeasA[fptbinsJetMeasN]);
+                hratio[i]->GetYaxis()->SetRangeUser(0.7,1.35);
                 hratio[i]->GetYaxis()->SetTitle(Form("ratio to central (%s)",desc[0].Data()));
                 if(!i) hratio[i]->Draw("hist");
                 else hratio[i]->Draw("samehist");
@@ -146,7 +146,7 @@ cout<<dirName[0].Data()<<endl;
             }
             leg2->Draw("same");
 
-            TLine *line = new TLine(ptbinsA[0],1,ptbinsA[ptbinsN],1);
+            TLine *line = new TLine(fptbinsJetMeasA[0],1,fptbinsJetMeasA[fptbinsJetMeasN],1);
             line->SetLineStyle(2);
             line->SetLineWidth(2);
             line->Draw("same");
@@ -156,12 +156,12 @@ cout<<dirName[0].Data()<<endl;
 
 
             //-------------- uncertanties
-            TH1D *hsys = (TH1D*)*spec[0]->Clone("hsys");
+            TH1D *hsys = (TH1D*)spec[0]->Clone("hsys");
             hsys->GetYaxis()->SetTitle("FD sys. unc [%]");
             hsys->SetLineColor(kViolet+1);
             hsys->SetLineStyle(2);
             hsys->SetLineWidth(2);
-            hsys->GetYaxis()->SetRangeUser(4,16);
+            hsys->GetYaxis()->SetRangeUser(4,22);
 
             for(int j=1; j<spec[0]->GetNbinsX()+1; j++ ){
                     double unc1 = spec[1]->GetBinContent(j) - spec[0]->GetBinContent(j);
@@ -171,7 +171,7 @@ cout<<dirName[0].Data()<<endl;
                     double unc = 0;
                     if(unc1>unc2) unc = unc1;
                     else unc = unc2;
-			cout<<"==========="<<100*unc/spec[0]->GetBinContent(j)<<"==="<<100*unc1/spec[0]->GetBinContent(j)<<"==="<<100*unc2/spec[0]->GetBinContent(j)<<endl;
+            std::cout<<"==========="<<100*unc/spec[0]->GetBinContent(j)<<"==="<<100*unc1/spec[0]->GetBinContent(j)<<"==="<<100*unc2/spec[0]->GetBinContent(j)<<std::endl;
                     unc /= spec[0]->GetBinContent(j);
                     hsys->SetBinContent(j,unc*100);
                     hsys->SetBinError(j,0);
@@ -198,7 +198,7 @@ void getRMS(const int nFiles, TH1F **hratio, TH1F *hmean, TH1F *hsys)
 {
 
   //TH1D *hsys = new TH1D("hsys","syst. rms; p_{T,ch jet};  sys [%] (rms)",nJetBins2,ptJetbins2);
-  hsys->SetTitle();
+  hsys->SetTitle("");
   hsys->SetLineColor(1);
   hsys->SetLineWidth(2);
   hsys->SetLineStyle(2);
@@ -214,16 +214,16 @@ void getRMS(const int nFiles, TH1F **hratio, TH1F *hmean, TH1F *hsys)
 //  hmean->GetYaxis()->SetRangeUser(0.95,1.1);
   hmean->SetMarkerStyle(20);
   hmean->SetLineStyle(1);
-  hmean->SetTitle();
+  hmean->SetTitle("");
 
-  double *rms = new double[nJetBins2];
-  double *mean = new double[nJetBins2];
-  for(int i=0; i<nJetBins2; i++){
+  double *rms = new double[fptbinsJetFinalN];
+  double *mean = new double[fptbinsJetFinalN];
+  for(int i=0; i<fptbinsJetFinalN; i++){
       rms[i] = 0;
        mean[i] = 0;
        for (int j=0; j<nFiles-1; j++){
-         mean[i] = mean[i]+ ( hratio[j]->GetBinContent(hratio[j]->FindBin( (ptJetbins2[i]+ptJetbins2[i+1])/2. )) );
-         rms[i] = rms[i]+ ( 1-hratio[j]->GetBinContent(hratio[j]->FindBin( (ptJetbins2[i]+ptJetbins2[i+1])/2. )) ) * ( 1-hratio[j]->GetBinContent(hratio[j]->FindBin( (ptJetbins2[i]+ptJetbins2[i+1])/2. )) ) ;
+         mean[i] = mean[i]+ ( hratio[j]->GetBinContent(hratio[j]->FindBin( (fptbinsJetFinalA[i]+fptbinsJetFinalA[i+1])/2. )) );
+         rms[i] = rms[i]+ ( 1-hratio[j]->GetBinContent(hratio[j]->FindBin( (fptbinsJetFinalA[i]+fptbinsJetFinalA[i+1])/2. )) ) * ( 1-hratio[j]->GetBinContent(hratio[j]->FindBin( (fptbinsJetFinalA[i]+fptbinsJetFinalA[i+1])/2. )) ) ;
 
       }
       mean[i] = mean[i]/(double)(nFiles-1);
@@ -231,8 +231,8 @@ void getRMS(const int nFiles, TH1F **hratio, TH1F *hmean, TH1F *hsys)
       hsys->SetBinContent(i+1,rms[i]*100);
 
       hmean->SetBinContent(i+1,mean[i]);
-      cout << "RMS pT " << (ptJetbins2[i]+ptJetbins2[i+1])/2. << " GeV/c:\t" << rms[i]*100 << endl;
-      cout << "Mean pT " << (ptJetbins2[i]+ptJetbins2[i+1])/2. << " GeV/c:\t" << mean[i] << endl;
+      std::cout << "RMS pT " << (fptbinsJetFinalA[i]+fptbinsJetFinalA[i+1])/2. << " GeV/c:\t" << rms[i]*100 << std::endl;
+      std::cout << "Mean pT " << (fptbinsJetFinalA[i]+fptbinsJetFinalA[i+1])/2. << " GeV/c:\t" << mean[i] << std::endl;
   }
 
 }

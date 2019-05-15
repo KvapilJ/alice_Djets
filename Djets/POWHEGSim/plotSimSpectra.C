@@ -14,7 +14,7 @@ double plotmin = 0, plotmax = 50;
 const double simScaling =  APb;
 //double pPbscaling = 2.1/208.;
 
-TH1* GetInputHist(TString inFile, string histName,TH1 *hh);
+TH1* GetInputHist(TString inFile, TString histName,TH1 *hh);
 
 void ScaleHist(TH1 *hh, int full = 0);
 void setHistoDetails(TH1 *hh, Color_t color, Style_t Mstyle, int Msize = 1.3, Width_t Lwidth = 2, Style_t Lstyle = 1);
@@ -267,10 +267,10 @@ void compareSpectra(TH1D **hFD, const int nFiles, bool isjet, bool quark, TStrin
     SaveCanvas(cr,cName+"_ratio");
 }
 
-TH1* GetInputHist(TString inFile, string histName,TH1 *hh){
+TH1* GetInputHist(TString inFile, TString histName,TH1 *hh){
 
 	TFile *jetPtFile = new TFile(inFile,"read");
-    hh = (TH1F*)jetPtFile->Get(histName.c_str());
+    hh = (TH1F*)jetPtFile->Get(histName);
 
     return hh;
 
@@ -307,5 +307,6 @@ void SaveCanvas(TCanvas *c, TString name){
 
     c->SaveAs(Form("%s.png",name.Data()));
     c->SaveAs(Form("%s.pdf",name.Data()));
+    c->SaveAs(Form("%s.svg",name.Data()));
 
 }

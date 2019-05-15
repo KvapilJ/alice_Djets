@@ -1,8 +1,15 @@
+#include "TStyle.h"
+#include "TFile.h"
+#include "TCanvas.h"
+#include "TPaveText.h"
+#include "TH1D.h"
+#include "TROOT.h"
+#include <iostream>
 #include "style.C"
 
 double scaleFactor = 1;
 
- int log=0;
+ int ilog=0;
 
 void multitrialJetPtYieldsDBins(char *outDir = "JetPtComparison" )
 {
@@ -16,7 +23,7 @@ void multitrialJetPtYieldsDBins(char *outDir = "JetPtComparison" )
     const int bkgvar = 8;
 
     double plotmin = 100;
-    if (!log) plotmin = 50;
+    if (!ilog) plotmin = 50;
 
     const int ptbinsJetN = 6;
     //double ptbinsJet[ptbinsJetN+1] = { 0,2,4,6,8,10,12,15,30,50 };
@@ -63,10 +70,10 @@ void multitrialJetPtYieldsDBins(char *outDir = "JetPtComparison" )
     cAv->SaveAs("plots/JetPtTrialsAvDBins_log.pdf");
     cAv->SaveAs("plots/JetPtTrialsAvDBins_log.png");*/
 
-    int ptbinsmin[] = {3,4,5,6,7,8,10,12,24};
-    int ptbinsmax[] = {4,5,6,7,8,10,12,24,36};
+    int ptbinsmin[] = {2,3,4,5,6,7,8,10,12,24};
+    int ptbinsmax[] = {3,4,5,6,7,8,10,12,24,36};
 
-    for(int i=0; i<9; i++){
+    for(int i=0; i<10; i++){
 
        TPaveText *pv1 = new TPaveText(0.75,0.8,0.9,0.9,"brNDC");
       pv1->SetFillStyle(0);
@@ -91,10 +98,10 @@ void multitrialJetPtYieldsDBins(char *outDir = "JetPtComparison" )
 
 
    return;
-
+/*
     for (int ibin=0; ibin<ptbinsJetN; ibin++){
         TFile *file = TFile::Open(Form("effScalemethod/Yield_Dzero_%1.1fto%1.1f.root",ptbinsJet[ibin],ptbinsJet[ibin+1]),"read");
-        cout << "________________ Reading pT bin: " <<  ptbinsJet[ibin] << "\t" << ptbinsJet[ibin+1] << endl;
+        std::cout << "________________ Reading pT bin: " <<  ptbinsJet[ibin] << "\t" << ptbinsJet[ibin+1] << std::endl;
         TH1D *hDist = (TH1D*)file->Get(Form("fJetPtBinYield_Bin%d",ibin));
 
         for (int j=0; j< nTrials; j++){
@@ -105,7 +112,7 @@ void multitrialJetPtYieldsDBins(char *outDir = "JetPtComparison" )
 
 
     TCanvas *cc = new TCanvas("cc","cc",800,600);
-    cc->SetLogy(log);
+    cc->SetLogy();
     hYields[0]->Draw("e");
 
     for(int i=1; i<48; i++){
@@ -113,7 +120,7 @@ void multitrialJetPtYieldsDBins(char *outDir = "JetPtComparison" )
    }
 
 
-   if(log){
+   if(ilog){
         cc->SaveAs("plots/JetPtTrialAll_log.pdf");
         cc->SaveAs("plots/JetPtTrialAll_log.png");
     }
@@ -121,7 +128,7 @@ void multitrialJetPtYieldsDBins(char *outDir = "JetPtComparison" )
         cc->SaveAs("plots/JetPtTrialAll.pdf");
         cc->SaveAs("plots/JetPtTrialAll.png");
     }
-
+*/
 
 
 }

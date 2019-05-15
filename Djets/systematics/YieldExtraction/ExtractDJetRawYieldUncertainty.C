@@ -6,37 +6,54 @@
 //  EvaluateBinPerBinUncertainty(...) //to be done for each pT bin in which you have a mass spectrum
 //  ExtractDJetRawYieldUncertainty(...) //to build the uncertainty for the various bins of the jet pT spectrum
 
+#include "AliDJetRawYieldUncertaintyLocal.h"
 
 double sigmajet[] = {0,0};
 
-const int ptbinsDN = 10;
-double ptDbins[ptbinsDN+1] = { 3,4,5,6,7,8,10,12,16,24,36 };
+const int ptbinsDN = 11;
+double ptDbins[ptbinsDN+1] = {2,3,4,5,6,7,8,10,12,16,24,36};
 
-double sigmaD[ptbinsDN] = {0.009975,0.01086,0.01171,0.01262,0.01299,0.01371,0.01461,0.01612, 0.01745,0.0185367 }; // set up sigma of the D signal from MC
+double sigmaD[ptbinsDN] = {0.00991,0.01075,0.01141,0.01215,0.01275,0.01316,0.0139,0.01477,0.01584,0.01806,0.02198}; // set up sigma of the D signal from MC
 
-TString efffile = "/home/jackbauer/Work/alice/analysis/pp5TeV/D0jet/results/DzeroR03_pPbCuts/Default_249/efficiency/DjetEff_prompt_jetpt5_50.root";
+TString efffile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/efficiency/DjetEff_prompt_jetpt5_50.root";
 //TString sigmaFile = "";
 
-void ExtractDJetRawYieldUncertainty(){
+// forward declaration
+void EvaluateBinPerBinUncertainty(
+   Int_t bin = 0,
+   AliDJetRawYieldUncertaintyLocal::DMesonSpecies specie=AliDJetRawYieldUncertaintyLocal::kD0toKpi,  //D-meson decay channel
+   AliDJetRawYieldUncertaintyLocal::YieldMethod method=AliDJetRawYieldUncertaintyLocal::kSideband,  //yield extraction method
+   Double_t zmin=-1.,   //lower z edge
+   Double_t zmax=2.,   //upper z edge
+   Bool_t refl=kFALSE
+   );
+void ExtractDJetRawYieldUncertaintyFull(
+   AliDJetRawYieldUncertaintyLocal::DMesonSpecies specie=AliDJetRawYieldUncertaintyLocal::kD0toKpi,  //D-meson decay channel
+   AliDJetRawYieldUncertaintyLocal::YieldMethod  method=AliDJetRawYieldUncertaintyLocal::kSideband,  //yield extraction method
+   Int_t nTrials=40,  	     //only for SB method: number of random trials for each pT(D) bin to build pT(jet) spectrum variations
+   Bool_t allowRepet=kFALSE  //only for SB method: allow repetitions in the extraction of trials in a give pT(D) bin
+   );
+void ExtractDJetRawYieldUncertainty_FromSB_CoherentTrialChoice(
+  AliDJetRawYieldUncertaintyLocal::DMesonSpecies specie=AliDJetRawYieldUncertaintyLocal::kD0toKpi,  //D-meson decay channel
+   Int_t nTrials=10
+   );
+void SetInputParametersDzero(AliDJetRawYieldUncertaintyLocal *interface);
+void SetInputParametersDstar(AliDJetRawYieldUncertaintyLocal *interface);
 
+
+void ExtractDJetRawYieldUncertainty(){
+  gROOT->LoadMacro("AliDJetRawYieldUncertaintyLocal.cxx+g");
 
   for(int i=0; i<ptbinsDN; i++)
     EvaluateBinPerBinUncertainty(i);
 
-  //ExtractDJetRawYieldUncertaintyFull();
+  ExtractDJetRawYieldUncertaintyFull();
 
 return;
 
 }
 
-void EvaluateBinPerBinUncertainty(
-   Int_t bin = 0,
-   Int_t specie=AliDJetRawYieldUncertaintyLocal::kD0toKpi,  //D-meson decay channel
-   Int_t method=AliDJetRawYieldUncertaintyLocal::kSideband,  //yield extraction method
-   Double_t zmin=-1.,   //lower z edge
-   Double_t zmax=2.,   //upper z edge
-   Bool_t refl=kFALSE
-   )
+void EvaluateBinPerBinUncertainty(Int_t bin,AliDJetRawYieldUncertaintyLocal::DMesonSpecies specie,AliDJetRawYieldUncertaintyLocal::YieldMethod method,Double_t zmin,Double_t zmax,Bool_t refl)
 {
 
   double ptmin = ptDbins[bin];
@@ -68,7 +85,7 @@ void EvaluateBinPerBinUncertainty(
 
   if(specie==0) SetInputParametersDzero(interface);  // check the names and the values in the method!!
   else if(specie==1) SetInputParametersDstar(interface);  // check the names and the values in the method!!
-  else if {printf("Error in setting the D-meson specie! Exiting...\n"); return kFALSE;}
+  else  {printf("Error in setting the D-meson specie! Exiting...\n"); return;}
 
   interface->SetDebugLevel(2); //0 = just do the job; 1 = additional printout; 2 = print individual fits
 
@@ -91,11 +108,7 @@ void EvaluateBinPerBinUncertainty(
 
 //________________________________________
 void ExtractDJetRawYieldUncertaintyFull(
-  Int_t specie=AliDJetRawYieldUncertaintyLocal::kD0toKpi,  //D-meson decay channel
- Int_t method=AliDJetRawYieldUncertaintyLocal::kSideband,  //yield extraction method
-   Int_t nTrials=40,  	     //only for SB method: number of random trials for each pT(D) bin to build pT(jet) spectrum variations
-   Bool_t allowRepet=kFALSE  //only for SB method: allow repetitions in the extraction of trials in a give pT(D) bin
-   )
+  AliDJetRawYieldUncertaintyLocal::DMesonSpecies specie, AliDJetRawYieldUncertaintyLocal::YieldMethod method,Int_t nTrials,Bool_t allowRepet)
 {
 
   AliDJetRawYieldUncertaintyLocal *interface = new AliDJetRawYieldUncertaintyLocal();
@@ -107,7 +120,7 @@ void ExtractDJetRawYieldUncertaintyFull(
 
   if(specie==0) SetInputParametersDzero(interface);  // here most of the configuration is dummy (not used in the evaluation), you need just the files and some bin ranges
   else if(specie==1) SetInputParametersDstar(interface);  // here most of the configuration is dummy (not used in the evaluation), you need just the files and some bin ranges
-  else if {printf("Error in setting the D-meson specie! Exiting...\n"); return kFALSE;}
+  else {printf("Error in setting the D-meson specie! Exiting...\n"); return;}
 
   interface->SetDebugLevel(2); //0 = just do the job; 1 = additional printout; 2 = print individual fits
 
@@ -123,10 +136,7 @@ void ExtractDJetRawYieldUncertaintyFull(
 }
 
 //________________________________________
-void ExtractDJetRawYieldUncertainty_FromSB_CoherentTrialChoice(
-  Int_t specie=AliDJetRawYieldUncertaintyLocal::kD0toKpi,  //D-meson decay channel
-   Int_t nTrials=10
-   ) //number of variations is fixed (all the variations in the pT(D) bins, which should match among the various pT(D) bins!)
+void ExtractDJetRawYieldUncertainty_FromSB_CoherentTrialChoice(AliDJetRawYieldUncertaintyLocal::DMesonSpecies specie,Int_t nTrials) //number of variations is fixed (all the variations in the pT(D) bins, which should match among the various pT(D) bins!)
 {
 
   AliDJetRawYieldUncertaintyLocal *interface = new AliDJetRawYieldUncertaintyLocal();
@@ -137,7 +147,7 @@ void ExtractDJetRawYieldUncertainty_FromSB_CoherentTrialChoice(
 
   if(specie==0) SetInputParametersDzero(interface);  // here most of the configuration is dummy (not used in the evaluation), you need just the files and some bin ranges
   else if(specie==1) SetInputParametersDstar(interface);  // here most of the configuration is dummy (not used in the evaluation), you need just the files and some bin ranges
-  else if {printf("Error in setting the D-meson specie! Exiting...\n"); return kFALSE;}
+  else  {printf("Error in setting the D-meson specie! Exiting...\n"); return;}
 
   interface->SetDebugLevel(2); //0 = just do the job; 1 = additional printout; 2 = print individual fits
 
@@ -156,29 +166,29 @@ void ExtractDJetRawYieldUncertainty_FromSB_CoherentTrialChoice(
 void SetInputParametersDzero(AliDJetRawYieldUncertaintyLocal *interface){
 
   //Dstar cfg
-  Int_t nDbins = 10;
-  Double_t ptDbins[11] = {3,4,5,6,7,8,10,12,16,24,36};
+  Int_t nDbins = 11;
+  Double_t ptDbins[12] = {2,3,4,5,6,7,8,10,12,16,24,36};
 
-  Int_t nJetbins = 9;
-  Double_t ptJetbins[10] = {3,4,5,6,8,10,14,20,30,50};
+  Int_t nJetbins = 11;
+  Double_t ptJetbins[12] = {2,3,4,5,6,8,10,12,14,20,30,50};
 // Pb-Pb binning
 //  Int_t nJetbins = 7;
 //  Double_t ptJetbins[8] = {3,5,10,15,20,25,35,50};
 
   Double_t DMesonEff[ptbinsDN];
   TFile *FileEff = new TFile(efffile.Data(),"read");
-  if(!FileEff) return kFALSE;
-	TH1F *hEff = (TH1F*)FileEff->Get("hEff_reb");
+  if(!FileEff) return;
+    TH1D *hEff = dynamic_cast<TH1D*>(FileEff->Get("hEff_reb"));
 	for(int i=0;i<ptbinsDN;i++){
 		double pt = (ptDbins[i]+ptDbins[i+1]) / 2.;
 		DMesonEff[i] = hEff->GetBinContent(hEff->GetXaxis()->FindBin(pt));
 	}
 
-  Double_t sigmafixed=0.014;
+  //Double_t sigmafixed=0.014;
   Double_t chi2cut=3;
   Bool_t meansigmaVar[6] = {kTRUE,kTRUE,kTRUE,kTRUE,kTRUE,kTRUE}; //set mean/sigma variations: fixedS, fixedS+15%, fixedS+15%, freeS&M, freeS/fixedM, fixedS&M
 //  Bool_t bkgVar[8] = {kTRUE,kFALSE,kTRUE,kFALSE,kFALSE,kFALSE,kFALSE,kFALSE}; //set bgk variations: exp, lin, pol2, pol3, pol4, pol5, PowLaw, PowLaw*Exp
-  Bool_t bkgVar[8] = {kTRUE,kTRUE,kTRUE,kFALSE,kFALSE,kFALSE,kFALSE,kFALSE}; //set bgk variations: exp, lin, pol2, pol3, pol4, pol5, PowLaw, PowLaw*Exp
+  Bool_t bkgVar[8] = {kTRUE,kTRUE,kFALSE,kFALSE,kFALSE,kFALSE,kFALSE,kFALSE}; //set bgk variations: exp, lin, pol2, pol3, pol4, pol5, PowLaw, PowLaw*Exp
 
   Int_t nRebinSteps=2;
   //Int_t rebinStep[2]={1};
@@ -191,24 +201,24 @@ void SetInputParametersDzero(AliDJetRawYieldUncertaintyLocal *interface){
   Double_t nSigmasBC[2]={3.5,4.0};
   //WARNING! set nmask value to active mean/sigma*active bkg variations!
   //And adjust consequently the following matrix (put an entry for each variation, with value: 0=don't consider it, 1=consider it in the final syst eval)
-/*  Int_t nmask = 12;
+  Int_t nmask = 12;
   Bool_t mask[12] =    {1,1,   // fixed sigma (Expo, Lin, Pol2, Pol3, Pol4, Pol5, PowLaw, PowLaw*Exp)
 			1,1,   // fixed sigma+15%
 			1,1,   // fixed sigma-15%
 			1,1,   // free sigma, free mean
 			1,1,   // free sigma, fixed mean
-			1,1};  // fixed mean, fixed sigma*/
+            1,1};  // fixed mean, fixed sigma
 
-      Int_t nmask = 18;
+   /*   Int_t nmask = 18;
       Bool_t mask[18] =    {1,1,1,   // fixed sigma (Expo, Lin, Pol2, Pol3, Pol4, Pol5, PowLaw, PowLaw*Exp)
     			1,1, 1,  // fixed sigma+15%
     			1,1, 1,  // fixed sigma-15%
     			1,1, 1,  // free sigma, free mean
     			1,1, 1,  // free sigma, fixed mean
-    			1,1, 1};  // fixed mean, fixed sigma
+                1,1, 1};  // fixed mean, fixed sigma*/
 
 
-  interface->SetInputFilename("/home/jackbauer/Work/alice/analysis/pp5TeV/D0jet/outData/AnalysisResults_LHC17pq_FASTwoSDD.root");
+  interface->SetInputFilename("/home/kvapil/work/analysis/pp_run2/D0jet/data_250319/data/AnalysisResults_Run2.root");
   interface->SetInputDirname("DmesonsForJetCorrelations");
   interface->SetInputListname("histosD0MBN");
   interface->SetInputObjectname("hsDphiz");
@@ -251,7 +261,7 @@ void SetInputParametersDstar(AliDJetRawYieldUncertaintyLocal *interface){
 
   Double_t DMesonEff[10];
   TFile *FileEff = new TFile("/home/basia/Work/alice/analysis/pPb_run2/Efficiencies/out_806Preliminary/DjetEff_prompt_jetpt2_50.root");
-	TH1F *hEff = (TH1F*)FileEff->Get("hEff_reb");
+    TH1D *hEff = dynamic_cast<TH1D*>(FileEff->Get("hEff_reb"));
 	for(int i=0;i<ptbinsDN;i++){
 		double pt = (ptDbins[i]+ptDbins[i+1]) / 2.;
 		double eff = hEff->GetBinContent(hEff->GetXaxis()->FindBin(pt));
@@ -260,7 +270,7 @@ void SetInputParametersDstar(AliDJetRawYieldUncertaintyLocal *interface){
 
  //  = {0.0201558, 0.0489161, 0.0820775, 0.137601, 0.173475, 0.236302, 0.272683, 0.306574, 0.361937, 0.44086};
 
-  Double_t sigmafixed=0.0006;
+ // Double_t sigmafixed=0.0006;
 
   Double_t chi2cut=3;
   Bool_t meansigmaVar[6] = {kTRUE,kTRUE,kTRUE,kTRUE,kTRUE,kTRUE}; //set mean/sigma variations: fixedS, fixedS+15%, fixedS+15%, freeS&M, freeS/fixedM, fixedS&M

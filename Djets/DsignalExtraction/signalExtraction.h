@@ -38,12 +38,17 @@
     Bool_t isptcut = 1;
     Bool_t isdetails = 0;
 
+    Bool_t fisRefSys;
+    Double_t frefScale;
+
     TString fReflFilename;
     TString plotsDir;
     // mass fit params
 
     //------- efficiency
     Double_t *efficiency = nullptr;
+
+    Double_t nEvents = 0;
 
     TH1F* hmass[fptbinsDN];
     TH1F *hmass_l[fptbinsDN];
@@ -63,6 +68,7 @@
     TH1F *hrawjetptspectrum;
     TH1F *hjetptspectrumReb;
     TH1F *hjetptspectrumRebScaled;
+    TH1F *hjetptspectrumRebEvntScaled;
     TH1F *hjetptspectrumRebUnc;
 
     TH1F *hmean;
@@ -73,6 +79,9 @@
     TH1F *hSignal;
     TH3D* hInvMassptD;
     TH1F* hReflRS;
+
+    TH1F *hSignalEffcor;
+
 
     void setHistoDetails(TH1 *h, int scale, Color_t color, Style_t Mstyle, Size_t size = 0.9f, Width_t width=2);
     Bool_t rawJetSpectra(TString outdir, TString prod);

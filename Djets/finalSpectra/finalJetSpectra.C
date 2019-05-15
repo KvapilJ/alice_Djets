@@ -12,21 +12,27 @@ double dy = 2*jetEta;
 double *sysCutVar, *systuncP;
 double DTrackEff = 0.03;
 double globalUnc = 0.038;
-int fptbinsJetFinalN;
+//int fptbinsJetFinalN;
 Double_t *xAxis;
 double plotmin = 5, plotmax=50;
 
-Int_t colors[] = {1,8,4,2,6,kOrange-1,kGray+2,kCyan+1,kMagenta+2,kViolet+5,kYellow+2};
+Color_t colors[] = {1,8,4,2,6,kOrange-1,kGray+2,kCyan+1,kMagenta+2,kViolet+5,kYellow+2};
 Int_t markers[] = {20,21,22,23,24,25,26,27,28,29,30,32,33,34};
-Int_t linestyle[] = {1,2,3,4,5,6,7,8,9,10,11,12,13};
+Style_t linestyle[] = {1,2,3,4,5,6,7,8,9,10,11,12,13};
 
 TGraphAsymmErrors *grsystheory, *grsys, *grsysRatio, *grsystheoryratio;
 TH1D *hData_binned, *hData_binned_ratio;
 TH1D *hPrompt_central_binned, *hPrompt_up, *hPrompt_down;
 
 void ScaleHist(TH1 *hh, int full = 0);
-void setHistoDetails(TH1 *hh, Color_t color, Style_t Mstyle, int Msize = 1.1, Width_t Lwidth = 2, Style_t Lstyle = 1);
+void setHistoDetails(TH1 *hh, Color_t color, Style_t Mstyle, Double_t Msize = 1.1, Width_t Lwidth = 2, Style_t Lstyle = 1);
 void SaveCanvas(TCanvas *c, TString name = "tmp");
+void getSystematics(TString inDir, TString outPlotDir);
+TH1* GetUpSys(TH1D **hh, const int nFiles = 11, TH1D *hh_up = nullptr);
+TH1* GetDownSys(TH1D **hh, const int nFiles = 11, TH1D *hh_down = nullptr);
+TH1* GetInputHist(TString inFile, TString histName,TH1 *hh);
+void ScaleHist(TH1 *hh, int full);
+void drawFinal(TString outPlotDir);
 
 TH1D *CentralPointsStatisticalUncertainty__4;
 TH1D *GeneratorLevel_JetPtSpectrum__3;
@@ -49,6 +55,7 @@ TString histBase = "unfoldedSpectrum"
 
 )
 {
+
     isSimSys = simsys;
     isSys = issys;
     isSim = issim;
@@ -64,13 +71,21 @@ TString histBase = "unfoldedSpectrum"
 //    for(int k=0; k<fptbinsJetFinalN; k++) systuncP[k] = 0.15;
 //    systuncErr_pp[ptbinsN] = {0.104599235179,0.0886904729946,0.114415907985,0.111763142404,0.15895282319,0.180252600536,0.199602104197};
 //    sysUncErr_pp[ptbinsN] = {0.104599395179,0.0886906329946,0.114416067985,0.111763302404,0.15895298319,0.180252760536,0.199602264197};//with BR 0.04% incl
-systuncP[0]=0.104599395179;
+/*systuncP[0]=0.104599395179;
 systuncP[1]=0.0886906329946;
 systuncP[2]=0.114416067985;
 systuncP[3]=0.111763302404;
 systuncP[4]=0.15895298319;
 systuncP[5]=0.180252760536;
-systuncP[6]=0.199602264197;
+systuncP[6]=0.199602264197;*/
+    systuncP[0] = 0.001;
+    systuncP[1] = 0.001;
+    systuncP[2] = 0.001;
+    systuncP[3] = 0.001;
+    systuncP[4] = 0.001;
+    systuncP[5] = 0.001;
+    systuncP[6] = 0.001;
+
     sysCutVar = new double[fptbinsJetFinalN];
     for(int k=0; k<fptbinsJetFinalN; k++) sysCutVar[k] = 0.05;
 
@@ -80,18 +95,18 @@ systuncP[6]=0.199602264197;
     double nEv;
 
     if(oldCounter) {
-      dir = (TDirectoryFile*)File->Get("DmesonsForJetCorrelations");
-      if(fDmesonSpecie) histList = (TList*)dir->Get("histosDStarMBN0");
-      else histList = (TList*)dir->Get("histosD0MBN0");
-      TH1F* hEvents = (TH1F*)histList->FindObject("hstat");
+      dir = dynamic_cast<TDirectoryFile*>(File->Get("DmesonsForJetCorrelations"));
+      if(fDmesonSpecie) histList = dynamic_cast<TList*>(dir->Get("histosDStarMBN0"));
+      else histList = dynamic_cast<TList*>(dir->Get("histosD0MBN0"));
+      TH1F* hEvents = dynamic_cast<TH1F*>(histList->FindObject("hstat"));
       double nEvSel = hEvents->GetBinContent(2);
-      double nEvAna = hEvents->GetBinContent(1);
+      //double nEvAna = hEvents->GetBinContent(1);
       nEv = nEvScale*nEvSel;
     }
     else {
       //dir = (TDirectoryFile*)File->Get(Form("PWG3_D2H_DmesonsForJetCorrelations%sMBN0",listName.Data()));
-      dir = (TDirectoryFile*)File->Get("PWG3_D2H_DmesonsForJetCorrelationsMBN0");
-      AliNormalizationCounter *c = (AliNormalizationCounter*)dir->Get("NormalizationCounter");
+      dir = dynamic_cast<TDirectoryFile*>(File->Get("PWG3_D2H_DmesonsForJetCorrelationsMBN0"));
+      AliNormalizationCounter *c = dynamic_cast<AliNormalizationCounter*>(dir->Get("NormalizationCounter"));
       nEv = c->GetNEventsForNorm();
     }
 
@@ -120,16 +135,16 @@ systuncP[6]=0.199602264197;
           if(fDmesonSpecie) file += "_Dstar";
           else file += "_Dzero";
           file += ".root";
-          TH1D *htmp;
-          htmp = (TH1D*) GetInputHist(file, "hPt", htmp);
+          TH1D *htmp = nullptr;
+          htmp = dynamic_cast<TH1D*>(GetInputHist(file, "hPt", htmp));
           htmp->GetYaxis()->SetTitle("d#sigma/dp_{T} (mb)");
-          hPrompt[nr] = (TH1D*)htmp->Clone(Form("hPrompt_%d",nr));
-          hPrompt_binned[nr] = (TH1D*)htmp->Rebin(fptbinsJetFinalN,Form("hPrompt_binned_%d",nr),xAxis);
+          hPrompt[nr] = dynamic_cast<TH1D*>(htmp->Clone(Form("hPrompt_%d",nr)));
+          hPrompt_binned[nr] = dynamic_cast<TH1D*>(htmp->Rebin(fptbinsJetFinalN,Form("hPrompt_binned_%d",nr),xAxis));
       }
 
-      TH1D *htmp = (TH1D*)(hPrompt[simNr]->Clone("htmp"));
-      TH1D *hPrompt_central = (TH1D*)htmp->Clone("hPrompt_central");
-      hPrompt_central_binned = (TH1D*)htmp->Rebin(fptbinsJetFinalN,"hPrompt_central_binned",xAxis);
+      TH1D *htmp = dynamic_cast<TH1D*>(hPrompt[simNr]->Clone("htmp"));
+      TH1D *hPrompt_central = dynamic_cast<TH1D*>(htmp->Clone("hPrompt_central"));
+      hPrompt_central_binned = dynamic_cast<TH1D*>(htmp->Rebin(fptbinsJetFinalN,"hPrompt_central_binned",xAxis));
 
       setHistoDetails(hPrompt_central,4,24);
       setHistoDetails(hPrompt_central_binned,4,24);
@@ -142,15 +157,15 @@ systuncP[6]=0.199602264197;
       if(isSimSys){
       // ----------------- prompt syst. (rebinned)---------------------
         // get up unc
-        hPrompt_up = (TH1D*)hPrompt_central_binned->Clone("hPrompt_up");
-        hPrompt_up = (TH1D*)GetUpSys(hPrompt_binned,nFiles,hPrompt_up);
+        hPrompt_up = dynamic_cast<TH1D*>(hPrompt_central_binned->Clone("hPrompt_up"));
+        hPrompt_up = dynamic_cast<TH1D*>(GetUpSys(hPrompt_binned,nFiles,hPrompt_up));
         setHistoDetails(hPrompt_up,4,24,0,2,2);
         hPrompt_up->Scale(simScaling);
         hPrompt_up->Scale(1,"width");
         hPrompt_up->Scale(1./dy);
         // get down unc
-        hPrompt_down = (TH1D*)hPrompt_central_binned->Clone("hPrompt_down");
-        hPrompt_down = (TH1D*)GetDownSys(hPrompt_binned,nFiles,hPrompt_down);
+        hPrompt_down = dynamic_cast<TH1D*>(hPrompt_central_binned->Clone("hPrompt_down"));
+        hPrompt_down = dynamic_cast<TH1D*>(GetDownSys(hPrompt_binned,nFiles,hPrompt_down));
         setHistoDetails(hPrompt_down,4,24,0,2,2);
         hPrompt_down->Scale(simScaling);
         hPrompt_down->Scale(1,"width");
@@ -159,24 +174,24 @@ systuncP[6]=0.199602264197;
     }
 
     // ----------------- data ---------------------
-    TH1D *hData_binned2;
-    hData_binned2 = (TH1D*)GetInputHist(dataFile, histBase, hData_binned2);
-    hData_binned = (TH1D*)hData_binned2->Rebin(fptbinsJetFinalN,"hData_binned", xAxis);
+    TH1D *hData_binned2 = nullptr;
+    hData_binned2 = dynamic_cast<TH1D*>(GetInputHist(dataFile, histBase, hData_binned2));
+    hData_binned = dynamic_cast<TH1D*>(hData_binned2->Rebin(fptbinsJetFinalN,"hData_binned", xAxis));
     hData_binned->Scale(1,"width");
     hData_binned->Scale(dataScaling);
     hData_binned->Scale(1./dy);
-    hData_binned->SetTitle();
+    hData_binned->SetTitle("");
     //hData_binned->SetMinimum(1);
     hData_binned->SetMaximum(hData_binned->GetMaximum()*2);
     hData_binned->GetYaxis()->SetTitle("d^{2}#sigma/dp_{T}d#it{#eta} (mb)");
 
+    Double_t sysunc[fptbinsJetFinalN];
+    Double_t sysuncAbs[fptbinsJetFinalN];
+    Double_t statunc[fptbinsJetFinalN];
+    Double_t value[fptbinsJetFinalN];
+    Double_t ptval[fptbinsJetFinalN];
+    Double_t ptvalunc[fptbinsJetFinalN];
     if(isSys) {
-      Double_t sysunc[fptbinsJetFinalN];
-      Double_t sysuncAbs[fptbinsJetFinalN];
-      Double_t statunc[fptbinsJetFinalN];
-      Double_t value[fptbinsJetFinalN];
-      Double_t ptval[fptbinsJetFinalN];
-      Double_t ptvalunc[fptbinsJetFinalN];
       for(int j=0; j<fptbinsJetFinalN; j++){
               ptval[j] = (xAxis[j]+xAxis[j+1]) / 2.;
               ptvalunc[j] = (xAxis[j+1]-xAxis[j]) / 2.;
@@ -190,9 +205,9 @@ systuncP[6]=0.199602264197;
       grsys = new TGraphAsymmErrors(fptbinsJetFinalN,ptval,value,ptvalunc,ptvalunc,sysuncAbs,sysuncAbs);
     }
 
+    Double_t ptvaltheory[fptbinsJetFinalN];
     if(isSim && isSimSys){
-      Double_t sysuncTheory[fptbinsJetFinalN];
-      Double_t ptvaltheory[fptbinsJetFinalN];
+     // Double_t sysuncTheory[fptbinsJetFinalN];
       Double_t ptvalunctheory[fptbinsJetFinalN];
       Double_t valuetheory[fptbinsJetFinalN];
       Double_t valuetheoryerrup[fptbinsJetFinalN];
@@ -209,20 +224,20 @@ systuncP[6]=0.199602264197;
     }
 
    //======= Ratio to powheg ======
-     if(isSim){
-       TH1D *hPrompt_central_binned_ratio;
-       hPrompt_central_binned_ratio  = (TH1D*)hPrompt_central_binned->Clone("hPrompt_central_binned_ratio");
+    TH1D *hPrompt_central_binned_ratio = nullptr;
+    TH1D *hPrompt_down_ratio = nullptr;
+    TH1D *hPrompt_up_ratio = nullptr;
+     if(isSim){    
+       hPrompt_central_binned_ratio  = dynamic_cast<TH1D*>(hPrompt_central_binned->Clone("hPrompt_central_binned_ratio"));
        hPrompt_central_binned_ratio->Divide(hPrompt_central_binned);
-       TH1D *hPrompt_down_ratio;
-       TH1D *hPrompt_up_ratio;
        if(isSimSys){
-         hPrompt_up_ratio = (TH1D*)hPrompt_up->Clone("hPrompt_up_ratio");
-         hPrompt_down_ratio = (TH1D*)hPrompt_down->Clone("hPrompt_down_ratio");
+         hPrompt_up_ratio = dynamic_cast<TH1D*>(hPrompt_up->Clone("hPrompt_up_ratio"));
+         hPrompt_down_ratio = dynamic_cast<TH1D*>(hPrompt_down->Clone("hPrompt_down_ratio"));
          hPrompt_up_ratio->Divide(hPrompt_central_binned);
          hPrompt_down_ratio->Divide(hPrompt_central_binned);
        }
      }
-       hData_binned_ratio = (TH1D*)hData_binned->Clone("hData_binned_ratio");
+       hData_binned_ratio = dynamic_cast<TH1D*>(hData_binned->Clone("hData_binned_ratio"));
        if(isSys){
          double *sysuncRatio = new double[fptbinsJetFinalN];
          double *valRatio = new double[fptbinsJetFinalN];
@@ -242,10 +257,10 @@ systuncP[6]=0.199602264197;
          }
          grsysRatio = new TGraphAsymmErrors(fptbinsJetFinalN,ptval,valRatio,ptvalunc,ptvalunc,sysuncRatio,sysuncRatio);
        }
-       hData_binned_ratio->SetMaximum(2);
+       hData_binned_ratio->SetMaximum(3);
 
        if(isSimSys){
-        double *sysuncTheoryratio = new double[fptbinsJetFinalN];
+        //double *sysuncTheoryratio = new double[fptbinsJetFinalN];
         double *ptvaltheoryratio = new double[fptbinsJetFinalN];
         double *ptvalunctheoryratio = new double[fptbinsJetFinalN];
         double *valuetheoryratio = new double[fptbinsJetFinalN];
@@ -322,12 +337,12 @@ void getSystematics(TString inDir, TString outPlotDir) {
     "Unfolding: ranges,SVD",
     "Bkg. Fluctuation Matrix",
     "Track. Eff. (D meson)"
-  }
+  };
 
   TCanvas *cUnc = new TCanvas("cUnc","cUnc",1200,800);
   TH1F *hist[nfiles+1];
-  double **sysUnc = new double[fptbinsJetFinalN];
-  for(int i=0; i<fptbinsJetFinalN; i++)  sysUnc[i] = new int[nfiles+1];
+  double **sysUnc = new double*[fptbinsJetFinalN];
+  for(int i=0; i<fptbinsJetFinalN; i++)  sysUnc[i] = new double[nfiles+1];
 
   hist[nfiles] = new TH1F("histUncN","Systematic uncertanties",fptbinsJetFinalN, xAxis);
   hist[0] = new TH1F("histUnc0","Systematic uncertanties",fptbinsJetFinalN, xAxis);
@@ -345,7 +360,7 @@ void getSystematics(TString inDir, TString outPlotDir) {
   for(int i=0; i<nfiles; i++){
     TFile *fileIn;
 //    if(i != 0 && i != 1) { fileIn = new TFile(Form("%s/%s", inDir.Data(),files[i].Data())); hist[i] = (TH1F*)fileIn->Get(Form("%s",histName[i].Data())); }
-    if(i != 0 ) { fileIn = new TFile(Form("%s/%s", inDir.Data(),files[i].Data())); hist[i] = (TH1F*)fileIn->Get(Form("%s",histName[i].Data())); }
+    if(i != 0 ) { fileIn = new TFile(Form("%s/%s", inDir.Data(),files[i].Data())); hist[i] = dynamic_cast<TH1F*>(fileIn->Get(Form("%s",histName[i].Data()))); }
 
     //hist[i] = (TH1F*)fileIn->Get(Form("%s",histName[i].Data()));
     hist[i]->SetMarkerColor(colors[i+1]);
@@ -358,15 +373,15 @@ void getSystematics(TString inDir, TString outPlotDir) {
     hist[i]->SetFillStyle(0);
     if(!i) hist[i]->Draw("hist");
     else hist[i]->Draw("histsame");
-    cout << "systematics: " << desc[i] << endl;
+    std::cout << "systematics: " << desc[i] << std::endl;
     for(int j=0; j<fptbinsJetFinalN; j++){
       double pt = (xAxis[j] + xAxis[j+1])/2.;
       int bin = hist[i]->GetXaxis()->FindBin(pt);
       if(bin) sysUnc[j][i] = hist[i]->GetBinContent(bin)*0.01;
       else sysUnc[j][i] = 0;
-      cout << "pt: " << pt << "\tsys: " << sysUnc[j][i]*100 << endl;
+      std::cout << "pt: " << pt << "\tsys: " << sysUnc[j][i]*100 << std::endl;
     }
-    cout << "=============END" << endl;
+    std::cout << "=============END" << std::endl;
       leg->AddEntry(hist[i],Form("%s",desc[i].Data()),"l");
   }
   leg->AddEntry(hist[nfiles],Form("%s",desc[nfiles].Data()),"l");
@@ -375,13 +390,14 @@ void getSystematics(TString inDir, TString outPlotDir) {
 
   cUnc->SaveAs(Form("%s/JetPtSpectra_allUnc.png",outPlotDir.Data()));
   cUnc->SaveAs(Form("%s/JetPtSpectra_allUnc.pdf",outPlotDir.Data()));
+  cUnc->SaveAs(Form("%s/JetPtSpectra_allUnc.svg",outPlotDir.Data()));
 
   TCanvas *cUnc2 = new TCanvas("cUnc2","cUnc2",1200,800);
   TH1D *histUnc = new TH1D("histUnc","Systematic uncertanties",fptbinsJetFinalN, xAxis);
   histUnc->SetLineColor(2);
   histUnc->SetLineWidth(2);
   histUnc->SetLineStyle(2);
-  histUnc->SetTitle();
+  histUnc->SetTitle("");
   histUnc->GetYaxis()->SetTitle("Final systematic uncertanties");
   histUnc->GetXaxis()->SetTitle("p_{T}^{ch,jet} (GeV/c)");
   histUnc->GetXaxis()->SetRangeUser(plotmin,plotmax);
@@ -402,13 +418,13 @@ void getSystematics(TString inDir, TString outPlotDir) {
 
   cUnc2->SaveAs(Form("%s/JetPtSpectra_finalUnc.png",outPlotDir.Data()));
   cUnc2->SaveAs(Form("%s/JetPtSpectra_finalUnc.pdf",outPlotDir.Data()));
-
+  cUnc2->SaveAs(Form("%s/JetPtSpectra_finalUnc.svg",outPlotDir.Data()));
 }
 
 
-TH1* GetUpSys(TH1D **hh, const int nFiles = 11, TH1D *hh_up){
+TH1* GetUpSys(TH1D **hh, const int nFiles, TH1D *hh_up){
 
-        double bin = 0, binerr = 0;
+        //double bin = 0, binerr = 0;
         double max = 0, maxerr = 0;
         for(int j=1; j<fptbinsJetFinalN+1; j++ ){
             max = hh[0]->GetBinContent(j);
@@ -425,8 +441,8 @@ TH1* GetUpSys(TH1D **hh, const int nFiles = 11, TH1D *hh_up){
     return hh_up;
 }
 
-TH1* GetDownSys(TH1D **hh, const int nFiles = 11, TH1D *hh_down){
-        double bin = 0, binerr = 0;
+TH1* GetDownSys(TH1D **hh, const int nFiles, TH1D *hh_down){
+        //double bin = 0, binerr = 0;
         double max = 0, maxerr = 0;
 
         for(int j=1; j<fptbinsJetFinalN+1; j++ ){
@@ -450,7 +466,7 @@ TH1* GetDownSys(TH1D **hh, const int nFiles = 11, TH1D *hh_down){
 TH1* GetInputHist(TString inFile, TString histName,TH1 *hh){
 
 	TFile *jetPtFile = new TFile(inFile,"read");
-  hh = (TH1F*)jetPtFile->Get(histName.Data());
+  hh = dynamic_cast<TH1*>(jetPtFile->Get(histName.Data()));
 
   return hh;
 }
@@ -471,7 +487,7 @@ void ScaleHist(TH1 *hh, int full){
     }
 }
 
-void setHistoDetails(TH1 *hh, Color_t color, Style_t Mstyle, int Msize, Width_t Lwidth, Style_t Lstyle){
+void setHistoDetails(TH1 *hh, Color_t color, Style_t Mstyle, Double_t Msize, Width_t Lwidth, Style_t Lstyle){
     hh->SetMarkerColor(color);
     hh->SetMarkerStyle(Mstyle);;
     hh->SetLineColor(color);
@@ -479,13 +495,14 @@ void setHistoDetails(TH1 *hh, Color_t color, Style_t Mstyle, int Msize, Width_t 
     hh->SetMarkerSize(Msize);
     hh->SetLineStyle(Lstyle);
    // hh->SetName(name.c_str());
-    hh->SetTitle();
+    hh->SetTitle("");
     hh->GetXaxis()->SetTitle("p_{T}^{ch,jet} (GeV/c)");
 }
 
 void SaveCanvas(TCanvas *c, TString name){
     c->SaveAs(Form("%s.png",name.Data()));
     c->SaveAs(Form("%s.pdf",name.Data()));
+    c->SaveAs(Form("%s.svg",name.Data()));
     //c->SaveAs(Form("%s.png",name.c_str()));
     //c->SaveAs(Form("%s.pdf",name.c_str()));
 }
@@ -515,7 +532,7 @@ void drawFinal(TString outPlotDir){
    FinalSpectrum_1->SetLogy();
    FinalSpectrum_1->SetTickx(1);
    FinalSpectrum_1->SetTicky(1);
-   FinalSpectrum_1->SetLeftMargin(0.15);
+   FinalSpectrum_1->SetLeftMargin(0.15f);
    FinalSpectrum_1->SetBottomMargin(0);
    FinalSpectrum_1->SetFrameBorderMode(0);
    FinalSpectrum_1->SetFrameBorderMode(0);
@@ -531,7 +548,7 @@ void drawFinal(TString outPlotDir){
      CentralPointsStatisticalUncertainty__1->SetMaximum(0.5);
   }
    CentralPointsStatisticalUncertainty__1->SetEntries(8);
-   CentralPointsStatisticalUncertainty__1->SetDirectory(0);
+   CentralPointsStatisticalUncertainty__1->SetDirectory(nullptr);
    CentralPointsStatisticalUncertainty__1->SetStats(0);
 
    Int_t ci;      // for color index setting
@@ -542,28 +559,29 @@ void drawFinal(TString outPlotDir){
    ci = TColor::GetColor("#990000");
    CentralPointsStatisticalUncertainty__1->SetMarkerColor(ci);
    CentralPointsStatisticalUncertainty__1->SetMarkerStyle(20);
-   CentralPointsStatisticalUncertainty__1->SetMarkerSize(0.9);
+   CentralPointsStatisticalUncertainty__1->SetMarkerSize(0.9f);
    CentralPointsStatisticalUncertainty__1->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
    CentralPointsStatisticalUncertainty__1->GetXaxis()->SetLabelFont(42);
-   CentralPointsStatisticalUncertainty__1->GetXaxis()->SetLabelSize(0.035);
-   CentralPointsStatisticalUncertainty__1->GetXaxis()->SetTitleSize(0.035);
+   CentralPointsStatisticalUncertainty__1->GetXaxis()->SetLabelSize(0.035f);
+   CentralPointsStatisticalUncertainty__1->GetXaxis()->SetTitleSize(0.035f);
    CentralPointsStatisticalUncertainty__1->GetXaxis()->SetTitleFont(42);
    //CentralPointsStatisticalUncertainty__1->GetYaxis()->SetTitle("#frac{d^{2}#sigma}{d#it{p}_{T}d#it{#eta}} [mb (GeV/#it{c})^{-1}]");
    CentralPointsStatisticalUncertainty__1->GetYaxis()->SetTitle("#frac{d^{2}#sigma}{d#it{p}_{T}d#it{#eta}} mb (GeV/#it{c})^{-1}");
    CentralPointsStatisticalUncertainty__1->GetYaxis()->SetLabelFont(43);
    CentralPointsStatisticalUncertainty__1->GetYaxis()->SetLabelSize(22);
    CentralPointsStatisticalUncertainty__1->GetYaxis()->SetTitleSize(26);
-   CentralPointsStatisticalUncertainty__1->GetYaxis()->SetTitleOffset(1.6);
+   CentralPointsStatisticalUncertainty__1->GetYaxis()->SetTitleOffset(1.6f);
    CentralPointsStatisticalUncertainty__1->GetYaxis()->SetTitleFont(43);
    CentralPointsStatisticalUncertainty__1->GetZaxis()->SetLabelFont(42);
-   CentralPointsStatisticalUncertainty__1->GetZaxis()->SetLabelSize(0.035);
-   CentralPointsStatisticalUncertainty__1->GetZaxis()->SetTitleSize(0.035);
+   CentralPointsStatisticalUncertainty__1->GetZaxis()->SetLabelSize(0.035f);
+   CentralPointsStatisticalUncertainty__1->GetZaxis()->SetTitleSize(0.035f);
    CentralPointsStatisticalUncertainty__1->GetZaxis()->SetTitleFont(42);
    CentralPointsStatisticalUncertainty__1->Draw("axis");
 
    // dat syst. unc.
+   TGraphAsymmErrors *grae = dynamic_cast<TGraphAsymmErrors*>(grsys->Clone("grae"));
 if(isSys){
-   TGraphAsymmErrors *grae = (TGraphAsymmErrors*) grsys->Clone("grae"); // = new TGraphAsymmErrors(6);
+    // = new TGraphAsymmErrors(6);
    grae->SetName("CentralPointsSystematicUncertainty_copy");
    grae->SetTitle("Bayes, iter=4, prior=ResponseTruth Systematics");
 
@@ -575,64 +593,64 @@ if(isSys){
    TH1F *Graph_central_syst_unc1 = new TH1F("Graph_central_syst_unc1","Bayes, iter=4, prior=ResponseTruth Systematics",100,2.5,52.5);
    Graph_central_syst_unc1->SetMinimum(4.779682e-05);
    Graph_central_syst_unc1->SetMaximum(0.02142993);
-   Graph_central_syst_unc1->SetDirectory(0);
+   Graph_central_syst_unc1->SetDirectory(nullptr);
    Graph_central_syst_unc1->SetStats(0);
 
    ci = TColor::GetColor("#000099");
    Graph_central_syst_unc1->SetLineColor(ci);
    Graph_central_syst_unc1->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
    Graph_central_syst_unc1->GetXaxis()->SetLabelFont(42);
-   Graph_central_syst_unc1->GetXaxis()->SetLabelSize(0.035);
-   Graph_central_syst_unc1->GetXaxis()->SetTitleSize(0.035);
+   Graph_central_syst_unc1->GetXaxis()->SetLabelSize(0.035f);
+   Graph_central_syst_unc1->GetXaxis()->SetTitleSize(0.035f);
    Graph_central_syst_unc1->GetXaxis()->SetTitleFont(42);
    Graph_central_syst_unc1->GetYaxis()->SetTitle("#frac{d^{2}#sigma}{d#it{p}_{T}d#it{#eta}} [mb (GeV/#it{c})^{-1}]");
    Graph_central_syst_unc1->GetYaxis()->SetLabelFont(42);
-   Graph_central_syst_unc1->GetYaxis()->SetLabelSize(0.035);
-   Graph_central_syst_unc1->GetYaxis()->SetTitleSize(0.035);
+   Graph_central_syst_unc1->GetYaxis()->SetLabelSize(0.035f);
+   Graph_central_syst_unc1->GetYaxis()->SetTitleSize(0.035f);
    Graph_central_syst_unc1->GetYaxis()->SetTitleFont(42);
    Graph_central_syst_unc1->GetZaxis()->SetLabelFont(42);
-   Graph_central_syst_unc1->GetZaxis()->SetLabelSize(0.035);
-   Graph_central_syst_unc1->GetZaxis()->SetTitleSize(0.035);
+   Graph_central_syst_unc1->GetZaxis()->SetLabelSize(0.035f);
+   Graph_central_syst_unc1->GetZaxis()->SetTitleSize(0.035f);
    Graph_central_syst_unc1->GetZaxis()->SetTitleFont(42);
    grae->SetHistogram(Graph_central_syst_unc1);
    grae->Draw("2");
  }
 
    // Central data
-   TH1D *CentralPointsStatisticalUncertainty__2 = (TH1D*) hData_binned->Clone("CentralPointsStatisticalUncertainty__2"); // = new
+   TH1D *CentralPointsStatisticalUncertainty__2 = dynamic_cast<TH1D*>(hData_binned->Clone("CentralPointsStatisticalUncertainty__2")); // = new
    CentralPointsStatisticalUncertainty__2->SetMinimum(2e-05);
    CentralPointsStatisticalUncertainty__2->SetMaximum(4);
    CentralPointsStatisticalUncertainty__2->SetEntries(8);
-   CentralPointsStatisticalUncertainty__2->SetDirectory(0);
+   CentralPointsStatisticalUncertainty__2->SetDirectory(nullptr);
    CentralPointsStatisticalUncertainty__2->SetStats(0);
 
    ci = TColor::GetColor("#990000");
    CentralPointsStatisticalUncertainty__2->SetLineColor(ci);
    CentralPointsStatisticalUncertainty__2->SetMarkerColor(ci);
    CentralPointsStatisticalUncertainty__2->SetMarkerStyle(20);
-   CentralPointsStatisticalUncertainty__2->SetMarkerSize(0.9);
+   CentralPointsStatisticalUncertainty__2->SetMarkerSize(0.9f);
    CentralPointsStatisticalUncertainty__2->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
    CentralPointsStatisticalUncertainty__2->GetXaxis()->SetLabelFont(42);
-   CentralPointsStatisticalUncertainty__2->GetXaxis()->SetLabelSize(0.035);
-   CentralPointsStatisticalUncertainty__2->GetXaxis()->SetTitleSize(0.035);
+   CentralPointsStatisticalUncertainty__2->GetXaxis()->SetLabelSize(0.035f);
+   CentralPointsStatisticalUncertainty__2->GetXaxis()->SetTitleSize(0.035f);
    CentralPointsStatisticalUncertainty__2->GetXaxis()->SetTitleFont(42);
    CentralPointsStatisticalUncertainty__2->GetYaxis()->SetTitle("#frac{d^{2}#sigma}{d#it{p}_{T}d#it{#eta}} [mb (GeV/#it{c})^{-1}]");
    CentralPointsStatisticalUncertainty__2->GetYaxis()->SetLabelFont(42);
-   CentralPointsStatisticalUncertainty__2->GetYaxis()->SetLabelSize(0.035);
-   CentralPointsStatisticalUncertainty__2->GetYaxis()->SetTitleSize(0.035);
-   CentralPointsStatisticalUncertainty__2->GetYaxis()->SetTitleOffset(1.4);
+   CentralPointsStatisticalUncertainty__2->GetYaxis()->SetLabelSize(0.035f);
+   CentralPointsStatisticalUncertainty__2->GetYaxis()->SetTitleSize(0.035f);
+   CentralPointsStatisticalUncertainty__2->GetYaxis()->SetTitleOffset(1.4f);
    CentralPointsStatisticalUncertainty__2->GetYaxis()->SetTitleFont(42);
    CentralPointsStatisticalUncertainty__2->GetZaxis()->SetLabelFont(42);
-   CentralPointsStatisticalUncertainty__2->GetZaxis()->SetLabelSize(0.035);
-   CentralPointsStatisticalUncertainty__2->GetZaxis()->SetTitleSize(0.035);
+   CentralPointsStatisticalUncertainty__2->GetZaxis()->SetLabelSize(0.035f);
+   CentralPointsStatisticalUncertainty__2->GetZaxis()->SetTitleSize(0.035f);
    CentralPointsStatisticalUncertainty__2->GetZaxis()->SetTitleFont(42);
    CentralPointsStatisticalUncertainty__2->Draw("same p e0 x0");
 
    // central theory
 if(isSim){
-   TH1D *GeneratorLevel_JetPtSpectrum__3 = (TH1D*)hPrompt_central_binned->Clone("GeneratorLevel_JetPtSpectrum__3"); //  new
+   TH1D *GeneratorLevel_JetPtSpectrum__3 = dynamic_cast<TH1D*>(hPrompt_central_binned->Clone("GeneratorLevel_JetPtSpectrum__3")); //  new
    GeneratorLevel_JetPtSpectrum__3->SetEntries(316731);
-   GeneratorLevel_JetPtSpectrum__3->SetDirectory(0);
+   GeneratorLevel_JetPtSpectrum__3->SetDirectory(nullptr);
    GeneratorLevel_JetPtSpectrum__3->SetStats(0);
 
    ci = TColor::GetColor("#000099");
@@ -641,26 +659,26 @@ if(isSim){
    ci = TColor::GetColor("#000099");
    GeneratorLevel_JetPtSpectrum__3->SetMarkerColor(ci);
    GeneratorLevel_JetPtSpectrum__3->SetMarkerStyle(24);
-   GeneratorLevel_JetPtSpectrum__3->SetMarkerSize(1.2);
+   GeneratorLevel_JetPtSpectrum__3->SetMarkerSize(1.2f);
    GeneratorLevel_JetPtSpectrum__3->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
    GeneratorLevel_JetPtSpectrum__3->GetXaxis()->SetLabelFont(42);
-   GeneratorLevel_JetPtSpectrum__3->GetXaxis()->SetLabelSize(0.035);
-   GeneratorLevel_JetPtSpectrum__3->GetXaxis()->SetTitleSize(0.035);
+   GeneratorLevel_JetPtSpectrum__3->GetXaxis()->SetLabelSize(0.035f);
+   GeneratorLevel_JetPtSpectrum__3->GetXaxis()->SetTitleSize(0.035f);
    GeneratorLevel_JetPtSpectrum__3->GetXaxis()->SetTitleFont(42);
    GeneratorLevel_JetPtSpectrum__3->GetYaxis()->SetTitle("#frac{d#sigma}{d#it{p}_{T}} #times #Delta#it{p}_{T} (mb)");
    GeneratorLevel_JetPtSpectrum__3->GetYaxis()->SetLabelFont(42);
-   GeneratorLevel_JetPtSpectrum__3->GetYaxis()->SetLabelSize(0.035);
-   GeneratorLevel_JetPtSpectrum__3->GetYaxis()->SetTitleSize(0.035);
+   GeneratorLevel_JetPtSpectrum__3->GetYaxis()->SetLabelSize(0.035f);
+   GeneratorLevel_JetPtSpectrum__3->GetYaxis()->SetTitleSize(0.035f);
    GeneratorLevel_JetPtSpectrum__3->GetYaxis()->SetTitleFont(42);
    GeneratorLevel_JetPtSpectrum__3->GetZaxis()->SetLabelFont(42);
-   GeneratorLevel_JetPtSpectrum__3->GetZaxis()->SetLabelSize(0.035);
-   GeneratorLevel_JetPtSpectrum__3->GetZaxis()->SetTitleSize(0.035);
+   GeneratorLevel_JetPtSpectrum__3->GetZaxis()->SetLabelSize(0.035f);
+   GeneratorLevel_JetPtSpectrum__3->GetZaxis()->SetTitleSize(0.035f);
    GeneratorLevel_JetPtSpectrum__3->GetZaxis()->SetTitleFont(42);
    GeneratorLevel_JetPtSpectrum__3->Draw("same p e0 x0");
 
    // theory syst unc
    if(isSimSys){
-     grae = (TGraphAsymmErrors*) grsystheory->Clone("grae"); //  new TGraphAsymmErrors(6);
+     grae = dynamic_cast<TGraphAsymmErrors*>(grsystheory->Clone("grae")); //  new TGraphAsymmErrors(6);
      grae->SetName("theorySyst_copy");
      grae->SetTitle("Graph");
      grae->SetFillColor(1);
@@ -672,28 +690,28 @@ if(isSim){
      TH1F *Graph_theorySyst_copy2 = new TH1F("Graph_theorySyst_copy2","Graph",100,2.5,52.5);
      Graph_theorySyst_copy2->SetMinimum(2.864129e-05);
      Graph_theorySyst_copy2->SetMaximum(0.01825038);
-     Graph_theorySyst_copy2->SetDirectory(0);
+     Graph_theorySyst_copy2->SetDirectory(nullptr);
      Graph_theorySyst_copy2->SetStats(0);
 
      ci = TColor::GetColor("#000099");
      Graph_theorySyst_copy2->SetLineColor(ci);
      Graph_theorySyst_copy2->GetXaxis()->SetLabelFont(42);
-     Graph_theorySyst_copy2->GetXaxis()->SetLabelSize(0.035);
-     Graph_theorySyst_copy2->GetXaxis()->SetTitleSize(0.035);
+     Graph_theorySyst_copy2->GetXaxis()->SetLabelSize(0.035f);
+     Graph_theorySyst_copy2->GetXaxis()->SetTitleSize(0.035f);
      Graph_theorySyst_copy2->GetXaxis()->SetTitleFont(42);
      Graph_theorySyst_copy2->GetYaxis()->SetLabelFont(42);
-     Graph_theorySyst_copy2->GetYaxis()->SetLabelSize(0.035);
-     Graph_theorySyst_copy2->GetYaxis()->SetTitleSize(0.035);
+     Graph_theorySyst_copy2->GetYaxis()->SetLabelSize(0.035f);
+     Graph_theorySyst_copy2->GetYaxis()->SetTitleSize(0.035f);
      Graph_theorySyst_copy2->GetYaxis()->SetTitleFont(42);
      Graph_theorySyst_copy2->GetZaxis()->SetLabelFont(42);
-     Graph_theorySyst_copy2->GetZaxis()->SetLabelSize(0.035);
-     Graph_theorySyst_copy2->GetZaxis()->SetTitleSize(0.035);
+     Graph_theorySyst_copy2->GetZaxis()->SetLabelSize(0.035f);
+     Graph_theorySyst_copy2->GetZaxis()->SetTitleSize(0.035f);
      Graph_theorySyst_copy2->GetZaxis()->SetTitleFont(42);
      grae->SetHistogram(Graph_theorySyst_copy2);
      grae->Draw("2");
   }
 }
-   TLegend *leg = new TLegend(0.5,0.32,0.8,0.57,NULL,"NB NDC");
+   TLegend *leg = new TLegend(0.5,0.32,0.8,0.57,nullptr,"NB NDC");
    leg->SetBorderSize(0);
    leg->SetTextFont(43);
    leg->SetTextSize(23);
@@ -709,7 +727,7 @@ if(isSim){
    entry->SetLineWidth(1);
    entry->SetMarkerColor(ci);
    entry->SetMarkerStyle(20);
-   entry->SetMarkerSize(0.9);
+   entry->SetMarkerSize(0.9f);
    entry->SetTextFont(43);
 
    if(isSys){
@@ -737,7 +755,7 @@ if(isSim){
      ci = TColor::GetColor("#000099");
      entry->SetMarkerColor(ci);
      entry->SetMarkerStyle(24);
-     entry->SetMarkerSize(1.2);
+     entry->SetMarkerSize(1.2f);
      entry->SetTextFont(43);
      if(isSimSys) {
        entry=leg->AddEntry("theorySyst_copy","Syst. unc. (theory)","f");
@@ -761,11 +779,11 @@ if(isSim){
    pt->SetTextSize(22);
    //TText *text = pt->AddText("ALICE Preliminary");
    TText *text = new TText;
-   text = pt->AddText("ALICE Preliminary");
+   //text = pt->AddText("ALICE Preliminary"); //uncomment
    if(fSystem) text = pt->AddText("p-Pb, #sqrt{#it{s}_{NN}} = 5.02 TeV");
    else text = pt->AddText("pp, #sqrt{#it{s}} = 5.02 TeV");
    text = pt->AddText(Form("charged jets, anti-#it{k}_{T}, #it{R} = 0.%d, |#it{#eta}_{lab}^{jet}| < 0.%d",Rpar,9-Rpar));
-   text = pt->AddText(Form ("with D^{0}, %d < #it{p}_{T,D^{0}} < %d GeV/#it{c}",(int)fptbinsDA[0],(int)fptbinsDA[fptbinsDN]));
+   text = pt->AddText(Form ("with D^{0}, %d < #it{p}_{T,D^{0}} < %d GeV/#it{c}",static_cast<int>(fptbinsDA[0]),static_cast<int>(fptbinsDA[fptbinsDN])));
    pt->Draw();
 
    // does nothing
@@ -773,7 +791,7 @@ if(isSim){
    CentralPointsStatisticalUncertainty__4->SetMinimum(2e-05);
    CentralPointsStatisticalUncertainty__4->SetMaximum(0.7);
    CentralPointsStatisticalUncertainty__4->SetEntries(8);
-   CentralPointsStatisticalUncertainty__4->SetDirectory(0);
+   CentralPointsStatisticalUncertainty__4->SetDirectory(nullptr);
    CentralPointsStatisticalUncertainty__4->SetStats(0);
 
    ci = TColor::GetColor("#990000");
@@ -782,28 +800,28 @@ if(isSim){
    ci = TColor::GetColor("#990000");
    CentralPointsStatisticalUncertainty__4->SetMarkerColor(ci);
    CentralPointsStatisticalUncertainty__4->SetMarkerStyle(20);
-   CentralPointsStatisticalUncertainty__4->SetMarkerSize(0.9);
+   CentralPointsStatisticalUncertainty__4->SetMarkerSize(0.9f);
    CentralPointsStatisticalUncertainty__4->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
    CentralPointsStatisticalUncertainty__4->GetXaxis()->SetLabelFont(42);
-   CentralPointsStatisticalUncertainty__4->GetXaxis()->SetLabelSize(0.035);
-   CentralPointsStatisticalUncertainty__4->GetXaxis()->SetTitleSize(0.035);
+   CentralPointsStatisticalUncertainty__4->GetXaxis()->SetLabelSize(0.035f);
+   CentralPointsStatisticalUncertainty__4->GetXaxis()->SetTitleSize(0.035f);
    CentralPointsStatisticalUncertainty__4->GetXaxis()->SetTitleFont(42);
    CentralPointsStatisticalUncertainty__4->GetYaxis()->SetTitle("#frac{d^{2}#sigma}{d#it{p}_{T}d#it{#eta}} [mb (GeV/#it{c})^{-1}]");
    CentralPointsStatisticalUncertainty__4->GetYaxis()->SetLabelFont(43);
    CentralPointsStatisticalUncertainty__4->GetYaxis()->SetLabelSize(22);
    CentralPointsStatisticalUncertainty__4->GetYaxis()->SetTitleSize(26);
-   CentralPointsStatisticalUncertainty__4->GetYaxis()->SetTitleOffset(1.6);
+   CentralPointsStatisticalUncertainty__4->GetYaxis()->SetTitleOffset(1.6f);
    CentralPointsStatisticalUncertainty__4->GetYaxis()->SetTitleFont(43);
    CentralPointsStatisticalUncertainty__4->GetZaxis()->SetLabelFont(42);
-   CentralPointsStatisticalUncertainty__4->GetZaxis()->SetLabelSize(0.035);
-   CentralPointsStatisticalUncertainty__4->GetZaxis()->SetTitleSize(0.035);
+   CentralPointsStatisticalUncertainty__4->GetZaxis()->SetLabelSize(0.035f);
+   CentralPointsStatisticalUncertainty__4->GetZaxis()->SetTitleSize(0.035f);
    CentralPointsStatisticalUncertainty__4->GetZaxis()->SetTitleFont(42);
    CentralPointsStatisticalUncertainty__4->Draw("sameaxis");
    FinalSpectrum_1->Modified();
    FinalSpectrum->cd();
 
 // ------------>Primitives in pad: FinalSpectrum_2
-   FinalSpectrum_2 = new TPad("FinalSpectrum_2", "FinalSpectrum_2",0,0,1,0.35);
+   TPad* FinalSpectrum_2 = new TPad("FinalSpectrum_2", "FinalSpectrum_2",0,0,1,0.35);
    FinalSpectrum_2->Draw();
    FinalSpectrum_2->cd();
    FinalSpectrum_2->Range(-1.986821e-07,-0.9209589,33.33333,2.49);
@@ -813,18 +831,18 @@ if(isSim){
    FinalSpectrum_2->SetGridy();
    FinalSpectrum_2->SetTickx(1);
    FinalSpectrum_2->SetTicky(1);
-   FinalSpectrum_2->SetLeftMargin(0.15);
+   FinalSpectrum_2->SetLeftMargin(0.15f);
    FinalSpectrum_2->SetTopMargin(0);
-   FinalSpectrum_2->SetBottomMargin(0.27);
+   FinalSpectrum_2->SetBottomMargin(0.27f);
    FinalSpectrum_2->SetFrameBorderMode(0);
    FinalSpectrum_2->SetFrameBorderMode(0);
 
    // central points data (values don't really needed)
    TH1D *CentralPointsStatisticalUncertainty__5 = new TH1D("CentralPointsStatisticalUncertainty__5","Central Values",fptbinsJetFinalN, xAxis);
    CentralPointsStatisticalUncertainty__5->SetMinimum(0);
-   CentralPointsStatisticalUncertainty__5->SetMaximum(2.49);
+   CentralPointsStatisticalUncertainty__5->SetMaximum(2.9);
    CentralPointsStatisticalUncertainty__5->SetEntries(8);
-   CentralPointsStatisticalUncertainty__5->SetDirectory(0);
+   CentralPointsStatisticalUncertainty__5->SetDirectory(nullptr);
    CentralPointsStatisticalUncertainty__5->SetStats(0);
 
    ci = TColor::GetColor("#990000");
@@ -833,29 +851,29 @@ if(isSim){
    ci = TColor::GetColor("#990000");
    CentralPointsStatisticalUncertainty__5->SetMarkerColor(ci);
    CentralPointsStatisticalUncertainty__5->SetMarkerStyle(20);
-   CentralPointsStatisticalUncertainty__5->SetMarkerSize(0.9);
+   CentralPointsStatisticalUncertainty__5->SetMarkerSize(0.9f);
    CentralPointsStatisticalUncertainty__5->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
    CentralPointsStatisticalUncertainty__5->GetXaxis()->SetLabelFont(43);
    CentralPointsStatisticalUncertainty__5->GetXaxis()->SetLabelSize(22);
    CentralPointsStatisticalUncertainty__5->GetXaxis()->SetTitleSize(26);
-   CentralPointsStatisticalUncertainty__5->GetXaxis()->SetTitleOffset(2.9);
+   CentralPointsStatisticalUncertainty__5->GetXaxis()->SetTitleOffset(2.9f);
    CentralPointsStatisticalUncertainty__5->GetXaxis()->SetTitleFont(43);
    CentralPointsStatisticalUncertainty__5->GetYaxis()->SetTitle("data / theory");
    CentralPointsStatisticalUncertainty__5->GetYaxis()->SetNdivisions(509);
    CentralPointsStatisticalUncertainty__5->GetYaxis()->SetLabelFont(43);
    CentralPointsStatisticalUncertainty__5->GetYaxis()->SetLabelSize(22);
    CentralPointsStatisticalUncertainty__5->GetYaxis()->SetTitleSize(26);
-   CentralPointsStatisticalUncertainty__5->GetYaxis()->SetTitleOffset(1.4);
+   CentralPointsStatisticalUncertainty__5->GetYaxis()->SetTitleOffset(1.4f);
    CentralPointsStatisticalUncertainty__5->GetYaxis()->SetTitleFont(43);
    CentralPointsStatisticalUncertainty__5->GetZaxis()->SetLabelFont(42);
-   CentralPointsStatisticalUncertainty__5->GetZaxis()->SetLabelSize(0.035);
-   CentralPointsStatisticalUncertainty__5->GetZaxis()->SetTitleSize(0.035);
+   CentralPointsStatisticalUncertainty__5->GetZaxis()->SetLabelSize(0.035f);
+   CentralPointsStatisticalUncertainty__5->GetZaxis()->SetTitleSize(0.035f);
    CentralPointsStatisticalUncertainty__5->GetZaxis()->SetTitleFont(42);
    CentralPointsStatisticalUncertainty__5->Draw("axis");
 
 if(isSys) {
    // data syst unc ratio
-   grae =  (TGraphAsymmErrors*) grsysRatio->Clone("grae"); //   new TGraphAsymmErrors(6);
+   grae =  dynamic_cast<TGraphAsymmErrors*>(grsysRatio->Clone("grae")); //   new TGraphAsymmErrors(6);
    grae->SetName("ratioSyst");
    grae->SetTitle("Bayes, iter=4, prior=ResponseTruth Systematics");
 
@@ -867,22 +885,22 @@ if(isSys) {
    TH1F *Graph_ratioSyst3 = new TH1F("Graph_ratioSyst3","Bayes, iter=4, prior=ResponseTruth Systematics",100,2.5,52.5);
    Graph_ratioSyst3->SetMinimum(0.5839274);
    Graph_ratioSyst3->SetMaximum(2.28012);
-   Graph_ratioSyst3->SetDirectory(0);
+   Graph_ratioSyst3->SetDirectory(nullptr);
    Graph_ratioSyst3->SetStats(0);
 
    ci = TColor::GetColor("#000099");
    Graph_ratioSyst3->SetLineColor(ci);
    Graph_ratioSyst3->GetXaxis()->SetLabelFont(42);
-   Graph_ratioSyst3->GetXaxis()->SetLabelSize(0.035);
-   Graph_ratioSyst3->GetXaxis()->SetTitleSize(0.035);
+   Graph_ratioSyst3->GetXaxis()->SetLabelSize(0.035f);
+   Graph_ratioSyst3->GetXaxis()->SetTitleSize(0.035f);
    Graph_ratioSyst3->GetXaxis()->SetTitleFont(42);
    Graph_ratioSyst3->GetYaxis()->SetLabelFont(42);
-   Graph_ratioSyst3->GetYaxis()->SetLabelSize(0.035);
-   Graph_ratioSyst3->GetYaxis()->SetTitleSize(0.035);
+   Graph_ratioSyst3->GetYaxis()->SetLabelSize(0.035f);
+   Graph_ratioSyst3->GetYaxis()->SetTitleSize(0.035f);
    Graph_ratioSyst3->GetYaxis()->SetTitleFont(42);
    Graph_ratioSyst3->GetZaxis()->SetLabelFont(42);
-   Graph_ratioSyst3->GetZaxis()->SetLabelSize(0.035);
-   Graph_ratioSyst3->GetZaxis()->SetTitleSize(0.035);
+   Graph_ratioSyst3->GetZaxis()->SetLabelSize(0.035f);
+   Graph_ratioSyst3->GetZaxis()->SetTitleSize(0.035f);
    Graph_ratioSyst3->GetZaxis()->SetTitleFont(42);
    grae->SetHistogram(Graph_ratioSyst3);
 
@@ -890,38 +908,38 @@ if(isSys) {
 }
 
    // data central ratio
-   TH1D *CentralPointsStatisticalUncertainty__6 =  (TH1D*) hData_binned_ratio->Clone("CentralPointsStatisticalUncertainty__6");
+   TH1D *CentralPointsStatisticalUncertainty__6 =  dynamic_cast<TH1D*>(hData_binned_ratio->Clone("CentralPointsStatisticalUncertainty__6"));
    CentralPointsStatisticalUncertainty__6->SetMinimum(1.122659e-05);
    CentralPointsStatisticalUncertainty__6->SetMaximum(0.06069752);
    CentralPointsStatisticalUncertainty__6->SetEntries(14);
-   CentralPointsStatisticalUncertainty__6->SetDirectory(0);
+   CentralPointsStatisticalUncertainty__6->SetDirectory(nullptr);
    CentralPointsStatisticalUncertainty__6->SetStats(0);
 
    ci = TColor::GetColor("#990000");
    CentralPointsStatisticalUncertainty__6->SetLineColor(ci);
    CentralPointsStatisticalUncertainty__6->SetMarkerColor(ci);
    CentralPointsStatisticalUncertainty__6->SetMarkerStyle(20);
-   CentralPointsStatisticalUncertainty__6->SetMarkerSize(0.9);
+   CentralPointsStatisticalUncertainty__6->SetMarkerSize(0.9f);
    CentralPointsStatisticalUncertainty__6->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
    CentralPointsStatisticalUncertainty__6->GetXaxis()->SetLabelFont(42);
-   CentralPointsStatisticalUncertainty__6->GetXaxis()->SetLabelSize(0.035);
-   CentralPointsStatisticalUncertainty__6->GetXaxis()->SetTitleSize(0.035);
+   CentralPointsStatisticalUncertainty__6->GetXaxis()->SetLabelSize(0.035f);
+   CentralPointsStatisticalUncertainty__6->GetXaxis()->SetTitleSize(0.035f);
    CentralPointsStatisticalUncertainty__6->GetXaxis()->SetTitleFont(42);
    CentralPointsStatisticalUncertainty__6->GetYaxis()->SetTitle("#frac{d^{2}#sigma}{d#it{p}_{T}d#it{#eta}} [mb (GeV/#it{c})^{-1}]");
    CentralPointsStatisticalUncertainty__6->GetYaxis()->SetLabelFont(42);
-   CentralPointsStatisticalUncertainty__6->GetYaxis()->SetLabelSize(0.035);
-   CentralPointsStatisticalUncertainty__6->GetYaxis()->SetTitleSize(0.035);
-   CentralPointsStatisticalUncertainty__6->GetYaxis()->SetTitleOffset(1.4);
+   CentralPointsStatisticalUncertainty__6->GetYaxis()->SetLabelSize(0.035f);
+   CentralPointsStatisticalUncertainty__6->GetYaxis()->SetTitleSize(0.035f);
+   CentralPointsStatisticalUncertainty__6->GetYaxis()->SetTitleOffset(1.4f);
    CentralPointsStatisticalUncertainty__6->GetYaxis()->SetTitleFont(42);
    CentralPointsStatisticalUncertainty__6->GetZaxis()->SetLabelFont(42);
-   CentralPointsStatisticalUncertainty__6->GetZaxis()->SetLabelSize(0.035);
-   CentralPointsStatisticalUncertainty__6->GetZaxis()->SetTitleSize(0.035);
+   CentralPointsStatisticalUncertainty__6->GetZaxis()->SetLabelSize(0.035f);
+   CentralPointsStatisticalUncertainty__6->GetZaxis()->SetTitleSize(0.035f);
    CentralPointsStatisticalUncertainty__6->GetZaxis()->SetTitleFont(42);
    CentralPointsStatisticalUncertainty__6->Draw("same p e0 x0");
 
    // theory syst ratio
    if(isSim && isSimSys) {
-     grae = (TGraphAsymmErrors*)  grsystheoryratio->Clone("grae"); // new TGraphAsymmErrors(6);
+     grae = dynamic_cast<TGraphAsymmErrors*>(grsystheoryratio->Clone("grae")); // new TGraphAsymmErrors(6);
      grae->SetName("ratioTheorySyst");
      grae->SetTitle("Graph");
      grae->SetFillColor(1);
@@ -934,22 +952,22 @@ if(isSys) {
      TH1F *Graph_ratioTheorySyst4 = new TH1F("Graph_ratioTheorySyst4","Graph",100,2.5,32.5);
      Graph_ratioTheorySyst4->SetMinimum(0.2058133);
      Graph_ratioTheorySyst4->SetMaximum(1.968171);
-     Graph_ratioTheorySyst4->SetDirectory(0);
+     Graph_ratioTheorySyst4->SetDirectory(nullptr);
      Graph_ratioTheorySyst4->SetStats(0);
 
      ci = TColor::GetColor("#000099");
      Graph_ratioTheorySyst4->SetLineColor(ci);
      Graph_ratioTheorySyst4->GetXaxis()->SetLabelFont(42);
-     Graph_ratioTheorySyst4->GetXaxis()->SetLabelSize(0.035);
-     Graph_ratioTheorySyst4->GetXaxis()->SetTitleSize(0.035);
+     Graph_ratioTheorySyst4->GetXaxis()->SetLabelSize(0.035f);
+     Graph_ratioTheorySyst4->GetXaxis()->SetTitleSize(0.035f);
      Graph_ratioTheorySyst4->GetXaxis()->SetTitleFont(42);
      Graph_ratioTheorySyst4->GetYaxis()->SetLabelFont(42);
-     Graph_ratioTheorySyst4->GetYaxis()->SetLabelSize(0.035);
-     Graph_ratioTheorySyst4->GetYaxis()->SetTitleSize(0.035);
+     Graph_ratioTheorySyst4->GetYaxis()->SetLabelSize(0.035f);
+     Graph_ratioTheorySyst4->GetYaxis()->SetTitleSize(0.035f);
      Graph_ratioTheorySyst4->GetYaxis()->SetTitleFont(42);
      Graph_ratioTheorySyst4->GetZaxis()->SetLabelFont(42);
-     Graph_ratioTheorySyst4->GetZaxis()->SetLabelSize(0.035);
-     Graph_ratioTheorySyst4->GetZaxis()->SetTitleSize(0.035);
+     Graph_ratioTheorySyst4->GetZaxis()->SetLabelSize(0.035f);
+     Graph_ratioTheorySyst4->GetZaxis()->SetTitleSize(0.035f);
      Graph_ratioTheorySyst4->GetZaxis()->SetTitleFont(42);
      grae->SetHistogram(Graph_ratioTheorySyst4);
      grae->Draw("2");
@@ -959,30 +977,30 @@ if(isSys) {
    CentralPointsStatisticalUncertainty__7->SetMinimum(0);
    CentralPointsStatisticalUncertainty__7->SetMaximum(2.49);
    CentralPointsStatisticalUncertainty__7->SetEntries(8);
-   CentralPointsStatisticalUncertainty__7->SetDirectory(0);
+   CentralPointsStatisticalUncertainty__7->SetDirectory(nullptr);
    CentralPointsStatisticalUncertainty__7->SetStats(0);
 
    ci = TColor::GetColor("#990000");
    CentralPointsStatisticalUncertainty__7->SetLineColor(ci);
    CentralPointsStatisticalUncertainty__7->SetMarkerColor(ci);
    CentralPointsStatisticalUncertainty__7->SetMarkerStyle(20);
-   CentralPointsStatisticalUncertainty__7->SetMarkerSize(0.9);
+   CentralPointsStatisticalUncertainty__7->SetMarkerSize(0.9f);
    CentralPointsStatisticalUncertainty__7->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
    CentralPointsStatisticalUncertainty__7->GetXaxis()->SetLabelFont(43);
    CentralPointsStatisticalUncertainty__7->GetXaxis()->SetLabelSize(22);
    CentralPointsStatisticalUncertainty__7->GetXaxis()->SetTitleSize(26);
-   CentralPointsStatisticalUncertainty__7->GetXaxis()->SetTitleOffset(2.9);
+   CentralPointsStatisticalUncertainty__7->GetXaxis()->SetTitleOffset(2.9f);
    CentralPointsStatisticalUncertainty__7->GetXaxis()->SetTitleFont(43);
    CentralPointsStatisticalUncertainty__7->GetYaxis()->SetTitle("data / theory");
    CentralPointsStatisticalUncertainty__7->GetYaxis()->SetNdivisions(509);
    CentralPointsStatisticalUncertainty__7->GetYaxis()->SetLabelFont(43);
    CentralPointsStatisticalUncertainty__7->GetYaxis()->SetLabelSize(22);
    CentralPointsStatisticalUncertainty__7->GetYaxis()->SetTitleSize(26);
-   CentralPointsStatisticalUncertainty__7->GetYaxis()->SetTitleOffset(1.4);
+   CentralPointsStatisticalUncertainty__7->GetYaxis()->SetTitleOffset(1.4f);
    CentralPointsStatisticalUncertainty__7->GetYaxis()->SetTitleFont(43);
    CentralPointsStatisticalUncertainty__7->GetZaxis()->SetLabelFont(42);
-   CentralPointsStatisticalUncertainty__7->GetZaxis()->SetLabelSize(0.035);
-   CentralPointsStatisticalUncertainty__7->GetZaxis()->SetTitleSize(0.035);
+   CentralPointsStatisticalUncertainty__7->GetZaxis()->SetLabelSize(0.035f);
+   CentralPointsStatisticalUncertainty__7->GetZaxis()->SetTitleSize(0.035f);
    CentralPointsStatisticalUncertainty__7->GetZaxis()->SetTitleFont(42);
    CentralPointsStatisticalUncertainty__7->Draw("sameaxig");
 
@@ -995,5 +1013,6 @@ if(isSys) {
    FinalSpectrum->SaveAs(Form("%s/JetPtSpectra_final.png",outPlotDir.Data()));
    FinalSpectrum->SaveAs(Form("%s/JetPtSpectra_final.pdf",outPlotDir.Data()));
    FinalSpectrum->SaveAs(Form("%s/JetPtSpectra_final.eps",outPlotDir.Data()));
+   FinalSpectrum->SaveAs(Form("%s/JetPtSpectra_final.svg",outPlotDir.Data()));
 
 }

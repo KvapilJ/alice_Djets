@@ -3,23 +3,23 @@
  //  Utrecht University
  //  barbara.antonina.trzeciak@cern.ch
  //-----------------------------------------------------------------------
+#include "config.h"
 
- const int     fptbinsDN = 12;
- double        fptbinsDA[fptbinsDN+1] = { 1,2,3,4,5,6,7,8,10,12,16,24,36 };
 
 void signalExtraction_refl(
   TString data = "$HOME/Work/alice/analysis/pp5TeV/D0jet/outMC/AnalysisResults_fast_R03_D0MC_def.root",
   TString out = "$HOME/Work/alice/analysis/pp5TeV/D0jet/outMC/reflections",
-  bool postfix = 1, TString listName = "cut2",
-  bool isMoreFiles = 0,
+  Bool_t postfix = 1, TString listName = "cut2",
+  Bool_t isMoreFiles = 0,
   TString prod = "kl"   // for more than 1 file, for one file leave it empty)
 )
 {
-
-  int fRebinMass = 2;
-  double jetmin = -10, jetmax = 50;
-  double zmin = -2, zmax = 2;
-  double minf = 1.65, maxf = 2.1;
+  const Int_t     fptbinsDN = 12;
+  Double_t        fptbinsDA[fptbinsDN+1] = { 1,2,3,4,5,6,7,8,10,12,16,24,36};
+  Int_t fRebinMass = 2;
+  Double_t jetmin = -10, jetmax = 50;
+  Double_t zmin = -2, zmax = 2;
+  Double_t minf = 1.65, maxf = 2.1;
 
     TString plotsDir = "/plots";
     TString outdir = out;
@@ -27,7 +27,7 @@ void signalExtraction_refl(
     gSystem->Exec(Form("mkdir %s%s",outdir.Data(),plotsDir.Data()));
 
     if(!isMoreFiles) prod="";
-    int nFiles = (int)prod.Length();
+    int nFiles = static_cast<int>(prod.Length());
 
     TString histName = "histosD0MBN";
     // get analysis output file
@@ -37,26 +37,26 @@ void signalExtraction_refl(
     TList *histList;
     THnSparseF *sparse;
 
-    TH2D *hInvMassptDSig, *hInvMassptDRefl;
+    TH2D *hInvMassptDSig = nullptr, *hInvMassptDRefl = nullptr;
     if(!isMoreFiles) {
       datafile = data;
       File = new TFile(datafile,"read");
-      if(!File) { cout << "==== WRONG FILE WITH DATA =====\n\n"; return ;}
-      dir=(TDirectoryFile*)File->Get("DmesonsForJetCorrelations");
+      if(!File) { std::cout << "==== WRONG FILE WITH DATA =====\n\n"; return ;}
+      dir=dynamic_cast<TDirectoryFile*>(File->Get("DmesonsForJetCorrelations"));
 
-      for(int i=0;i<3; i++){
-          if(postfix) histList =  (TList*)dir->Get(Form("%s%d%sMCrec",histName.Data(),i,listName.Data()));
-          else histList =  (TList*)dir->Get(Form("%s%dMCrec",histName.Data(),i));
-          sparse = (THnSparseF*)histList->FindObject("hsDphiz");
+      for(int i=0;i<NDMC; i++){
+          if(postfix) histList =  dynamic_cast<TList*>(dir->Get(Form("%s%d%sMCrec",histName.Data(),i,listName.Data())));
+          else histList =  dynamic_cast<TList*>(dir->Get(Form("%s%dMCrec",histName.Data(),i)));
+          sparse = dynamic_cast<THnSparseF*>(histList->FindObject("hsDphiz"));
           sparse->GetAxis(0)->SetRangeUser(zmin,zmax);
           sparse->GetAxis(1)->SetRangeUser(jetmin,jetmax);
           if(i==0) {
-            hInvMassptDSig = (TH2D*)sparse->Projection(2,6);
-            hInvMassptDRefl = (TH2D*)sparse->Projection(2,7);
+            hInvMassptDSig = dynamic_cast<TH2D*>(sparse->Projection(2,6));
+            hInvMassptDRefl = dynamic_cast<TH2D*>(sparse->Projection(2,7));
           }
           else {
-            hInvMassptDSig->Add((TH2D*)sparse->Projection(2,6));
-            hInvMassptDRefl->Add((TH2D*)sparse->Projection(2,7));
+            hInvMassptDSig->Add(dynamic_cast<TH2D*>(sparse->Projection(2,6)));
+            hInvMassptDRefl->Add(dynamic_cast<TH2D*>(sparse->Projection(2,7)));
           }
       }
     }
@@ -66,29 +66,29 @@ void signalExtraction_refl(
           datafile += prod.Data()[j];
           datafile += ".root";
           File = new TFile(datafile,"read");
-          if(!File) { cout << "==== WRONG FILE WITH DATA =====\n\n"; return ;}
-          dir=(TDirectoryFile*)File->Get("DmesonsForJetCorrelations");
+          if(!File) { std::cout << "==== WRONG FILE WITH DATA =====\n\n"; return ;}
+          dir=dynamic_cast<TDirectoryFile*>(File->Get("DmesonsForJetCorrelations"));
 
           for(int i=0;i<2; i++){
-              if(postfix) histList =  (TList*)dir->Get(Form("%s%d%sMCrec",histName.Data(),i,listName.Data()));
-              else histList =  (TList*)dir->Get(Form("%s%dMCrec",histName.Data(),i));
-              sparse = (THnSparseF*)histList->FindObject("hsDphiz");
+              if(postfix) histList =  dynamic_cast<TList*>(dir->Get(Form("%s%d%sMCrec",histName.Data(),i,listName.Data())));
+              else histList =  dynamic_cast<TList*>(dir->Get(Form("%s%dMCrec",histName.Data(),i)));
+              sparse = dynamic_cast<THnSparseF*>(histList->FindObject("hsDphiz"));
               sparse->GetAxis(0)->SetRangeUser(zmin,zmax);
               sparse->GetAxis(1)->SetRangeUser(jetmin,jetmax);
               if(i==0 && j==0) {
-                hInvMassptDSig = (TH2D*)sparse->Projection(2,6);
-                hInvMassptDRefl = (TH2D*)sparse->Projection(2,7);
+                hInvMassptDSig = dynamic_cast<TH2D*>(sparse->Projection(2,6));
+                hInvMassptDRefl = dynamic_cast<TH2D*>(sparse->Projection(2,7));
               }
               else {
-                hInvMassptDSig->Add((TH2D*)sparse->Projection(2,6));
-                hInvMassptDRefl->Add((TH2D*)sparse->Projection(2,7));
+                hInvMassptDSig->Add(dynamic_cast<TH2D*>(sparse->Projection(2,6)));
+                hInvMassptDRefl->Add(dynamic_cast<TH2D*>(sparse->Projection(2,7)));
               }
           }
       }
     }
 
     TH1D *hsig[fptbinsDN], *hrefl[fptbinsDN];
-    TH1F *hFitReflNewTemp[fptbinsDN], *ratio[fptbinsDN];
+    TH1D *hFitReflNewTemp[fptbinsDN], *ratio[fptbinsDN];
     TString formulaSig = "[0]/([2]*TMath::Sqrt(2*TMath::Pi()))*exp(-(x-[1])*(x-[1])/(2*[2]*[2]))";
     TString formulaRef = "[0]/(TMath::Sqrt(2.*TMath::Pi())*[2])*TMath::Exp(-(x-[1])*(x-[1])/(2.*[2]*[2]))+[3]/( TMath::Sqrt(2.*TMath::Pi())*[5])*TMath::Exp(-(x-[4])*(x-[4])/(2.*[5]*[5]))";
 
@@ -102,8 +102,8 @@ void signalExtraction_refl(
     cRatio->Divide(4,3);
 
     for(int i=0; i<fptbinsDN; i++){
-      hsig[i] = (TH1D*)hInvMassptDSig->ProjectionX(Form("histSgn_%d_%d",(int)fptbinsDA[i],(int)fptbinsDA[i+1]),hInvMassptDSig->GetYaxis()->FindBin(fptbinsDA[i]), hInvMassptDSig->GetYaxis()->FindBin(fptbinsDA[i+1])-1);
-      hrefl[i] = (TH1D*)hInvMassptDRefl->ProjectionX(Form("hrefl_%d_%d",(int)fptbinsDA[i],(int)fptbinsDA[i+1]),hInvMassptDRefl->GetYaxis()->FindBin(fptbinsDA[i]), hInvMassptDRefl->GetYaxis()->FindBin(fptbinsDA[i+1])-1);
+      hsig[i] = dynamic_cast<TH1D*>(hInvMassptDSig->ProjectionX(Form("histSgn_%d_%d",static_cast<int>(fptbinsDA[i]),static_cast<int>(fptbinsDA[i+1])),hInvMassptDSig->GetYaxis()->FindBin(fptbinsDA[i]), hInvMassptDSig->GetYaxis()->FindBin(fptbinsDA[i+1])-1));
+      hrefl[i] = dynamic_cast<TH1D*>(hInvMassptDRefl->ProjectionX(Form("hrefl_%d_%d",static_cast<int>(fptbinsDA[i]),static_cast<int>(fptbinsDA[i+1])),hInvMassptDRefl->GetYaxis()->FindBin(fptbinsDA[i]), hInvMassptDRefl->GetYaxis()->FindBin(fptbinsDA[i+1])-1));
       hsig[i]->Rebin(fRebinMass);
       hrefl[i]->Rebin(fRebinMass);
 
@@ -146,8 +146,8 @@ void signalExtraction_refl(
       cRefl2->cd(i+1);
       TF1 *fFitRefl = hrefl[i]->GetFunction("doublegaussMCRefl");
       //fFitReflection->cd();
-      hFitReflNewTemp[i] = (TH1F*)hrefl[i]->Clone(Form("histRflFittedDoubleGaus_pt%d_%d",(int)fptbinsDA[i],(int)fptbinsDA[i+1]));
-      ratio[i] = (TH1F*)hrefl[i]->Clone(Form("ratioRelDistr_pt%d_%d", (int)fptbinsDA[i],(int)fptbinsDA[i+1]));
+      hFitReflNewTemp[i] = dynamic_cast<TH1D*>(hrefl[i]->Clone(Form("histRflFittedDoubleGaus_pt%d_%d",static_cast<int>(fptbinsDA[i]),static_cast<int>(fptbinsDA[i+1]))));
+      ratio[i] = dynamic_cast<TH1D*>(hrefl[i]->Clone(Form("ratioRelDistr_pt%d_%d", static_cast<int>(fptbinsDA[i]),static_cast<int>(fptbinsDA[i+1]))));
 
       for(Int_t iBin2=1; iBin2<=hrefl[i]->GetNbinsX(); iBin2++){
         hFitReflNewTemp[i]->SetBinContent(iBin2, 0.);
@@ -170,7 +170,7 @@ void signalExtraction_refl(
 
     // --------------------------------------------------------
     // ----------- write to output file
-    TFile *ofile = new TFile(Form("%s/reflectionTemplates_%s.root",outdir.Data(), postfix ? listName.Data() : "pPb" ),"RECREATE");
+    TFile *ofile = new TFile(Form("%s/reflectionTemplates_%s.root",outdir.Data(), postfix ? listName.Data() : "pp" ),"RECREATE");
     for(int i=0; i<fptbinsDN; i++){
       hsig[i]->Write();
       hrefl[i]->Write();

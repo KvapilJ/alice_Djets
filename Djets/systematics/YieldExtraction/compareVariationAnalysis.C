@@ -1,18 +1,27 @@
+#include "TStyle.h"
+#include "TString.h"
+#include "TFile.h"
+#include "TH1F.h"
+#include "TCanvas.h"
+#include "TLegend.h"
+#include "TLine.h"
+#include "TROOT.h"
+#include <iostream>
 #include "style.C"
 
-const int ptbinsJetN = 9;
-double ptbinsJet[ptbinsJetN+1] = { 3,4,5,6,8,10,14,20,30,50 };
+const int ptbinsJetN = 11;
+double ptbinsJet[ptbinsJetN+1] = {2,3,4,5,6,8,10,12,14,20,30,50};//{ 3,4,5,6,8,10,14,20,30,50 };
 
 // Pb-Pb binning
 TString out = "out";
-TString jetDataFile = "/home/jackbauer/Work/alice/analysis/pp5TeV/D0jet/results/DzeroR03_pPbCuts/Default_249/signalExtraction/JetPtSpectra_SB_eff.root";
+TString jetDataFile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff.root";
 
 void compareVariationAnalysis(char *outDir = "JetPtComparison" )
 {
 
     style();
 
-    double plotmin = 3;
+    double plotmin = 5;
     double plotmax = 50;
 
     TString jetSimFile = "out/FinalRawYieldCentralPlusSystUncertainty_Dzero.root";
@@ -39,7 +48,7 @@ void compareVariationAnalysis(char *outDir = "JetPtComparison" )
     hjetSimFile->SetMarkerSize(1.1);
      hjetSimFile->SetFillColor(kRed-2);
      hjetSimFile->SetFillStyle(3005);
-     hjetSimFile->SetTitle();
+     hjetSimFile->SetTitle("");
 
     //hjetDataFile->SetMinimum(50);
     hjetDataFile->GetXaxis()->SetRangeUser(3,30);
@@ -90,7 +99,7 @@ void compareVariationAnalysis(char *outDir = "JetPtComparison" )
             double err = hjetDataFile->GetBinError(i);
             if(err) {
                 relUncDataSB->SetBinContent(i,err/bin*100);
-		             cout << "bin" << i << "\tunc: " << err / bin << endl;
+                     std::cout << "bin" << i << "\tunc: " << err / bin << std::endl;
                 relUncDataSB->SetBinError(i,0);
             }
             else {
@@ -109,14 +118,14 @@ void compareVariationAnalysis(char *outDir = "JetPtComparison" )
      cJetDataUn->SaveAs(Form("%s/RawYieldDataStatUnc.pdf",out.Data()));
      cJetDataUn->SaveAs(Form("%s/RawYieldDataStatUnc.png",out.Data()));
 
-	cout << "SB systematic unc: " << endl;
+    std::cout << "SB systematic unc: " << std::endl;
     TH1F *relUncVarSB = (TH1F*)hjetSimFile->Clone("relUncVarSB");
     for(int i=1; i<=hjetSimFile->GetNbinsX(); i++){
             double bin = hjetSimFile->GetBinContent(i);
             double err = hjetSimFile->GetBinError(i);
             if(err) {
                 relUncVarSB->SetBinContent(i,err/bin*100);
-		cout << "bin" << i << "\tunc: " << err / bin << endl;
+        std::cout << "bin" << i << "\tunc: " << err / bin << std::endl;
                 relUncVarSB->SetBinError(i,0);
             }
             else {
@@ -128,7 +137,7 @@ void compareVariationAnalysis(char *outDir = "JetPtComparison" )
      relUncVarSB->GetYaxis()->SetTitleOffset(1.5);
      relUncVarSB->GetYaxis()->SetRangeUser(0,10);
     relUncVarSB->GetYaxis()->SetTitle("Yield ext. syst. unc.");
-    relUncVarSB->SetTitle();
+    relUncVarSB->SetTitle("");
 
 
 

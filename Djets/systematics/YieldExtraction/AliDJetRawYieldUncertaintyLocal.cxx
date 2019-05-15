@@ -400,19 +400,19 @@ printf("sigmaBC=%d\n",fnSigmaBC);
 
   if(fFitRefl) { //reflection treatment
 
-    cout<< " Reflection template file: " << fReflFilenameInput.Data() << " - Reflection histo name:  " << fReflHistoName.Data() << endl;
+    std::cout<< " Reflection template file: " << fReflFilenameInput.Data() << " - Reflection histo name:  " << fReflHistoName.Data() << std::endl;
     TFile *fRefl=TFile::Open(fReflFilenameInput.Data(),"read");
-    if(!fRefl) {cout << " Reflection file not found! Exiting... " << endl; return kFALSE;}
+    if(!fRefl) {std::cout << " Reflection file not found! Exiting... " << std::endl; return kFALSE;}
     TH1F *hTemplRefl=(TH1F*)fRefl->Get(fReflHistoName.Data());
-    if(!hTemplRefl) {cout << " Reflection histo not found! Exiting... " << endl; return kFALSE;}
+    if(!hTemplRefl) {std::cout << " Reflection histo not found! Exiting... " << std::endl; return kFALSE;}
     hTemplRefl->Draw();
 
         if(fFixRiflOverS<0){
-          cout<< " MC signal file: " << fSigMCFilenameInput.Data() << " - MC signal histo name:  " << fReflHistoName.Data() << endl;
+          std::cout<< " MC signal file: " << fSigMCFilenameInput.Data() << " - MC signal histo name:  " << fReflHistoName.Data() << std::endl;
           TFile *fSigMC=TFile::Open(fSigMCFilenameInput.Data(),"read"); //needed if refl/sigMC ratio is not fixed
-          if(!fSigMC) {cout << " MC signal file not found! Exiting... " << endl; return kFALSE;}
+          if(!fSigMC) {std::cout << " MC signal file not found! Exiting... " << std::endl; return kFALSE;}
           TH1F *hSignMC=(TH1F*)fSigMC->Get(fSigMCHistoName.Data());
-	  if(!hSignMC) {cout << " MC signal histo not found! Exiting... " << endl; return kFALSE;}
+      if(!hSignMC) {std::cout << " MC signal histo not found! Exiting... " << std::endl; return kFALSE;}
           fFixRiflOverS=hTemplRefl->Integral(hTemplRefl->FindBin(fReflRangeL+0.00001),hTemplRefl->FindBin(fReflRangeR-0.00001))/hSignMC->Integral(hSignMC->FindBin(fReflRangeL+0.00001),hSignMC->FindBin(fReflRangeR-0.00001));
           printf("Sign over Refl bin %1.1f-%1.1f = %f",fpTmin,fpTmax,fFixRiflOverS);
         }

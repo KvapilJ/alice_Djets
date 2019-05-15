@@ -8,12 +8,18 @@
 
 double plotmin = fptbinsJetMeasA[0], plotmax = fptbinsJetMeasA[fptbinsJetMeasN];
 
-TH1* GetInputHist(TString inFile = "JetPtSpectra_effScale.root", string histName = "hjetpt",TH1 *hh);
+TH1* GetInputHist(TString inFile = "JetPtSpectra_effScale.root", TString histName = "hjetpt",TH1 *hh = nullptr);
 TH1* GetInputSimHist(TString inFile, TH1 *hJetPt_B);
 
 void ScaleHist(TH1 *hh, int full = 0);
 void setHistoDetails(TH1 *hh, Color_t color, Style_t Mstyle, double Msize = 1.1, Width_t Lwidth = 2, Style_t Lstyle = 1);
 void SaveCanvas(TCanvas *c, TString name = "tmp");
+
+void subtractB_afterFolding(TString matrixFile,TH1D *hFD_central_binned,TH1D *hFD_up,TH1D *hFD_down,TH1D *hData_binned,TString outPlotDir,TString outSpectraDir, bool isSys);
+void subtractB_beforeFolding(TH1D *hFD_central_binned,TH1D *hFD_up,TH1D *hFD_down,TH1D *hData_binned,TString outPlotDir,TString outSpectraDir, bool isSys);
+TH1* GetUpSys(TH1D **hFD, const int nFiles = 11, TH1D *hFD_up = nullptr);
+TH1* GetDownSys(TH1D **hFD, const int nFiles = 11, TH1D *hFD_down = nullptr);
+TH1* foldB(TString matrixFile, TH1D *hFD, TH1D *folded );
 
 
 void subtractFD(
@@ -45,17 +51,17 @@ bool oldCounter = 0)
     double nEv;
     
     if(oldCounter) {
-      dir = (TDirectoryFile*)File->Get("DmesonsForJetCorrelations");
-      if(fDmesonSpecie) histList = (TList*)dir->Get("histosDStarMBN0");
-      else histList = (TList*)dir->Get("histosD0MBN0");
-      TH1F* hEvents = (TH1F*)histList->FindObject("hstat");
+      dir = dynamic_cast<TDirectoryFile*>(File->Get("DmesonsForJetCorrelations"));
+      if(fDmesonSpecie) histList = dynamic_cast<TList*>(dir->Get("histosDStarMBN0"));
+      else histList = dynamic_cast<TList*>(dir->Get("histosD0MBN0"));
+      TH1F* hEvents = dynamic_cast<TH1F*>(histList->FindObject("hstat"));
       double nEvSel = hEvents->GetBinContent(2);
       double nEvAna = hEvents->GetBinContent(1);
       nEv = nEvScale*nEvSel;
     }
     else {
-      dir = (TDirectoryFile*)File->Get(Form("PWG3_D2H_DmesonsForJetCorrelations%sMBN0",listName.Data()));
-      AliNormalizationCounter *c = (AliNormalizationCounter*)dir->Get("NormalizationCounter");
+      dir = dynamic_cast<TDirectoryFile*>(File->Get(Form("PWG3_D2H_DmesonsForJetCorrelations%sMBN0",listName.Data())));
+      AliNormalizationCounter *c = dynamic_cast<AliNormalizationCounter*>(dir->Get("NormalizationCounter"));
       nEv = c->GetNEventsForNorm();
     }
 
@@ -71,9 +77,9 @@ bool oldCounter = 0)
     }
 
     // ----------------- data eff corrected D-jet pT spectrum ---------------------
-    TH1D *hData;
-    hData = (TH1D*)GetInputHist(dataFile, "hjetptspectrum", hData);
-    TH1D *hData_binned = (TH1D*)hData->Rebin(fptbinsJetMeasN,"hData_binned", fptbinsJetMeasA);
+    TH1D *hData = nullptr;
+    hData = dynamic_cast<TH1D*>(GetInputHist(dataFile, "hjetptspectrum", hData));
+    TH1D *hData_binned = dynamic_cast<TH1D*>(hData->Rebin(fptbinsJetMeasN,"hData_binned", fptbinsJetMeasA));
 
     // ----------------- B->D simulation ---------------------
     int cent = 0;
@@ -94,19 +100,19 @@ bool oldCounter = 0)
         if(fDmesonSpecie) file += "_Dstar";
         else file += "_Dzero";
         file += ".root";
-        TH1D *htmp;
-        htmp = (TH1D*) GetInputHist(file, "hPt", htmp);
+        TH1D *htmp = nullptr;
+        htmp = dynamic_cast<TH1D*>(GetInputHist(file, "hPt", htmp));
         //htmp->Scale(sigma_c[nr]);
         htmp->GetYaxis()->SetTitle("d#sigma/dp_{T} (mb)");
-        hFD[nr] = (TH1D*)htmp->Clone(Form("hFD_%d",nr));
-        hFD_binned[nr] = (TH1D*)htmp->Rebin(fptbinsJetTrueN,Form("hFD_binned_%d",nr),fptbinsJetTrueA);
+        hFD[nr] = dynamic_cast<TH1D*>(htmp->Clone(Form("hFD_%d",nr)));
+        hFD_binned[nr] = dynamic_cast<TH1D*>(htmp->Rebin(fptbinsJetTrueN,Form("hFD_binned_%d",nr),fptbinsJetTrueA));
 
     }
 
 
-    TH1D *htmp = (TH1D*)(hFD[cent]->Clone("htmp"));
-    TH1D *hFD_central = (TH1D*)htmp->Clone("hFD_central");
-    TH1D *hFD_central_binned = (TH1D*)htmp->Rebin(fptbinsJetTrueN,"hFD_central_binned",fptbinsJetTrueA);
+    TH1D *htmp = dynamic_cast<TH1D*>(hFD[cent]->Clone("htmp"));
+    TH1D *hFD_central = dynamic_cast<TH1D*>(htmp->Clone("hFD_central"));
+    TH1D *hFD_central_binned = dynamic_cast<TH1D*>(htmp->Rebin(fptbinsJetTrueN,"hFD_central_binned",fptbinsJetTrueA));
 
     setHistoDetails(hFD_central,4,24);
     setHistoDetails(hFD_central_binned,4,24);
@@ -115,28 +121,33 @@ bool oldCounter = 0)
     hFD_central_binned->Scale(simScaling);
 
 
+    TH1D *hFD_up_binned = nullptr;
+    TH1D *hFD_down_binned = nullptr;
+    TH1D *hFD_up = nullptr;
+    TH1D *hFD_down = nullptr;
+
     if(isSys){
         // ----------------- B->D syst. (rebinned)---------------------
         // get up unc
-        TH1D *hFD_up = (TH1D*)hFD_central->Clone("hFD_up");
+        hFD_up = dynamic_cast<TH1D*>(hFD_central->Clone("hFD_up"));
         //hFD_up = (TH1D*)GetUpSys(hFD,nFiles,hFD_up);
         setHistoDetails(hFD_up,4,24,0,2,2);
       //  hFD_up->Scale(simScaling);
 
         // get down unc
-        TH1D *hFD_down = (TH1D*)hFD_central->Clone("hFD_down");
+        hFD_down = dynamic_cast<TH1D*>(hFD_central->Clone("hFD_down"));
       //  hFD_down = (TH1D*)GetDownSys(hFD,nFiles,hFD_down);
         setHistoDetails(hFD_down,4,24,0,2,2);
       //  hFD_down->Scale(simScaling);
 
-        TH1D *hFD_up_binned = (TH1D*)hFD_central_binned->Clone("hFD_up_binned");
-        hFD_up_binned = (TH1D*)GetUpSys(hFD_binned,fBsimN,hFD_up_binned);
+        hFD_up_binned = dynamic_cast<TH1D*>(hFD_central_binned->Clone("hFD_up_binned"));
+        hFD_up_binned = dynamic_cast<TH1D*>(GetUpSys(hFD_binned,fBsimN,hFD_up_binned));
         setHistoDetails(hFD_up_binned,4,24,0,2,2);
         hFD_up_binned->Scale(simScaling);
 
         // get down unc
-        TH1D *hFD_down_binned = (TH1D*)hFD_central_binned->Clone("hFD_down_binned");
-        hFD_down_binned = (TH1D*)GetDownSys(hFD_binned,fBsimN,hFD_down_binned);
+        hFD_down_binned = dynamic_cast<TH1D*>(hFD_central_binned->Clone("hFD_down_binned"));
+        hFD_down_binned = dynamic_cast<TH1D*>(GetDownSys(hFD_binned,fBsimN,hFD_down_binned));
         setHistoDetails(hFD_down_binned,4,24,0,2,2);
         hFD_down_binned->Scale(simScaling);
 
@@ -146,7 +157,7 @@ bool oldCounter = 0)
     if(fold){
          /////////////////////// fold B->D spectra ///////////////////////////////////
         if(rebinned) subtractB_afterFolding(comMatrixFile,hFD_central_binned,hFD_up_binned,hFD_down_binned,hData_binned,outPlotDir,outSpectraDir,isSys);
-        else { cout << "!!!! DATA AND SIM NEED TO BE REBINED FOR FOLDING !!!!"; return; }
+        else { std::cout << "!!!! DATA AND SIM NEED TO BE REBINED FOR FOLDING !!!!"; return; }
         //else subtractB_afterFolding(bkgRM,detRM,hFD_central,hFD_up,hFD_down,hData,outPlotDir,outSpectraDir,isSys);
     }
     else{
@@ -165,27 +176,32 @@ void subtractB_afterFolding(TString matrixFile,TH1D *hFD_central_binned,TH1D *hF
     hData_binned->SetMaximum(hData_binned->GetMaximum()*2);
 
     TH1D *hFD_central_binned_fold;
-    hFD_central_binned_fold = (TH1D*)foldB(matrixFile, hFD_central_binned,hFD_central_binned_fold);
+    hFD_central_binned_fold = dynamic_cast<TH1D*>(foldB(matrixFile, hFD_central_binned,hFD_central_binned_fold));
     hFD_central_binned_fold->SetName("hFD_central_binned_fold");
     setHistoDetails(hFD_central_binned_fold,4,24);
 
-    TH1D *hData_binned_sub = (TH1D*)hData_binned->Clone("hData_binned_sub");
+    TH1D *hData_binned_sub = dynamic_cast<TH1D*>(hData_binned->Clone("hData_binned_sub"));
     hData_binned_sub->Add(hFD_central_binned_fold ,-1);
-    //hData_binned_sub->Add(hFD_central_binned ,-1);
+    //hData_binned_sub->Add(hFD_central_binned ,-1);hh
     hData_binned_sub->SetMarkerStyle(20);
 
+    TH1D *hFD_down_fold = nullptr;
+    TH1D *hFD_up_fold = nullptr;
+    TH1D *hData_binned_sub_up = nullptr;
+    TH1D *hData_binned_sub_down = nullptr;
+    TH1D *hFD_ratio_up = nullptr;
+    TH1D *hFD_ratio_down = nullptr;
+
     if(isSys) {
-    TH1D *hData_binned_sub_up = (TH1D*)hData_binned->Clone("hData_binned_sub_up");
-    TH1D *hFD_down_fold;
-    hFD_down_fold = (TH1D*)foldB(matrixFile,hFD_down,hFD_down_fold);
+    hData_binned_sub_up = dynamic_cast<TH1D*>(hData_binned->Clone("hData_binned_sub_up"));
+    hFD_down_fold = dynamic_cast<TH1D*>(foldB(matrixFile,hFD_down,hFD_down_fold));
     hFD_down_fold->SetName("hFD_down_fold");
     hData_binned_sub_up->Add(hFD_down_fold ,-1);
     setHistoDetails(hFD_down_fold,4,20,0,2,2);
     setHistoDetails(hData_binned_sub_up,2,20,0,2,2);
 
-    TH1D *hData_binned_sub_down = (TH1D*)hData_binned->Clone("hData_binned_sub_down");
-    TH1D *hFD_up_fold;
-    hFD_up_fold = (TH1D*)foldB(matrixFile,hFD_up,hFD_up_fold);
+    hData_binned_sub_down = dynamic_cast<TH1D*>(hData_binned->Clone("hData_binned_sub_down"));
+    hFD_up_fold = dynamic_cast<TH1D*>(foldB(matrixFile,hFD_up,hFD_up_fold));
     hFD_up_fold->SetName("hFD_up_fold");
     hData_binned_sub_down->Add(hFD_up_fold ,-1);
     setHistoDetails(hFD_up_fold,4,20,0,2,2);
@@ -193,21 +209,23 @@ void subtractB_afterFolding(TString matrixFile,TH1D *hFD_central_binned,TH1D *hF
     }
 
     //-------------- data to sim ratio - B feed-down fraction
-    TH1D *hFD_ratio = (TH1D*)hFD_central_binned_fold->Clone("hFD_ratio");
+    TH1D *hFD_ratio = dynamic_cast<TH1D*>(hFD_central_binned_fold->Clone("hFD_ratio"));
     hFD_ratio->Divide(hData_binned);
     hFD_ratio->GetYaxis()->SetTitle("FD raw sim/data");
     hFD_ratio->SetMinimum(0);
     setHistoDetails(hFD_ratio,8,20);
 
+    TH1D *hFDUnc  = nullptr;
+
     if(isSys){
-    TH1D *hFD_ratio_up = (TH1D*)hFD_up_fold->Clone("hFD_ratio_up");
+    hFD_ratio_up = dynamic_cast<TH1D*>(hFD_up_fold->Clone("hFD_ratio_up"));
     hFD_ratio_up->Divide(hData_binned);
     setHistoDetails(hFD_ratio_up,8,24,0,2,2);
     for(int j=1; j<=fptbinsJetMeasN; j++ ){
             hFD_ratio_up->SetBinError(j,0);
     }
 
-    TH1D *hFD_ratio_down = (TH1D*)hFD_down_fold->Clone("hFD_ratio_down");
+    hFD_ratio_down = dynamic_cast<TH1D*>(hFD_down_fold->Clone("hFD_ratio_down"));
     hFD_ratio_down->Divide(hData_binned);
     setHistoDetails(hFD_ratio_down,8,24,0,2,2);
      for(int j=1; j<=fptbinsJetMeasN; j++ ){
@@ -215,7 +233,7 @@ void subtractB_afterFolding(TString matrixFile,TH1D *hFD_central_binned,TH1D *hF
     }
 
     //-------------- FD uncertanties
-    TH1D *hFDUnc = (TH1D*)*hData_binned_sub->Clone("hDFUnc");
+    hFDUnc = dynamic_cast<TH1D*>(hData_binned_sub->Clone("hDFUnc"));
     setHistoDetails(hFDUnc,kMagenta+2,20);
     hFDUnc->GetYaxis()->SetTitle("FD sys. unc");
     for(int j=1; j<=fptbinsJetMeasN; j++ ){
@@ -257,7 +275,7 @@ void subtractB_afterFolding(TString matrixFile,TH1D *hFD_central_binned,TH1D *hF
      pvEn->SetFillStyle(0);
      pvEn->SetBorderSize(0);
      pvEn->SetTextFont(42);
-     pvEn->SetTextSize(0.045);
+     pvEn->SetTextSize(0.045f);
      pvEn->SetTextAlign(11);
      pvEn->AddText(Form("%s",fSystemS.Data()));
 
@@ -267,7 +285,7 @@ void subtractB_afterFolding(TString matrixFile,TH1D *hFD_central_binned,TH1D *hF
      pvJet->SetFillStyle(0);
      pvJet->SetBorderSize(0);
      pvJet->SetTextFont(42);
-     pvJet->SetTextSize(0.04);
+     pvJet->SetTextSize(0.04f);
      pvJet->SetTextAlign(11);
      pvJet->AddText(Form("Charged Jets, Anti-#it{k}_{T}, #it{R} = 0.%d",Rpar));
 
@@ -276,7 +294,7 @@ void subtractB_afterFolding(TString matrixFile,TH1D *hFD_central_binned,TH1D *hF
      pvD->SetFillStyle(0);
      pvD->SetBorderSize(0);
      pvD->SetTextFont(42);
-     pvD->SetTextSize(0.04);
+     pvD->SetTextSize(0.04f);
      pvD->SetTextAlign(11);
      if(fDmesonSpecie) pvD->AddText("with D^{*+} #rightarrow D^{0}#pi^{+} and charge conj.");
      else pvD->AddText("with D^{0} #rightarrow K^{-}#pi^{+} and charge conj.");
@@ -286,7 +304,7 @@ void subtractB_afterFolding(TString matrixFile,TH1D *hFD_central_binned,TH1D *hF
      pvEta->SetFillStyle(0);
      pvEta->SetBorderSize(0);
      pvEta->SetTextFont(42);
-     pvEta->SetTextSize(0.04);
+     pvEta->SetTextSize(0.04f);
      pvEta->SetTextAlign(11);
      pvEta->AddText(Form("|#it{#eta}_{jet}| < 0.%d",9-Rpar));
 
@@ -295,9 +313,9 @@ void subtractB_afterFolding(TString matrixFile,TH1D *hFD_central_binned,TH1D *hF
      pv3->SetFillStyle(0);
      pv3->SetBorderSize(0);
      pv3->SetTextFont(42);
-     pv3->SetTextSize(0.04);
+     pv3->SetTextSize(0.04f);
      pv3->SetTextAlign(11);
-     pv3->AddText(Form("%d < p_{T,%s} < %d GeV/#it{c}",(Int_t)fptbinsDA[0],fDmesonS.Data(),(Int_t)fptbinsDA[fptbinsDN]));
+     pv3->AddText(Form("%d < p_{T,%s} < %d GeV/#it{c}",static_cast<Int_t>(fptbinsDA[0]),fDmesonS.Data(),static_cast<Int_t>(fptbinsDA[fptbinsDN])));
 
     setHistoDetails(hData_binned,kGreen+2,21,1.2,2,1);
     setHistoDetails(hFD_central_binned,kBlue+1,25,1.3,2,2);
@@ -347,8 +365,9 @@ void subtractB_afterFolding(TString matrixFile,TH1D *hFD_central_binned,TH1D *hF
 
     cSpectra->SaveAs(Form("%s/JetPtSpectra_FDsub.png",outPlotDir.Data()));
     cSpectra->SaveAs(Form("%s/JetPtSpectra_FDsub.pdf",outPlotDir.Data()));
+    cSpectra->SaveAs(Form("%s/JetPtSpectra_FDsub.svg",outPlotDir.Data()));
 
-    TH1F *JetPtSpectra_FDsubUn = (TH1F*)hData_binned_sub->Clone("JetPtSpectra_FDsubUn");
+    TH1D*JetPtSpectra_FDsubUn = dynamic_cast<TH1D*>(hData_binned_sub->Clone("JetPtSpectra_FDsubUn"));
     JetPtSpectra_FDsubUn->GetYaxis()->SetTitle("Rel. unc.");
     JetPtSpectra_FDsubUn->SetLineColor(kGreen+1);
     JetPtSpectra_FDsubUn->SetMarkerColor(kGreen+1);
@@ -369,15 +388,16 @@ void subtractB_afterFolding(TString matrixFile,TH1D *hFD_central_binned,TH1D *hF
     pv3->SetFillStyle(0);
     pv3->SetBorderSize(0);
     pv3->SetTextFont(42);
-    pv3->SetTextSize(0.04);
+    pv3->SetTextSize(0.04f);
     pv3->SetTextAlign(11);
-    pv3->AddText(Form("%d < p_{T,%s} < %d GeV/#it{c}",(Int_t)fptbinsDA[0],fDmesonS.Data(),(Int_t)fptbinsDA[fptbinsDN]));
+    pv3->AddText(Form("%d < p_{T,%s} < %d GeV/#it{c}",static_cast<Int_t>(fptbinsDA[0]),fDmesonS.Data(),static_cast<Int_t>(fptbinsDA[fptbinsDN])));
     TCanvas *cSpectrumRebinUnc = new TCanvas("cSpectrumRebinUnc","cSpectrumRebinUnc",800,500);
     JetPtSpectra_FDsubUn->Draw();
     pv3->Draw("same");
 
     cSpectrumRebinUnc->SaveAs(Form("%s/JetPtSpectra_FDsubUnc.png",outPlotDir.Data()));
     cSpectrumRebinUnc->SaveAs(Form("%s/JetPtSpectra_FDsubUnc.pdf",outPlotDir.Data()));
+    cSpectrumRebinUnc->SaveAs(Form("%s/JetPtSpectra_FDsubUnc.svg",outPlotDir.Data()));
 
     TCanvas *cRatio = new TCanvas("cRatio","cRatio",1000,500);
     hFD_ratio->GetYaxis()->SetRangeUser(0,hFD_ratio->GetMaximum()*2);
@@ -389,6 +409,7 @@ void subtractB_afterFolding(TString matrixFile,TH1D *hFD_central_binned,TH1D *hF
 
     cRatio->SaveAs(Form("%s/FDratio.png",outPlotDir.Data()));
     cRatio->SaveAs(Form("%s/FDratio.pdf",outPlotDir.Data()));
+    cRatio->SaveAs(Form("%s/FDratio.svg",outPlotDir.Data()));
 
     if(isSys){
         TCanvas *cFDUnc = new TCanvas("cFDUnc","cFDUnc",1000,500);
@@ -397,6 +418,7 @@ void subtractB_afterFolding(TString matrixFile,TH1D *hFD_central_binned,TH1D *hF
         hFDUnc->Draw();
         cFDUnc->SaveAs(Form("%s/FDUnc_beforeUnf.png",outPlotDir.Data()));
         cFDUnc->SaveAs(Form("%s/FDUnc_beforeUnf.pdf",outPlotDir.Data()));
+        cFDUnc->SaveAs(Form("%s/FDUnc_beforeUnf.svg",outPlotDir.Data()));
     }
 
 return;
@@ -409,37 +431,44 @@ void subtractB_beforeFolding(TH1D *hFD_central_binned,TH1D *hFD_up,TH1D *hFD_dow
     hData_binned->SetMinimum(1);
     hData_binned->SetMaximum(hData_binned->GetMaximum()*2);
 
-    TH1D *hData_binned_sub = (TH1D*)hData_binned->Clone("hData_binned_sub");
+    TH1D *hData_binned_sub = dynamic_cast<TH1D*>(hData_binned->Clone("hData_binned_sub"));
     hData_binned_sub->Add(hFD_central_binned ,-1);
     hData_binned_sub->SetMarkerStyle(24);
 
+    TH1D *hData_binned_sub_up = nullptr;
+    TH1D *hData_binned_sub_down = nullptr;
+
     if(isSys) {
-    TH1D *hData_binned_sub_up = (TH1D*)hData_binned->Clone("hData_binned_sub_up");
+    hData_binned_sub_up = dynamic_cast<TH1D*>(hData_binned->Clone("hData_binned_sub_up"));
     hData_binned_sub_up->Add(hFD_down ,-1);
     setHistoDetails(hData_binned_sub_up,2,24,0,2,2);
 
 
-    TH1D *hData_binned_sub_down = (TH1D*)hData_binned->Clone("hData_binned_sub_down");
+    hData_binned_sub_down = dynamic_cast<TH1D*>(hData_binned->Clone("hData_binned_sub_down"));
     hData_binned_sub_down->Add(hFD_up ,-1);
     setHistoDetails(hData_binned_sub_down,2,24,0,2,2);
     }
 
     //-------------- data to sim ratio - B feed-down fraction
-    TH1D *hFD_ratio = (TH1D*)hFD_central_binned->Clone("hFD_ratio");
+    TH1D *hFD_ratio = dynamic_cast<TH1D*>(hFD_central_binned->Clone("hFD_ratio"));
     hFD_ratio->Divide(hData_binned);
     hFD_ratio->GetYaxis()->SetTitle("data/FD raw sim");
     hFD_ratio->SetMinimum(0);
     setHistoDetails(hFD_ratio,8,20);
 
+    TH1D *hFD_ratio_up = nullptr;
+    TH1D *hFD_ratio_down = nullptr;
+    TH1D *hFDUnc = nullptr;
+
     if(isSys){
-    TH1D *hFD_ratio_up = (TH1D*)hFD_up->Clone("hFD_ratio_up");
+    hFD_ratio_up = dynamic_cast<TH1D*>(hFD_up->Clone("hFD_ratio_up"));
     hFD_ratio_up->Divide(hData_binned);
     setHistoDetails(hFD_ratio_up,8,24,0,2,2);
     for(int j=1; j<=fptbinsJetMeasN; j++ ){
             hFD_ratio_up->SetBinError(j,0);
     }
 
-    TH1D *hFD_ratio_down = (TH1D*)hFD_down->Clone("hFD_ratio_down");
+    hFD_ratio_down = dynamic_cast<TH1D*>(hFD_down->Clone("hFD_ratio_down"));
     hFD_ratio_down->Divide(hData_binned);
     setHistoDetails(hFD_ratio_down,8,24,0,2,2);
      for(int j=1; j<=fptbinsJetMeasN; j++ ){
@@ -447,7 +476,7 @@ void subtractB_beforeFolding(TH1D *hFD_central_binned,TH1D *hFD_up,TH1D *hFD_dow
     }
 
     //-------------- FD uncertanties
-    TH1D *hFDUnc = (TH1D*)*hData_binned_sub->Clone("hDFUnc");
+    hFDUnc = dynamic_cast<TH1D*>(hData_binned_sub->Clone("hDFUnc"));
     setHistoDetails(hFDUnc,kMagenta+2,20);
     hFDUnc->GetYaxis()->SetTitle("FD sys. unc");
     for(int j=1; j<=fptbinsJetMeasN; j++ ){
@@ -518,6 +547,7 @@ void subtractB_beforeFolding(TH1D *hFD_central_binned,TH1D *hFD_up,TH1D *hFD_dow
 
     cSpectra->SaveAs(Form("%s/JetPtSpectra_FDsub_beforeFolding.png",outPlotDir.Data()));
     cSpectra->SaveAs(Form("%s/JetPtSpectra_FDsub_beforeFolding.pdf",outPlotDir.Data()));
+    cSpectra->SaveAs(Form("%s/JetPtSpectra_FDsub_beforeFolding.svg",outPlotDir.Data()));
 
 
     TCanvas *cRatio = new TCanvas("cRatio","cRatio",1000,500);
@@ -529,6 +559,7 @@ void subtractB_beforeFolding(TH1D *hFD_central_binned,TH1D *hFD_up,TH1D *hFD_dow
 
     cRatio->SaveAs(Form("%s/FDratio_beforeFolding.png",outPlotDir.Data()));
     cRatio->SaveAs(Form("%s/FDratio_beforeFolding.pdf",outPlotDir.Data()));
+    cRatio->SaveAs(Form("%s/FDratio_beforeFolding.svg",outPlotDir.Data()));
 
     if(isSys){
     TCanvas *cFDUnc = new TCanvas("cFDUnc","cFDUnc",1000,500);
@@ -536,13 +567,14 @@ void subtractB_beforeFolding(TH1D *hFD_central_binned,TH1D *hFD_up,TH1D *hFD_dow
     hFDUnc->Draw();
     cFDUnc->SaveAs(Form("%s/FDUnc_beforeUnf_beforeFolding.png",outPlotDir.Data()));
     cFDUnc->SaveAs(Form("%s/FDUnc_beforeUnf_beforeFolding.pdf",outPlotDir.Data()));
+    cFDUnc->SaveAs(Form("%s/FDUnc_beforeUnf_beforeFolding.svg",outPlotDir.Data()));
     }
 
 return;
 }
 
 
-TH1* GetUpSys(TH1D **hFD, const int nFiles = 11, TH1D *hFD_up){
+TH1* GetUpSys(TH1D **hFD, const int nFiles, TH1D *hFD_up){
 
 
         double bin = 0, binerr = 0;
@@ -567,7 +599,7 @@ TH1* GetUpSys(TH1D **hFD, const int nFiles = 11, TH1D *hFD_up){
     return hFD_up;
 }
 
-TH1* GetDownSys(TH1D **hFD, const int nFiles = 11, TH1D *hFD_down){
+TH1* GetDownSys(TH1D **hFD, const int nFiles, TH1D *hFD_down){
 
 
         double bin = 0, binerr = 0;
@@ -597,16 +629,16 @@ TH1* foldB(TString matrixFile, TH1D *hFD, TH1D *folded ){
     gStyle->SetOptStat(0000); //Mean and RMS shown
 
 
-    TH1D *folded = new TH1D("folded","folded",fptbinsJetMeasN,fptbinsJetMeasA);
+    folded = new TH1D("folded","folded",fptbinsJetMeasN,fptbinsJetMeasA);
 
     TFile *File = new TFile(matrixFile,"read");
-    TH2D *combMatrix0 = (TH2D*)File->Get("Matrix");
+    TH2D *combMatrix0 = dynamic_cast<TH2D*>(File->Get("Matrix"));
     //TH2D *combMatrix0 = (TH2D*)hRMDet0->Clone("combMatrix0");
 
     RooUnfoldResponse* RooUResp_reb = new RooUnfoldResponse();
-    RooUResp_reb->Setup(0,0,combMatrix0);
+    RooUResp_reb->Setup(nullptr,nullptr,combMatrix0);
 
-    folded  = (TH1D*)RooUResp_reb->ApplyToTruth(hFD);
+    folded  = dynamic_cast<TH1D*>(RooUResp_reb->ApplyToTruth(hFD));
 
     folded->SetLineColor(2);
     folded->SetMarkerColor(2);
@@ -619,7 +651,7 @@ TH1* foldB(TString matrixFile, TH1D *hFD, TH1D *folded ){
     hFD->Draw("same");
     //folded->Draw("same");
 
-    combMatrix0->SetTitle();
+    combMatrix0->SetTitle("");
     TCanvas *cM = new TCanvas;
     cM->SetLogz();
     combMatrix0->Draw("colz");
@@ -630,10 +662,10 @@ TH1* foldB(TString matrixFile, TH1D *hFD, TH1D *folded ){
 }
 
 
-TH1* GetInputHist(TString inFile, string histName,TH1 *hh){
+TH1* GetInputHist(TString inFile, TString histName, TH1 *hh){
 
 	TFile *jetPtFile = new TFile(inFile,"read");
-  hh = (TH1F*)jetPtFile->Get(histName.c_str());
+  hh = dynamic_cast<TH1*>(jetPtFile->Get(histName));
 
   return hh;
 
@@ -662,7 +694,7 @@ void setHistoDetails(TH1 *hh, Color_t color, Style_t Mstyle, double Msize, Width
     hh->SetLineStyle(Lstyle);
    // hh->SetName(name.c_str());
 
-    hh->SetTitle();
+    hh->SetTitle("");
     hh->GetXaxis()->SetTitle("p_{T,ch,jet} (GeV/c)");
 
 }
@@ -671,5 +703,6 @@ void SaveCanvas(TCanvas *c, TString name){
 
     c->SaveAs(Form("%s.png",name.Data()));
     c->SaveAs(Form("%s.pdf",name.Data()));
+    c->SaveAs(Form("%s.svg",name.Data()));
 
 }

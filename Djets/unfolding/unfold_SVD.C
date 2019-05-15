@@ -17,9 +17,22 @@ TH1D* fMeasSpectrum;
 	############# define your bins #####################
 	************************************/
 
-int colortable[] = {kMagenta, kViolet, kBlue, kCyan+2, kGreen+4, kGreen+1, kYellow+1, kOrange+1, kRed, kRed+2};
-int linesytle[] = {1,2,3,4,5,6,7,8,9,10,11,12,13};
+Color_t colortable[] = {kMagenta, kViolet, kBlue, kCyan+2, kGreen+4, kGreen+1, kYellow+1, kOrange+1, kRed, kRed+2};
+Style_t linesytle[] = {1,2,3,4,5,6,7,8,9,10,11,12,13};
 	 // Int_t fColors[] = {1,2,8,4,kOrange-1,6,kGray+1,kCyan+1,kMagenta+2,kGreen+3,kViolet+5,kYellow+2};
+int LoadDetectorMatrix(TString fn, TString mxname, TString tsname, TString msname, bool norm = 1, TString spostfix="");
+int LoadBackgroundMatrix(TString fn, TString mxname);
+int LoadRawSpectrum(TString fn, TString sname, int rebin = 0, TString spostfix="");
+TH2D * getResponseMatrix(bool useDeltaPt);
+TH2D * ProductMatrix(TH2D * MtxA, TH2D * MtxB);
+int MtxPlots(TString outDir, TString outName);
+int plotSlice(TVirtualPad * p, TH2D * hMtxPP, TH2D * hMtxDpt, TH2D * hMtxRe, TH2D * hMtxPro, const double ptmin, const double ptmax);
+void WeightMatrixY(TH2D * Mtx, TH1D * h, bool divide);
+TH2D * Rebin2D(const char* name, TH2D *h, int nx, const double *binx, int ny, const double *biny, bool crop);
+TF1* getPriorFunction(int prior, TH1D* spect, int priorType = 0, TH1D* rawspectrum = nullptr);
+TH2D* NormMatrixY(const char* name, TH2D* Mtx);
+void NormMatrixY(TH2D * Mtx);
+TH2D * getPearsonCoeffs(const TMatrixD &covMatrix);
 
 /***********************************
 ############# begining of the macro ##################
@@ -66,15 +79,15 @@ else LoadRawSpectrum(datafile.Data(),"hData_binned_sub",0);
 if(useDeltaPt) LoadBackgroundMatrix(bkgRMfile.Data(),"hBkgM");
 LoadDetectorMatrix(detRMfile.Data(),"hPtJet2d","hPtJetGen","hPtJetRec",0);
 
-	if (!fRawSpectrum)  { Error("Unfold", "No raw spectrum!"); return 0;	}
-	if (!fTrueSpectrum) { Error("Unfold", "No true spectrum!");	return 0; }
-	if (!fMeasSpectrum) { Error("Unfold", "No reconstructed spectrum!"); return 0; }
+    if (!fRawSpectrum)  { Error("Unfold", "No raw spectrum!"); return;	}
+    if (!fTrueSpectrum) { Error("Unfold", "No true spectrum!");	return; }
+    if (!fMeasSpectrum) { Error("Unfold", "No reconstructed spectrum!"); return; }
 
 
 	TH1D* truespec = (TH1D*)fTrueSpectrum->Clone("truespec"); //fTrueSpectrum is an (!un)initialized 1D histogram. 		//They are initialised by the LoadR/B/D....() functions above.
 	truespec->Scale(1./truespec->Integral());
 	TH2D* MatrixDeltaReb;
-	TH2D* MatrixComb;
+    TH2D* MatrixComb = nullptr;
 
 	if(useDeltaPt){
 	fMatrixDeltaPt->Sumw2();
@@ -83,12 +96,12 @@ LoadDetectorMatrix(detRMfile.Data(),"hPtJet2d","hPtJetGen","hPtJetRec",0);
 	MatrixComb = ProductMatrix(fMatrixDeltaPt,fMatrixPP); //product of two matrices
 	}
 
-	if(useDeltaPt) fMatrixProd = (TH2D*)MatrixComb->Clone("fMatrixProd");
-	else fMatrixProd = (TH2D*)fMatrixPP->Clone("fMatrixProd");
-	if (!fMatrixProd) { Error("Unfold", "Error getting product matrix!"); return 0;	}
+    if(useDeltaPt) fMatrixProd = dynamic_cast<TH2D*>(MatrixComb->Clone("fMatrixProd"));
+    else fMatrixProd = dynamic_cast<TH2D*>(fMatrixPP->Clone("fMatrixProd"));
+    if (!fMatrixProd) { Error("Unfold", "Error getting product matrix!"); return;	}
 
-	TH1D* priorhisto = (TH1D*) fTrueSpectrum->Clone("priorhisto");
-	TH1D *rawspectrum = (TH1D*)fRawSpectrum->Clone("rawspectrum");
+    TH1D* priorhisto = dynamic_cast<TH1D*>(fTrueSpectrum->Clone("priorhisto"));
+    TH1D *rawspectrum = dynamic_cast<TH1D*>(fRawSpectrum->Clone("rawspectrum"));
 	//rawspectrum->Scale(1./rawspectrum->Integral());
 	rawspectrum->Scale(1,"width");
 
@@ -98,11 +111,11 @@ LoadDetectorMatrix(detRMfile.Data(),"hPtJet2d","hPtJetGen","hPtJetRec",0);
         TF1* fPriorFunction;
         if(isPrior) {
 					fPriorFunction = getPriorFunction(isPrior, priorhisto,priorType, rawspectrum);
-					priorhisto->SetTitle();
+                    priorhisto->SetTitle("");
 					priorhisto->GetXaxis()->SetTitle("p_{T, ch.jet}");
 					TCanvas* cPrior = new TCanvas("cPrior0", "cPrior0", 800, 600);
 					cPrior->SetLogy();
-					TH1D* histoPrior=(TH1D*)priorhisto->Clone();
+                    TH1D* histoPrior=dynamic_cast<TH1D*>(priorhisto->Clone());
 					histoPrior->Draw();
 					if(priorType == 8) rawspectrum->Draw();
 					fPriorFunction->Draw("same");
@@ -114,26 +127,26 @@ LoadDetectorMatrix(detRMfile.Data(),"hPtJet2d","hPtJetGen","hPtJetRec",0);
     TH1D* hNormY;
     // weighting the matrix
 		if (fDoWeighting) {
-        cout << "==== weighting ==== " << endl;
-				hNormY=(TH1D*)fMatrixProd->ProjectionY("hNormY");
+        std::cout << "==== weighting ==== " << std::endl;
+                hNormY=dynamic_cast<TH1D*>(fMatrixProd->ProjectionY("hNormY"));
 				if (isPrior){
-	        cout << "=== using prior function ====" << endl;
-					if (! hNormY->Divide(fPriorFunction) ) { cout << "\"divide\" failed "; return; }
+            std::cout << "=== using prior function ====" << std::endl;
+                    if (! hNormY->Divide(fPriorFunction) ) { std::cout << "\"divide\" failed "; return; }
         }
 				else{
-	        cout << "==== dividing ==== " << endl;
+            std::cout << "==== dividing ==== " << std::endl;
 					hNormY->Divide(priorhisto);
         }
 				WeightMatrixY(fMatrixProd,hNormY,fdivide);
 	}
 
-    TH1D* hProjYeff=(TH1D*)fMatrixProd->ProjectionY("hProjYeff");
-    TH1D* hProjXeff=(TH1D*)fMatrixProd->ProjectionX("hProjXeff");
+    TH1D* hProjYeff=dynamic_cast<TH1D*>(fMatrixProd->ProjectionY("hProjYeff"));
+    TH1D* hProjXeff=dynamic_cast<TH1D*>(fMatrixProd->ProjectionX("hProjXeff"));
 
     TH2D* Matrix = Rebin2D("Matrix", fMatrixProd, fptbinsJetMeasN, fptbinsJetMeasA, fptbinsJetTrueN, fptbinsJetTrueA,0);
-    TH1D* hProjXeffRebin=(TH1D*)hProjXeff->Rebin(fptbinsJetMeasN, "hProjXeffRebin", fptbinsJetMeasA);
-    TH1D* hProjYeffRebin=(TH1D*)hProjYeff->Rebin(fptbinsJetTrueN, "hProjYeffRebin", fptbinsJetTrueA);
-    TH1D* fRawRebin=(TH1D*)fRawSpectrum->Rebin(fptbinsJetMeasN, "fRawRebin", fptbinsJetMeasA);
+    TH1D* hProjXeffRebin=dynamic_cast<TH1D*>(hProjXeff->Rebin(fptbinsJetMeasN, "hProjXeffRebin", fptbinsJetMeasA));
+    TH1D* hProjYeffRebin=dynamic_cast<TH1D*>(hProjYeff->Rebin(fptbinsJetTrueN, "hProjYeffRebin", fptbinsJetTrueA));
+    TH1D* fRawRebin=dynamic_cast<TH1D*>(fRawSpectrum->Rebin(fptbinsJetMeasN, "fRawRebin", fptbinsJetMeasA));
 
 
 /**************************************************
@@ -161,8 +174,8 @@ LoadDetectorMatrix(detRMfile.Data(),"hPtJet2d","hPtJetGen","hPtJetRec",0);
 ############# unfolding ##################
 ************************************/
 		RooUnfoldSvd unfold (&response, fRawRebin, ivar+1);
-		fUnfoldedSVD[ivar] = (TH1D*)unfold.Hreco();
-		folded[ivar] = (TH1D*)response.ApplyToTruth(fUnfoldedSVD[ivar]);
+        fUnfoldedSVD[ivar] = dynamic_cast<TH1D*>(unfold.Hreco());
+        folded[ivar] = dynamic_cast<TH1D*>(response.ApplyToTruth(fUnfoldedSVD[ivar]));
 
 		// ------------ Get Person coefficient ------------
 		fPearsonCoeffs[ivar] = getPearsonCoeffs( unfold.Ereco(RooUnfold::kCovariance) );
@@ -197,13 +210,13 @@ https://indico.cern.ch/event/107747/contributions/32647/attachments/24320/35004/
 https://indico.cern.ch/event/107747/contributions/32650/attachments/24325/35009/tackmann.pdf#search=svd%20unfolding
 */
 if (fptbinsJetMeasN==fptbinsJetTrueN){
-TH1D* bdat = (TH1D*) fRawRebin->Clone();
-TH1D* bini = (TH1D*) Matrix->ProjectionX()->Clone();
-TH1D* xini = (TH1D*) Matrix->ProjectionY()->Clone();
-TH2D* Adet = (TH2D*) Matrix->Clone();
+TH1D* bdat = dynamic_cast<TH1D*>(fRawRebin->Clone());
+TH1D* bini = dynamic_cast<TH1D*>(Matrix->ProjectionX()->Clone());
+TH1D* xini = dynamic_cast<TH1D*>(Matrix->ProjectionY()->Clone());
+TH2D* Adet = dynamic_cast<TH2D*>(Matrix->Clone());
 int kreg = regSVD;
 //TSVDUnfold* tsvdunf = new TSVDUnfold(bdat, Bcov, bini, xini, Adet);
-TSVDUnfold* tsvdunf = new TSVDUnfold(bdat=bdat, bini=bini, xini=xini, Adet=Adet);
+TSVDUnfold* tsvdunf = new TSVDUnfold(bdat, bini, xini, Adet);
 TH1D* unfresult = tsvdunf->Unfold(kreg);
 TH1D* singVec = tsvdunf->GetSV();
 
@@ -212,8 +225,8 @@ TH1D* singVec = tsvdunf->GetSV();
     TLegend* leg2 =  new TLegend(0.6,0.4,0.85,0.85);
     leg2->SetBorderSize(0);
 
-TH1D* fUnfoldedClone = (TH1D*)fUnfoldedSVD[regSVD-1]->Clone();
-TH1D* fDvector = (TH1D*)(tsvdunf->GetD())->Clone();
+TH1D* fUnfoldedClone = dynamic_cast<TH1D*>(fUnfoldedSVD[regSVD-1]->Clone());
+TH1D* fDvector = dynamic_cast<TH1D*>((tsvdunf->GetD())->Clone());
 unfresult->Scale(1,"width");
 bdat->Scale(1,"width");
 unfresult->SetLineColor(kBlue);
@@ -277,7 +290,7 @@ singVec->Draw();
 	cSVD_singVal->SaveAs(Form("%s/plots/%s_SVD_singVector.pdf",outDir.Data(),outName.Data()));
 	cSVD_singVal->SaveAs(Form("%s/plots/%s_SVD_singVector.png",outDir.Data(),outName.Data()));
 }
-else {cout<<"----- D vector cannot be found using TSVDUnfold if histograms do not have same dimensions!!! -----"<<endl; }	
+else {std::cout<<"----- D vector cannot be found using TSVDUnfold if histograms do not have same dimensions!!! -----"<<std::endl; }
 /*---- end of `finding D vector' ---*/
 
 	TCanvas *cPearson = new TCanvas("cPearson","cPearson",1800,1800);
@@ -297,12 +310,12 @@ else {cout<<"----- D vector cannot be found using TSVDUnfold if histograms do no
     TCanvas *cRatio2 = new TCanvas("cRatio2","cRatio2",800,600);
     TLegend *legRatio2 =  new TLegend(0.4,0.15,0.6,0.5);//0.6,0.5,0.65,0.85
     legRatio2->SetBorderSize(0);
-		TH1D* hBaseMeasure = (TH1D*)fRawRebin->Clone("hBaseSpectrum");
+        TH1D* hBaseMeasure = dynamic_cast<TH1D*>(fRawRebin->Clone("hBaseSpectrum"));
 
 		// =============== Refolded / Measured
 		THStack *hRatioS = new THStack("hRatioS","refolded/measured");
     for(Int_t ivar=0; ivar<NTrials; ivar++){
-        hRatio[ivar] = (TH1D*) folded[ivar]->Clone(Form("hRatio%d",ivar));
+        hRatio[ivar] = dynamic_cast<TH1D*>(folded[ivar]->Clone(Form("hRatio%d",ivar)));
         hRatio[ivar]->Divide(hBaseMeasure);
         hRatio[ivar]->GetYaxis()->SetTitle("refolded/measured");
 				hRatio[ivar]->SetTitle(Form("Reg=%d",ivar+1));
@@ -354,10 +367,10 @@ else {cout<<"----- D vector cannot be found using TSVDUnfold if histograms do no
 		// =============== Unfolded
 		THStack *hRatioUnfS = new THStack("hRatioUnfS",Form("Unfolded RegX/Reg%d",regSVD));
 		TCanvas *cRatio = new TCanvas("cRatio","cRatio",800,600);
-    TH1D *hBaseSpectrum = (TH1D*)fUnfoldedSVD[regSVD-1]->Clone("hBaseSpectrum");
+    TH1D *hBaseSpectrum = dynamic_cast<TH1D*>(fUnfoldedSVD[regSVD-1]->Clone("hBaseSpectrum"));
 //    int iter = 0;
     for(Int_t ivar=0; ivar<NTrials; ivar++){
-        hRatioSpectrum[ivar] = (TH1D*) fUnfoldedSVD[ivar]->Clone(Form("hRatioSpectrum%d",ivar));
+        hRatioSpectrum[ivar] = dynamic_cast<TH1D*>(fUnfoldedSVD[ivar]->Clone(Form("hRatioSpectrum%d",ivar)));
         hRatioSpectrum[ivar]->Divide(hBaseSpectrum);
 				hRatioSpectrum[ivar]->GetYaxis()->SetTitle(Form("RegX/Reg%d",regSVD));
         hRatioSpectrum[ivar]->SetTitle(Form("Reg=%d",ivar+1));
@@ -400,7 +413,7 @@ else {cout<<"----- D vector cannot be found using TSVDUnfold if histograms do no
     folded[regSVD-1]->SetName("foldedSpectrum");
     fRawRebin->SetName("fRawRebin");
 
-		TH1F *hUnfolded_Unc = (TH1F*)fUnfoldedSVD[regSVD-1]->Clone("hUnfolded_Unc");
+        TH1D *hUnfolded_Unc = dynamic_cast<TH1D*>(fUnfoldedSVD[regSVD-1]->Clone("hUnfolded_Unc"));
 		hUnfolded_Unc->GetYaxis()->SetTitle("Rel. unc.");
 		hUnfolded_Unc->SetLineColor(kGreen+1);
 		hUnfolded_Unc->SetMarkerColor(kGreen+1);
@@ -412,7 +425,7 @@ else {cout<<"----- D vector cannot be found using TSVDUnfold if histograms do no
 								hUnfolded_Unc->SetBinContent(j,err);
 								hUnfolded_Unc->SetBinError(j,0);
 		}
-		hUnfolded_Unc->SetTitle();
+        hUnfolded_Unc->SetTitle("");
 		hUnfolded_Unc->SetMaximum(hUnfolded_Unc->GetMaximum()*1.2);
 		hUnfolded_Unc->SetMinimum(0);
 
@@ -425,7 +438,7 @@ else {cout<<"----- D vector cannot be found using TSVDUnfold if histograms do no
     fMatrixProd->Write();
     Matrix->Write();
 
-    fRawRebin->SetTitle();
+    fRawRebin->SetTitle("");
 //    fUnfoldedSVD[regSVD-1]->SetLineColor(kRed+1);
 //    fUnfoldedSVD[regSVD-1]->SetMarkerColor(kRed+1);
     fRawRebin ->Write();
@@ -444,13 +457,13 @@ else {cout<<"----- D vector cannot be found using TSVDUnfold if histograms do no
 		 fRawRebin->Scale(1,"width");
 		 for(Int_t ivar=0; ivar<NTrials; ivar++){ fUnfoldedSVD[ivar]->Scale(1,"width"); }
 		 folded[regSVD-1]->Scale(1,"width");
-		 fUnfoldedSVD[regSVD-1]->SetTitle();
+         fUnfoldedSVD[regSVD-1]->SetTitle("");
 
 		 TPaveText *pvEn= new TPaveText(0.2,0.80,0.8,0.85,"brNDC");
 		 pvEn->SetFillStyle(0);
 		 pvEn->SetBorderSize(0);
 		 pvEn->SetTextFont(42);
-		 pvEn->SetTextSize(0.045);
+         pvEn->SetTextSize(0.045f);
 		 pvEn->SetTextAlign(11);
 		 pvEn->AddText(Form("%s",fSystemS.Data()));
 
@@ -459,7 +472,7 @@ else {cout<<"----- D vector cannot be found using TSVDUnfold if histograms do no
 		 pvJet->SetFillStyle(0);
 		 pvJet->SetBorderSize(0);
 		 pvJet->SetTextFont(42);
-		 pvJet->SetTextSize(0.04);
+         pvJet->SetTextSize(0.04f);
 		 pvJet->SetTextAlign(11);
 		 pvJet->AddText(Form("Charged Jets, Anti-#it{k}_{T}, #it{R} = 0.%d",Rpar));
 
@@ -468,7 +481,7 @@ else {cout<<"----- D vector cannot be found using TSVDUnfold if histograms do no
 		 pvD->SetFillStyle(0);
 		 pvD->SetBorderSize(0);
 		 pvD->SetTextFont(42);
-		 pvD->SetTextSize(0.04);
+         pvD->SetTextSize(0.04f);
 		 pvD->SetTextAlign(11);
 		 if(fDmesonSpecie) pvD->AddText("with D^{*+} #rightarrow D^{0}#pi^{+} and charge conj.");
 		 else pvD->AddText("with D^{0} #rightarrow K^{-}#pi^{+} and charge conj.");
@@ -478,7 +491,7 @@ else {cout<<"----- D vector cannot be found using TSVDUnfold if histograms do no
 		 pvEta->SetFillStyle(0);
 		 pvEta->SetBorderSize(0);
 		 pvEta->SetTextFont(42);
-		 pvEta->SetTextSize(0.04);
+         pvEta->SetTextSize(0.04f);
 		 pvEta->SetTextAlign(11);
 		 pvEta->AddText(Form("|#it{#eta}_{jet}| < 0.%d",9-Rpar));
 
@@ -487,9 +500,9 @@ else {cout<<"----- D vector cannot be found using TSVDUnfold if histograms do no
 		 pv3->SetFillStyle(0);
 		 pv3->SetBorderSize(0);
 		 pv3->SetTextFont(42);
-		 pv3->SetTextSize(0.04);
+         pv3->SetTextSize(0.04f);
 		 pv3->SetTextAlign(11);
-		 pv3->AddText(Form("%d < p_{T,%s} < %d GeV/#it{c}",(Int_t)fptbinsDA[0],fDmesonS.Data(),(Int_t)fptbinsDA[fptbinsDN]));
+         pv3->AddText(Form("%d < p_{T,%s} < %d GeV/#it{c}",static_cast<Int_t>(fptbinsDA[0]),fDmesonS.Data(),static_cast<Int_t>(fptbinsDA[fptbinsDN])));
 
     TCanvas* cSpectra = new TCanvas("cSpectra","cSpectra",800,600);
     cSpectra->SetLogy();
@@ -506,7 +519,7 @@ else {cout<<"----- D vector cannot be found using TSVDUnfold if histograms do no
     TLegend* ls = new TLegend(0.55,0.67,0.88,0.87);
     ls->SetBorderSize(0);
     ls->AddEntry(fRawRebin,"Measured","p");
-    ls->AddEntry(fUnfoldedSVD[regSVD-1], Form("Unfolded, SVD reg=%d",regSVD,"p"));
+    ls->AddEntry(fUnfoldedSVD[regSVD-1], Form("Unfolded, SVD reg=%d",regSVD),"p");
     ls->AddEntry(folded[regSVD-1],"Refolded","l");
     ls->Draw("same");
 
@@ -517,9 +530,9 @@ else {cout<<"----- D vector cannot be found using TSVDUnfold if histograms do no
 		pv3->SetFillStyle(0);
 		pv3->SetBorderSize(0);
 		pv3->SetTextFont(42);
-		pv3->SetTextSize(0.04);
+        pv3->SetTextSize(0.04f);
 		pv3->SetTextAlign(11);
-		pv3->AddText(Form("%d < p_{T,%s} < %d GeV/#it{c}",(Int_t)fptbinsDA[0],fDmesonS.Data(),(Int_t)fptbinsDA[fptbinsDN]));
+        pv3->AddText(Form("%d < p_{T,%s} < %d GeV/#it{c}",static_cast<Int_t>(fptbinsDA[0]),fDmesonS.Data(),static_cast<Int_t>(fptbinsDA[fptbinsDN])));
 
 		TCanvas *cSpectrumRebinUnc = new TCanvas("cSpectrumRebinUnc","cSpectrumRebinUnc",800,500);
     hUnfolded_Unc->Draw();
@@ -529,9 +542,10 @@ else {cout<<"----- D vector cannot be found using TSVDUnfold if histograms do no
 		cSpectrumRebinUnc->SaveAs(Form("%s/plots/%s_UnfSpectrum_unc.pdf",outDir.Data(),outName.Data()));
 		cSpectrumRebinUnc->SaveAs(Form("%s/plots/%s_UnfSpectrum_unc.png",outDir.Data(),outName.Data()));
 
-    TH1F* hratio = (TH1F*)fUnfoldedSVD[regSVD-1]->Rebin(fptbinsJetTrueN,"hratio",fptbinsJetTrueA);
+    TH1D* hratio = dynamic_cast<TH1D*>(fUnfoldedSVD[regSVD-1]->Rebin(fptbinsJetTrueN,"hratio",fptbinsJetTrueA));
+    TH1D* fRawRebinClone = nullptr;
 		if (fptbinsJetTrueN != fptbinsJetMeasN){
-	    TH1D* fRawRebinClone = new TH1D("fRawRebinClone","Measured hist, True rebinned",fptbinsJetTrueN,fptbinsJetTrueA);
+        fRawRebinClone = new TH1D("fRawRebinClone","Measured hist, True rebinned",fptbinsJetTrueN,fptbinsJetTrueA);
 			int istart = 0;
 			while (fptbinsJetTrueA[0] != fptbinsJetMeasA[istart]){
 			istart++;
@@ -543,7 +557,7 @@ else {cout<<"----- D vector cannot be found using TSVDUnfold if histograms do no
         fRawRebinClone->SetBinError(j, err);
       }
 	}
-	else    TH1D* fRawRebinClone = (TH1D*)fRawRebin->Clone("fRawRebinClone");
+    else    fRawRebinClone = dynamic_cast<TH1D*>(fRawRebin->Clone("fRawRebinClone"));
 //    TH1D* fRawRebinClone = (TH1D*)hBaseMeasure->Clone("fRawRebinClone");
 	hratio->Divide(fRawRebinClone);
 	hratio->SetLineColor(kMagenta+1);
@@ -589,14 +603,14 @@ else {cout<<"----- D vector cannot be found using TSVDUnfold if histograms do no
 }
 
 
-int LoadDetectorMatrix(TString fn, TString mxname, TString tsname, TString msname, bool norm = 1, TString spostfix="") {
+int LoadDetectorMatrix(TString fn, TString mxname, TString tsname, TString msname, bool norm, TString spostfix) {
 	TFile *f  = TFile::Open(fn);
 	if (!f) { Error("LoadDetectorMatrix","Detector matrix file %s not found.",fn.Data()); return 0; }
 
     if(norm){
 	if (mxname == "") mxname = "Detectormatrix";
         //fMatrixPP = (TH2D*)f->Get(mxname);
-        TH2D *matrix = (TH2D*)f->Get(mxname);
+        TH2D *matrix = dynamic_cast<TH2D*>(f->Get(mxname));
         //if (!fMatrixPP) {
         if (!matrix) {
             Error("LoadDetectorMatrix","Detector matrix %s could not be gotten from file.",mxname.Data());
@@ -605,7 +619,7 @@ int LoadDetectorMatrix(TString fn, TString mxname, TString tsname, TString msnam
         fMatrixPP = NormMatrixY(mxname,matrix);
     }
     else {
-        fMatrixPP = (TH2D*)f->Get(mxname);
+        fMatrixPP = dynamic_cast<TH2D*>(f->Get(mxname));
         if (!fMatrixPP) {
             Error("LoadDetectorMatrix","Detector matrix %s could not be gotten from file.",mxname.Data());
             return 0;
@@ -625,7 +639,7 @@ int LoadDetectorMatrix(TString fn, TString mxname, TString tsname, TString msnam
     }
 
 	if (tsname == "") tsname = "hTrue";
-	fTrueSpectrum = (TH1D*) f->Get(tsname);
+    fTrueSpectrum = dynamic_cast<TH1D*>(f->Get(tsname));
 	//fTrueSpectrum = (TH1D*) fMatrixPP->ProjectionY("fTrueSpectrum");
 	tsname+=spostfix;
 	if (!fTrueSpectrum) {
@@ -635,7 +649,7 @@ int LoadDetectorMatrix(TString fn, TString mxname, TString tsname, TString msnam
 
 	if (msname == "") msname = "hReco";
 	msname+=spostfix;
-	fMeasSpectrum = (TH1D*) f->Get(msname);
+    fMeasSpectrum = dynamic_cast<TH1D*>(f->Get(msname));
 	//fMeasSpectrum = (TH1D*) fMatrixPP->ProjectionX("fMeasSpectrum");
     if (!fMeasSpectrum) {
 		Error("LoadDetectorMatrix","True spectrum %s could not be gotten from file.",msname.Data());
@@ -654,7 +668,7 @@ int LoadBackgroundMatrix(TString fn, TString mxname) {
 	TFile *f  = TFile::Open(fn);
 	if (!f) { Error("LoadBackgroundMatrix","Background matrix file %s not found.",fn.Data()); return 0; }
 
-	fMatrixDeltaPt = (TH2D*)f->Get(mxname);
+    fMatrixDeltaPt = dynamic_cast<TH2D*>(f->Get(mxname));
 	if (!fMatrixDeltaPt) {
 		Error("LoadBackgroundMatrix","Background matrix %s could not be gotten from file.",mxname.Data());
 		return 0;
@@ -679,7 +693,7 @@ int LoadBackgroundMatrix(TString fn, TString mxname) {
 
 /// load raw spectrum (that is to be unfolded)
 /// if sname is not specified, try to load according to default naming conventions
-int LoadRawSpectrum(TString fn, TString sname, int rebin = 0, TString spostfix="") {
+int LoadRawSpectrum(TString fn, TString sname, int rebin, TString spostfix) {
 	TFile *f  = TFile::Open(fn);
 	if (!f) { Error("LoadRawSpectrum","Raw spectrum file %s not found.",fn.Data());	return 0; }
 
@@ -687,15 +701,15 @@ int LoadRawSpectrum(TString fn, TString sname, int rebin = 0, TString spostfix="
 	sname += spostfix;
 
 
-	TH1D *spectrum = (TH1D*)f->Get(sname);
+    TH1D *spectrum = dynamic_cast<TH1D*>(f->Get(sname));
 	if (!spectrum) {
 		Error("LoadRawSpectrum","Raw spectrum %s could not be gotten from file.",sname.Data());
 		return 0;
 	}
 	Info("LoadRawSpectrum", "%s loaded.", sname.Data());
 
-	if(rebin)  fRawSpectrum = (TH1D*)spectrum->Rebin(fptbinsJetMeasN,"fRawSpectrum",fptbinsJetMeasA);
-	else fRawSpectrum = (TH1D*)spectrum->Clone("fRawSpectrum");
+    if(rebin)  fRawSpectrum = dynamic_cast<TH1D*>(spectrum->Rebin(fptbinsJetMeasN,"fRawSpectrum",fptbinsJetMeasA));
+    else fRawSpectrum = dynamic_cast<TH1D*>(spectrum->Clone("fRawSpectrum"));
 
 
     fRawSpectrum->Sumw2();
@@ -712,8 +726,8 @@ TH2D * getResponseMatrix(bool useDeltaPt) {
 	TH2D *fMatrixDeltaPt2;
 
 	if (!useDeltaPt) {
-		if (!fMatrixPP) { Error("getResponseMatrix","No unfolding matrix present."); return 0; }
- 		mtx = (TH2D*) fMatrixPP->Clone();
+        if (!fMatrixPP) { Error("getResponseMatrix","No unfolding matrix present."); return nullptr; }
+        mtx = dynamic_cast<TH2D*>(fMatrixPP->Clone());
  		//mtx = (TH2D*) fMatrixDeltaPt->Clone();
 		mtx->Sumw2();
 	}
@@ -739,12 +753,12 @@ TH2D * getResponseMatrix(bool useDeltaPt) {
 TH2D * ProductMatrix(TH2D * MtxA, TH2D * MtxB) {
 	// make sure the matrices exist
 	if (!MtxA) {
-		cerr << "Error in <AliHeavyUnfoldTools::ProductMatrix> : MtxA==0." << endl;
-		return 0;
+        std::cerr << "Error in <AliHeavyUnfoldTools::ProductMatrix> : MtxA==0." << std::endl;
+        return nullptr;
 	}
 	if (!MtxB) {
-		cerr << "Error in <AliHeavyUnfoldTools::ProductMatrix> : MtxB==0." << endl;
-		return 0;
+        std::cerr << "Error in <AliHeavyUnfoldTools::ProductMatrix> : MtxB==0." << std::endl;
+        return nullptr;
 	}
 
 	Int_t binx_a=MtxA->GetNbinsX();
@@ -754,8 +768,8 @@ TH2D * ProductMatrix(TH2D * MtxA, TH2D * MtxB) {
 
 	// make sure the matrices are of the same size
 	if (binx_b!=binx_a) {
-		cerr << "Error in <AliHeavyUnfoldTools::ProductMatrix> : MtxA--MtxB dimension mismatch." << endl;
-		return 0;
+        std::cerr << "Error in <AliHeavyUnfoldTools::ProductMatrix> : MtxA--MtxB dimension mismatch." << std::endl;
+        return nullptr;
 	}
 
 	Double_t x_low = MtxA->GetXaxis()->GetBinLowEdge(1);
@@ -786,12 +800,12 @@ TH2D * ProductMatrix(TH2D * MtxA, TH2D * MtxB) {
 int MtxPlots(TString outDir, TString outName) {
 
 	TString tag = "tag";
-	if (!fMatrixPP) { Error("MtxPlots","No unfolding matrix present."); return kErr; }
+    if (!fMatrixPP) { Error("MtxPlots","No unfolding matrix present."); return 80; }
 
-	TH2D * hMtxPP = NULL;
-	TH2D * hMtxDpt = NULL;
-	TH2D * hMtxRe = NULL;
-	TH2D * hMtxPro = NULL;
+    TH2D * hMtxPP = nullptr;
+    TH2D * hMtxDpt = nullptr;
+    TH2D * hMtxRe = nullptr;
+    TH2D * hMtxPro = nullptr;
 
 	// Probabilities
 	TCanvas *cMtx=new TCanvas("ProbMtx", "Probability matrices",50,50,800,800);
@@ -799,7 +813,7 @@ int MtxPlots(TString outDir, TString outName) {
 
 	cMtx->cd(1)->SetLogz();
 	cMtx->SetLogz();
-	hMtxPP = (TH2D*)NormMatrixY("hMtxPP"+tag,fMatrixPP);
+    hMtxPP = dynamic_cast<TH2D*>(NormMatrixY("hMtxPP"+tag,fMatrixPP));
 	hMtxPP->SetTitle("Detector prob. matrix");
 	NormMatrixY(hMtxPP);
 	hMtxPP->Draw("colz");
@@ -807,7 +821,7 @@ int MtxPlots(TString outDir, TString outName) {
 	if (fMatrixDeltaPt) {
 		cMtx->cd(2)->SetLogz();
 		cMtx->SetLogz();
-		hMtxDpt = (TH2D*)NormMatrixY("hMtxDpt"+tag,fMatrixDeltaPt);
+        hMtxDpt = dynamic_cast<TH2D*>(NormMatrixY("hMtxDpt"+tag,fMatrixDeltaPt));
 		hMtxDpt->SetTitle("Background prob. matrix");
 		hMtxDpt->Draw("colz");
 
@@ -815,11 +829,11 @@ int MtxPlots(TString outDir, TString outName) {
 		//if(!fMatrixProd)
 		//	fMatrixProd = getResponseMatrix( fMatrixDeltaPt );
 
-		if (!fMatrixProd) { Error("MtxPlots", "Error getting product matrix!"); return kErr; }
+        if (!fMatrixProd) { Error("MtxPlots", "Error getting product matrix!"); return 80; }
 
 		//hMtxRe = (TH2D*)NormMatrixY("hMtxRe"+tag,fMatrixProd);
 
-		hMtxRe = (TH2D*)fMatrixProd->Clone("hMtRe");
+        hMtxRe = dynamic_cast<TH2D*>(fMatrixProd->Clone("hMtRe"));
 		hMtxRe->SetTitle("Response prob. matrix");
 		hMtxRe->Draw("colz");
 
@@ -853,27 +867,27 @@ int MtxPlots(TString outDir, TString outName) {
 /// Plot probability matrices
 int plotSlice(TVirtualPad * p, TH2D * hMtxPP, TH2D * hMtxDpt, TH2D * hMtxRe, TH2D * hMtxPro, const double ptmin, const double ptmax) {
 
-	TH1D * hSliceDpt = NULL;
-	TH1D * hSlicePP = NULL;
-	TH1D * hSliceRe = NULL;
-	TH1D * hSlicePro = NULL;
+    TH1D * hSliceDpt = nullptr;
+    TH1D * hSlicePP = nullptr;
+    TH1D * hSliceRe = nullptr;
+    TH1D * hSlicePro = nullptr;
 
 	int imin = hMtxPP->GetYaxis()->FindBin(ptmin+0.0001);
 	int imax = hMtxPP->GetYaxis()->FindBin(ptmax-0.0001);
 
-	TString sname = "-"+TString::Itoa((int)(ptmin),10)+"-"+TString::Itoa((int)(ptmax),10);
-	TString stitle = TString::Itoa((int)(ptmin),10)+"<p_{T}^{gen}<"+TString::Itoa((int)(ptmax),10)+" GeV/c";
+    TString sname = "-"+TString::Itoa(static_cast<Int_t>(ptmin),10)+"-"+TString::Itoa(static_cast<Int_t>(ptmax),10);
+    TString stitle = TString::Itoa(static_cast<Int_t>(ptmin),10)+"<p_{T}^{gen}<"+TString::Itoa(static_cast<Int_t>(ptmax),10)+" GeV/c";
 
 	p->SetLogy();
 
 	// takes width of 1st bin : only works for even binning!
-	int binno = (fptbinsJetTrueA[1]-fptbinsJetTrueA[0]);
+    int binno = static_cast<Int_t>(fptbinsJetTrueA[1]-fptbinsJetTrueA[0]);
 
 	if(hMtxDpt) {
 		hSliceDpt = hMtxDpt->ProjectionX("hSliceDpt"+sname,imin,imax);
 		hSliceDpt->SetTitle("probability matrix");
 		hSliceDpt->SetMarkerColor(2);
-		hSliceDpt->SetMarkerSize(0.8);
+        hSliceDpt->SetMarkerSize(0.8f);
 		hSliceDpt->SetMarkerStyle(20);
 		hSliceDpt->SetLineColor(2);
 		//setHistStyle(hSliceDpt, 2, 21);
@@ -884,7 +898,7 @@ int plotSlice(TVirtualPad * p, TH2D * hMtxPP, TH2D * hMtxDpt, TH2D * hMtxRe, TH2
 	hSlicePP = hMtxPP->ProjectionX("hSlicePP"+sname,imin,imax);
 	hSlicePP->SetMarkerColor(4);
 	hSlicePP->SetMarkerStyle(20);
-	hSlicePP->SetMarkerSize(0.8);
+    hSlicePP->SetMarkerSize(0.8f);
 	hSliceDpt->SetLineColor(4);
 	hSlicePP->Rebin(binno);
 	/*if (hMtxDpt)
@@ -897,7 +911,7 @@ int plotSlice(TVirtualPad * p, TH2D * hMtxPP, TH2D * hMtxDpt, TH2D * hMtxRe, TH2
 		//setHistStyle(hSliceRe, 4, 26);
 		hSliceRe->SetMarkerColor(kMagenta);
 		hSliceRe->SetMarkerStyle(20);
-		hSliceRe->SetMarkerSize(0.8);
+        hSliceRe->SetMarkerSize(0.8f);
 		hSliceRe->SetLineColor(1);
 		hSliceRe->Rebin(binno);
 		//hSliceRe->Draw("HistPSame");
@@ -908,7 +922,7 @@ int plotSlice(TVirtualPad * p, TH2D * hMtxPP, TH2D * hMtxDpt, TH2D * hMtxRe, TH2
 		//setHistStyle(hSlicePro, 6, 32);
 		hSlicePro->SetMarkerColor(1);
 		hSlicePro->SetMarkerStyle(20);
-		hSlicePro->SetMarkerSize(0.8);
+        hSlicePro->SetMarkerSize(0.8f);
 		hSlicePro->SetLineColor(1);
 		hSlicePro->Rebin(binno);
 		hSlicePro->Draw("HistPSame");
@@ -925,7 +939,7 @@ int plotSlice(TVirtualPad * p, TH2D * hMtxPP, TH2D * hMtxDpt, TH2D * hMtxRe, TH2
 		l->SetHeader(stitle);
 		l->Draw();
 	}
-
+    return 0;
 }
 
 
@@ -933,11 +947,11 @@ int plotSlice(TVirtualPad * p, TH2D * hMtxPP, TH2D * hMtxDpt, TH2D * hMtxRe, TH2
 /// Weight matrix along y axis by histo values
 void WeightMatrixY(TH2D * Mtx, TH1D * h, bool divide) {
 	if (!Mtx) {
-		cerr << "Warning in <AliHeavyUnfoldTools::WeightMatrixY> : Mtx==0." << endl;
+        std::cerr << "Warning in <AliHeavyUnfoldTools::WeightMatrixY> : Mtx==0." << std::endl;
 		return;
 	}
 	if (!h) {
-		cerr << "Warning in <AliHeavyUnfoldTools::WeightMatrixY> : h==0." << endl;
+        std::cerr << "Warning in <AliHeavyUnfoldTools::WeightMatrixY> : h==0." << std::endl;
 		return;
 	}
 
@@ -957,8 +971,8 @@ void WeightMatrixY(TH2D * Mtx, TH1D * h, bool divide) {
 /// rebin in 2d variable size - no such routine in Root
 TH2D * Rebin2D(const char* name, TH2D *h, int nx, const double *binx, int ny, const double *biny, bool crop) {
 	if (!h) {
-		cerr << "Warning in <AliHeavyUnfoldTools::Rebin2D> : h==0." << endl;
-		return 0;
+        std::cerr << "Warning in <AliHeavyUnfoldTools::Rebin2D> : h==0." << std::endl;
+        return nullptr;
 	}
 
 	TAxis *xaxis = h->GetXaxis();
@@ -1024,55 +1038,55 @@ TH2D * Rebin2D(const char* name, TH2D *h, int nx, const double *binx, int ny, co
 
 
 /// Prior for unfolding: try different prior functions wich best describe the raw specrum.
-TF1* getPriorFunction(int prior, TH1D* spect, int priorType = 0, TH1D* rawspectrum = NULL) {
+TF1* getPriorFunction(int prior, TH1D* spect, int priorType , TH1D* rawspectrum ) {
 
 	if (!spect) {
 		Error("getPriorFunction","Required spectrum does not exist.");
-		return 0;
+        return nullptr;
 	}
 
 	double fitlo = fptbinsJetMeasA[0]; // fFitPtMin;
 	double fithi = fptbinsJetMeasA[fptbinsJetMeasN]; // fFitPtMax;
 	//fithi = 30;
 
-	TF1 *fPriorFunction = 0;
+    TF1 *fPriorFunction = nullptr;
 	TString fitopt = "MRN";
 	//if (fLHfit) fitopt += "L";
 
 	//PriorFunction = new TF1("PriorFunction","[0]*pow(1+(sqrt([1]*[1]+x*x)-[1])/([2]*[3]),-1*[2])",0,50);
 	//PriorFunction->SetParameters(10,0.14,6.6,0.145);/
-    PriorFunction = new TF1("PriorFunction","[0]* pow(x,-[1]) * exp(-[1]*[2]/x)",fitlo,fithi);
+    fPriorFunction = new TF1("PriorFunction","[0]* pow(x,-[1]) * exp(-[1]*[2]/x)",fitlo,fithi);
 
-		PriorFunction->SetParLimits(1,2,8);
-    if(priorType == 0)  		{ PriorFunction->FixParameter(1,4.6); PriorFunction->FixParameter(2,4);}
-		else if(priorType == 1) { PriorFunction->FixParameter(1,3);   PriorFunction->FixParameter(2,4);}
-  	else if(priorType == 2) { PriorFunction->FixParameter(1,4);   PriorFunction->FixParameter(2,4);}
-		else if(priorType == 3) { PriorFunction->FixParameter(1,5);   PriorFunction->FixParameter(2,4);}
-		else if(priorType == 4) { PriorFunction->FixParameter(1,6);   PriorFunction->FixParameter(2,4);}
-		else if(priorType == 5) { PriorFunction->FixParameter(1,7);   PriorFunction->FixParameter(2,4);}
-		else if(priorType == 6) { PriorFunction->FixParameter(1,4.5); PriorFunction->FixParameter(2,3); }
-		else if(priorType == 7) { PriorFunction->FixParameter(1,4.5); PriorFunction->FixParameter(2,5); }
-		else if(priorType == 8) { PriorFunction->SetParLimits(1,2,8); PriorFunction->SetParLimits(2,2,8); fitlo = fptbinsJetMeasA[0]; }
-		if(priorType == 8) { rawspectrum->Fit(PriorFunction, fitopt,"",fitlo,fithi); }
-		else spect->Fit(PriorFunction, fitopt,"",fitlo,fithi);
+        fPriorFunction->SetParLimits(1,2,8);
+    if(priorType == 0)  		{ fPriorFunction->FixParameter(1,4.6); fPriorFunction->FixParameter(2,4);}
+        else if(priorType == 1) { fPriorFunction->FixParameter(1,3);   fPriorFunction->FixParameter(2,4);}
+        else if(priorType == 2) { fPriorFunction->FixParameter(1,4);   fPriorFunction->FixParameter(2,4);}
+        else if(priorType == 3) { fPriorFunction->FixParameter(1,5);   fPriorFunction->FixParameter(2,4);}
+        else if(priorType == 4) { fPriorFunction->FixParameter(1,6);   fPriorFunction->FixParameter(2,4);}
+        else if(priorType == 5) { fPriorFunction->FixParameter(1,7);   fPriorFunction->FixParameter(2,4);}
+        else if(priorType == 6) { fPriorFunction->FixParameter(1,4.5); fPriorFunction->FixParameter(2,3); }
+        else if(priorType == 7) { fPriorFunction->FixParameter(1,4.5); fPriorFunction->FixParameter(2,5); }
+        else if(priorType == 8) { fPriorFunction->SetParLimits(1,2,8); fPriorFunction->SetParLimits(2,2,8); fitlo = fptbinsJetMeasA[0]; }
+        if(priorType == 8) { rawspectrum->Fit(fPriorFunction, fitopt,"",fitlo,fithi); }
+        else spect->Fit(fPriorFunction, fitopt,"",fitlo,fithi);
 
 	//PriorFunction = new TF1("PriorFunction","[0]*x+[1]",0,50);
 	//PriorFunction->SetParameters(10,20);
 	//spect->Fit(PriorFunction, fitopt,"",fitlo,fithi);
 
 
-	PriorFunction->SetTitle("Chosen prior function");
-	return PriorFunction;
+    fPriorFunction->SetTitle("Chosen prior function");
+    return fPriorFunction;
 }
 
 /// Create a new, y-normalized matrix
 TH2D* NormMatrixY(const char* name, TH2D* Mtx) {
 	if (!Mtx) {
-		cerr << "Warning in <AliHeavyUnfoldTools::NormMatrixY> : Mtx==0." << endl;
-		return 0;
+        std::cerr << "Warning in <AliHeavyUnfoldTools::NormMatrixY> : Mtx==0." << std::endl;
+        return nullptr;
 	}
 
-	TH2D * Mre = (TH2D*)Mtx->Clone(name);
+    TH2D * Mre = dynamic_cast<TH2D*>(Mtx->Clone(name));
 	NormMatrixY(Mre);
 
 	return Mre;
@@ -1082,7 +1096,7 @@ TH2D* NormMatrixY(const char* name, TH2D* Mtx) {
 /// Normalize matrix along y axis projection
 void NormMatrixY(TH2D * Mtx) {
 	if (!Mtx) {
-		cerr << "Warning in <AliHeavyUnfoldTools::NormMatrixY> : Mtx==0." << endl;
+        std::cerr << "Warning in <AliHeavyUnfoldTools::NormMatrixY> : Mtx==0." << std::endl;
 		return;
 	}
 
