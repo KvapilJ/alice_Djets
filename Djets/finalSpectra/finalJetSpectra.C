@@ -10,8 +10,8 @@ double jetEta = 0.9 - fRpar;
 double dy = 2*jetEta;
 
 double *sysCutVar, *systuncP;
-double DTrackEff = 0.03;
-double globalUnc = 0.038;
+double DTrackEff = 100;
+double globalUnc = 100;
 //int fptbinsJetFinalN;
 Double_t *xAxis;
 double plotmin = 5, plotmax=50;
@@ -78,16 +78,64 @@ systuncP[3]=0.111763302404;
 systuncP[4]=0.15895298319;
 systuncP[5]=0.180252760536;
 systuncP[6]=0.199602264197;*/
-    systuncP[0] = 0.001;
+ /*   systuncP[0] = 0.001;
     systuncP[1] = 0.001;
     systuncP[2] = 0.001;
     systuncP[3] = 0.001;
     systuncP[4] = 0.001;
     systuncP[5] = 0.001;
-    systuncP[6] = 0.001;
+    systuncP[6] = 0.001;*/
+  /*  systuncP[0] =0.1008563335;
+    systuncP[1] =0.08368990381;
+    systuncP[2] =0.0990403958;
+    systuncP[3] =0.1092336944;
+    systuncP[4] =0.1310496089;
+    systuncP[5] =0.1497631463;
+    systuncP[6] =0.2303215144;
+    systuncP[7] =0.258096881;*/
+
+  /*  systuncP[0] =0.1130840395;
+    systuncP[1] =0.09808159868;
+    systuncP[2] =0.111467484;
+    systuncP[3] =0.1206150903;
+    systuncP[4] =0.1406769349;
+    systuncP[5] =0.1582561215;
+    systuncP[6] =0.2359321936;
+    systuncP[7] =0.263115944;*/
+
+ /*   systuncP[0]=0.107713741;
+    systuncP[1]=0.113120511;
+    systuncP[2]=0.1250809738;
+    systuncP[3]=0.1333913415;
+    systuncP[4]=0.1512316105;
+    systuncP[5]=0.1694609099;
+    systuncP[6]=0.2517498759;
+    systuncP[7]=0.48723403;*/
+/*
+    systuncP[0]=0.108010416;
+    systuncP[1]=0.11375522;
+    systuncP[2]=0.126100159;
+    systuncP[3]=0.134882356;
+    systuncP[4]=0.15328405;
+    systuncP[5]=0.172644143;
+    systuncP[6]=0.2566671;
+    systuncP[7]=0.494086025;
+*/
+    systuncP[0]=0.1186433732;
+    systuncP[1]=0.1233541649;
+    systuncP[2]=0.1345037174;
+    systuncP[3]=0.1418705396;
+    systuncP[4]=0.1602310831;
+    systuncP[5]=0.1768756625;
+    systuncP[6]=0.2544523531;
+    systuncP[7]=0.2759402109;
+
+
+
+
 
     sysCutVar = new double[fptbinsJetFinalN];
-    for(int k=0; k<fptbinsJetFinalN; k++) sysCutVar[k] = 0.05;
+    for(int k=0; k<fptbinsJetFinalN; k++) sysCutVar[k] = 0.0;
 
     TFile *File = new TFile(dataAnalysisFile,"read");
     TDirectoryFile* dir;
@@ -711,7 +759,7 @@ if(isSim){
      grae->Draw("2");
   }
 }
-   TLegend *leg = new TLegend(0.5,0.32,0.8,0.57,nullptr,"NB NDC");
+   TLegend *leg = new TLegend(0.5,0.35,0.8,0.6,nullptr,"NB NDC");
    leg->SetBorderSize(0);
    leg->SetTextFont(43);
    leg->SetTextSize(23);
@@ -771,7 +819,7 @@ if(isSim){
  }
    leg->Draw();
 
-   TPaveText *pt = new TPaveText(0.16,0.64,0.55,0.9,"NB NDC");
+   TPaveText *pt = new TPaveText(0.20,0.64,0.59,0.9,"NB NDC");
    pt->SetBorderSize(0);
    pt->SetFillStyle(0);
    pt->SetTextAlign(13);
@@ -779,9 +827,9 @@ if(isSim){
    pt->SetTextSize(22);
    //TText *text = pt->AddText("ALICE Preliminary");
    TText *text = new TText;
-   //text = pt->AddText("ALICE Preliminary"); //uncomment
-   if(fSystem) text = pt->AddText("p-Pb, #sqrt{#it{s}_{NN}} = 5.02 TeV");
-   else text = pt->AddText("pp, #sqrt{#it{s}} = 5.02 TeV");
+   text = pt->AddText("ALICE Preliminary"); //uncomment
+   if(fSystem) text = pt->AddText("p-Pb, #sqrt{#it{s}_{NN}} = 13 TeV");
+   else text = pt->AddText("pp, #sqrt{#it{s}} = 13 TeV");
    text = pt->AddText(Form("charged jets, anti-#it{k}_{T}, #it{R} = 0.%d, |#it{#eta}_{lab}^{jet}| < 0.%d",Rpar,9-Rpar));
    text = pt->AddText(Form ("with D^{0}, %d < #it{p}_{T,D^{0}} < %d GeV/#it{c}",static_cast<int>(fptbinsDA[0]),static_cast<int>(fptbinsDA[fptbinsDN])));
    pt->Draw();
@@ -992,6 +1040,7 @@ if(isSys) {
    CentralPointsStatisticalUncertainty__7->GetXaxis()->SetTitleOffset(2.9f);
    CentralPointsStatisticalUncertainty__7->GetXaxis()->SetTitleFont(43);
    CentralPointsStatisticalUncertainty__7->GetYaxis()->SetTitle("data / theory");
+   CentralPointsStatisticalUncertainty__7->GetYaxis()->SetRangeUser(0,3);//added
    CentralPointsStatisticalUncertainty__7->GetYaxis()->SetNdivisions(509);
    CentralPointsStatisticalUncertainty__7->GetYaxis()->SetLabelFont(43);
    CentralPointsStatisticalUncertainty__7->GetYaxis()->SetLabelSize(22);

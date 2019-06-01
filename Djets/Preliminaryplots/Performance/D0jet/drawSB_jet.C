@@ -1,20 +1,31 @@
-#include "style.C"
 #include <string>
 #include <sstream>
 #include <iostream>
+#include "TH1.h"
+#include "TStyle.h"
+#include "TFile.h"
+#include "TLegend.h"
+#include "TPaveText.h"
+#include "TCanvas.h"
+#include "TString.h"
+#include "TStyle.h"
+#include "TROOT.h"
+#include "TF1.h"
+#include "style.C"
 #include <TPDF.h>
 
-setHistoDetails(TH1 *h, Color_t color, Style_t Mstyle, Width_t width);
+void setHistoDetails(TH1 *h, Color_t color, Style_t Mstyle, Width_t width);
+void SaveCanvas(TCanvas *c, TString name = "tmp");
 
  //double zmin = 0, zmax = 2.;
     //double jetmin = 0, jetmax = 50;
     //double plotmin = 0, plotmax = 50;
 
-    const int ptbinsDN = 10;
-    float ptDbins[ptbinsDN+1] = { 3,4,5,6,7,8,10,12,16,24,36 };
+    const int ptbinsDN = 11;
+    float ptDbins[ptbinsDN+1] = {2,3,4,5,6,7,8,10,12,16,24,36};
 
-    const int ptbinsJetN = 7;
-    double ptJetbins[ptbinsJetN+1] = { 5,6,8,10,14,20,30,50 };
+    const int ptbinsJetN = 8;
+    double ptJetbins[ptbinsJetN+1] = { 5,6,8,10,12,14,20,30,50};
 
     int massColor = kBlack;
     int signalColor = kRed+1;
@@ -42,38 +53,40 @@ void drawSB_jet( int Rpar = 4 )
     gStyle->SetPadTopMargin(0.02);
 
 
-stringstream sst;
-sst.clear(); sst.str("");
+//stringstream sst;
+//sst.clear(); sst.str("");
 
    //TFile *inFile = new TFile("JetPtSpectra_SB_FASTwoSDD_eff_ptD3_rebin.root","read");
   // TFile *inFile = new TFile("JetPtSpectra_SB_eff.root","read");
-    TFile *inFile = new TFile(
+ //   TFile *inFile = new TFile(
 //"/home/basia/Work/alice/analysis/pPb_run2/DzeroR03_RefDPt3PythiaEff_BaseCuts/Default_jetMeas3_50_jetTrue3_50_ppbinning/signalExtraction/JetPtSpectra_SB_eff.root"
-"/home/jackbauer/Work/alice/analysis/pp5TeV/D0jet/results_cutTight/DzeroR03_def_437_old0/Default/signalExtraction/JetPtSpectra_SB_eff.root","read");
+//"/home/jackbauer/Work/alice/analysis/pp5TeV/D0jet/results_cutTight/DzeroR03_def_437_old0/Default/signalExtraction/JetPtSpectra_SB_eff.root","read");
 
-    int bin1 = 1, bin2 = 5, bin3 = 7;
+    TFile *inFile = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff.root","read");
+
+    int bin1 = 0, bin2 = 4, bin3 = 8;
 
     int islog = 1;
 
 
-    TH1F* hjetpt[ptbinsDN];
+    TH1D* hjetpt[ptbinsDN];
     //TH1F* hjetpt[ptbinsDN]=new TH1F("yo","yo",100,4.8,50.2);
-    TH1F* hjetpt_s[ptbinsDN];
-    TH1F* hjetptsub[ptbinsDN];
+    TH1D* hjetpt_s[ptbinsDN];
+    TH1D* hjetptsub[ptbinsDN];
     TH1F* hmass_c[ptbinsDN];
 
-    TH1F* hjetpt[ptbinsDN];
-    TH1F* hjetpt_s[ptbinsDN];
-    TH1F* hjetptsub[ptbinsDN];
+   // TH1F* hjetpt[ptbinsDN];
+   // TH1F* hjetpt_s[ptbinsDN];
+   // TH1F* hjetptsub[ptbinsDN];
     TH1F* hjetptcorr[ptbinsDN];
 
 
     for(int i=0; i<ptbinsDN; i++){
 
-            TH1F *hjet = (TH1F*)inFile->Get(Form("hjetpt_%d",i));
-            hjetpt[i] = (TH1F*)hjet->Rebin(ptbinsJetN,Form("hjetpt_%d",i),ptJetbins);
+            TH1D *hjet = (TH1D*)inFile->Get(Form("hjetpt_%d",i));
+            hjetpt[i] = (TH1D*)hjet->Rebin(ptbinsJetN,Form("hjetpt_%d",i),ptJetbins);
 
-            hjetpt[i]->SetTitle();
+            hjetpt[i]->SetTitle("");
             hjetpt[i]->SetMarkerColor(signalColor);
             hjetpt[i]->SetLineColor(signalColor);
             hjetpt[i]->SetLineWidth(2);
@@ -97,9 +110,9 @@ sst.clear(); sst.str("");
             hjetpt[i]->SetMinimum(-50);
             if(islog) hjetpt[i]->SetMinimum(1);
 
-            TH1F *hjets = (TH1F*)inFile->Get(Form("hjetpt_sb_%d",i));
-            hjetpt_s[i] = (TH1F*)hjets->Rebin(ptbinsJetN,Form("hjetpt_s_%d",i),ptJetbins);
-            hjetpt_s[i]->SetTitle();
+            TH1D *hjets = (TH1D*)inFile->Get(Form("hjetpt_sb_%d",i));
+            hjetpt_s[i] = (TH1D*)hjets->Rebin(ptbinsJetN,Form("hjetpt_s_%d",i),ptJetbins);
+            hjetpt_s[i]->SetTitle("");
             hjetpt_s[i]->SetMarkerColor(SBColor);
             hjetpt_s[i]->SetLineColor(SBColor);
             hjetpt_s[i]->SetLineWidth(2);
@@ -108,9 +121,9 @@ sst.clear(); sst.str("");
             hjetpt_s[i]->SetMarkerSize(markersize);
 
 
-            TH1F *hjetsub = (TH1F*)inFile->Get(Form("hjetptsub_%d",i));
-            hjetptsub[i] = (TH1F*)hjetsub->Rebin(ptbinsJetN,Form("hjetptsub_%d",i),ptJetbins);
-            hjetptsub[i]->SetTitle();
+            TH1D *hjetsub = (TH1D*)inFile->Get(Form("hjetptsub_%d",i));
+            hjetptsub[i] = (TH1D*)hjetsub->Rebin(ptbinsJetN,Form("hjetptsub_%d",i),ptJetbins);
+            hjetptsub[i]->SetTitle("");
             hjetptsub[i]->SetMarkerColor(subColor);
             hjetptsub[i]->SetLineColor(subColor);
             hjetptsub[i]->SetLineWidth(2);
@@ -119,7 +132,7 @@ sst.clear(); sst.str("");
             hjetptsub[i]->SetMarkerSize(markersize+0.5);
 
     }
-
+std::cout<<"A"<<std::endl;
    // hjetpt[bin1]->SetMaximum(hjetpt[bin1]->GetMaximum()*1.1);
    // hjetpt[bin2]->SetMaximum(1600);
    // hjetpt[bin3]->SetMaximum(1600);
@@ -127,8 +140,8 @@ sst.clear(); sst.str("");
 
      if(islog) hjetpt[bin3]->SetMaximum(hjetpt[bin3]->GetMaximum()*1000);
 
-//     TH1F *hh = (TH1F*)hjetpt[0]->Clone("hh");
-//     hh->SetMarkerSize(0);
+     TH1F *hh = (TH1F*)hjetpt[0]->Clone("hh");
+     hh->SetMarkerSize(0);
 
     TLegend *legBands1 = new TLegend(0.15,0.76,0.7,0.86);
     legBands1->SetTextSize(ltextsize);
@@ -150,12 +163,12 @@ sst.clear(); sst.str("");
     //legBands22->AddEntry(hh,"|4<(#it{M}(K#pi))<9#sigma|","p");
   //  legBands22->SetTextAlign(13);
 
-    TLegend *legBands23 = new TLegend(0.28,0.63,0.7,0.65,"normalised to signal region");
+    TLegend *legBands23 = new TLegend(0.28,0.63,0.6,0.65);
     legBands23->SetTextSize(ltextsize);
     legBands23->SetFillStyle(0);
     legBands23->SetTextAlign(11);
-    //legBands23->AddEntry(hh,"normalised to Signal region","p");
-
+    legBands23->AddEntry(hh,"normalised to Signal region","p");
+std::cout<<"B"<<std::endl;
      TLegend *legBands3 = new TLegend(0.15,0.55,0.7,0.6);
     legBands3->SetTextSize(ltextsize);
     legBands3->SetFillStyle(0);
@@ -180,7 +193,7 @@ sst.clear(); sst.str("");
     pvEn->SetTextSize(0.053);
     pvEn->SetTextAlign(11);
     //pvEn->AddText("p-Pb, #sqrt{#it{s}_{NN}} = 5.02 TeV, 603M events");
-    pvEn->AddText("pp, #sqrt{#it{s}} = 5.02 TeV");
+    pvEn->AddText("pp, #sqrt{#it{s}} = 13 TeV");
 
     //TPaveText *pvD = new TPaveText(0.25,0.82,0.55,0.87,"brNDC");
     //TPaveText *pvD = new TPaveText(0.247,0.82,0.55,0.87,"brNDC");
@@ -199,8 +212,8 @@ sst.clear(); sst.str("");
     pvJet->SetTextFont(42);
     pvJet->SetTextSize(0.053);
     pvJet->SetTextAlign(11);
-    pvJet->AddText("in charged jets, anti-#it{k}_{T}, #it{R} = 0.3");
-
+    pvJet->AddText("in charged jets, anti-#it{k}_{T}, #it{R} = 0.4");
+std::cout<<"C"<<std::endl;
     //TPaveText *pvEta = new TPaveText(0.25,0.72,0.6,0.77,"brNDC");
     //TPaveText *pvEta = new TPaveText(0.247,0.72,0.6,0.77,"brNDC");
     TPaveText *pvEta = new TPaveText(0.187,0.72,0.6,0.77,"brNDC");
@@ -209,7 +222,7 @@ sst.clear(); sst.str("");
     pvEta->SetTextFont(42);
     pvEta->SetTextSize(0.053);
     pvEta->SetTextAlign(11);
-    pvEta->AddText("|#it{#eta}_{lab}^{jet}| < 0.6");
+    pvEta->AddText("|#it{#eta}_{lab}^{jet}| < 0.5");
     //pvEta->AddText("|#it{#eta}_{jet}| < 0.6");
 
     TPaveText *pvpt1 = new TPaveText(0.58,0.66,0.85,0.71,"brNDC");
@@ -228,7 +241,7 @@ sst.clear(); sst.str("");
     pvpt2->AddText(Form("%.0f < #it{p}_{T,D^{0}} < %.0f GeV/#it{c}",ptDbins[bin2],ptDbins[bin2+1]));
 
 
-    TPaveText *pvpt3 = new TPaveText(0.35,0.88,0.65,0.92,"brNDC");
+ //   TPaveText *pvpt3 = new TPaveText(0.35,0.88,0.65,0.92,"brNDC");
     TPaveText *pvpt3 = new TPaveText(0.31,0.88,0.65,0.92,"brNDC");
     //TPaveText *pvpt3 = new TPaveText(0.6,0.8,0.83,0.85,"brNDC");
     pvpt3->SetFillStyle(0);
@@ -237,12 +250,12 @@ sst.clear(); sst.str("");
     pvpt3->SetTextSize(0.053);
     pvpt3->AddText(Form("%.0f < #it{p}_{T,D^{0}} < %.0f GeV/#it{c}",ptDbins[bin3],ptDbins[bin3+1]));
 
-
+std::cout<<"D"<<std::endl;
 
     //TCanvas *cMass = new TCanvas("cMass","cMass",3000,900);
     //TCanvas *cMass = new TCanvas("cMass","cMass",3000,1800);
     //TCanvas *cMass = new TCanvas("cMass","cMass",3000,1400);
-    TCanvas *cMass = new TCanvas("cMass","cMass",1800,840);
+ //   TCanvas *cMass = new TCanvas("cMass","cMass",1800,840);
 //    TCanvas *cMass = new TCanvas("cMass","cMass",2100,980);
     //TCanvas *cMass = new TCanvas("cMass","cMass",1800,600);
     //TCanvas *cMass = new TCanvas("cMass","cMass",900,300);
@@ -279,7 +292,7 @@ sst.clear(); sst.str("");
     pvEta->Draw("same");
     //pvsig1->Draw("same");
     //legBands->Draw("same");
-
+std::cout<<"E"<<std::endl;
     cMass->cd(2);
     gPad->SetLogy(islog);
     hjetpt[bin2]->Draw();
@@ -308,9 +321,8 @@ sst.clear(); sst.str("");
     pvpt3->Draw("same");
     //pvEta->Draw("same");
 
-     legBands1->Draw("same");
+    legBands1->Draw("same");
     legBands2->Draw("same");
-    //legBands22->Draw("same");
     legBands23->Draw("same");
     legBands3->Draw("same");
 
@@ -320,10 +332,10 @@ sst.clear(); sst.str("");
     cMass->Print("RawJetPt_Perf_v5.root");
     cMass->Print("RawJetPt_Perf_v5.C");
     */
-
+std::cout<<"F"<<std::endl;
     if(islog) SaveCanvas(cMass,"RawJetPt_Perf_log_2");
     else SaveCanvas(cMass,"RawJetPt_Perf_2");
-
+std::cout<<"G"<<std::endl;
 }
 
 void setHistoDetails(TH1 *h, Color_t color, Style_t Mstyle, Size_t size = 0.9, Width_t width=2, int scale = 0){
@@ -334,19 +346,21 @@ void setHistoDetails(TH1 *h, Color_t color, Style_t Mstyle, Size_t size = 0.9, W
     h->SetMarkerSize(size);
     h->SetLineColor(color);
     h->SetLineWidth(width);
-    h->SetTitle(0);
+    h->SetTitle("");
     h->GetXaxis()->SetTitle("p_{T}^{#D^0}(GeV/c)");
 
     return;
 
 }
 
-void SaveCanvas(TCanvas *c, string name = "tmp"){
+void SaveCanvas(TCanvas *c, TString name){
+std::cout<<"F1"<<std::endl;
+    c->SaveAs(name+".png");
+    std::cout<<"F2"<<std::endl;
+    c->SaveAs(name+".pdf");
+    c->SaveAs(name+".eps");
+    c->SaveAs(name+".root");
+    c->SaveAs(name+".C");
 
-    c->SaveAs(Form("%s.png",name.c_str()));
-    c->SaveAs(Form("%s.pdf",name.c_str()));
-    c->SaveAs(Form("%s.eps",name.c_str()));
-    c->SaveAs(Form("%s.root",name.c_str()));
-    c->SaveAs(Form("%s.C",name.c_str()));
 
 }

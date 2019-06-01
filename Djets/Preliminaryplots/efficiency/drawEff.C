@@ -1,17 +1,26 @@
-#include "style.C"
 #include <string>
 #include <sstream>
 #include <iostream>
+#include "TH1.h"
+#include "TStyle.h"
+#include "TFile.h"
+#include "TLegend.h"
+#include "TPaveText.h"
+#include "TCanvas.h"
+#include "TString.h"
+#include "TStyle.h"
+#include "TROOT.h"
+#include "style.C"
 
-setHistoDetails(TH1 *h, Color_t color, Style_t Mstyle, Width_t width);
+void setHistoDetails(TH1 *h, Color_t color, Style_t Mstyle, Width_t width);
 
  double zmin = 0, zmax = 2.;
-    double jetmin = 2, jetmax = 40;
-    double plotmin = 3, plotmax = 36;
+ //double jetmin = 2, jetmax = 50;
+ double plotmin = 2, plotmax = 36;
 
 
-    const int ptbinsJetN = 8;
-    float ptJetbins[ptbinsJetN+1] = { 2,4,6,8,10,12,16,24,50 };
+    const int ptbinsJetN = 11;
+    float ptJetbins[ptbinsJetN+1] = {2,3,4,5,6,7,8,10,12,16,24,36};
 
     int promptColor = kRed+1;
     int nonpromptColor = kBlue+1;
@@ -27,20 +36,24 @@ void drawEff( int Rpar = 4 )
     //gStyle->SetLegendTextSize(0.05);
 
 
-stringstream sst;
-sst.clear(); sst.str("");
+//stringstream sst;
+//sst.clear(); sst.str("");
 
 
    //TFile *inFilePrompt = new TFile("out_806Preliminary/DjetEff_prompt_jetpt2_50.root","read");
    //TFile *inFileFD = new TFile("out_806Base_FD/DjetEff_nonPrompt_jetpt2_50.root","read");
 
-   TFile *inFilePrompt = new TFile("/home/jackbauer/Work/alice/analysis/pp5TeV/D0jet/results_cutTight/DzeroR03_def_437_old0/Default/efficiency/DjetEff_prompt_jetpt5_50.root","read");
-   TFile *inFileFD = new TFile("/home/jackbauer/Work/alice/analysis/pp5TeV/D0jet/results_cutTight/DzeroR03_def_437_old0/Default/efficiency/DjetEff_nonPrompt_jetpt5_50.root","read");
+  // TFile *inFilePrompt = new TFile("/home/jackbauer/Work/alice/analysis/pp5TeV/D0jet/results_cutTight/DzeroR03_def_437_old0/Default/efficiency/DjetEff_prompt_jetpt5_50.root","read");
+  // TFile *inFileFD = new TFile("/home/jackbauer/Work/alice/analysis/pp5TeV/D0jet/results_cutTight/DzeroR03_def_437_old0/Default/efficiency/DjetEff_nonPrompt_jetpt5_50.root","read");
+
+   TFile *inFilePrompt = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/efficiency/DjetEff_prompt_jetpt5_50.root","read");
+   TFile *inFileFD = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/efficiency/DjetEff_nonPrompt_jetpt5_50.root","read");
+
 
     TH1F *hEffPrompt = (TH1F*)inFilePrompt->Get("hEff_reb");
     TH1F *hEffNonPrompt = (TH1F*)inFileFD->Get("hEff_reb");
 
-    hEffPrompt->SetTitle();
+    hEffPrompt->SetTitle("");
             hEffPrompt->SetMarkerColor(promptColor);
             hEffPrompt->SetLineColor(promptColor);
             hEffPrompt->SetMarkerStyle(20);
@@ -59,7 +72,7 @@ sst.clear(); sst.str("");
             hEffPrompt->SetMaximum(hEffPrompt->GetMaximum()*3.5);
 
 
-   hEffNonPrompt->SetTitle();
+   hEffNonPrompt->SetTitle("");
             hEffNonPrompt->SetMarkerColor(nonpromptColor);
             hEffNonPrompt->SetLineColor(nonpromptColor);
             hEffNonPrompt->SetMarkerStyle(21);
@@ -96,7 +109,7 @@ sst.clear(); sst.str("");
     pvEn->SetTextSize(0.045);
     pvEn->SetTextAlign(11);
     //pvEn->AddText("p-Pb, #sqrt{#it{s}_{NN}} = 5.02 TeV");
-    pvEn->AddText("pp, #sqrt{#it{s}} = 5.02 TeV");
+    pvEn->AddText("pp, #sqrt{#it{s}} = 13 TeV");
 
     double shift = 0.1;
     TPaveText *pvD = new TPaveText(0.42,0.65-shift,0.9,0.69-shift,"brNDC");
@@ -115,17 +128,17 @@ sst.clear(); sst.str("");
     pvJet->SetTextSize(0.045);
     pvJet->SetTextAlign(11);
     //pvJet->AddText("in Charged Jets, Anti-#it{k}_{T}, #it{R} = 0.4");
-    pvJet->AddText("in Charged Jets, Anti-#it{k}_{T}, #it{R} = 0.3");
+    pvJet->AddText("in Charged Jets, Anti-#it{k}_{T}, #it{R} = 0.4");
 
 
-    TPaveText *pvEta = new TPaveText(0.42,0.54-shift,0.8,0.59-shift,"brNDC");
+   // TPaveText *pvEta = new TPaveText(0.42,0.54-shift,0.8,0.59-shift,"brNDC");
     TPaveText *pvEta = new TPaveText(0.425,0.54-shift,0.8,0.59-shift,"brNDC");
     pvEta->SetFillStyle(0);
     pvEta->SetBorderSize(0);
     pvEta->SetTextFont(42);
     pvEta->SetTextSize(0.045);
     pvEta->SetTextAlign(11);
-    pvEta->AddText("|#it{#eta}_{lab}^{jet}| < 0.6");
+    pvEta->AddText("|#it{#eta}_{lab}^{jet}| < 0.5");
     //pvEta->AddText("|#it{#eta}_{jet}| < 0.6");
 
     TCanvas *cEff = new TCanvas("cEff","cEff",1000,800);
@@ -163,16 +176,16 @@ void setHistoDetails(TH1 *h, Color_t color, Style_t Mstyle, Size_t size = 0.9, W
     h->SetMarkerSize(size);
     h->SetLineColor(color);
     h->SetLineWidth(width);
-    h->SetTitle(0);
+    h->SetTitle("");
     h->GetXaxis()->SetTitle("p_{T}^{D^{*+}}(GeV/c)");
 
     return;
 
 }
 
-void SaveCanvas(TCanvas *c, string name = "tmp"){
+void SaveCanvas(TCanvas *c, TString name = "tmp"){
 
-    c->SaveAs(Form("%s.png",name.c_str()));
-    c->SaveAs(Form("%s.pdf",name.c_str()));
+    c->SaveAs(name+".png");
+    c->SaveAs(name+".pdf");
 
 }

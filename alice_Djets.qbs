@@ -26,13 +26,21 @@ Project {
         property string pDunfold: "Djets/unfolding/"
         property string pDfinal: "Djets/finalSpectra/"
         property string pDsys: "Djets/systematics/"
+        property string pDprelim: "Djets/Preliminaryplots/"
+
 
         files: [pDcuts+"makeTFile4CutsD0Jet_pp13TeV_BasepPb_normCounter.C",
+                pDcuts+"var/makeTFile4CutsD0Correlations_pp2017_L2.C",
+                pDcuts+"var/makeTFile4CutsD0Correlations_pp2017_L3.C",
+                pDcuts+"var/makeTFile4CutsD0Correlations_pp2017_T1.C",
+                pDcuts+"var/makeTFile4CutsD0Correlations_pp2017_T2.C",
+                pDcuts+"var/makeTFile4CutsD0Correlations_pp2017_T3.C",
 
                 "Djets/configDzero.h",
                 "Djets/run.csh",
                 "Djets/run_main.csh",
                 "Djets/run_analysis.csh",
+                "Djets/run_main_sys.csh",
                 "/home/kvapil/work/analysis/pp_run2/D0jet/compare.cxx",
                 "/home/kvapil/work/analysis/pp_run2/D0jet/compare2.cxx",
                 "/home/kvapil/work/analysis/pp_run2/D0jet/comparefinal.cxx",
@@ -70,7 +78,12 @@ Project {
                 pDsys+"YieldExtraction/AliDJetRawYieldUncertaintyLocal.cxx",
                 pDsys+"YieldExtraction/compareVariationAnalysis.C",
                 pDsys+"YieldExtraction/multitrialJetPtYieldsDBins.C",
+                pDsys+"unfRangesComparisonBayes.C",
+                pDsys+"unfRangesComparisonSVD.C",
+                pDsys+"unfRangesComparison2.C",
                 pDsys+"unfPriorComparison2.C",
+                pDsys+"cutsSystematics.C",
+                pDsys+"JetSpectrumSys.C",
 
                 pDQA+"runQAMC.cxx",
                 pDQA+"OLoader.cxx",
@@ -78,6 +91,10 @@ Project {
                 pDQA+"OCanvas.cxx",
                 pDQA+"OCanvas.h",
 
+                pDprelim+"Performance/D0jet/drawSB.C",
+                pDprelim+"Performance/D0jet/drawSB_jet.C",
+                pDprelim+"efficiency/drawEff.C",
+                pDprelim+"FD/drawFD.C",
 
 
                 pPWGHF+"jetsHF/AliAnalysisTaskDJetCorrelationsQA.cxx",

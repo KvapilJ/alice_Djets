@@ -1,17 +1,27 @@
-#include "style.C"
 #include <string>
 #include <sstream>
 #include <iostream>
+#include "TH1.h"
+#include "TStyle.h"
+#include "TFile.h"
+#include "TLegend.h"
+#include "TPaveText.h"
+#include "TCanvas.h"
+#include "TString.h"
+#include "TStyle.h"
+#include "TROOT.h"
+#include "TF1.h"
+#include "style.C"
 #include <TPDF.h>
 
-setHistoDetails(TH1 *h, Color_t color, Style_t Mstyle, Width_t width);
+void setHistoDetails(TH1 *h, Color_t color, Style_t Mstyle, Width_t width);
 
  double zmin = 0, zmax = 2.;
     double jetmin = 0, jetmax = 50;
     double plotmin = 0, plotmax = 50;
 
-    const int ptbinsDN = 10;
-    float ptDbins[ptbinsDN+1] = { 3,4,5,6,7,8,10,12,16,24,36 };
+    const int ptbinsDN = 11;
+    float ptDbins[ptbinsDN+1] = {2,3,4,5,6,7,8,10,12,16,24,36};
 
     double efficiency[ptbinsDN];// = { 0.0353325, 0.0678059, 0.109101, 0.168871, 0.243708, 0.307365, 0.324496, 0.361858 };
 
@@ -33,15 +43,17 @@ void drawSB()
     gStyle->SetPadTopMargin(0.02);
 
 
-stringstream sst;
-sst.clear(); sst.str("");
+//stringstream sst;
+//sst.clear(); sst.str("");
 
    //TFile *inFile = new TFile("JetPtSpectra_SB_FASTwoSDD_eff_ptD3_rebin.root","read");
-   TFile *inFile = new TFile("/home/jackbauer/Work/alice/analysis/pp5TeV/D0jet/results_cutTight/DzeroR03_def_437_old0/Default/signalExtraction/JetPtSpectra_SB_eff.root"
+  // TFile *inFile = new TFile("/home/jackbauer/Work/alice/analysis/pp5TeV/D0jet/results_cutTight/DzeroR03_def_437_old0/Default/signalExtraction/JetPtSpectra_SB_eff.root"
 // "/home/basia/Work/alice/analysis/pPb_run2/DzeroR03_RefDPt3PythiaEff_BaseCuts/Default_jetMeas3_50_jetTrue3_50_ppbinning/signalExtraction/JetPtSpectra_SB_eff.root"
-,"read");
+//,"read");
+    TFile *inFile = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff.root","read");
 
-     int bin1 = 1, bin2 = 5, bin3 = 7;
+
+     int bin1 = 0, bin2 = 4, bin3 = 8;
 
 
     TH1F *hmean = (TH1F*)inFile->Get("hmean");
@@ -63,7 +75,7 @@ sst.clear(); sst.str("");
 
     for(int i=0; i<ptbinsDN; i++){
             hmass[i] = (TH1F*)inFile->Get(Form("hmass_%d",i));
-            hmass[i]->SetTitle();
+            hmass[i]->SetTitle("");
             hmass[i]->SetMarkerColor(massColor);
             hmass[i]->SetLineColor(massColor);
             hmass[i]->SetMarkerStyle(20);
@@ -81,7 +93,7 @@ sst.clear(); sst.str("");
             hmass[i]->SetMinimum(1);
 
             hmass_l[i] = (TH1F*)inFile->Get(Form("hmass_l_%d",i));
-            hmass_l[i]->SetTitle();
+            hmass_l[i]->SetTitle("");
             hmass_l[i]->SetMarkerColor(massColor);
             hmass_l[i]->SetLineColor(SBColor);
             hmass_l[i]->SetFillColor(SBColor);
@@ -89,7 +101,7 @@ sst.clear(); sst.str("");
             hmass_l[i]->SetLineWidth(1);
 
             hmass_u[i] = (TH1F*)inFile->Get(Form("hmass_u_%d",i));
-            hmass_u[i]->SetTitle();
+            hmass_u[i]->SetTitle("");
             hmass_u[i]->SetMarkerColor(massColor);
             hmass_u[i]->SetLineColor(SBColor);
             hmass_u[i]->SetFillColor(SBColor);
@@ -97,7 +109,7 @@ sst.clear(); sst.str("");
             hmass_u[i]->SetLineWidth(1);
 
             hmass_c[i] = (TH1F*)inFile->Get(Form("hmass_c_%d",i));
-            hmass_c[i]->SetTitle();
+            hmass_c[i]->SetTitle("");
             hmass_c[i]->SetMarkerColor(massColor);
             hmass_c[i]->SetLineColor(signalColor);
             hmass_c[i]->SetFillColor(signalColor);
@@ -130,7 +142,7 @@ sst.clear(); sst.str("");
     hmass[bin2]->GetXaxis()->SetTitleOffset(1.1);
     hmass[bin3]->GetXaxis()->SetTitleOffset(1.1);
 
-    TLegend *legBands = new TLegend(0.18,0.86,0.8,0.95);
+   // TLegend *legBands = new TLegend(0.18,0.86,0.8,0.95);
     TLegend *legBands = new TLegend(0.181,0.86,0.8,0.95);
     legBands->SetTextSize(0.04);
     legBands->AddEntry(hmass_c[0],"Signal region","f");
@@ -164,7 +176,7 @@ sst.clear(); sst.str("");
     pvEn->SetTextAlign(11);
     //pvEn->AddText("p-Pb, #sqrt{#it{s}_{NN}} = 5.02 TeV, 603M events");
     //pvEn->AddText("p-Pb, #sqrt{#it{s}_{NN}} = 5.02 TeV");
-    pvEn->AddText("pp, #sqrt{#it{s}} = 5.02 TeV");
+    pvEn->AddText("pp, #sqrt{#it{s}} = 13 TeV");
 
     //TPaveText *pvD = new TPaveText(0.2,0.85,0.55,0.89,"brNDC");
     //TPaveText *pvD = new TPaveText(0.1795,0.85,0.55,0.89,"brNDC");
@@ -185,7 +197,7 @@ sst.clear(); sst.str("");
     pvJet->SetTextFont(42);
     pvJet->SetTextSize(0.046);
     pvJet->SetTextAlign(11);
-    pvJet->AddText("in charged jets, anti-#it{k}_{T}, #it{R} = 0.3");
+    pvJet->AddText("in charged jets, anti-#it{k}_{T}, #it{R} = 0.4");
 
     //TPaveText *pvEta = new TPaveText(0.2,0.75,0.4,0.79,"brNDC");
     //TPaveText *pvEta = new TPaveText(0.21,0.75,0.4,0.79,"brNDC");
@@ -197,7 +209,7 @@ sst.clear(); sst.str("");
     pvEta->SetTextFont(42);
     pvEta->SetTextSize(0.046);
     pvEta->SetTextAlign(11);
-    pvEta->AddText("|#it{#eta}_{lab}^{jet}| < 0.6");
+    pvEta->AddText("|#it{#eta}_{lab}^{jet}| < 0.5");
     //pvEta->AddText("|#it{#eta}_{jet}| < 0.6");
 
     //TPaveText *pvpt1 = new TPaveText(0.62,0.74,0.9,0.77,"brNDC");
@@ -252,7 +264,8 @@ sst.clear(); sst.str("");
     pvmean1->SetTextFont(42);
     pvmean1->SetTextSize(0.046);
     pvmean1->SetTextAlign(11);
-    pvmean1->AddText(Form("#mu = %.2f #pm %.2f GeV/#it{c}^{2}",hmean->GetBinContent(hmean->FindBin((ptDbins[bin1]+ptDbins[bin1+1])/2. )),hmean->GetBinError(hmean->FindBin((ptDbins[bin1]+ptDbins[bin1+1])/2. ))));
+    pvmean1->AddText(Form("#mu = %.2f #pm %.2f MeV/#it{c}^{2}",1000*hmean->GetBinContent(hmean->FindBin((ptDbins[bin1]+ptDbins[bin1+1])/2. )),1000*hmean->GetBinError(hmean->FindBin((ptDbins[bin1]+ptDbins[bin1+1])/2. ))));
+//std::cout<<hmean->GetBinError(hmean->FindBin((ptDbins[bin1]+ptDbins[bin1+1])/2.))<<std::endl;
 //    pvmean1->AddText(Form("#mu = %.3f #pm 0.001 GeV/#it{c^{2}}",hmean->GetBinContent(hmean->FindBin((ptDbins[bin1]+ptDbins[bin1+1])/2. )),hmean->GetBinError(hmean->FindBin((ptDbins[bin1]+ptDbins[bin1+1])/2. ))));
 
     //TPaveText *pvsigma1 = new TPaveText(0.18,0.63,0.62,0.67,"brNDC");
@@ -293,7 +306,7 @@ sst.clear(); sst.str("");
     pvmean2->SetTextAlign(11);
     //pvmean2->AddText(Form("#mu = %.2f #pm %.2f GeV/#it{c^{2}}",hmean->GetBinContent(hmean->FindBin((ptDbins[bin2]+ptDbins[bin2+1])/2. )),hmean->GetBinError(hmean->FindBin((ptDbins[bin2]+ptDbins[bin2+1])/2. ))));
     //pvmean2->AddText(Form("#mu = %.3f #pm 0.001 GeV/#it{c^{2}}",hmean->GetBinContent(hmean->FindBin((ptDbins[bin2]+ptDbins[bin2+1])/2. ))));
-    pvmean2->AddText(Form("#mu = %.2f #pm %.2f GeV/#it{c}^{2}",hmean->GetBinContent(hmean->FindBin((ptDbins[bin2]+ptDbins[bin2+1])/2. )),hmean->GetBinError(hmean->FindBin((ptDbins[bin2]+ptDbins[bin2+1])/2. ))));
+    pvmean2->AddText(Form("#mu = %.2f #pm %.2f MeV/#it{c}^{2}",1000*hmean->GetBinContent(hmean->FindBin((ptDbins[bin2]+ptDbins[bin2+1])/2. )),1000*hmean->GetBinError(hmean->FindBin((ptDbins[bin2]+ptDbins[bin2+1])/2. ))));
 
     //TPaveText *pvsigma2 = new TPaveText(0.18,0.73,0.62,0.77,"brNDC");
     TPaveText *pvsigma2 = new TPaveText(0.1797,0.735,0.62,0.77,"brNDC");
@@ -329,7 +342,7 @@ sst.clear(); sst.str("");
     pvmean3->SetTextSize(0.046);
     pvmean3->SetTextAlign(11);
     //pvmean3->AddText(Form("#mu = %.3f #pm %.3f GeV/#it{c^{2}}",hmean->GetBinContent(hmean->FindBin((ptDbins[bin3]+ptDbins[bin3+1])/2. )),hmean->GetBinError(hmean->FindBin((ptDbins[bin3]+ptDbins[bin3+1])/2. ))));
-    pvmean3->AddText(Form("#mu = %.2f #pm %.2f GeV/#it{c}^{2}",hmean->GetBinContent(hmean->FindBin((ptDbins[bin3]+ptDbins[bin3+1])/2. )),hmean->GetBinError(hmean->FindBin((ptDbins[bin3]+ptDbins[bin3+1])/2. ))));
+    pvmean3->AddText(Form("#mu = %.2f #pm %.2f MeV/#it{c}^{2}",1000*hmean->GetBinContent(hmean->FindBin((ptDbins[bin3]+ptDbins[bin3+1])/2. )),1000*hmean->GetBinError(hmean->FindBin((ptDbins[bin3]+ptDbins[bin3+1])/2. ))));
 
     //TPaveText *pvsigma3 = new TPaveText(0.18,0.68,0.62,0.72,"brNDC");
     //TPaveText *pvsigma3 = new TPaveText(0.1797,0.68,0.62,0.72,"brNDC");
@@ -429,9 +442,9 @@ void setHistoDetails(TH1 *h, Color_t color, Style_t Mstyle, Size_t size = 0.9, W
 
 }
 
-void SaveCanvas(TCanvas *c, string name = "tmp"){
+void SaveCanvas(TCanvas *c, TString name = "tmp"){
 
-    c->SaveAs(Form("%s.png",name.c_str()));
-    c->SaveAs(Form("%s.pdf",name.c_str()));
+    c->SaveAs(name+".png");
+    c->SaveAs(name+".pdf");
 
 }

@@ -86,7 +86,7 @@ enum DMesonSpecies {kD0toKpi=0, kDStarD0pi=1};
     Int_t fMarkers[] = {20,21,22,23,24,25,26,27,28,29,30,32,33,34};
 
 
-    ///============== POWHEG simulations ============================
+      ///============== POWHEG simulations ============================
     //======= set up here names of your simulation files =======
 /*
     TString fRunB[] = {
@@ -106,7 +106,7 @@ enum DMesonSpecies {kD0toKpi=0, kDStarD0pi=1};
       "AnalysisResults_FastSim_powheg+pythia6+evtgen_beauty_1554379646",	//R2F1
       "AnalysisResults_FastSim_powheg+pythia6+evtgen_beauty_1549618884",	//R0.5F0.5
       "AnalysisResults_FastSim_powheg+pythia6+evtgen_beauty_1554711712",	//R2F2
-      "AnalysisResults_FastSim_powheg+pythia6_beauty_1504197460",	//pdf 21200
+      "AnalysisResults_FastSim_powheg+pythia6+evtgen_beauty_1554808125",	//pdf 21200
       "AnalysisResults_FastSim_powheg+pythia6_beauty_1504199953"	//pdf 10800
     };
 
@@ -134,16 +134,32 @@ enum DMesonSpecies {kD0toKpi=0, kDStarD0pi=1};
 
 
     TString fRunC[] = {
-      "AnalysisResults_FastSim_powheg+pythia6_charm_1549014986"
+      "AnalysisResults_FastSim_powheg+pythia6_charm_1549014986",
+      "AnalysisResults_FastSim_powheg+pythia6_charm_1556529849",
+    "AnalysisResults_FastSim_powheg+pythia6_charm_1556531679",
+    "AnalysisResults_FastSim_powheg+pythia6_charm_1557130640",
+    "AnalysisResults_FastSim_powheg+pythia6_charm_1557131019",
+    "AnalysisResults_FastSim_powheg+pythia6_charm_1557314618",
+    "AnalysisResults_FastSim_powheg+pythia6_charm_1557315004",
+    "AnalysisResults_FastSim_powheg+pythia6_charm_1557483108",
+    "AnalysisResults_FastSim_powheg+pythia6_charm_1557488527",
+    "AnalysisResults_FastSim_powheg+pythia6_charm_1557603973",
+    "AnalysisResults_FastSim_powheg+pythia6_charm_1557651402",
+    "AnalysisResults_FastSim_powheg+pythia6_charm_1557694660",
+    "AnalysisResults_FastSim_powheg+pythia6_charm_1557829599",
     };
     TString fDescC[] = {
       "central",
       "m_{c}=1.3",
       "m_{c}=1.7",
-      "muR=2,muF=2",
+      "muR=0.5,muF=1",
+      "muR=1,muF=0.5",
       "muR=1,muF=2",
       "muR=2,muF=1",
       "muR=0.5,muF=0.5",
-      "muR=1,muF=0.5",
-      "muR=0.5,muF=1"
+      "muR=2,muF=2",
+      "PDF=21200 1",
+         "PDF=21200 2",
+         "PDF=21200 3",
+         "PDF=21200 4",
     };

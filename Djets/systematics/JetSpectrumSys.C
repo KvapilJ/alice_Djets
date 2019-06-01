@@ -6,8 +6,11 @@
 #include "sys.h"
 #include "config.h"
 
+void getRMS(const int nFiles, TH1D **hratio, TH1D *hmean, TH1D *hsys);
+void compareJES(int reg = 3 , TString inDir = "/home/basia/Work/alice/analysis/pPb_run2/DzeroR03_RefDPt3PythiaEff_BaseCuts/Default_jetMeas3_50_jetTrue3_50");
 
-void JetSpectrumSys(int reg=3,  TString inDirBase = "/home/basia/Work/alice/analysis/pPb_run2/DzeroR03_RefDPt3PythiaEff_BaseCuts", TString input = "Default_jetMeas3_50_jetTrue3_50_ppbinning", bool isChain = 1, TString int measmin=3, int measmax=50, int truemin=5, int truemax=50)
+
+void JetSpectrumSys(int reg=3,  TString inDirBase = "/home/basia/Work/alice/analysis/pPb_run2/DzeroR03_RefDPt3PythiaEff_BaseCuts", TString input = "Default_jetMeas3_50_jetTrue3_50_ppbinning", bool isChain = 1, int measmin=2, int measmax=50, int truemin=5, int truemax=50)
 {
 
   if(!isChain) {
@@ -27,7 +30,7 @@ void JetSpectrumSys(int reg=3,  TString inDirBase = "/home/basia/Work/alice/anal
       for(int i=0;i<nJetBins+1;i++) ptJetbins[i] = ptbins[i+2];
     }
     else {
-      cout << "WRONG true minimum pT !!!!" << endl;
+      std::cout << "WRONG true minimum pT !!!!" << std::endl;
       return;
     }
   }
@@ -53,92 +56,107 @@ void JetSpectrumSys(int reg=3,  TString inDirBase = "/home/basia/Work/alice/anal
 return;
 }
 
-void compareJES(int reg = 3 , TString inDir = "/home/basia/Work/alice/analysis/pPb_run2/DzeroR03_RefDPt3PythiaEff_BaseCuts/Default_jetMeas3_50_jetTrue3_50")
+void compareJES(int reg , TString inDir)
 {
-
+std::cout<<"A"<<std::endl;
         gStyle->SetOptStat(0000); //Mean and RMS shown
         gSystem->Exec(Form("mkdir %s/systematics",inDir.Data()));
 
         TFile *outFile = new TFile(Form("%s/systematics/JES_reg%d.root",inDir.Data(),reg),"RECREATE");
 
-        const int nFiles = 4;
-        TString tab[nFiles-1] = { "96", "95","90"};
+        const int nFiles = 2;
+        TString tab[nFiles-1] = { "96"};//, "95","90"};
         TString dirName[nFiles];
         dirName[0] = inDir;
-        dirName[0] += "_JES";
+        dirName[0] += "";
         dirName[0] += "/unfolding_Bayes_";
         dirName[0] += reg;
 
         dirName[1] = inDir;
-        dirName[1] += "_JES96";
+        dirName[1] += "96";
         dirName[1] += "/unfolding_Bayes_";
         dirName[1] += reg;
 
-        dirName[2] = inDir;
-        dirName[2] += "_JES95";
-        dirName[2] += "/unfolding_Bayes_";
-        dirName[2] += reg;
+    //    dirName[2] = inDir;
+     //   dirName[2] += "_JES95";
+     //   dirName[2] += "/unfolding_Bayes_";
+     //   dirName[2] += reg;
 
-        dirName[3] = inDir;
-        dirName[3] += "_JES90";
-        dirName[3] += "/unfolding_Bayes_";
-        dirName[3] += reg;
+     //   dirName[3] = inDir;
+     //   dirName[3] += "_JES90";
+     //   dirName[3] += "/unfolding_Bayes_";
+     //   dirName[3] += reg;
 
-        TString desc[nFiles] = {"central","inefficiency 4%","inefficiency 5%","inefficiency 10%"};
+        TString desc[nFiles] = {"central","inefficiency 4%"};//,"inefficiency 5%","inefficiency 10%"};
 
         double plotmin = ptJetbins[0], plotmax = ptJetbins[nJetBins];
         //  double plotmin = 5;
-
+std::cout<<"B"<<std::endl;
         TFile *fproj[nFiles];
-        for(int i=0; i<nFiles; i++) fproj[i] = new TFile(Form("%s/unfoldedSpectrum_unfoldedJetSpectrum.root",dirName[i].Data()),"READ");
-
+        for(int i=0; i<nFiles; i++){
+            fproj[i]=nullptr;
+            fproj[i] = new TFile(Form("%s/unfoldedSpectrum_unfoldedJetSpectrum.root",dirName[i].Data()),"READ");
+            if(!fproj[i]) std::cout<<"No FILE: "<<Form("%s/unfoldedSpectrum_unfoldedJetSpectrum.root",dirName[i].Data())<<std::endl;
+        }
+std::cout<<"C"<<std::endl;
         TCanvas *cspec = new TCanvas("cspec","cspec",800,600);
         cspec->SetLogy();
 
         TLegend *leg = new TLegend(0.5,0.65,0.85,0.8);
         leg->SetBorderSize(0);
-
-        TH1F *spec[nFiles];
+std::cout<<"D"<<std::endl;
+        TH1D *spec[nFiles];
         for(int i=0; i<nFiles; i++) {
-            spec[i] = (TH1F*)fproj[i]->Get("unfoldedSpectrum");
+            spec[i] = nullptr;
+            spec[i] = (TH1D*)fproj[i]->Get("unfoldedSpectrum");
+            if(!spec[i]) std::cout<<"Did not get histo unfoldedSpectrum from "<<Form("%s/unfoldedSpectrum_unfoldedJetSpectrum.root",dirName[i].Data())<<std::endl;
             spec[i]->Sumw2();
             spec[i] -> Scale(1,"width");
-            spec[i]->SetTitle();
-            spec[i]->SetLineColor(colors[i]);
-            spec[i]->SetMarkerColor(colors[i]);
-            spec[i]->SetMarkerStyle(markers[i]);
+            spec[i]->SetTitle("");
+            //spec[i]->SetLineColor(colors[i]);
+            //spec[i]->SetMarkerColor(colors[i]);
+            //spec[i]->SetMarkerStyle(markers[i]);
+            if(i==0){
+                spec[i]->SetLineColor(kRed);
+                spec[i]->SetMarkerColor(kRed);
+                spec[i]->SetMarkerStyle(22);
+            }else{
+                spec[i]->SetLineColor(kBlue);
+                spec[i]->SetMarkerColor(kBlue);
+                spec[i]->SetMarkerStyle(23);
+            }
           //  spec[i]->GetXaxis()->SetRangeUser(plotmin,plotmax);
             if(!i) spec[i]->Draw();
             else spec[i]->Draw("same");
             leg->AddEntry(spec[i],desc[i].Data());
         }
         leg->Draw("same");
-
+std::cout<<"E"<<std::endl;
       cspec->SaveAs(Form("%s/systematics/JES_reg%d.pdf",inDir.Data(),reg));
       cspec->SaveAs(Form("%s/systematics/JES_reg%d.png",inDir.Data(),reg));
 
 
-        TH1F *hratio[nFiles-1];
-        TH1F *hratiof[nFiles-1];
+        TH1D *hratio[nFiles-1];
+        TH1D *hratiof[nFiles-1];
         TF1 *fr[nFiles-1];
         for(int i=0; i<nFiles-1; i++){
-            hratio[i] = (TH1F*)spec[i+1]->Clone( Form("hratio_%d",i));
+            hratio[i] = (TH1D*)spec[i+1]->Clone( Form("hratio_%d",i));
           	hratio[i] -> Divide(spec[i+1],spec[0],1,1,"b");
             hratio[i]->SetLineStyle(linestyle[i]);
             hratio[i]->GetXaxis()->SetRangeUser(plotmin,plotmax);
-            hratio[i]->GetYaxis()->SetRangeUser(0.82,1.1);
+            hratio[i]->GetYaxis()->SetRangeUser(0.95,1.2);
             hratio[i]->GetYaxis()->SetTitle(Form("ratio to central (%s)",desc[0].Data()));
 
             fr[i] = new TF1(Form("fr_%d",i),"[0]*x+[1]",4,plotmax);
             fr[i]->SetLineStyle(1);
             fr[i]->SetLineWidth(2);
-            fr[i]->SetLineColor(colors[i+1]);
+            fr[i]->SetLineColor(kRed);
             hratio[i]->Fit(fr[i],"EM0","",6,plotmax);
 
             double value = 0;
-            hratiof[i] = (TH1F*)hratio[i]->Clone(Form("hratiof_%d",i));
+            hratiof[i] = (TH1D*)hratio[i]->Clone(Form("hratiof_%d",i));
             for(int j=0; j<hratio[i]->GetNbinsX();j++){
-                value = (1 - fr[i]->Eval(hratio[i]->GetBinCenter(j+1))) *100;
+                value = TMath::Abs(1 - fr[i]->Eval(hratio[i]->GetBinCenter(j+1))) *100;
                 hratiof[i]->SetBinContent(j+1,value);
                 //if(!i)cout << "bin: " << j+1 << "\t\t 4% value in: " << hratio[i]->GetBinCenter(j+1) << ":\t\t" << value << endl;
             }
@@ -147,13 +165,13 @@ void compareJES(int reg = 3 , TString inDir = "/home/basia/Work/alice/analysis/p
           //  hratiof[i]->Write();
 
         }
-
+std::cout<<"F"<<std::endl;
         TLegend *leg2 = new TLegend(0.6,0.65,0.85,0.85);
         leg2->SetBorderSize(0);
         TCanvas *cspec2 = new TCanvas("cspec2","cspec2",800,400);
         for(int i=0; i<nFiles-1; i++){
             hratio[i]->GetXaxis()->SetRangeUser(5,plotmax);
-            hratio[i]->GetYaxis()->SetRangeUser(0.82,1.1);
+            hratio[i]->GetYaxis()->SetRangeUser(0.95,1.2);
 
             if(!i) hratio[i]->Draw();
             else hratio[i]->Draw("same");
@@ -161,20 +179,20 @@ void compareJES(int reg = 3 , TString inDir = "/home/basia/Work/alice/analysis/p
             leg2->AddEntry(hratio[i],desc[i+1].Data());
         }
         leg2->Draw("same");
-
+std::cout<<"G"<<std::endl;
         TLine *line = new TLine(5,1,plotmax,1);
         line->SetLineStyle(2);
         line->SetLineWidth(2);
         line->Draw("same");
-
+std::cout<<"GG"<<std::endl;
         cspec2->SaveAs(Form("%s/systematics/JES_reg%d_ratio.pdf",inDir.Data(),reg));
         cspec2->SaveAs(Form("%s/systematics/JES_reg%d_ratio.png",inDir.Data(),reg));
-
+std::cout<<"GGG"<<std::endl;
         outFile->cd();
         hratiof[0]->Write();
-        hratiof[1]->Write();
-        hratiof[2]->Write();
-
+     //   hratiof[1]->Write();
+     //   hratiof[2]->Write();
+std::cout<<"H"<<std::endl;
     TCanvas *cspecf2 = new TCanvas("cspecf2","cspecf2",800,400);
     for(int i=0; i<nFiles-1; i++){
         hratiof[i]->GetYaxis()->SetRangeUser(0,20);
@@ -185,9 +203,9 @@ void compareJES(int reg = 3 , TString inDir = "/home/basia/Work/alice/analysis/p
         else hratiof[i]->Draw("same");
     }
     leg2->Draw("same");
-
+std::cout<<"I"<<std::endl;
     for(int j=0; j<hratiof[0]->GetNbinsX();j++){
-        cout << "bin: " << j+1 << "\t\t 4% value in: " << hratiof[0]->GetBinCenter(j+1) << ":\t\t" << hratiof[0]->GetBinContent(j+1) << endl;
+        std::cout << "bin: " << j+1 << "\t\t 4% value in: " << hratiof[0]->GetBinCenter(j+1) << ":\t\t" << hratiof[0]->GetBinContent(j+1) << std::endl;
     }
 
     cspecf2->SaveAs(Form("%s/systematics/JES_reg%d_unc.pdf",inDir.Data(),reg));
@@ -240,12 +258,12 @@ void compareReg(TString inDir = "/home/basia/Work/alice/analysis/pPb_run2/DzeroR
             TLegend *leg = new TLegend(0.5,0.6,0.85,0.8);
             leg->SetBorderSize(0);
 
-            TH1F *spec[nFiles];
+            TH1D *spec[nFiles];
             for(int i=0; i<nFiles; i++) {
-                spec[i] = (TH1F*)fproj[i]->Get("unfoldedSpectrum");
+                spec[i] = (TH1D*)fproj[i]->Get("unfoldedSpectrum");
                 spec[i]->Sumw2();
                 spec[i] -> Scale(1,"width");
-                spec[i]->SetTitle();
+                spec[i]->SetTitle("");
                 spec[i]->SetLineColor(colors[i]);
                 spec[i]->SetMarkerColor(colors[i]);
                 spec[i]->SetMarkerStyle(markers[i]);
@@ -262,9 +280,9 @@ void compareReg(TString inDir = "/home/basia/Work/alice/analysis/pPb_run2/DzeroR
 
             leg2->SetBorderSize(0);
             TCanvas *cspec2 = new TCanvas("cspec2","cspec2",800,400);
-            TH1F *hratio[nFiles-1];
+            TH1D *hratio[nFiles-1];
             for(int i=0; i<nFiles-1; i++){
-                hratio[i] = (TH1F*)spec[i+1]->Clone( Form("hratio_%d",i));
+                hratio[i] = (TH1D*)spec[i+1]->Clone( Form("hratio_%d",i));
                 hratio[i]->Divide(spec[0]);
                 hratio[i]->SetLineStyle(linestyle[i]);
                 hratio[i]->GetXaxis()->SetRangeUser(plotmin,plotmax);
@@ -334,12 +352,12 @@ void comparePriors(int reg = 4 , TString inDir = "/home/basia/Work/alice/analysi
         TLegend *leg = new TLegend(0.5,0.6,0.85,0.8);
         leg->SetBorderSize(0);
 
-        TH1F *spec[nFiles];
+        TH1D *spec[nFiles];
         for(int i=0; i<nFiles; i++) {
-            spec[i] = (TH1F*)fproj[i]->Get("unfoldedSpectrum");
+            spec[i] = (TH1D*)fproj[i]->Get("unfoldedSpectrum");
             spec[i]->Sumw2();
             spec[i] -> Scale(1,"width");
-            spec[i]->SetTitle();
+            spec[i]->SetTitle("");
             spec[i]->SetLineColor(colors[i]);
             spec[i]->SetMarkerColor(colors[i]);
             spec[i]->SetMarkerStyle(markers[i]);
@@ -356,9 +374,9 @@ void comparePriors(int reg = 4 , TString inDir = "/home/basia/Work/alice/analysi
         TLegend *leg2 = new TLegend(0.55,0.5,0.9,0.88);
         leg2->SetBorderSize(0);
         TCanvas *cspec2 = new TCanvas("cspec2","cspec2",800,400);
-        TH1F *hratio[nFiles-1];
+        TH1D *hratio[nFiles-1];
         for(int i=0; i<nFiles-1; i++){
-            hratio[i] = (TH1F*)spec[i+1]->Clone( Form("hratio_%d",i));
+            hratio[i] = (TH1D*)spec[i+1]->Clone( Form("hratio_%d",i));
             hratio[i]->Divide(spec[0]);
             hratio[i]->SetLineStyle(linestyle[i]);
             hratio[i]->GetXaxis()->SetRangeUser(plotmin,plotmax);
@@ -379,8 +397,8 @@ void comparePriors(int reg = 4 , TString inDir = "/home/basia/Work/alice/analysi
         cspec2->SaveAs(Form("%s/systematics/PriorComparison_reg%d_ratio.pdf",inDir.Data(),reg));
         cspec2->SaveAs(Form("%s/systematics/PriorComparison_reg%d_ratio.png",inDir.Data(),reg));
 
-        TH1F *hsys = new TH1F("hsys","syst. rms; p_{T,ch jet};  sys [%] (rms)",nJetBins,ptJetbins);
-        TH1F *hmean = (TH1F*)hsys->Clone("hmean");
+        TH1D *hsys = new TH1D("hsys","syst. rms; p_{T,ch jet};  sys [%] (rms)",nJetBins,ptJetbins);
+        TH1D *hmean = (TH1D*)hsys->Clone("hmean");
         getRMS(nFiles,hratio,hmean,hsys);
 
         hsys->GetYaxis()->SetRangeUser(0,10);
@@ -452,12 +470,12 @@ void FDsys(int reg = 3 , TString inDir = "/home/basia/Work/alice/analysis/pPb_ru
         TLegend *leg = new TLegend(0.5,0.65,0.85,0.8);
         leg->SetBorderSize(0);
 
-        TH1F *spec[nFiles];
+        TH1D *spec[nFiles];
         for(int i=0; i<nFiles; i++) {
-            spec[i] = (TH1F*)fproj[i]->Get("unfoldedSpectrum");
+            spec[i] = (TH1D*)fproj[i]->Get("unfoldedSpectrum");
             spec[i]->Sumw2();
             spec[i] -> Scale(1,"width");
-            spec[i]->SetTitle();
+            spec[i]->SetTitle("");
             spec[i]->SetLineColor(colors[i]);
             spec[i]->SetMarkerColor(colors[i]);
             spec[i]->SetMarkerStyle(markers[i]);
@@ -474,11 +492,11 @@ void FDsys(int reg = 3 , TString inDir = "/home/basia/Work/alice/analysis/pPb_ru
         TLegend *leg2 = new TLegend(0.6,0.3,0.85,0.45);
         leg2->SetBorderSize(0);
         TCanvas *cspec2 = new TCanvas("cspec2","cspec2",800,400);
-        TH1F *hratio[nFiles-1];
-        TH1F *hratiof[nFiles-1];
+        TH1D *hratio[nFiles-1];
+        TH1D *hratiof[nFiles-1];
 
         for(int i=0; i<nFiles-1; i++){
-            hratio[i] = (TH1F*)spec[i+1]->Clone( Form("hratio_%d",i));
+            hratio[i] = (TH1D*)spec[i+1]->Clone( Form("hratio_%d",i));
             hratio[i]->Divide(spec[0]);
             hratio[i]->SetLineStyle(linestyle[i]);
             hratio[i]->GetXaxis()->SetRangeUser(plotmin,plotmax);
@@ -501,7 +519,7 @@ void FDsys(int reg = 3 , TString inDir = "/home/basia/Work/alice/analysis/pPb_ru
 
 
 //-------------- FD uncertanties
-TH1D *hFDUnc = (TH1D*)*spec[0]->Clone("hDFUnc");
+TH1D *hFDUnc = (TH1D*)spec[0]->Clone("hDFUnc");
 hFDUnc->GetYaxis()->SetTitle("FD sys. unc [%]");
 hFDUnc->SetLineColor(kViolet+1);
 for(int j=1; j<=nJetBins; j++ ){
@@ -577,12 +595,12 @@ void compareBkgM(int reg = 4 , TString inDir = "/home/basia/Work/alice/analysis/
     TLegend *leg = new TLegend(0.5,0.45,0.85,0.85);
     leg->SetBorderSize(0);
 
-    TH1F *spec[nFiles];
+    TH1D *spec[nFiles];
     for(int i=0; i<nFiles; i++) {
-        spec[i] = (TH1F*)fproj[i]->Get("unfoldedSpectrum");
+        spec[i] = (TH1D*)fproj[i]->Get("unfoldedSpectrum");
         spec[i]->Sumw2();
         spec[i] -> Scale(1,"width");
-        spec[i]->SetTitle();
+        spec[i]->SetTitle("");
         spec[i]->SetLineColor(colors[i]);
         spec[i]->SetMarkerColor(colors[i]);
         spec[i]->SetMarkerStyle(markers[i]);
@@ -599,9 +617,9 @@ void compareBkgM(int reg = 4 , TString inDir = "/home/basia/Work/alice/analysis/
     TLegend *leg2 = new TLegend(0.55,0.5,0.9,0.88);
     leg2->SetBorderSize(0);
     TCanvas *cspec2 = new TCanvas("cspec2","cspec2",800,400);
-    TH1F *hratio[nFiles-1];
+    TH1D *hratio[nFiles-1];
     for(int i=0; i<nFiles-1; i++){
-        hratio[i] = (TH1F*)spec[i+1]->Clone( Form("hratio_%d",i));
+        hratio[i] = (TH1D*)spec[i+1]->Clone( Form("hratio_%d",i));
         hratio[i]->Divide(spec[0]);
         hratio[i]->SetLineStyle(linestyle[i]);
         hratio[i]->GetXaxis()->SetRangeUser(plotmin,plotmax);
@@ -622,8 +640,8 @@ void compareBkgM(int reg = 4 , TString inDir = "/home/basia/Work/alice/analysis/
     cspec2->SaveAs(Form("%s/systematics/BkgComparison_reg%d_ratio.pdf",inDir.Data(),reg));
     cspec2->SaveAs(Form("%s/systematics/BkgComparison_reg%d_ratio.png",inDir.Data(),reg));
 
-    TH1F *hsys = new TH1F("hsys","syst. rms; p_{T,ch jet};  sys [%] (rms)",nJetBins,ptJetbins);
-    TH1F *hmean = (TH1F*)hsys->Clone("hmean");
+    TH1D *hsys = new TH1D("hsys","syst. rms; p_{T,ch jet};  sys [%] (rms)",nJetBins,ptJetbins);
+    TH1D *hmean = (TH1D*)hsys->Clone("hmean");
     getRMS(nFiles,hratio,hmean,hsys);
 
     hsys->GetYaxis()->SetRangeUser(0,6);
@@ -762,11 +780,11 @@ else{
 }
 
 
-void getRMS(const int nFiles, TH1F **hratio, TH1F *hmean, TH1F *hsys)
+void getRMS(const int nFiles, TH1D **hratio, TH1D *hmean, TH1D *hsys)
 {
 
   //TH1D *hsys = new TH1D("hsys","syst. rms; p_{T,ch jet};  sys [%] (rms)",nJetBins,ptJetbins);
-  hsys->SetTitle();
+  hsys->SetTitle("");
   hsys->SetLineColor(1);
   hsys->SetLineWidth(2);
   hsys->SetLineStyle(2);
@@ -777,12 +795,12 @@ void getRMS(const int nFiles, TH1F **hratio, TH1F *hmean, TH1F *hsys)
   hsys->GetYaxis()->SetLabelSize(0.05);
   hsys->GetYaxis()->SetTitleOffset(0.8);
 
-  //hmean = (TH1F*)hsys->Clone("hmean");
+  //hmean = (TH1D*)hsys->Clone("hmean");
   hmean->GetYaxis()->SetTitle("mean");
 //  hmean->GetYaxis()->SetRangeUser(0.95,1.1);
   hmean->SetMarkerStyle(20);
   hmean->SetLineStyle(1);
-  hmean->SetTitle();
+  hmean->SetTitle("");
 
   double *rms = new double[nJetBins];
   double *mean = new double[nJetBins];
@@ -808,8 +826,8 @@ void getRMS(const int nFiles, TH1F **hratio, TH1F *hmean, TH1F *hsys)
       hsys->SetBinContent(i+1,rms[i]*100);
 
       hmean->SetBinContent(i+1,mean[i]);
-      cout << "RMS pT " << (ptJetbins[i]+ptJetbins[i+1])/2. << " GeV/c:\t" << rms[i]*100 << endl;
-      cout << "Mean pT " << (ptJetbins[i]+ptJetbins[i+1])/2. << " GeV/c:\t" << mean[i] << endl;
+      std::cout << "RMS pT " << (ptJetbins[i]+ptJetbins[i+1])/2. << " GeV/c:\t" << rms[i]*100 << std::endl;
+      std::cout << "Mean pT " << (ptJetbins[i]+ptJetbins[i+1])/2. << " GeV/c:\t" << mean[i] << std::endl;
   }
 
 }
