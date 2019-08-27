@@ -48,10 +48,10 @@ void signalExtraction_SB(
     if (fObservable == Observable::kXsection){
         ptbinsDN_=fptbinsDN;
         ptbinsDA_=fptbinsDA;
-        jetmin = fptbinsJetMeasA[0];
-        jetmax = fptbinsJetMeasA[fptbinsJetMeasN];
-        jetplotmin = fptbinsJetMeasA[0];
-        jetplotmax = fptbinsJetMeasA[fptbinsJetMeasN];
+        jetmin = 5;
+        jetmax = 50;
+        jetplotmin = 5;
+        jetplotmax = 50;
     }
     else if (fObservable == Observable::kFragmentation){
         ptbinsDN_=fzptbinsDN[zBin-1];
@@ -135,6 +135,8 @@ void signalExtraction_SB(
           sparse = dynamic_cast<THnSparseF*>(histList->FindObject("hsDphiz"));
           sparse->GetAxis(0)->SetRangeUser(zmin,zmax);
           sparse->GetAxis(1)->SetRangeUser(jetmin,jetmax);
+          sparse->GetAxis(2)->SetRangeUser(2,36); //Nima
+          sparse->GetAxis(5)->SetRangeUser(-0.5,0.5); //Nima
           if(isEta) sparse->GetAxis(5)->SetRangeUser(-jetEta,jetEta);
           if (fObservable == Observable::kXsection){
             if(i==0) hInvMassptD=dynamic_cast<TH3D*>(sparse->Projection(3,1,2));
@@ -832,7 +834,7 @@ void  saveSpectraPlots(TString outdir,TString prod){
       }
       hjetptspectrumRebEvntScaled->Scale(1./nEvents);
       setHistoDetails(hjetptspectrumReb,0,kBlue,20,static_cast<Size_t>(1.2)); // with bin width scaling
-      setHistoDetails(hjetptspectrumRebScaled,1,kBlue,20,static_cast<Size_t>(1.2)); // with bin width scaling
+      setHistoDetails(hjetptspectrumRebScaled,0,kBlue,20,static_cast<Size_t>(1.2)); // with bin width scaling
       setHistoDetails(hjetptspectrumRebEvntScaled,1,kBlue,20,static_cast<Size_t>(1.2)); // with bin width scaling
       setHistoDetails(hSignalEffcor,0,kBlue,20,static_cast<Size_t>(1.2));
       if(fObservable == Observable::kXsection){

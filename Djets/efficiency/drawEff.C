@@ -16,12 +16,33 @@ Color_t nonpromptColor = kBlue+1;
 void drawEff(TString promptFile = "DjetEff_prompt_jetpt2_50", TString nonpromptFile = "DjetEff_nonPrompt_jetpt2_50",
 TString outDir = "plots",
 double jetptmin = 5, double jetptmax = 50,
-double plotmin = 2, double plotmax = 36)
+double plotmin = 2, double plotmax = 36,
+Int_t zbin=0)
 {
 
     gStyle->SetOptStat(000);
 
-    plotmin = fptbinsDA[0];
+    if (fObservable == Observable::kXsection){
+        plotmin = fptbinsDA[0];
+    }
+    else if (fObservable == Observable::kFragmentation){
+        //std::cout<<"Modifying files name"<<std::endl;
+        //std::cout<<zbin<<" "<<jetptmin<<" "<<fzptJetMeasA[zbin-1]<<" "<<jetptmax<<" "<<fzptJetMeasA[zbin]<<std::endl;
+        //promptFile.ReplaceAll(Form("%d.", static_cast<int>(jetptmax)),Form("%d.", static_cast<int>(fzptJetMeasA[zbin])));
+        //promptFile.ReplaceAll(Form("%d_", static_cast<int>(jetptmin)),Form("%d_", static_cast<int>(fzptJetMeasA[zbin-1])));
+        //nonpromptFile.ReplaceAll(Form("%d.", static_cast<int>(jetptmax)),Form("%d.", static_cast<int>(fzptJetMeasA[zbin])));
+        //nonpromptFile.ReplaceAll(Form("%d_", static_cast<int>(jetptmin)),Form("%d_", static_cast<int>(fzptJetMeasA[zbin-1])));
+        std::cout<<promptFile<<std::endl;
+        std::cout<<nonpromptFile<<std::endl;
+        plotmin = fzptbinsDA[zbin-1][0];
+        plotmax = fzptbinsDA[zbin-1][fzptbinsDN[zbin-1]];
+        jetptmin=fzptJetMeasA[zbin-1];
+        jetptmax=fzptJetMeasA[zbin];
+        std::cout<<"plot min: "<<plotmin<<" plot max "<<plotmax<<std::endl;
+
+    }
+
+
 
     TFile *inFilePrompt = new TFile(promptFile.Data(),"read");
     TFile *inFileFD = new TFile(nonpromptFile.Data(),"read");
@@ -132,9 +153,9 @@ double plotmin = 2, double plotmax = 36)
         leg->Draw("same");
 
 
-        cEff->SaveAs(Form("%s/DjetEff_Sim_log.pdf",outDir.Data()));
-        cEff->SaveAs(Form("%s/DjetEff_Sim_log.png",outDir.Data()));
-        cEff->SaveAs(Form("%s/DjetEff_Sim_log.svg",outDir.Data()));
+        cEff->SaveAs(Form("%s/DjetEff_Sim_log_jetpt%d_%d.pdf",outDir.Data(), static_cast<int>(jetptmin),static_cast<int>(jetptmax)));
+        cEff->SaveAs(Form("%s/DjetEff_Sim_log_jetpt%d_%d.png",outDir.Data(), static_cast<int>(jetptmin),static_cast<int>(jetptmax)));
+        cEff->SaveAs(Form("%s/DjetEff_Sim_log_jetpt%d_%d.svg",outDir.Data(), static_cast<int>(jetptmin),static_cast<int>(jetptmax)));
 
 
     TCanvas *cEff2 = new TCanvas("cEff2","cEff2",800,600);
@@ -143,8 +164,8 @@ double plotmin = 2, double plotmax = 36)
     hEffNonPrompt->Draw("same");
 
 
-    cEff2->SaveAs(Form("%s/DjetEff_Sim.pdf",outDir.Data()));
-    cEff2->SaveAs(Form("%s/DjetEff_Sim.png",outDir.Data()));
-    cEff2->SaveAs(Form("%s/DjetEff_Sim.svg",outDir.Data()));
+    cEff2->SaveAs(Form("%s/DjetEff_Sim_jetpt%d_%d.pdf",outDir.Data(), static_cast<int>(jetptmin),static_cast<int>(jetptmax)));
+    cEff2->SaveAs(Form("%s/DjetEff_Sim_jetpt%d_%d.png",outDir.Data(), static_cast<int>(jetptmin),static_cast<int>(jetptmax)));
+    cEff2->SaveAs(Form("%s/DjetEff_Sim_jetpt%d_%d.svg",outDir.Data(), static_cast<int>(jetptmin),static_cast<int>(jetptmax)));
 
 }

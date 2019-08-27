@@ -156,8 +156,8 @@ std::cout<<ptvaltheory[j]<<" "<<ptvalunctheory[j]<<" "<<valuetheoryerrup[j]<<" "
     //leg->SetTextSize(0.045);
     leg->SetTextFont(42);
     leg->SetTextSize(0.045);
-    leg->AddEntry(hFD_ratio,"Raw B Feed Down Fraction","p");
-    leg->AddEntry(hFD_ratio_err,"POWHEG Systematics Uncertainty","F");
+    leg->AddEntry(hFD_ratio,"B Feed-Down Fraction","p");
+    leg->AddEntry(hFD_ratio_err,"POWHEG Systematic Uncertainty","F");
 /*
     TPaveText *pvALICE = new TPaveText(0.15,0.85,0.8,0.9,"brNDC");
     pvALICE->SetFillStyle(0);

@@ -9,6 +9,7 @@
 #include "config.h"
 
 double plotmin = 0, plotmax = 50;
+Int_t fBin;
 
 
 const double simScaling =  APb;
@@ -32,7 +33,7 @@ TH1* GetDownSys(TH1D **hFD, const int nFiles, TH1D *hFD_down);
 
 void plotSimSpectra(int quark = 1, bool jet = 1, bool isDptcut = 1, bool isEff = 0,
 TString outHistDir = "out", TString outPlotDir = "plots",
-bool isjetptcut = 0, double jetptmin = 5, double jetptmax = 30 )
+bool isjetptcut = 0, double jetptmin = 5, double jetptmax = 30, Int_t zBin=0 )
 {
 
   /*  gStyle->SetPadBottomMargin(0.1); //margins...
@@ -40,6 +41,7 @@ bool isjetptcut = 0, double jetptmin = 5, double jetptmax = 30 )
     gStyle->SetPadLeftMargin(0.08);
     gStyle->SetPadRightMargin(0.04);*/
     gStyle->SetOptStat(0000);
+    fBin=zBin;
 
     TString outh = outPlotDir;
     outh += "/plots";
@@ -62,29 +64,47 @@ bool isjetptcut = 0, double jetptmin = 5, double jetptmax = 30 )
       //  file += "_";
         if(quark == 0) file += fRunC[nr];
         else if(quark == 1) file += fRunB[nr];
+        if(fObservable == Observable::kXsection){
         if(jet) {
              if(isDptcut) { file += "_Dpt"; file += fptbinsDA[0]; file += "_"; file += fptbinsDA[fptbinsDN];  }
         }
         else {
             if(isjetptcut) { file += "_Jetpt"; file +=  jetptmin; file += "_"; file += jetptmax;  }
         }
+        }
+        if(fObservable == Observable::kFragmentation){
+            file += "_Dpt"; file +=  fzptbinsDA[zBin-1][0]; file += "_"; file += fzptbinsDA[zBin-1][fzptbinsDN[zBin-1]];
+            file += "_Jetpt"; file +=  fzptJetMeasA[zBin-1]; file += "_"; file += fzptJetMeasA[zBin];
+        }
         if(jet && isEff) file += "_effScaled";
         if(fDmesonSpecie) file += "_Dstar";
         else file += "_Dzero";
         file += ".root";
         TH1D *htmp;
-        htmp = (TH1D*) GetInputHist(file, "hPt", htmp);
+        if(fObservable == kXsection){
+            htmp = (TH1D*) GetInputHist(file, "hPt", htmp);
+            htmp->GetYaxis()->SetTitle("d#sigma/dp_{T} (mb)");
+            hSpectrum[nr] = (TH1D*)htmp->Clone(Form("hSpectrum_%d",nr));
+            hSpectrum_binned[nr] = (TH1D*)htmp->Rebin(fptbinsJetTrueN,Form("hSpectrum_binned_%d",nr),fptbinsJetTrueA);
+        }
+        else if(fObservable == kFragmentation){
+            htmp = (TH1D*) GetInputHist(file, "hz", htmp);
+            htmp->GetYaxis()->SetTitle("d#sigma/dz (mb)");
+            hSpectrum[nr] = (TH1D*)htmp->Clone(Form("hSpectrum_%d",nr));
+            hSpectrum_binned[nr] = (TH1D*)htmp->Rebin(fzbinsJetTrueN,Form("hSpectrum_binned_%d",nr),fzbinsJetTrueA);
+        }
         //htmp->Scale(sigma_c[nr]);
-        htmp->GetYaxis()->SetTitle("d#sigma/dp_{T} (mb)");
-        hSpectrum[nr] = (TH1D*)htmp->Clone(Form("hSpectrum_%d",nr));
-        hSpectrum_binned[nr] = (TH1D*)htmp->Rebin(fptbinsJetTrueN,Form("hSpectrum_binned_%d",nr),fptbinsJetTrueA);
+
+
 
     }
 
     int cent = 0;
     TH1D *htmp = (TH1D*)(hSpectrum[cent]->Clone("htmp"));
     TH1D *hSpectrum_central = (TH1D*)htmp->Clone("hSpectrum_central");
-    TH1D *hSpectrum_central_binned = (TH1D*)htmp->Rebin(fptbinsJetTrueN,"hSpectrum_central_binned",fptbinsJetTrueA);
+    TH1D *hSpectrum_central_binned =nullptr;
+    if(fObservable == kXsection)hSpectrum_central_binned = (TH1D*)htmp->Rebin(fptbinsJetTrueN,"hSpectrum_central_binned",fptbinsJetTrueA);
+    if(fObservable == kFragmentation)hSpectrum_central_binned = (TH1D*)htmp->Rebin(fzbinsJetTrueN,"hSpectrum_central_binned",fzbinsJetTrueA);
 
     setHistoDetails(hSpectrum_central,4,24);
     setHistoDetails(hSpectrum_central_binned,4,24);
@@ -92,7 +112,11 @@ bool isjetptcut = 0, double jetptmin = 5, double jetptmax = 30 )
     hSpectrum_central->Scale(simScaling);
     hSpectrum_central_binned->Scale(simScaling);
     hSpectrum_central_binned->Scale(1,"width");
-    if(jet) hSpectrum_central_binned->GetXaxis()->SetTitle("p_{T}^{ch,jet} (GeV/c)");
+    if(jet){
+        if(fObservable == kXsection)hSpectrum_central_binned->GetXaxis()->SetTitle("p_{T}^{ch,jet} (GeV/c)");
+        if(fObservable == kFragmentation)hSpectrum_central_binned->GetXaxis()->SetTitle("z^{ch,jet}");
+
+    }
     else hSpectrum_central_binned->GetXaxis()->SetTitle("p_{T}^{D*} (GeV/c)");
 
     // ----------------- up/down bands ---------------------
@@ -110,8 +134,9 @@ bool isjetptcut = 0, double jetptmin = 5, double jetptmax = 30 )
     hSpectrum_down->Scale(1,"width");
 
      // ======================= compare spectra ============================
+    if(fObservable == Observable::kXsection){
      if(quark == 0) {
-         outh+="/Promptspectra_";
+        outh+="/Promptspectra_";
          if(jet) {
              outh += "JetPt";
              if(isDptcut) { outh += "_Dpt"; outh += fptbinsDA[0]; outh += "_"; outh += fptbinsDA[fptbinsDN];  }
@@ -123,7 +148,7 @@ bool isjetptcut = 0, double jetptmin = 5, double jetptmax = 30 )
 
       }
       else if(quark == 1) {
-           outh+="/NonPromptspectra_";
+         outh+="/Promptspectra_";
            if(jet) {
                outh += "JetPt";
                if(isDptcut) { outh += "_Dpt"; outh += fptbinsDA[0]; outh += "_"; outh += fptbinsDA[fptbinsDN];  }
@@ -134,6 +159,21 @@ bool isjetptcut = 0, double jetptmin = 5, double jetptmax = 30 )
                if(isjetptcut) { outh += "_Jetpt"; outh +=  jetptmin; outh += "_"; outh += jetptmax;  }
            }
       }
+    }
+    if(fObservable == Observable::kFragmentation){
+     if(quark == 0) {
+         outh+="/PromptZspectra_";
+         outh += "_Jetpt"; outh +=  fzptJetMeasA[zBin-1]; outh += "_"; outh += fzptJetMeasA[zBin];
+         outh += "_Dpt"; outh += fzptbinsDA[zBin-1][0]; outh += "_"; outh += fzptbinsDA[zBin-1][fzptbinsDN[zBin-1]];
+         if(isEff) outh += "_effScaled";
+      }
+      else if(quark == 1) {
+            outh+="/NonPromptZspectra_";
+            outh += "_Jetpt"; outh +=  fzptJetMeasA[zBin-1]; outh += "_"; outh += fzptJetMeasA[zBin];
+            outh += "_Dpt"; outh += fzptbinsDA[zBin-1][0]; outh += "_"; outh += fzptbinsDA[zBin-1][fzptbinsDN[zBin-1]];
+            if(isEff) outh += "_effScaled";
+    }
+    }
 
       if(nFiles > 1) compareSpectra(hSpectrum_binned,nFiles, jet, quark, outh);
 
@@ -153,7 +193,10 @@ TH1* GetUpSys(TH1D **hFD, const int nFiles, TH1D *hFD_up){
 
         double bin = 0, binerr = 0;
         double max = 0, maxerr = 0;
-        for(int j=1; j<=fptbinsJetTrueN; j++ ){
+        Int_t ObsN = 0;
+        if(fObservable == Observable::kXsection) ObsN=fptbinsJetTrueN;
+        if(fObservable == Observable::kFragmentation) ObsN=fzbinsJetTrueN;
+        for(int j=1; j<=ObsN; j++ ){
             max = hFD[0]->GetBinContent(j);
             for(int i=1;i<nFiles;i++){
                 if(hFD[i]->GetBinContent(j) > max){
@@ -171,7 +214,10 @@ TH1* GetDownSys(TH1D **hFD, const int nFiles, TH1D *hFD_down){
 
         double bin = 0, binerr = 0;
         double max = 0, maxerr = 0;
-        for(int j=1; j<=fptbinsJetTrueN; j++ ){
+        Int_t ObsN = 0;
+        if(fObservable == Observable::kXsection) ObsN=fptbinsJetTrueN;
+        if(fObservable == Observable::kFragmentation) ObsN=fzbinsJetTrueN;
+        for(int j=1; j<=ObsN; j++ ){
             max = hFD[0]->GetBinContent(j);
             for(int i=1;i<nFiles;i++){
                 if(hFD[i]->GetBinContent(j) < max){
@@ -223,8 +269,16 @@ void compareSpectra(TH1D **hFD, const int nFiles, bool isjet, bool quark, TStrin
     TCanvas *cr = new TCanvas("cr","cr",1200,800);
     if(isjet) { plotmin = fptbinsJetTrueA[0]; plotmax = fptbinsJetTrueA[fptbinsJetTrueN]; }
     else { plotmin = fptbinsDA[0]; plotmax = fptbinsDA[fptbinsDN]; }
-    int bin = (plotmax-plotmin);
-    TH1D *hh = new TH1D("hh","",bin, plotmin,plotmax);
+    if(fObservable == Observable::kFragmentation){
+        plotmin=fzbinsJetTrueA[0];
+        plotmax=fzbinsJetTrueA[fzbinsJetTrueN];
+    }
+    TH1D *hh = nullptr;
+    //if(fObservable==kXsection){
+        int bin = (plotmax-plotmin);
+        hh = new TH1D("hh","",bin, plotmin,plotmax);
+    //}
+    //if(fObservable==kFragmentation) hh = new TH1D("hh","",bin, plotmin,plotmax);
     hh->GetYaxis()->SetTitle("ratio");
     if(quark == 0) hh->GetYaxis()->SetRangeUser(0.2,3.5);
     else if(quark == 1) hh->GetYaxis()->SetRangeUser(0.5,2);
@@ -256,7 +310,9 @@ void compareSpectra(TH1D **hFD, const int nFiles, bool isjet, bool quark, TStrin
         else if(quark == 1) leg3->AddEntry(hJetPtRatio[i],fDescB[i+1].Data(),"l");
     }
 
-    TLine *line = new TLine(fptbinsJetTrueA[0],1,fptbinsJetTrueA[fptbinsJetTrueN],1);
+    TLine *line = new TLine(plotmin,1,plotmax,1);
+
+
     line->SetLineStyle(2);
     line->SetLineWidth(2);
     line->Draw("same");

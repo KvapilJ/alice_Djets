@@ -6,12 +6,14 @@
 #include "config.h"
 
 
+
 void signalExtraction_refl(
   TString data = "$HOME/Work/alice/analysis/pp5TeV/D0jet/outMC/AnalysisResults_fast_R03_D0MC_def.root",
   TString out = "$HOME/Work/alice/analysis/pp5TeV/D0jet/outMC/reflections",
   Bool_t postfix = 1, TString listName = "cut2",
   Bool_t isMoreFiles = 0,
-  TString prod = "kl"   // for more than 1 file, for one file leave it empty)
+  TString prod = "kl",   // for more than 1 file, for one file leave it empty)
+  Int_t zBin = 0
 )
 {
   const Int_t     fptbinsDN = 12;
@@ -20,6 +22,11 @@ void signalExtraction_refl(
   Double_t jetmin = -10, jetmax = 50;
   Double_t zmin = -2, zmax = 2;
   Double_t minf = 1.65, maxf = 2.1;
+  if(fObservable == kFragmentation){
+      jetmin = fzptJetMeasA[zBin-1];
+      jetmax = fzptJetMeasA[zBin];
+      std::cout<<"JET RANGES: "<<jetmin<<" "<<jetmax<<std::endl;
+  }
 
     TString plotsDir = "/plots";
     TString outdir = out;
@@ -101,6 +108,8 @@ void signalExtraction_refl(
     TCanvas *cRatio = new TCanvas("cRatio","cRatio",1600,1800);
     cRatio->Divide(4,3);
 
+    std::ofstream myfile (Form("%s/Sigmas%s%s.txt",outdir.Data(), postfix ? listName.Data() : "pp" ,(zBin!=0)?Form("%d",zBin):""));
+
     for(int i=0; i<fptbinsDN; i++){
       hsig[i] = dynamic_cast<TH1D*>(hInvMassptDSig->ProjectionX(Form("histSgn_%d_%d",static_cast<int>(fptbinsDA[i]),static_cast<int>(fptbinsDA[i+1])),hInvMassptDSig->GetYaxis()->FindBin(fptbinsDA[i]), hInvMassptDSig->GetYaxis()->FindBin(fptbinsDA[i+1])-1));
       hrefl[i] = dynamic_cast<TH1D*>(hInvMassptDRefl->ProjectionX(Form("hrefl_%d_%d",static_cast<int>(fptbinsDA[i]),static_cast<int>(fptbinsDA[i+1])),hInvMassptDRefl->GetYaxis()->FindBin(fptbinsDA[i]), hInvMassptDRefl->GetYaxis()->FindBin(fptbinsDA[i+1])-1));
@@ -124,6 +133,13 @@ void signalExtraction_refl(
       gStyle->SetOptFit(11111);
       hsig[i]->Fit("gaussMCSig","RI","",1.65,2.15);
       hsig[i]->Draw();
+
+
+      if(hsig[i]->GetEntries() > 1){
+        myfile <<"pT:"<<fptbinsDA[i]<<"-"<<fptbinsDA[i+1]<<": "<<gaussMCSignal->GetParameter(2)<<" "<<gaussMCSignal->GetParError(2)<<"\n";
+      }
+      else
+        myfile <<"pT:"<<fptbinsDA[i]<<"-"<<fptbinsDA[i+1]<<": "<<"no entries"<<"\n";
 
       cRefl->cd(i+1);
       TF1 *doublegaussMCRefl=new TF1("doublegaussMCRefl",formulaRef.Data(),minf,maxf);
@@ -166,11 +182,12 @@ void signalExtraction_refl(
       ratio[i]->Fit("pol0", "FM");
 
     }
+    myfile.close();
 
 
     // --------------------------------------------------------
     // ----------- write to output file
-    TFile *ofile = new TFile(Form("%s/reflectionTemplates_%s.root",outdir.Data(), postfix ? listName.Data() : "pp" ),"RECREATE");
+    TFile *ofile = new TFile(Form("%s/reflectionTemplates_%s%s.root",outdir.Data(), postfix ? listName.Data() : "pp" ,(zBin!=0)?Form("%d",zBin):""),"RECREATE");
     for(int i=0; i<fptbinsDN; i++){
       hsig[i]->Write();
       hrefl[i]->Write();

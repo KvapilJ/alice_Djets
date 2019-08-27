@@ -13,11 +13,14 @@
 //fRpar = 0.4;
 //Rpar = 4;
 
+Double_t dptmin = 5, dptmax = 30; // for D pT spectra
 Double_t jetptmin = 5, jetptmax = 30; // for D pT spectra
 Double_t jetEta = 0.9-fRpar;
 Int_t BFDsim;
+Int_t dptN;
+Int_t fzBin;
 
-TH1* GetInputSimHistJet(TString inFile, TH1 *hPt, Bool_t isEff, TString effFilePrompt, TString effFileNonPrompt,Bool_t isDptcut, Int_t isNPrompt, Int_t SimNr);
+TH1* GetInputSimHistJet(TString inFile, TH1 *hPt, Bool_t isEff, TString effFilePrompt, TString effFileNonPrompt,Bool_t isDptcut, Int_t isNPrompt, Int_t SimNr,TH1D **hz);
 TH1* GetInputSimHistD(TString inFile, TH1 *hPt, Bool_t isjetptcut);
 
 
@@ -29,7 +32,7 @@ Int_t simNr = 0, Int_t quark = 1, Bool_t jet = 1,  Bool_t isDptcut = 1, Bool_t i
 TString effFilePrompt = "$HOME/file.root",
 TString effFileNonPrompt = "$HOME/file.root",
 TString outFileDir = "outR03Test/",
-Bool_t isjetptcut = 0, Double_t jetmin = 5, Double_t jetmax = 30 );
+Bool_t isjetptcut = 0, Double_t jetmin = 5, Double_t jetmax = 30, Int_t zBin=0 );
 
 Double_t GetEfficiency(TH1 *hh, Double_t Dpt);
 void setHistoDetails(TH1 *hh, Color_t color, Style_t Mstyle, Width_t width, TString name);
@@ -40,14 +43,27 @@ void getSimSpectra(TString simFile, Int_t simNr,
   Int_t quark, Bool_t jet, Bool_t isDptcut,
   Bool_t isEff, TString effFilePrompt, TString effFileNonPrompt,
   TString outFileDir,
-  Bool_t isjetptcut, Double_t jetmin, Double_t jetmax )
+  Bool_t isjetptcut, Double_t jetmin, Double_t jetmax, Int_t zBin )
 {
-
+std::cout<<"A"<<std::endl;
     gSystem->Exec(Form("mkdir -p %s",outFileDir.Data()));
 
     jetptmin = jetmin;
     jetptmax = jetmax;
     BFDsim = quark;
+    dptmin=fptbinsDA[0];
+    dptmax=fptbinsDA[fptbinsDN];
+    dptN=fptbinsDN;
+
+    if(fObservable == Observable::kFragmentation){
+            dptmin=fzptbinsDA[zBin-1][0];
+            dptmax=fzptbinsDA[zBin-1][fzptbinsDN[zBin-1]];
+            dptN=fzptbinsDN[zBin-1];
+            jetptmin = fzptJetMeasA[zBin-1];
+            jetptmax = fzptJetMeasA[zBin];
+            fzBin=zBin;
+            isjetptcut=true;
+    }
 
     simFile += "/";
     if(quark == 1) simFile += fRunB[simNr];
@@ -58,9 +74,10 @@ void getSimSpectra(TString simFile, Int_t simNr,
     if(quark == 1) simFile += fRunB[simNr];
     else if(quark == 0) simFile += fRunC[simNr];*/
     simFile += ".root";
-
+std::cout<<"B"<<std::endl;
     TH1D *hPt = nullptr;
-    if(jet) hPt = dynamic_cast<TH1D*>(GetInputSimHistJet(simFile.Data(),hPt, isEff, effFilePrompt.Data(), effFileNonPrompt.Data(),isDptcut,quark,simNr));
+    TH1D *hz = nullptr;
+    if(jet) hPt = dynamic_cast<TH1D*>(GetInputSimHistJet(simFile.Data(),hPt, isEff, effFilePrompt.Data(), effFileNonPrompt.Data(),isDptcut,quark,simNr,&hz));
     else hPt = dynamic_cast<TH1D*>(GetInputSimHistD(simFile.Data(),hPt,isjetptcut));
 
     TString out = outFileDir;
@@ -71,21 +88,28 @@ void getSimSpectra(TString simFile, Int_t simNr,
   //  out += "_";
     if(quark == 1) out += fRunB[simNr];
     else if(quark == 0) out += fRunC[simNr];
-
+std::cout<<"C"<<std::endl;
+if(fObservable == Observable::kXsection){
     if(jet){
-        if(isDptcut) { out += "_Dpt"; out +=  fptbinsDA[0]; out += "_"; out += fptbinsDA[fptbinsDN];  }
+        if(isDptcut) { out += "_Dpt"; out +=  dptmin; out += "_"; out += dptmax;  }
     }
     else{
         if(isjetptcut){ out += "_Jetpt"; out +=  jetptmin; out += "_"; out += jetptmax; }
     }
+}
+if(fObservable == Observable::kFragmentation){
+    out += "_Dpt"; out +=  dptmin; out += "_"; out += dptmax;
+    out += "_Jetpt"; out +=  jetptmin; out += "_"; out += jetptmax;
+}
 
     if(jet && isEff) out += "_effScaled";
     if(fDmesonSpecie) out += "_Dstar";
     else out += "_Dzero";
     out += ".root";
-
+std::cout<<"D"<<std::endl;
     TFile *ofile = new TFile( out.Data() ,"RECREATE");
     hPt->Write();
+    hz->Write();
     ofile->Close();
 
     return;
@@ -100,8 +124,8 @@ TH1* GetInputHist(TString inFile, TString histName,TH1 *hh){
     return hh;
 }
 
-TH1* GetInputSimHistJet(TString inFile, TH1 *hPt, Bool_t isEff, TString effFilePrompt, TString effFileNonPrompt,Bool_t isDptcut, Int_t isNPrompt, Int_t SimNr){
-
+TH1* GetInputSimHistJet(TString inFile, TH1 *hPt, Bool_t isEff, TString effFilePrompt, TString effFileNonPrompt,Bool_t isDptcut, Int_t isNPrompt, Int_t SimNr,TH1D **hz){
+std::cout<<"BA"<<std::endl;
     TFile *fileInput = new TFile(inFile,"read");
     if(!fileInput){
       std::cout << "File " << fileInput << " cannot be opened! check your file path!" << std::endl; return nullptr;
@@ -113,7 +137,7 @@ TH1* GetInputSimHistJet(TString inFile, TH1 *hPt, Bool_t isEff, TString effFileP
       return nullptr;
     }
 
-
+std::cout<<"BB"<<std::endl;
     TProfile *hxsection;
     if(!isNPrompt)	hxsection = dynamic_cast<TProfile*>(dir->FindObject("fHistXsection"));
     else { 
@@ -121,7 +145,7 @@ TH1* GetInputSimHistJet(TString inFile, TH1 *hPt, Bool_t isEff, TString effFileP
           else hxsection = dynamic_cast<TProfile*>(dir->FindObject("fHistXsection"));
           //else hxsection = (TH1D*)dir->FindObject("fHistXsection");
     }
- 
+ std::cout<<"BC"<<std::endl;
     if(!hxsection) {
       std::cout << "Error in getting x-section hist! Exiting..." << std::endl;
       return nullptr;
@@ -129,7 +153,7 @@ TH1* GetInputSimHistJet(TString inFile, TH1 *hPt, Bool_t isEff, TString effFileP
     Double_t xsection = hxsection->GetMean(2);
     Double_t events = hxsection->GetEntries();
     Double_t scaling = xsection/events;
-
+std::cout<<"BD"<<std::endl;
     TTree *tree;
     if(!fDmesonSpecie) tree = dynamic_cast<TTree*>(fileInput->Get("AliAnalysisTaskDmesonJets_D0_MCTruth"));
     else tree = dynamic_cast<TTree*>(fileInput->Get("AliAnalysisTaskDmesonJets_DStar_MCTruth"));
@@ -138,26 +162,30 @@ TH1* GetInputSimHistJet(TString inFile, TH1 *hPt, Bool_t isEff, TString effFileP
     AliAnalysisTaskDmesonJets::AliJetInfoSummary *brJet = nullptr;
     tree->SetBranchAddress("DmesonJet",&brD);
     tree->SetBranchAddress(Form("Jet_AKTChargedR0%d0_pt_scheme",Rpar),&brJet);
-
+std::cout<<"BE"<<std::endl;
     if(!tree || !brD || !brJet) {
       std::cout << "Error in setting the tree/branch names! Exiting..." << std::endl;
       return nullptr;
     }
-
+std::cout<<"BF"<<std::endl;
     TH1D *hPromptEff = nullptr;
     if(isEff) hPromptEff = dynamic_cast<TH1D*>(GetInputHist(effFilePrompt,"hEff_reb",hPromptEff));
     TH1D *hNonPromptEff = nullptr;
     if(isEff) hNonPromptEff = dynamic_cast<TH1D*>(GetInputHist(effFileNonPrompt,"hEff_reb",hNonPromptEff));
 
-
-    TH1D *hjetpt[fptbinsDN];
-    for (Int_t j=0; j<fptbinsDN; j++) {
+std::cout<<"BG"<<std::endl;
+    TH1D *hjetpt[dptN];
+    TH1D *hjetz[dptN];
+    for (Int_t j=0; j<dptN; j++) {
         hjetpt[j] = new TH1D(Form("hjetpt_%d",j),"hjetpt",100,0,100);
         hjetpt[j]->Sumw2();
+        hjetz[j] = new TH1D(Form("hjetz_%d",j),"hjetz",100,0,1.02);
+        hjetz[j]->Sumw2();
     }
     Double_t effC, effB, eff;
     hPt = new TH1D("hPt","hjetpt",100,0,100);
-
+    *hz = new TH1D("hz","hz",100,0,1.02);
+std::cout<<"BH"<<std::endl;
     for (Int_t k=0; k<tree->GetEntries(); k++) {
     tree->GetEntry(k);
     if (brJet->fEta < -jetEta || brJet->fEta > jetEta) continue;
@@ -168,19 +196,24 @@ TH1* GetInputSimHistJet(TString inFile, TH1 *hPt, Bool_t isEff, TString effFileP
     }
     else if(brD->fPartonType != 4) continue;
     if(brD->fAncestorPDG == 2212) continue; // check if not coming from proton
-
+//if(fObservable == Observable::kFragmentation)
     if(isDptcut){
-      for (Int_t j=0; j<fptbinsDN; j++) {
-        if (brD->fPt < fptbinsDA[j] || brD->fPt >= fptbinsDA[j+1]) continue;
+      for (Int_t j=0; j<dptN; j++) {
+        if ((brD->fPt < fptbinsDA[j] || brD->fPt >= fptbinsDA[j+1])&&(fObservable == Observable::kXsection)) continue;
+        if ((brD->fPt < fzptbinsDA[fzBin-1][j] || brD->fPt >= fzptbinsDA[fzBin-1][j+1])&&(fObservable == Observable::kFragmentation)) continue;
         hjetpt[j]->Fill(brJet->fPt);
+        if (brJet->fPt > fzptJetMeasA[fzBin-1] && brJet->fPt <= fzptJetMeasA[fzBin]) hjetz[j]->Fill(brJet->fZ);
+        if(k<10)std::cout<<k<<" "<<fzptbinsDA[fzBin-1][j]<<" "<<fzptbinsDA[fzBin-1][j+1]<<" "<<fzptJetMeasA[fzBin-1]<<" "<< fzptJetMeasA[fzBin]<<std::endl;
       }//end of D-meson pT bin loop
     }
     else hPt->Fill(brJet->fPt);
     }
 
+std::cout<<"BI"<<std::endl;
 if(isDptcut){
-  for (Int_t j=0; j<fptbinsDN; j++){
+  for (Int_t j=0; j<dptN; j++){
     Double_t pt = (fptbinsDA[j]+fptbinsDA[j+1])/2.;
+    if(fObservable == Observable::kFragmentation)pt = (fzptbinsDA[fzBin-1][j]+fzptbinsDA[fzBin-1][j+1])/2.;
     if(isEff)  {
         effC = GetEfficiency(hPromptEff,pt);
         effB = GetEfficiency(hNonPromptEff,pt);
@@ -190,12 +223,18 @@ if(isDptcut){
     if (!j){
         hPt = dynamic_cast<TH1D*>(hjetpt[j]->Clone("hPt"));
         hPt->Scale(eff);
+        *hz = dynamic_cast<TH1D*>(hjetz[j]->Clone("hz"));
+        (*hz)->Scale(eff);
     }
-    else hPt->Add(hjetpt[j],eff);
+    else{
+        hPt->Add(hjetpt[j],eff);
+        (*hz)->Add(hjetz[j],eff);
+    }
   }
 }
-
+std::cout<<"BJ"<<std::endl;
 hPt->Scale(scaling);
+(*hz)->Scale(scaling);
 
  if(!hPt) {
    std::cout << "Error in extracting the mass plot! Exiting..." << std::endl;

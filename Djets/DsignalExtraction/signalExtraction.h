@@ -26,8 +26,8 @@
 
 #include "config.h"
 
-    Double_t jetmin = fptbinsJetMeasA[0], jetmax = fptbinsJetMeasA[fptbinsJetMeasN];
-    Double_t jetplotmin = fptbinsJetMeasA[0], jetplotmax = fptbinsJetMeasA[fptbinsJetMeasN];
+    Double_t jetmin, jetmax;
+    Double_t jetplotmin, jetplotmax;
 
     Bool_t isEta = 0;
     Double_t jetEta = 0.4;
@@ -50,19 +50,22 @@
 
     Double_t nEvents = 0;
 
-    TH1F* hmass[fptbinsDN];
-    TH1F *hmass_l[fptbinsDN];
-    TH1F *hmass_u[fptbinsDN];
-    TH1F *hmass_c[fptbinsDN];
-    TF1* fullfit[fptbinsDN];
-    TF1* massfit[fptbinsDN];
-    TF1* bkgfit[fptbinsDN];
-    TF1* bkgRfit[fptbinsDN];
+    Int_t ptbinsDN_;
+    Double_t *ptbinsDA_;
 
-    TH1F* hjetpt[fptbinsDN];
-    TH1F *hjetpt_sb[fptbinsDN];
-    TH1F *hjetptsub[fptbinsDN];
-    TH1F *hjetptcorr[fptbinsDN];
+    TH1F** hmass;
+    TH1F **hmass_l;
+    TH1F **hmass_u;
+    TH1F **hmass_c;
+    TF1** fullfit;
+    TF1** massfit;
+    TF1** bkgfit;
+    TF1** bkgRfit;
+
+    TH1F** hjetpt;
+    TH1F**hjetpt_sb;
+    TH1F **hjetptsub;
+    TH1F **hjetptcorr;
 
     TH1F *hjetptspectrum;
     TH1F *hrawjetptspectrum;
@@ -81,6 +84,7 @@
     TH1F* hReflRS;
 
     TH1F *hSignalEffcor;
+    Double_t reflSig, reflSigErr;
 
 
     void setHistoDetails(TH1 *h, int scale, Color_t color, Style_t Mstyle, Size_t size = 0.9f, Width_t width=2);

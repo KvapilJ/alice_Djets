@@ -7,13 +7,13 @@
 #include "config.h"
 
 void DetRM(bool isPrompt = 1, TString datafile = "../outMC/AnalysisResults_fast_D0MCPythia_SMQcorr2.root", TString outDir = "plots",
-bool postfix = 0, TString listName = "FD", bool isprefix=0 )
+bool postfix = 0, TString listName = "FD", bool isprefix=0, Int_t zBin=0)
 {
 
     gStyle->SetOptStat(0000); //Mean and RMS shown
     gStyle->SetPadRightMargin(0.1);
     gSystem->Exec(Form("mkdir %s",outDir.Data()));
-    gSystem->Exec(Form("mkdir %s/plots",outDir.Data()));
+    gSystem->Exec(Form("mkdir %s/plots%s",outDir.Data(),(zBin!=0)?Form("%d",zBin):""));
 
     TFile *File = new TFile(datafile,"read");
     TDirectoryFile* dir=(TDirectoryFile*)File->Get("DmesonsForJetCorrelations");
@@ -28,6 +28,12 @@ bool postfix = 0, TString listName = "FD", bool isprefix=0 )
 
     float jetmin = 0, jetmax = 60;
     float Dptmin = fptbinsDA[0], Dptmax = fptbinsDA[fptbinsDN];
+    if(fObservable == kFragmentation){
+        Dptmin=fzptbinsDA[zBin-1][0];
+        Dptmax=fzptbinsDA[zBin-1][fzptbinsDN[zBin-1]];
+        jetmin = fzptJetMeasA[zBin-1];
+        jetmax = fzptJetMeasA[zBin];
+    }
 
     TPaveText *pv2 = new TPaveText(0.15,0.8,0.25,0.9,"brNDC");
     pv2->SetFillStyle(0);
@@ -85,26 +91,50 @@ bool postfix = 0, TString listName = "FD", bool isprefix=0 )
         sparseMC[i]->GetAxis(9)->SetRangeUser(-(0.9-fRpar),0.9-fRpar);
     }
 
-
-        if(fDmesonSpecie) hPtJet[i] = (TH2F*)sparseMC[i]->Projection(5,1,"E"); //Dstar tmp
-        else hPtJet[i] = (TH2F*)sparseMC[i]->Projection(6,1,"E");
+        if(fObservable == kXsection){
+            if(fDmesonSpecie) hPtJet[i] = (TH2F*)sparseMC[i]->Projection(5,1,"E"); //Dstar tmp
+            else hPtJet[i] = (TH2F*)sparseMC[i]->Projection(6,1,"E");
+            if(fDmesonSpecie) hPtG[i] = (TH1F*)sparseMC[i]->Projection(5); //Dstar tmp
+            else   hPtG[i] = (TH1F*)sparseMC[i]->Projection(6);
+            hPtR[i] = (TH1F*)sparseMC[i]->Projection(1);
+        }
+        if(fObservable == kFragmentation){
+            if(fDmesonSpecie) hPtJet[i] = (TH2F*)sparseMC[i]->Projection(4,0,"E"); //Dstar tmp
+            else hPtJet[i] = (TH2F*)sparseMC[i]->Projection(5,0,"E");
+            if(fDmesonSpecie) hPtG[i] = (TH1F*)sparseMC[i]->Projection(4); //Dstar tmp
+            else   hPtG[i] = (TH1F*)sparseMC[i]->Projection(5);
+            hPtR[i] = (TH1F*)sparseMC[i]->Projection(0);
+        }
 
         hPtJet[i]->Sumw2();
-        hPtJet[i]->SetName(Form("hPtJet_%d",i));
 
-        if(fDmesonSpecie) hPtG[i] = (TH1F*)sparseMC[i]->Projection(5); //Dstar tmp
-        else   hPtG[i] = (TH1F*)sparseMC[i]->Projection(6);
 
-        hPtG[i]->SetName(Form("hPtG_%d",i));
-        hPtR[i] = (TH1F*)sparseMC[i]->Projection(1);
-        hPtR[i]->SetName(Form("hPtR_%d",i));
         hPtG[i]->Sumw2();
         hPtR[i]->Sumw2();
 
+        if(fObservable == kXsection){
+            hPtJet[i]->SetName(Form("hPtJet_%d",i));
+            hPtG[i]->SetName(Form("hPtG_%d",i));
+            hPtR[i]->SetName(Form("hPtR_%d",i));
+        }
+        if(fObservable == kFragmentation){
+            hPtJet[i]->SetName(Form("hZJet_%d",i));
+            hPtG[i]->SetName(Form("hZG_%d",i));
+            hPtR[i]->SetName(Form("hZR_%d",i));
+        }
+
             if (!i){
-                 hPtJet2d = (TH2F*)hPtJet[0]->Clone("hPtJet2d");
-                 hPtJetGen = (TH1F*)hPtG[0]->Clone("hPtJetGen");
-                 hPtJetRec = (TH1F*)hPtR[0]->Clone("hPtJetRec");
+                if(fObservable == kXsection){
+                    hPtJet2d = (TH2F*)hPtJet[0]->Clone("hPtJet2d");
+                    hPtJetGen = (TH1F*)hPtG[0]->Clone("hPtJetGen");
+                    hPtJetRec = (TH1F*)hPtR[0]->Clone("hPtJetRec");
+                }
+                if(fObservable == kFragmentation){
+                    hPtJet2d = (TH2F*)hPtJet[0]->Clone("hZJet2d");
+                    hPtJetGen = (TH1F*)hPtG[0]->Clone("hZJetGen");
+                    hPtJetRec = (TH1F*)hPtR[0]->Clone("hZJetRec");
+                }
+
         }
         else {
             hPtJet2d->Add(hPtJet[i]);
@@ -116,12 +146,36 @@ bool postfix = 0, TString listName = "FD", bool isprefix=0 )
 
 
     hPtJet2d->SetTitle("");
-    hPtJet2d->SetName("hPtJet2d");
-    hPtJet2d->GetXaxis()->SetTitle("p_{T,ch jet}^{rec.} (GeV/#it{c})");
-    hPtJet2d->GetYaxis()->SetTitle("p_{T,ch jet}^{gen.} (GeV/#it{c})");
+    if(fObservable == kXsection){
+        hPtJet2d->SetName("hPtJet2d");
+        hPtJet2d->GetXaxis()->SetTitle("p_{T,ch jet}^{rec.} (GeV/#it{c})");
+        hPtJet2d->GetYaxis()->SetTitle("p_{T,ch jet}^{gen.} (GeV/#it{c})");
+        hPtJetGen->SetName("hPtJetGen");
+        hPtJetRec->SetName("hPtJetRec");
+    }
+    if(fObservable == kFragmentation){
+        hPtJet2d->SetName("hZJet2d");
+        hPtJet2d->GetXaxis()->SetTitle("z^{rec.}");
+        hPtJet2d->GetYaxis()->SetTitle("z^{gen.}");
+        hPtJet2d->GetXaxis()->SetRangeUser(fzbinsJetMeasA[0],fzbinsJetMeasA[fzbinsJetMeasN]+0.2);
+        if(isPrompt)hPtJet2d->GetYaxis()->SetRangeUser(fzbinsJetMeasA[0],fzbinsJetTrueA[fzbinsJetTrueN]+0.2);
+        else hPtJet2d->GetYaxis()->SetRangeUser(fzbinsJetMeasA[0],fzbinsJetTrueAPrompt[fzbinsJetTrueN]+0.2);
 
-    hPtJetGen->SetName("hPtJetGen");
-    hPtJetRec->SetName("hPtJetRec");
+        hPtJetGen->SetName("hZJetGen");
+        hPtJetRec->SetName("hZJetRec");
+        if(isPrompt){
+            Int_t nBin = hPtJetGen->FindBin(1.0);
+            hPtJetGen->SetBinContent(nBin-1,hPtJetGen->GetBinContent(nBin-1)+hPtJetGen->GetBinContent(nBin));
+            hPtJetGen->SetBinContent(nBin,0);
+            Int_t nBinY = hPtJet2d->GetYaxis()->FindBin(1.0);
+            Int_t nBinX = hPtJet2d->GetNbinsX();
+            for(Int_t bin = 1; bin<nBinX;bin++){
+                hPtJet2d->SetBinContent(bin,nBinY-1,hPtJet2d->GetBinContent(bin,nBinY-1)+hPtJet2d->GetBinContent(bin,nBinY));
+                hPtJet2d->SetBinContent(bin,nBinY,0);
+            }
+        }
+    }
+
     hPtJetGen->SetLineColor(kBlue+2);
     hPtJetRec->SetLineColor(kRed+2);
 
@@ -138,10 +192,10 @@ bool postfix = 0, TString listName = "FD", bool isprefix=0 )
     pv2->Draw("same");
 
 
-    cjetPt2d->SaveAs(Form("%s/plots/DetMatrix_%s_Dpt%d_%d.png",outDir.Data(), isPrompt ? "prompt" : "nonPrompt", (int)Dptmin, (int)Dptmax));
+    cjetPt2d->SaveAs(Form("%s/plots%s/DetMatrix_%s_Dpt%d_%d.png",outDir.Data(),(zBin!=0)?Form("%d",zBin):"", isPrompt ? "prompt" : "nonPrompt", (int)Dptmin, (int)Dptmax));
 
     //TFile *ofile = new TFile(Form("%s/DetMatrix_Dpt%d_%d.root",outDir, (int)Dptmin, (int)Dptmax),"RECREATE");
-    TFile *ofile = new TFile(Form("%s/DetMatrix_%s.root",outDir.Data(), isPrompt ? "prompt" : "nonPrompt" ),"RECREATE");
+    TFile *ofile = new TFile(Form("%s/DetMatrix_%s%s.root",outDir.Data(), isPrompt ? "prompt" : "nonPrompt", (zBin!=0)?Form("%d",zBin):"" ),"RECREATE");
 
     hPtJetGen->Write();
     hPtJetRec->Write();

@@ -5,6 +5,7 @@
 //-----------------------------------------------------------------------
 
 #include "config.h"
+#include "../Preliminaryplots/FD/style.C"
 
 double jetEta = 0.9 - fRpar;
 double dy = 2*jetEta;
@@ -21,7 +22,8 @@ Int_t markers[] = {20,21,22,23,24,25,26,27,28,29,30,32,33,34};
 Style_t linestyle[] = {1,2,3,4,5,6,7,8,9,10,11,12,13};
 
 TGraphAsymmErrors *grsystheory, *grsys, *grsysRatio, *grsystheoryratio;
-TH1D *hData_binned, *hData_binned_ratio;
+TH1D *hData_binned=nullptr;
+TH1D *hData_binned_ratio;
 TH1D *hPrompt_central_binned, *hPrompt_up, *hPrompt_down;
 
 void ScaleHist(TH1 *hh, int full = 0);
@@ -36,6 +38,7 @@ void drawFinal(TString outPlotDir);
 
 TH1D *CentralPointsStatisticalUncertainty__4;
 TH1D *GeneratorLevel_JetPtSpectrum__3;
+Int_t fBin;
 
 bool isSimSys = 1, isSys = 1, isSim = 1;
 TString sysUncDir;
@@ -50,18 +53,21 @@ bool issys = 1,
 bool issim = 1,
 bool simsys = 1,
 TString listName = "",
+Int_t zBin = 0,
 bool oldCounter = 0,
 TString histBase = "unfoldedSpectrum"
 
 )
 {
 
+    fBin=zBin;
     isSimSys = simsys;
     isSys = issys;
     isSim = issim;
     sysUncDir = sysDir;
     TString outPlotDir = outSpectraDir;
     outPlotDir+="/plots";
+    outPlotDir+=(zBin!=0)?Form("%d",zBin):"";
     gSystem->Exec(Form("mkdir %s",outSpectraDir.Data()));
     gSystem->Exec(Form("mkdir %s",outPlotDir.Data()));
 
@@ -121,14 +127,24 @@ systuncP[6]=0.199602264197;*/
     systuncP[6]=0.2566671;
     systuncP[7]=0.494086025;
 */
-    systuncP[0]=0.1186433732;
+ /*   systuncP[0]=0.1186433732;
     systuncP[1]=0.1233541649;
     systuncP[2]=0.1345037174;
     systuncP[3]=0.1418705396;
     systuncP[4]=0.1602310831;
     systuncP[5]=0.1768756625;
     systuncP[6]=0.2544523531;
-    systuncP[7]=0.2759402109;
+    systuncP[7]=0.2759402109;*/
+
+
+    systuncP[0]=0.01;
+        systuncP[1]=0.01;
+        systuncP[2]=0.01;
+        systuncP[3]=0.01;
+        systuncP[4]=0.01;
+        systuncP[5]=0.01;
+        systuncP[6]=0.01;
+        systuncP[7]=0.01;
 
 
 
@@ -141,7 +157,7 @@ systuncP[6]=0.199602264197;*/
     TDirectoryFile* dir;
     TList *histList;
     double nEv;
-
+std::cout<<"A"<<std::endl;
     if(oldCounter) {
       dir = dynamic_cast<TDirectoryFile*>(File->Get("DmesonsForJetCorrelations"));
       if(fDmesonSpecie) histList = dynamic_cast<TList*>(dir->Get("histosDStarMBN0"));
@@ -179,21 +195,40 @@ systuncP[6]=0.199602264197;*/
           TString file = simDir;
           file += "/JetPt_";
           file += fRunC[nr];
-          file += "_Dpt"; file += fptbinsDA[0]; file += "_"; file += fptbinsDA[fptbinsDN];
+          if(fObservable == Observable::kXsection){
+              file += "_Dpt"; file += fptbinsDA[0]; file += "_"; file += fptbinsDA[fptbinsDN];
+          }
+          else if(fObservable == Observable::kFragmentation) {
+              file += "_Dpt"; file += fzptbinsDA[zBin-1][0]; file += "_"; file += fzptbinsDA[zBin-1][fzptbinsDN[zBin-1]];
+              file += "_Jetpt"; file += fzptJetMeasA[zBin-1]; file += "_"; file += fzptJetMeasA[zBin];
+          }
           if(fDmesonSpecie) file += "_Dstar";
           else file += "_Dzero";
           file += ".root";
-          TH1D *htmp = nullptr;
-          htmp = dynamic_cast<TH1D*>(GetInputHist(file, "hPt", htmp));
-          htmp->GetYaxis()->SetTitle("d#sigma/dp_{T} (mb)");
-          hPrompt[nr] = dynamic_cast<TH1D*>(htmp->Clone(Form("hPrompt_%d",nr)));
-          hPrompt_binned[nr] = dynamic_cast<TH1D*>(htmp->Rebin(fptbinsJetFinalN,Form("hPrompt_binned_%d",nr),xAxis));
+          TH1D *htmp = nullptr;                 
+          if(fObservable == kXsection){
+              htmp = dynamic_cast<TH1D*>(GetInputHist(file, "hPt", htmp));
+              htmp->GetYaxis()->SetTitle("d#sigma/dp_{T} (mb)");
+              hPrompt[nr] = dynamic_cast<TH1D*>(htmp->Clone(Form("hPrompt_%d",nr)));
+              hPrompt_binned[nr] = dynamic_cast<TH1D*>(htmp->Rebin(fptbinsJetFinalN,Form("hPrompt_binned_%d",nr),xAxis));
+          }
+          if(fObservable == kFragmentation){
+              htmp = dynamic_cast<TH1D*>(GetInputHist(file, "hz", htmp));
+              htmp->GetYaxis()->SetTitle("d#sigma/dz (mb)");
+              Int_t nBin = htmp->FindBin(1.0);
+              std::cout<<htmp->GetBinContent(nBin-1)<<" "<<htmp->GetBinContent(nBin)<<std::endl;
+              htmp->SetBinContent(nBin-1,htmp->GetBinContent(nBin-1)+htmp->GetBinContent(nBin));
+              htmp->SetBinContent(nBin,0);
+              std::cout<<htmp->GetBinContent(nBin-1)<<" "<<htmp->GetBinContent(nBin)<<std::endl;
+              hPrompt[nr] = dynamic_cast<TH1D*>(htmp->Clone(Form("hFD_%d",nr)));
+              hPrompt_binned[nr] = dynamic_cast<TH1D*>(htmp->Rebin(fzbinsJetTrueN,Form("hFD_binned_%d",nr),fzbinsJetTrueA));
+          }
       }
-
+std::cout<<"B"<<std::endl;
       TH1D *htmp = dynamic_cast<TH1D*>(hPrompt[simNr]->Clone("htmp"));
       TH1D *hPrompt_central = dynamic_cast<TH1D*>(htmp->Clone("hPrompt_central"));
       hPrompt_central_binned = dynamic_cast<TH1D*>(htmp->Rebin(fptbinsJetFinalN,"hPrompt_central_binned",xAxis));
-
+std::cout<<"BA"<<std::endl;
       setHistoDetails(hPrompt_central,4,24);
       setHistoDetails(hPrompt_central_binned,4,24);
 
@@ -201,7 +236,7 @@ systuncP[6]=0.199602264197;*/
       hPrompt_central_binned->Scale(simScaling);
       hPrompt_central_binned->Scale(1,"width");
       hPrompt_central_binned->Scale(1./dy);
-
+std::cout<<"BB"<<std::endl;
       if(isSimSys){
       // ----------------- prompt syst. (rebinned)---------------------
         // get up unc
@@ -219,11 +254,14 @@ systuncP[6]=0.199602264197;*/
         hPrompt_down->Scale(1,"width");
         hPrompt_down->Scale(1./dy);
       }
+      std::cout<<"BC"<<std::endl;
     }
-
+std::cout<<"BD"<<std::endl;
     // ----------------- data ---------------------
     TH1D *hData_binned2 = nullptr;
     hData_binned2 = dynamic_cast<TH1D*>(GetInputHist(dataFile, histBase, hData_binned2));
+    std::cout<<"getting "<<dataFile<<" "<<histBase<<std::endl;
+    if(!hData_binned2)std::cout<<"not histo"<<std::endl;
     hData_binned = dynamic_cast<TH1D*>(hData_binned2->Rebin(fptbinsJetFinalN,"hData_binned", xAxis));
     hData_binned->Scale(1,"width");
     hData_binned->Scale(dataScaling);
@@ -231,28 +269,34 @@ systuncP[6]=0.199602264197;*/
     hData_binned->SetTitle("");
     //hData_binned->SetMinimum(1);
     hData_binned->SetMaximum(hData_binned->GetMaximum()*2);
-    hData_binned->GetYaxis()->SetTitle("d^{2}#sigma/dp_{T}d#it{#eta} (mb)");
-
+    if(fObservable == Observable::kXsection)hData_binned->GetYaxis()->SetTitle("d^{2}#sigma/dp_{T}d#it{#eta} (mb)");
+    if(fObservable == Observable::kFragmentation)hData_binned->GetYaxis()->SetTitle("d^{2}#sigma/dz_{#parallel}d#it{#eta} (mb)");
+std::cout<<"BE"<<std::endl;
     Double_t sysunc[fptbinsJetFinalN];
     Double_t sysuncAbs[fptbinsJetFinalN];
     Double_t statunc[fptbinsJetFinalN];
     Double_t value[fptbinsJetFinalN];
     Double_t ptval[fptbinsJetFinalN];
     Double_t ptvalunc[fptbinsJetFinalN];
+    std::cout<<"BF"<<std::endl;
     if(isSys) {
       for(int j=0; j<fptbinsJetFinalN; j++){
               ptval[j] = (xAxis[j]+xAxis[j+1]) / 2.;
               ptvalunc[j] = (xAxis[j+1]-xAxis[j]) / 2.;
               value[j] = hData_binned->GetBinContent(hData_binned->GetXaxis()->FindBin(ptval[j]));
+              if(value[j]<1E-9)value[j]=1000;
               Double_t error = hData_binned->GetBinError(hData_binned->GetXaxis()->FindBin(ptval[j]));
+              std::cout<<j<<" "<<ptval[j]<<" "<<ptvalunc[j]<<" "<<value[j]<<" "<<error<<std::endl;
               sysunc[j] =  systuncP[j];
               sysuncAbs[j] = value[j] * systuncP[j];
-              statunc[j] = error/ value[j] *100;
+              if(value[j]>1E-9)statunc[j] = error/ value[j] *100;
+
             //  cout << j << " sys: " << sysunc[j] << "\t\t stat: " << statunc[j] << endl;
       }
       grsys = new TGraphAsymmErrors(fptbinsJetFinalN,ptval,value,ptvalunc,ptvalunc,sysuncAbs,sysuncAbs);
     }
 
+std::cout<<"C"<<std::endl;
     Double_t ptvaltheory[fptbinsJetFinalN];
     if(isSim && isSimSys){
      // Double_t sysuncTheory[fptbinsJetFinalN];
@@ -295,8 +339,11 @@ systuncP[6]=0.199602264197;*/
                  double valPred;
                  if(isSim) valPred = hPrompt_central_binned->GetBinContent(hPrompt_central_binned->GetXaxis()->FindBin(pt));
                  else valPred = hData_binned->GetBinContent(hData_binned->GetXaxis()->FindBin(pt));
-                 valRatio[j] = val / valPred;
-                 double err = hData_binned->GetBinError(hData_binned->GetXaxis()->FindBin(pt)) / valPred;
+                 if(val<1E-9)val=1000000;
+                 if(valPred<1E-9)valPred=1000;
+                 if(valPred>1E-9)valRatio[j] = val / valPred;
+                 double err = 0;
+                 if(valPred>1E-9) err=hData_binned->GetBinError(hData_binned->GetXaxis()->FindBin(pt)) / valPred;
                  //err = err * valRatio[j];
                  sysuncRatio[j] = sysunc[j]*valRatio[j];
 
@@ -305,7 +352,11 @@ systuncP[6]=0.199602264197;*/
          }
          grsysRatio = new TGraphAsymmErrors(fptbinsJetFinalN,ptval,valRatio,ptvalunc,ptvalunc,sysuncRatio,sysuncRatio);
        }
-       hData_binned_ratio->SetMaximum(3);
+       hData_binned_ratio->SetMaximum(10);
+       if(zBin==1)hData_binned_ratio->SetMaximum(10);
+       if(zBin==2)hData_binned_ratio->SetMaximum(5);
+       if(zBin==1)hData_binned_ratio->GetYaxis()->SetRangeUser(0,10);
+       if(zBin==2)hData_binned_ratio->GetYaxis()->SetRangeUser(0,5);
 
        if(isSimSys){
         //double *sysuncTheoryratio = new double[fptbinsJetFinalN];
@@ -324,10 +375,10 @@ systuncP[6]=0.199602264197;*/
         grsystheoryratio = new TGraphAsymmErrors(fptbinsJetFinalN,ptvaltheoryratio,valuetheoryratio,ptvalunctheoryratio,ptvalunctheoryratio,valuetheoryerrdownratio,valuetheoryerrupratio);
       }
 
-
+std::cout<<"D"<<std::endl;
 drawFinal(outPlotDir);
 
-TFile *ofile = new TFile(Form("%s/JetPtSpectrum_final.root",outSpectraDir.Data()),"RECREATE");
+TFile *ofile = new TFile(Form("%s/JetPtSpectrum_final%s.root",outSpectraDir.Data(),(zBin!=0)?Form("%d",zBin):""),"RECREATE");
 hData_binned->Write();
 hData_binned_ratio->Write();
 if(isSim){
@@ -343,7 +394,7 @@ if(isSys) grsysRatio->Write();
 if(isSys) grsys->Write();
 
 ofile->Close();
-
+std::cout<<"E"<<std::endl;
 return;
 
 }
@@ -447,7 +498,8 @@ void getSystematics(TString inDir, TString outPlotDir) {
   histUnc->SetLineStyle(2);
   histUnc->SetTitle("");
   histUnc->GetYaxis()->SetTitle("Final systematic uncertanties");
-  histUnc->GetXaxis()->SetTitle("p_{T}^{ch,jet} (GeV/c)");
+  if(fObservable == Observable::kXsection)histUnc->GetXaxis()->SetTitle("p_{T}^{ch,jet} (GeV/c)");
+  if(fObservable == Observable::kFragmentation)histUnc->GetXaxis()->SetTitle("#it{z}_{#parallel}^{ch,jet}");
   histUnc->GetXaxis()->SetRangeUser(plotmin,plotmax);
   for(int i=0; i<fptbinsJetFinalN; i++){
     double value = 0;
@@ -544,7 +596,8 @@ void setHistoDetails(TH1 *hh, Color_t color, Style_t Mstyle, Double_t Msize, Wid
     hh->SetLineStyle(Lstyle);
    // hh->SetName(name.c_str());
     hh->SetTitle("");
-    hh->GetXaxis()->SetTitle("p_{T}^{ch,jet} (GeV/c)");
+    if(fObservable == Observable::kXsection)hh->GetXaxis()->SetTitle("p_{T}^{ch,jet} (GeV/c)");
+    if(fObservable == Observable::kFragmentation)hh->GetXaxis()->SetTitle("#it{z}_{#parallel}^{ch,jet}");
 }
 
 void SaveCanvas(TCanvas *c, TString name){
@@ -559,6 +612,7 @@ void drawFinal(TString outPlotDir){
 
   //=========Macro generated from canvas: FinalSpectrum/FinalSpectrum
 //=========  (Mon Jun 12 17:00:30 2017) by ROOT version5.34/30
+   style();
    TCanvas *FinalSpectrum = new TCanvas("FinalSpectrum", "FinalSpectrum",0,45,700,700);
    gStyle->SetOptStat(0);
    gStyle->SetOptTitle(0);
@@ -590,11 +644,14 @@ void drawFinal(TString outPlotDir){
    if(fSystem){
      CentralPointsStatisticalUncertainty__1->SetMinimum(2.e-04);
      CentralPointsStatisticalUncertainty__1->SetMaximum(500);
+
    }
    else{
      CentralPointsStatisticalUncertainty__1->SetMinimum(2.e-06);
      CentralPointsStatisticalUncertainty__1->SetMaximum(0.5);
   }
+   if(fObservable == Observable::kFragmentation)CentralPointsStatisticalUncertainty__1->SetMaximum(5);
+    if(fObservable == Observable::kFragmentation)CentralPointsStatisticalUncertainty__1->SetMinimum(2.e-05);
    CentralPointsStatisticalUncertainty__1->SetEntries(8);
    CentralPointsStatisticalUncertainty__1->SetDirectory(nullptr);
    CentralPointsStatisticalUncertainty__1->SetStats(0);
@@ -608,13 +665,15 @@ void drawFinal(TString outPlotDir){
    CentralPointsStatisticalUncertainty__1->SetMarkerColor(ci);
    CentralPointsStatisticalUncertainty__1->SetMarkerStyle(20);
    CentralPointsStatisticalUncertainty__1->SetMarkerSize(0.9f);
-   CentralPointsStatisticalUncertainty__1->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
+   if(fObservable == Observable::kXsection)CentralPointsStatisticalUncertainty__1->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
+   if(fObservable == Observable::kFragmentation)CentralPointsStatisticalUncertainty__1->GetXaxis()->SetTitle("#it{z}_{#parallel}^{ch,jet}");
    CentralPointsStatisticalUncertainty__1->GetXaxis()->SetLabelFont(42);
    CentralPointsStatisticalUncertainty__1->GetXaxis()->SetLabelSize(0.035f);
    CentralPointsStatisticalUncertainty__1->GetXaxis()->SetTitleSize(0.035f);
    CentralPointsStatisticalUncertainty__1->GetXaxis()->SetTitleFont(42);
    //CentralPointsStatisticalUncertainty__1->GetYaxis()->SetTitle("#frac{d^{2}#sigma}{d#it{p}_{T}d#it{#eta}} [mb (GeV/#it{c})^{-1}]");
-   CentralPointsStatisticalUncertainty__1->GetYaxis()->SetTitle("#frac{d^{2}#sigma}{d#it{p}_{T}d#it{#eta}} mb (GeV/#it{c})^{-1}");
+   if(fObservable == Observable::kXsection)CentralPointsStatisticalUncertainty__1->GetYaxis()->SetTitle("#frac{d^{2}#sigma}{d#it{p}_{T}d#it{#eta}} mb (GeV/#it{c})^{-1}");
+   if(fObservable == Observable::kFragmentation)CentralPointsStatisticalUncertainty__1->GetYaxis()->SetTitle("#frac{d^{2}#sigma}{d#it{z}_{#parallel}d#it{#eta}} mb");
    CentralPointsStatisticalUncertainty__1->GetYaxis()->SetLabelFont(43);
    CentralPointsStatisticalUncertainty__1->GetYaxis()->SetLabelSize(22);
    CentralPointsStatisticalUncertainty__1->GetYaxis()->SetTitleSize(26);
@@ -646,7 +705,8 @@ if(isSys){
 
    ci = TColor::GetColor("#000099");
    Graph_central_syst_unc1->SetLineColor(ci);
-   Graph_central_syst_unc1->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
+   if(fObservable == Observable::kXsection)Graph_central_syst_unc1->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
+   if(fObservable == Observable::kFragmentation)Graph_central_syst_unc1->GetXaxis()->SetTitle("#it{z}_{#parallel}^{ch,jet}");
    Graph_central_syst_unc1->GetXaxis()->SetLabelFont(42);
    Graph_central_syst_unc1->GetXaxis()->SetLabelSize(0.035f);
    Graph_central_syst_unc1->GetXaxis()->SetTitleSize(0.035f);
@@ -677,7 +737,8 @@ if(isSys){
    CentralPointsStatisticalUncertainty__2->SetMarkerColor(ci);
    CentralPointsStatisticalUncertainty__2->SetMarkerStyle(20);
    CentralPointsStatisticalUncertainty__2->SetMarkerSize(0.9f);
-   CentralPointsStatisticalUncertainty__2->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
+   if(fObservable == Observable::kXsection)CentralPointsStatisticalUncertainty__2->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
+   if(fObservable == Observable::kFragmentation)CentralPointsStatisticalUncertainty__2->GetXaxis()->SetTitle("#it{z}_{#parallel}^{ch,jet}");
    CentralPointsStatisticalUncertainty__2->GetXaxis()->SetLabelFont(42);
    CentralPointsStatisticalUncertainty__2->GetXaxis()->SetLabelSize(0.035f);
    CentralPointsStatisticalUncertainty__2->GetXaxis()->SetTitleSize(0.035f);
@@ -695,8 +756,9 @@ if(isSys){
    CentralPointsStatisticalUncertainty__2->Draw("same p e0 x0");
 
    // central theory
+   TH1D *GeneratorLevel_JetPtSpectrum__3 =nullptr;
 if(isSim){
-   TH1D *GeneratorLevel_JetPtSpectrum__3 = dynamic_cast<TH1D*>(hPrompt_central_binned->Clone("GeneratorLevel_JetPtSpectrum__3")); //  new
+   GeneratorLevel_JetPtSpectrum__3 = dynamic_cast<TH1D*>(hPrompt_central_binned->Clone("GeneratorLevel_JetPtSpectrum__3")); //  new
    GeneratorLevel_JetPtSpectrum__3->SetEntries(316731);
    GeneratorLevel_JetPtSpectrum__3->SetDirectory(nullptr);
    GeneratorLevel_JetPtSpectrum__3->SetStats(0);
@@ -708,7 +770,8 @@ if(isSim){
    GeneratorLevel_JetPtSpectrum__3->SetMarkerColor(ci);
    GeneratorLevel_JetPtSpectrum__3->SetMarkerStyle(24);
    GeneratorLevel_JetPtSpectrum__3->SetMarkerSize(1.2f);
-   GeneratorLevel_JetPtSpectrum__3->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
+   if(fObservable == Observable::kXsection)GeneratorLevel_JetPtSpectrum__3->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
+   if(fObservable == Observable::kFragmentation)GeneratorLevel_JetPtSpectrum__3->GetXaxis()->SetTitle("#it{z}_{#parallel}^{ch,jet}");
    GeneratorLevel_JetPtSpectrum__3->GetXaxis()->SetLabelFont(42);
    GeneratorLevel_JetPtSpectrum__3->GetXaxis()->SetLabelSize(0.035f);
    GeneratorLevel_JetPtSpectrum__3->GetXaxis()->SetTitleSize(0.035f);
@@ -759,7 +822,9 @@ if(isSim){
      grae->Draw("2");
   }
 }
-   TLegend *leg = new TLegend(0.5,0.35,0.8,0.6,nullptr,"NB NDC");
+   TLegend *leg = nullptr;
+   if(fObservable==Observable::kXsection) leg = new TLegend(0.5,0.4,0.8,0.65,nullptr,"NB NDC");
+   if(fObservable==Observable::kFragmentation) leg = new TLegend(0.5,0.1,0.8,0.35,nullptr,"NB NDC");
    leg->SetBorderSize(0);
    leg->SetTextFont(43);
    leg->SetTextSize(23);
@@ -819,7 +884,9 @@ if(isSim){
  }
    leg->Draw();
 
-   TPaveText *pt = new TPaveText(0.20,0.64,0.59,0.9,"NB NDC");
+   TPaveText *pt = nullptr;
+   if(fObservable==Observable::kXsection) pt = new TPaveText(0.2,0.7,0.85,0.95,"NB NDC");
+   if(fObservable==Observable::kFragmentation) pt = new TPaveText(0.2,0.62,0.85,0.95,"NB NDC");
    pt->SetBorderSize(0);
    pt->SetFillStyle(0);
    pt->SetTextAlign(13);
@@ -827,11 +894,12 @@ if(isSim){
    pt->SetTextSize(22);
    //TText *text = pt->AddText("ALICE Preliminary");
    TText *text = new TText;
-   text = pt->AddText("ALICE Preliminary"); //uncomment
+   //text = pt->AddText("ALICE Preliminary"); //uncomment
    if(fSystem) text = pt->AddText("p-Pb, #sqrt{#it{s}_{NN}} = 13 TeV");
    else text = pt->AddText("pp, #sqrt{#it{s}} = 13 TeV");
    text = pt->AddText(Form("charged jets, anti-#it{k}_{T}, #it{R} = 0.%d, |#it{#eta}_{lab}^{jet}| < 0.%d",Rpar,9-Rpar));
    text = pt->AddText(Form ("with D^{0}, %d < #it{p}_{T,D^{0}} < %d GeV/#it{c}",static_cast<int>(fptbinsDA[0]),static_cast<int>(fptbinsDA[fptbinsDN])));
+   if(fObservable==Observable::kFragmentation)text = pt->AddText(Form("%d < p_{T,ch. jet} < %d GeV/#it{c}",static_cast<Int_t>(fzptJetMeasA[fBin-1]),static_cast<Int_t>(fzptJetMeasA[fBin])));
    pt->Draw();
 
    // does nothing
@@ -849,7 +917,8 @@ if(isSim){
    CentralPointsStatisticalUncertainty__4->SetMarkerColor(ci);
    CentralPointsStatisticalUncertainty__4->SetMarkerStyle(20);
    CentralPointsStatisticalUncertainty__4->SetMarkerSize(0.9f);
-   CentralPointsStatisticalUncertainty__4->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
+   if(fObservable == Observable::kXsection)CentralPointsStatisticalUncertainty__4->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
+   if(fObservable == Observable::kFragmentation)CentralPointsStatisticalUncertainty__4->GetXaxis()->SetTitle("#it{z}_{#parallel}^{ch,jet}");
    CentralPointsStatisticalUncertainty__4->GetXaxis()->SetLabelFont(42);
    CentralPointsStatisticalUncertainty__4->GetXaxis()->SetLabelSize(0.035f);
    CentralPointsStatisticalUncertainty__4->GetXaxis()->SetTitleSize(0.035f);
@@ -888,7 +957,7 @@ if(isSim){
    // central points data (values don't really needed)
    TH1D *CentralPointsStatisticalUncertainty__5 = new TH1D("CentralPointsStatisticalUncertainty__5","Central Values",fptbinsJetFinalN, xAxis);
    CentralPointsStatisticalUncertainty__5->SetMinimum(0);
-   CentralPointsStatisticalUncertainty__5->SetMaximum(2.9);
+   CentralPointsStatisticalUncertainty__5->SetMaximum(3.3);
    CentralPointsStatisticalUncertainty__5->SetEntries(8);
    CentralPointsStatisticalUncertainty__5->SetDirectory(nullptr);
    CentralPointsStatisticalUncertainty__5->SetStats(0);
@@ -900,7 +969,8 @@ if(isSim){
    CentralPointsStatisticalUncertainty__5->SetMarkerColor(ci);
    CentralPointsStatisticalUncertainty__5->SetMarkerStyle(20);
    CentralPointsStatisticalUncertainty__5->SetMarkerSize(0.9f);
-   CentralPointsStatisticalUncertainty__5->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
+   if(fObservable == Observable::kXsection)CentralPointsStatisticalUncertainty__5->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
+   if(fObservable == Observable::kFragmentation)CentralPointsStatisticalUncertainty__5->GetXaxis()->SetTitle("#it{z}_{#parallel}^{ch,jet}");
    CentralPointsStatisticalUncertainty__5->GetXaxis()->SetLabelFont(43);
    CentralPointsStatisticalUncertainty__5->GetXaxis()->SetLabelSize(22);
    CentralPointsStatisticalUncertainty__5->GetXaxis()->SetTitleSize(26);
@@ -917,6 +987,7 @@ if(isSim){
    CentralPointsStatisticalUncertainty__5->GetZaxis()->SetLabelSize(0.035f);
    CentralPointsStatisticalUncertainty__5->GetZaxis()->SetTitleSize(0.035f);
    CentralPointsStatisticalUncertainty__5->GetZaxis()->SetTitleFont(42);
+   if(fBin==1 || fBin==2)CentralPointsStatisticalUncertainty__5->SetMaximum(7);
    CentralPointsStatisticalUncertainty__5->Draw("axis");
 
 if(isSys) {
@@ -968,7 +1039,9 @@ if(isSys) {
    CentralPointsStatisticalUncertainty__6->SetMarkerColor(ci);
    CentralPointsStatisticalUncertainty__6->SetMarkerStyle(20);
    CentralPointsStatisticalUncertainty__6->SetMarkerSize(0.9f);
-   CentralPointsStatisticalUncertainty__6->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
+   if(fObservable == Observable::kXsection)CentralPointsStatisticalUncertainty__6->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
+   if(fObservable == Observable::kFragmentation)CentralPointsStatisticalUncertainty__6->GetXaxis()->SetTitle("#it{z}_{#parallel}^{ch,jet}");
+
    CentralPointsStatisticalUncertainty__6->GetXaxis()->SetLabelFont(42);
    CentralPointsStatisticalUncertainty__6->GetXaxis()->SetLabelSize(0.035f);
    CentralPointsStatisticalUncertainty__6->GetXaxis()->SetTitleSize(0.035f);
@@ -1033,14 +1106,15 @@ if(isSys) {
    CentralPointsStatisticalUncertainty__7->SetMarkerColor(ci);
    CentralPointsStatisticalUncertainty__7->SetMarkerStyle(20);
    CentralPointsStatisticalUncertainty__7->SetMarkerSize(0.9f);
-   CentralPointsStatisticalUncertainty__7->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
+   if(fObservable == Observable::kXsection)CentralPointsStatisticalUncertainty__7->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
+   if(fObservable == Observable::kFragmentation)CentralPointsStatisticalUncertainty__7->GetXaxis()->SetTitle("#it{z}_{#parallel}^{ch,jet}");
    CentralPointsStatisticalUncertainty__7->GetXaxis()->SetLabelFont(43);
    CentralPointsStatisticalUncertainty__7->GetXaxis()->SetLabelSize(22);
    CentralPointsStatisticalUncertainty__7->GetXaxis()->SetTitleSize(26);
    CentralPointsStatisticalUncertainty__7->GetXaxis()->SetTitleOffset(2.9f);
    CentralPointsStatisticalUncertainty__7->GetXaxis()->SetTitleFont(43);
    CentralPointsStatisticalUncertainty__7->GetYaxis()->SetTitle("data / theory");
-   CentralPointsStatisticalUncertainty__7->GetYaxis()->SetRangeUser(0,3);//added
+   CentralPointsStatisticalUncertainty__7->GetYaxis()->SetRangeUser(0,3.5);//added
    CentralPointsStatisticalUncertainty__7->GetYaxis()->SetNdivisions(509);
    CentralPointsStatisticalUncertainty__7->GetYaxis()->SetLabelFont(43);
    CentralPointsStatisticalUncertainty__7->GetYaxis()->SetLabelSize(22);
@@ -1052,6 +1126,9 @@ if(isSys) {
    CentralPointsStatisticalUncertainty__7->GetZaxis()->SetTitleSize(0.035f);
    CentralPointsStatisticalUncertainty__7->GetZaxis()->SetTitleFont(42);
    CentralPointsStatisticalUncertainty__7->Draw("sameaxig");
+
+
+
 
    FinalSpectrum_2->Modified();
    FinalSpectrum->cd();

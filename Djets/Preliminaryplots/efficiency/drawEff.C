@@ -128,7 +128,7 @@ void drawEff( int Rpar = 4 )
     pvJet->SetTextSize(0.045);
     pvJet->SetTextAlign(11);
     //pvJet->AddText("in Charged Jets, Anti-#it{k}_{T}, #it{R} = 0.4");
-    pvJet->AddText("in Charged Jets, Anti-#it{k}_{T}, #it{R} = 0.4");
+    pvJet->AddText("in charged jets, anti-#it{k}_{T}, #it{R} = 0.4");
 
 
    // TPaveText *pvEta = new TPaveText(0.42,0.54-shift,0.8,0.59-shift,"brNDC");

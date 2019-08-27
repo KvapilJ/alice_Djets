@@ -3,7 +3,7 @@
 count=0
 while [ $count -lt $1 ]
 do
-	root -l -b -q getSimSpectra.C'("'$2'",'$count','$3','$4','$5','$6', "'$7'","'$8'","'$9'")'
+        root -l -b -q getSimSpectra.C'("'$2'",'$count','$3','$4','$5','$6', "'$7'","'$8'","'$9'",0,5,30,'${10}')'
 	((count++))
 done
 

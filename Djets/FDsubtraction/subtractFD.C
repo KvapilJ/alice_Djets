@@ -6,7 +6,11 @@
 
 #include "config.h"
 
-double plotmin = fptbinsJetMeasA[0], plotmax = fptbinsJetMeasA[fptbinsJetMeasN];
+double plotmin, plotmax; //declared later
+Int_t maxObsBinN;
+Int_t fBin;
+
+
 
 TH1* GetInputHist(TString inFile = "JetPtSpectra_effScale.root", TString histName = "hjetpt",TH1 *hh = nullptr);
 TH1* GetInputSimHist(TString inFile, TH1 *hJetPt_B);
@@ -29,12 +33,24 @@ TString dataAnalysisFile = "",
 TString simDir = "../simulations/POWHEG/out/",
 TString comMatrixFile = "",
 TString outSpectraDir = "out_FDPythia",
+Int_t zBin=0,
 TString listName = "",
 bool isDptcut = 1,
 bool fold = 1, TString outHistName = "ptSpectrumSim_",
 bool isSys = 1, bool rebinned = 1,  bool isEff = 1,
 bool oldCounter = 0)
 {
+    if(fObservable == kXsection){
+      plotmin = fptbinsJetMeasA[0];
+      plotmax = fptbinsJetMeasA[fptbinsJetMeasN];
+      maxObsBinN = fptbinsJetMeasN;
+    }
+    if(fObservable == kFragmentation){
+      plotmin = fzbinsJetTrueA[0];
+      plotmax = fzbinsJetTrueA[fzbinsJetTrueN];
+      maxObsBinN = fzbinsJetMeasN;
+    }
+    fBin=zBin;
 
     gSystem->Load(Form("%s",roounfoldpwd.Data()));
 
@@ -42,6 +58,7 @@ bool oldCounter = 0)
 
     TString outPlotDir = outSpectraDir;
     outPlotDir+="/plots";
+    outPlotDir+=Form("%s",(zBin!=0)?Form("%d",zBin):"");
     gSystem->Exec(Form("mkdir %s",outSpectraDir.Data()));
     gSystem->Exec(Form("mkdir %s",outPlotDir.Data()));
 
@@ -79,7 +96,9 @@ bool oldCounter = 0)
     // ----------------- data eff corrected D-jet pT spectrum ---------------------
     TH1D *hData = nullptr;
     hData = dynamic_cast<TH1D*>(GetInputHist(dataFile, "hjetptspectrum", hData));
-    TH1D *hData_binned = dynamic_cast<TH1D*>(hData->Rebin(fptbinsJetMeasN,"hData_binned", fptbinsJetMeasA));
+    TH1D *hData_binned =nullptr;
+    if(fObservable == kXsection) hData_binned= dynamic_cast<TH1D*>(hData->Rebin(fptbinsJetMeasN,"hData_binned", fptbinsJetMeasA));
+    if(fObservable == kFragmentation) hData_binned= dynamic_cast<TH1D*>(hData->Rebin(fzbinsJetMeasN,"hData_binned", fzbinsJetMeasA));
 
     // ----------------- B->D simulation ---------------------
     int cent = 0;
@@ -95,24 +114,41 @@ bool oldCounter = 0)
         TString file = simDir;
         file += "/JetPt_";
         file += fRunB[nr];
-        if(isDptcut) { file += "_Dpt"; file += fptbinsDA[0]; file += "_"; file += fptbinsDA[fptbinsDN];  }
+        if(isDptcut && fObservable == Observable::kXsection) { file += "_Dpt"; file += fptbinsDA[0]; file += "_"; file += fptbinsDA[fptbinsDN];  }
+        if(fObservable == Observable::kFragmentation) {
+            file += "_Dpt"; file += fzptbinsDA[zBin-1][0]; file += "_"; file += fzptbinsDA[zBin-1][fzptbinsDN[zBin-1]];
+            file += "_Jetpt"; file += fzptJetMeasA[zBin-1]; file += "_"; file += fzptJetMeasA[zBin];
+        }
         if(isEff) file += "_effScaled";
         if(fDmesonSpecie) file += "_Dstar";
         else file += "_Dzero";
         file += ".root";
         TH1D *htmp = nullptr;
-        htmp = dynamic_cast<TH1D*>(GetInputHist(file, "hPt", htmp));
+        if(fObservable == kXsection){
+            htmp = dynamic_cast<TH1D*>(GetInputHist(file, "hPt", htmp));
+            htmp->GetYaxis()->SetTitle("d#sigma/dp_{T} (mb)");
+            hFD[nr] = dynamic_cast<TH1D*>(htmp->Clone(Form("hFD_%d",nr)));
+            hFD_binned[nr] = dynamic_cast<TH1D*>(htmp->Rebin(fptbinsJetTrueN,Form("hFD_binned_%d",nr),fptbinsJetTrueA));
+        }
+        if(fObservable == kFragmentation){
+            htmp = dynamic_cast<TH1D*>(GetInputHist(file, "hz", htmp));
+            htmp->GetYaxis()->SetTitle("d#sigma/dz (mb)");
+            hFD[nr] = dynamic_cast<TH1D*>(htmp->Clone(Form("hFD_%d",nr)));
+            hFD_binned[nr] = dynamic_cast<TH1D*>(htmp->Rebin(fzbinsJetTrueN,Form("hFD_binned_%d",nr),fzbinsJetTrueA));
+        }
+
         //htmp->Scale(sigma_c[nr]);
-        htmp->GetYaxis()->SetTitle("d#sigma/dp_{T} (mb)");
-        hFD[nr] = dynamic_cast<TH1D*>(htmp->Clone(Form("hFD_%d",nr)));
-        hFD_binned[nr] = dynamic_cast<TH1D*>(htmp->Rebin(fptbinsJetTrueN,Form("hFD_binned_%d",nr),fptbinsJetTrueA));
+
+
 
     }
 
 
     TH1D *htmp = dynamic_cast<TH1D*>(hFD[cent]->Clone("htmp"));
     TH1D *hFD_central = dynamic_cast<TH1D*>(htmp->Clone("hFD_central"));
-    TH1D *hFD_central_binned = dynamic_cast<TH1D*>(htmp->Rebin(fptbinsJetTrueN,"hFD_central_binned",fptbinsJetTrueA));
+    TH1D *hFD_central_binned = nullptr;
+    if(fObservable == kXsection)hFD_central_binned=dynamic_cast<TH1D*>(htmp->Rebin(fptbinsJetTrueN,"hFD_central_binned",fptbinsJetTrueA));
+    if(fObservable == kFragmentation)hFD_central_binned=dynamic_cast<TH1D*>(htmp->Rebin(fzbinsJetTrueN,"hFD_central_binned",fzbinsJetTrueA));
 
     setHistoDetails(hFD_central,4,24);
     setHistoDetails(hFD_central_binned,4,24);
@@ -169,7 +205,6 @@ bool oldCounter = 0)
 }
 
 void subtractB_afterFolding(TString matrixFile,TH1D *hFD_central_binned,TH1D *hFD_up,TH1D *hFD_down,TH1D *hData_binned,TString outPlotDir,TString outSpectraDir, bool isSys){
-
     gStyle->SetOptStat(0000);
 
     hData_binned->SetMinimum(1);
@@ -215,20 +250,22 @@ void subtractB_afterFolding(TString matrixFile,TH1D *hFD_central_binned,TH1D *hF
     hFD_ratio->SetMinimum(0);
     setHistoDetails(hFD_ratio,8,20);
 
+
     TH1D *hFDUnc  = nullptr;
 
     if(isSys){
     hFD_ratio_up = dynamic_cast<TH1D*>(hFD_up_fold->Clone("hFD_ratio_up"));
+
     hFD_ratio_up->Divide(hData_binned);
     setHistoDetails(hFD_ratio_up,8,24,0,2,2);
-    for(int j=1; j<=fptbinsJetMeasN; j++ ){
+    for(int j=1; j<=maxObsBinN; j++ ){
             hFD_ratio_up->SetBinError(j,0);
     }
 
     hFD_ratio_down = dynamic_cast<TH1D*>(hFD_down_fold->Clone("hFD_ratio_down"));
     hFD_ratio_down->Divide(hData_binned);
     setHistoDetails(hFD_ratio_down,8,24,0,2,2);
-     for(int j=1; j<=fptbinsJetMeasN; j++ ){
+     for(int j=1; j<=maxObsBinN; j++ ){
             hFD_ratio_down->SetBinError(j,0);
     }
 
@@ -236,13 +273,14 @@ void subtractB_afterFolding(TString matrixFile,TH1D *hFD_central_binned,TH1D *hF
     hFDUnc = dynamic_cast<TH1D*>(hData_binned_sub->Clone("hDFUnc"));
     setHistoDetails(hFDUnc,kMagenta+2,20);
     hFDUnc->GetYaxis()->SetTitle("FD sys. unc");
-    for(int j=1; j<=fptbinsJetMeasN; j++ ){
+
+    for(int j=1; j<=maxObsBinN; j++ ){
             double unc1 = hData_binned_sub_up->GetBinContent(j) - hData_binned_sub->GetBinContent(j);
             double unc2 = hData_binned_sub->GetBinContent(j) - hData_binned_sub_down->GetBinContent(j);
             double unc = 0;
             if(unc1>unc2) unc = unc1;
             else unc = unc2;
-            unc /= hData_binned_sub->GetBinContent(j);
+            if(hData_binned_sub->GetBinContent(j)>1E-20) unc /= hData_binned_sub->GetBinContent(j);
             hFDUnc->SetBinContent(j,unc);
             hFDUnc->SetBinError(j,0);
 
@@ -252,7 +290,7 @@ void subtractB_afterFolding(TString matrixFile,TH1D *hFD_central_binned,TH1D *hF
     }
 
     //___________________________________drawing and saving
-    TFile *ofile = new TFile(Form("%s/JetPtSpectrum_FDsub.root",outSpectraDir.Data()),"RECREATE");
+    TFile *ofile = new TFile(Form("%s/JetPtSpectrum_FDsub%s.root",outSpectraDir.Data(),(fBin!=0)?Form("%d",fBin):""),"RECREATE");
     hData_binned->Write();
     hFD_central_binned->Write();
     hFD_central_binned_fold->Write();
@@ -281,7 +319,14 @@ void subtractB_afterFolding(TString matrixFile,TH1D *hFD_central_binned,TH1D *hF
 
      double shift = 0.09;
      double dshift = 0.06;
-     TPaveText *pvJet = new TPaveText(0.5,0.65-shift,0.9,0.7-shift,"brNDC");
+     Double_t zshiftx = 0;
+     Double_t zshifty = 0;
+     Double_t letsConfuseEveryoneWithTheseShifts = 0;
+     if(fObservable==Observable::kFragmentation){ zshiftx=-0.3;
+         zshifty=0.2;
+         letsConfuseEveryoneWithTheseShifts=-0.1;
+     }
+     TPaveText *pvJet = new TPaveText(0.5+zshiftx,0.65-shift+zshifty,0.9+zshiftx,0.7-shift+zshifty,"brNDC");
      pvJet->SetFillStyle(0);
      pvJet->SetBorderSize(0);
      pvJet->SetTextFont(42);
@@ -290,7 +335,7 @@ void subtractB_afterFolding(TString matrixFile,TH1D *hFD_central_binned,TH1D *hF
      pvJet->AddText(Form("Charged Jets, Anti-#it{k}_{T}, #it{R} = 0.%d",Rpar));
 
      shift+=dshift;
-     TPaveText *pvD = new TPaveText(0.5,0.65-shift,0.9,0.7-shift,"brNDC");
+     TPaveText *pvD = new TPaveText(0.5+zshiftx,0.65-shift+zshifty,0.9+zshiftx,0.7-shift+zshifty,"brNDC");
      pvD->SetFillStyle(0);
      pvD->SetBorderSize(0);
      pvD->SetTextFont(42);
@@ -300,7 +345,7 @@ void subtractB_afterFolding(TString matrixFile,TH1D *hFD_central_binned,TH1D *hF
      else pvD->AddText("with D^{0} #rightarrow K^{-}#pi^{+} and charge conj.");
 
      shift+=dshift;
-     TPaveText *pvEta = new TPaveText(0.5,0.65-shift,0.9,0.7-shift,"brNDC");
+     TPaveText *pvEta = new TPaveText(0.5+zshiftx,0.65-shift+zshifty,0.9+zshiftx,0.7-shift+zshifty,"brNDC");
      pvEta->SetFillStyle(0);
      pvEta->SetBorderSize(0);
      pvEta->SetTextFont(42);
@@ -309,13 +354,14 @@ void subtractB_afterFolding(TString matrixFile,TH1D *hFD_central_binned,TH1D *hF
      pvEta->AddText(Form("|#it{#eta}_{jet}| < 0.%d",9-Rpar));
 
      shift+=dshift;
-     TPaveText *pv3 = new TPaveText(0.5,0.65-shift,0.9,0.7-shift,"brNDC");
+     TPaveText *pv3 = new TPaveText(0.5+zshiftx,0.65-shift+zshifty+letsConfuseEveryoneWithTheseShifts,0.9+zshiftx,0.7-shift+zshifty,"brNDC");
      pv3->SetFillStyle(0);
      pv3->SetBorderSize(0);
      pv3->SetTextFont(42);
      pv3->SetTextSize(0.04f);
      pv3->SetTextAlign(11);
      pv3->AddText(Form("%d < p_{T,%s} < %d GeV/#it{c}",static_cast<Int_t>(fptbinsDA[0]),fDmesonS.Data(),static_cast<Int_t>(fptbinsDA[fptbinsDN])));
+     if(fObservable==Observable::kFragmentation)pv3->AddText(Form("%d < p_{T,ch. jet} < %d GeV/#it{c}",static_cast<Int_t>(fzptJetMeasA[fBin-1]),static_cast<Int_t>(fzptJetMeasA[fBin])));
 
     setHistoDetails(hData_binned,kGreen+2,21,1.2,2,1);
     setHistoDetails(hFD_central_binned,kBlue+1,25,1.3,2,2);
@@ -339,6 +385,11 @@ void subtractB_afterFolding(TString matrixFile,TH1D *hFD_central_binned,TH1D *hF
     //hFD_central_binned ->Draw("same");
     hFD_central_binned_fold ->Draw("same");
     hData_binned_sub->Draw("same");
+
+    if(fObservable == kFragmentation){
+        hData_binned->GetYaxis()->SetRangeUser(1E2,1E9);
+        if(fBin==4)hData_binned->GetYaxis()->SetRangeUser(1E1,1E8);
+    }
 
     if(isSys){
         //hFD_up->Draw("same");
@@ -464,14 +515,14 @@ void subtractB_beforeFolding(TH1D *hFD_central_binned,TH1D *hFD_up,TH1D *hFD_dow
     hFD_ratio_up = dynamic_cast<TH1D*>(hFD_up->Clone("hFD_ratio_up"));
     hFD_ratio_up->Divide(hData_binned);
     setHistoDetails(hFD_ratio_up,8,24,0,2,2);
-    for(int j=1; j<=fptbinsJetMeasN; j++ ){
+    for(int j=1; j<=maxObsBinN; j++ ){
             hFD_ratio_up->SetBinError(j,0);
     }
 
     hFD_ratio_down = dynamic_cast<TH1D*>(hFD_down->Clone("hFD_ratio_down"));
     hFD_ratio_down->Divide(hData_binned);
     setHistoDetails(hFD_ratio_down,8,24,0,2,2);
-     for(int j=1; j<=fptbinsJetMeasN; j++ ){
+     for(int j=1; j<=maxObsBinN; j++ ){
             hFD_ratio_down->SetBinError(j,0);
     }
 
@@ -479,7 +530,7 @@ void subtractB_beforeFolding(TH1D *hFD_central_binned,TH1D *hFD_up,TH1D *hFD_dow
     hFDUnc = dynamic_cast<TH1D*>(hData_binned_sub->Clone("hDFUnc"));
     setHistoDetails(hFDUnc,kMagenta+2,20);
     hFDUnc->GetYaxis()->SetTitle("FD sys. unc");
-    for(int j=1; j<=fptbinsJetMeasN; j++ ){
+    for(int j=1; j<=maxObsBinN; j++ ){
             double unc1 = hData_binned_sub_up->GetBinContent(j) - hData_binned_sub->GetBinContent(j);
             double unc2 = hData_binned_sub->GetBinContent(j) - hData_binned_sub_down->GetBinContent(j);
             double unc = 0;
@@ -493,7 +544,7 @@ void subtractB_beforeFolding(TH1D *hFD_central_binned,TH1D *hFD_up,TH1D *hFD_dow
     }
 
     //___________________________________drawing and saving
-    TFile *ofile = new TFile(Form("%s/JetPtSpectrum_FDsub_beforeFolding.root",outSpectraDir.Data()),"RECREATE");
+    TFile *ofile = new TFile(Form("%s/JetPtSpectrum_FDsub_beforeFolding%s.root",outSpectraDir.Data(),(fBin!=0)?Form("%d",fBin):""),"RECREATE");
     hData_binned->Write();
     hFD_central_binned->Write();
     hFD_ratio->Write();
@@ -581,7 +632,7 @@ TH1* GetUpSys(TH1D **hFD, const int nFiles, TH1D *hFD_up){
         double max = 0, maxerr = 0;
 
 
-        for(int j=1; j<=fptbinsJetMeasN; j++ ){
+        for(int j=1; j<=maxObsBinN; j++ ){
             max = hFD[0]->GetBinContent(j);
             for(int i=1;i<nFiles;i++){
                 if(hFD[i]->GetBinContent(j) > max){
@@ -606,7 +657,7 @@ TH1* GetDownSys(TH1D **hFD, const int nFiles, TH1D *hFD_down){
         double max = 0, maxerr = 0;
 
 
-        for(int j=1; j<=fptbinsJetMeasN; j++ ){
+        for(int j=1; j<=maxObsBinN; j++ ){
             max = hFD[0]->GetBinContent(j);
             for(int i=1;i<nFiles;i++){
                 if(hFD[i]->GetBinContent(j) < max){
@@ -628,8 +679,13 @@ TH1* foldB(TString matrixFile, TH1D *hFD, TH1D *folded ){
 
     gStyle->SetOptStat(0000); //Mean and RMS shown
 
+    if(fObservable == kXsection){
+      folded = new TH1D("folded","folded",fptbinsJetMeasN,fptbinsJetMeasA);
+    }
+    if(fObservable == kFragmentation){
+      folded = new TH1D("folded","folded",fzbinsJetTrueN,fzbinsJetTrueA);
+    }
 
-    folded = new TH1D("folded","folded",fptbinsJetMeasN,fptbinsJetMeasA);
 
     TFile *File = new TFile(matrixFile,"read");
     TH2D *combMatrix0 = dynamic_cast<TH2D*>(File->Get("Matrix"));
@@ -695,7 +751,13 @@ void setHistoDetails(TH1 *hh, Color_t color, Style_t Mstyle, double Msize, Width
    // hh->SetName(name.c_str());
 
     hh->SetTitle("");
-    hh->GetXaxis()->SetTitle("p_{T,ch,jet} (GeV/c)");
+    if(fObservable == kXsection){
+      hh->GetXaxis()->SetTitle("p_{T,ch,jet} (GeV/c)");
+    }
+    if(fObservable == kFragmentation){
+      hh->GetXaxis()->SetTitle("z_{#parallel}");
+    }
+
 
 }
 

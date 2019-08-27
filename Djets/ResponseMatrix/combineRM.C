@@ -19,6 +19,7 @@ TH2D * hMtxPP = nullptr;
 TH2D * hMtxDpt = nullptr;
 TH2D * hMtxRe = nullptr;
 TH2D * hMtxPro = nullptr;
+Int_t fBin;
 
 int LoadDetectorMatrix(TString fn, TString mxname, TString tsname, TString msname, bool norm = 1, TString spostfix="");
 int LoadBackgroundMatrix(TString fn, TString mxname);
@@ -41,14 +42,16 @@ TString detRMFile = "",
 bool useDeltaPt = 1,
 TString bkgRMFile = "matrix.root",
 bool fDoWeighting = 1,
-bool fdivide = 1 )
+bool fdivide = 1,
+        Int_t zBin=0)
 {
+    fBin=zBin;
 
 
   gStyle->SetOptStat(0000); //Mean and RMS shown
     gStyle->SetPadRightMargin(0.1f);
 	gSystem->Exec(Form("mkdir %s",outDir.Data()));
-	gSystem->Exec(Form("mkdir %s/plots",outDir.Data()));
+    gSystem->Exec(Form("mkdir %s/plots%s",outDir.Data(),(zBin!=0)?Form("%d",zBin):""));
 
 
 if (useDeltaPt) {
@@ -59,7 +62,8 @@ if (useDeltaPt) {
 	fMatrixDeltaPt->SetTitle("Bkg.Fluc. Matrix");
 }
 
-LoadDetectorMatrix(detRMFile.Data(),"hPtJet2d","hPtJetGen","hPtJetRec",0);
+if(fObservable == kXsection)LoadDetectorMatrix(detRMFile.Data(),"hPtJet2d","hPtJetGen","hPtJetRec",0);
+if(fObservable == kFragmentation)LoadDetectorMatrix(detRMFile.Data(),"hZJet2d","hZJetGen","hZJetRec",0);
 
 
 if (!fTrueSpectrum) { Error("Unfold", "No true spectrum!");	return; }
@@ -97,9 +101,16 @@ if (!fMeasSpectrum) { Error("Unfold", "No reconstructed spectrum!"); return; }
   }
 
   if (!fMatrixProd) { Error("Unfold", "Error getting product matrix!"); return;	}
+  if(fObservable == kXsection){
+      fMatrixProd->GetXaxis()->SetTitle("p_{T,ch jet}^{rec.} (GeV/#it{c})");
+    fMatrixProd->GetYaxis()->SetTitle("p_{T,ch jet}^{gen.} (GeV/#it{c})");
+  }
+  if(fObservable == kFragmentation){
+      fMatrixProd->GetXaxis()->SetTitle("z_{#parallel}^{rec.}");
+    fMatrixProd->GetYaxis()->SetTitle("z_{#parallel}^{gen.}");
+  }
 
-	fMatrixProd->GetXaxis()->SetTitle("p_{T,ch jet}^{rec.} (GeV/#it{c})");
-  fMatrixProd->GetYaxis()->SetTitle("p_{T,ch jet}^{gen.} (GeV/#it{c})");
+
 	fMatrixProd->SetTitle("Combined Matrix");
 
   if(fSystem) MtxPlots(outDir,"probability");
@@ -111,20 +122,52 @@ if (!fMeasSpectrum) { Error("Unfold", "No reconstructed spectrum!"); return; }
   TH1D* hProjYeff=dynamic_cast<TH1D*>(fMatrixProd->ProjectionY("hProjYeff"));
   TH1D* hProjXeff=dynamic_cast<TH1D*>(fMatrixProd->ProjectionX("hProjXeff"));
 
-  TH2D *Matrix = Rebin2D("Matrix", fMatrixProd, fptbinsJetMeasN, fptbinsJetMeasA, fptbinsJetTrueN, fptbinsJetTrueA,0);
-  Matrix->GetXaxis()->SetTitle("p_{T,ch jet}^{rec.} (GeV/#it{c})");
-  Matrix->GetYaxis()->SetTitle("p_{T,ch jet}^{gen.} (GeV/#it{c})");
+  TH2D *Matrix = nullptr;
+  if(fObservable == kXsection){
+      Matrix = Rebin2D("Matrix", fMatrixProd, fptbinsJetMeasN, fptbinsJetMeasA, fptbinsJetTrueN, fptbinsJetTrueA,0);
+      Matrix->GetXaxis()->SetTitle("p_{T,ch jet}^{rec.} (GeV/#it{c})");
+      Matrix->GetYaxis()->SetTitle("p_{T,ch jet}^{gen.} (GeV/#it{c})");
+  }
+  if(fObservable == kFragmentation){
+      if(isPrompt)Matrix = Rebin2D("Matrix", fMatrixProd, fzbinsJetMeasN, fzbinsJetMeasA, fzbinsJetTrueN, fzbinsJetTrueAPrompt,0);
+      else Matrix = Rebin2D("Matrix", fMatrixProd, fzbinsJetMeasN, fzbinsJetMeasA, fzbinsJetTrueN, fzbinsJetTrueA,0);
+      Matrix->GetXaxis()->SetTitle("z_{#parallel}^{rec.}");
+      Matrix->GetYaxis()->SetTitle("z_{#parallel}^{gen.}");
+      Matrix->GetXaxis()->SetRangeUser(fzbinsJetMeasA[0],fzbinsJetMeasA[fzbinsJetMeasN]+0.2);
+      if(isPrompt)Matrix->GetYaxis()->SetRangeUser(fzbinsJetMeasA[0],fzbinsJetTrueA[fzbinsJetTrueN]);
+      else Matrix->GetYaxis()->SetRangeUser(fzbinsJetMeasA[0],fzbinsJetTrueAPrompt[fzbinsJetTrueN]);
+  }
   Matrix->SetTitle("Combined Matrix");
 
-  TH2D *MatrixProb = Rebin2D("MatrixProb", fMatrixProd, fptbinsJetMeasN, fptbinsJetMeasA, fptbinsJetTrueN, fptbinsJetTrueA,0);
-  MatrixProb->GetXaxis()->SetTitle("p_{T,ch jet}^{rec.} (GeV/#it{c})");
-  MatrixProb->GetYaxis()->SetTitle("p_{T,ch jet}^{gen.} (GeV/#it{c})");
+  TH2D *MatrixProb = nullptr;
+  if(fObservable == kXsection){
+      MatrixProb=Rebin2D("MatrixProb", fMatrixProd, fptbinsJetMeasN, fptbinsJetMeasA, fptbinsJetTrueN, fptbinsJetTrueA,0);
+      MatrixProb->GetXaxis()->SetTitle("p_{T,ch jet}^{rec.} (GeV/#it{c})");
+      MatrixProb->GetYaxis()->SetTitle("p_{T,ch jet}^{gen.} (GeV/#it{c})");
+  }
+  if(fObservable == kFragmentation){
+      if(isPrompt)MatrixProb=Rebin2D("MatrixProb", fMatrixProd, fzbinsJetMeasN, fzbinsJetMeasA, fzbinsJetTrueN, fzbinsJetTrueA,0);
+      else MatrixProb=Rebin2D("MatrixProb", fMatrixProd, fzbinsJetMeasN, fzbinsJetMeasA, fzbinsJetTrueN, fzbinsJetTrueAPrompt,0);
+      MatrixProb->GetXaxis()->SetTitle("z_{#parallel}^{rec.}");
+      MatrixProb->GetYaxis()->SetTitle("z_{#parallel}^{gen.}");
+  }
+
   MatrixProb->SetTitle("Combined Prob Matrix");
   NormMatrixY(MatrixProb);
   MatrixProb->GetZaxis()->SetRangeUser(0.0001,1);
 
-  hMtxPro->GetXaxis()->SetTitle("p_{T,ch jet}^{rec.} (GeV/#it{c})");
-  hMtxPro->GetYaxis()->SetTitle("p_{T,ch jet}^{gen.} (GeV/#it{c})");
+  if(fObservable == kXsection){
+      hMtxPro->GetXaxis()->SetTitle("p_{T,ch jet}^{rec.} (GeV/#it{c})");
+      hMtxPro->GetYaxis()->SetTitle("p_{T,ch jet}^{gen.} (GeV/#it{c})");
+  }
+  if(fObservable == kFragmentation){
+      hMtxPro->GetXaxis()->SetTitle("z_{#parallel}^{rec.}");
+      hMtxPro->GetYaxis()->SetTitle("z_{#parallel}^{gen.}");
+
+
+  }
+
+
 	hMtxPro->SetTitle("Combined Matrix");
 
 /*  hMtxPP->GetXaxis()->SetTitle("p_{T,ch jet}^{rec.} (GeV/#it{c})");
@@ -183,13 +226,16 @@ if (!fMeasSpectrum) { Error("Unfold", "No reconstructed spectrum!"); return; }
   pvEta->SetTextAlign(11);
   pvEta->AddText(Form("|#it{#eta}_{jet}| < 0.%d",9-Rpar));
 
-  TPaveText *pv3 = new TPaveText(0.6,0.5-shift,0.9,0.54-shift,"brNDC");
+  TPaveText *pv3 = nullptr;
+  if(fObservable==kXsection) pv3=new TPaveText(0.6,0.5-shift,0.9,0.54-shift,"brNDC");
+  if(fObservable==kFragmentation) pv3=new TPaveText(0.5,0.5-shift,0.9,0.54-shift,"brNDC");
   pv3->SetFillStyle(0);
   pv3->SetBorderSize(0);
   pv3->SetTextFont(42);
   pv3->SetTextSize(0.03f);
   pv3->SetTextAlign(11);
   pv3->AddText(Form("%d < p_{T,%s} < %d GeV/#it{c}",static_cast<Int_t>(fptbinsDA[0]),fDmesonS.Data(),static_cast<Int_t>(fptbinsDA[fptbinsDN])));
+  if(fObservable==kFragmentation)pv3->AddText(Form("%d < p_{T,ch. jet} < %d",static_cast<Int_t>(fzptJetMeasA[fBin-1]),static_cast<Int_t>(fzptJetMeasA[fBin])));
 
 	TCanvas *cMatrixProd = new TCanvas();
 	cMatrixProd->SetLogz();
@@ -213,19 +259,30 @@ if (!fMeasSpectrum) { Error("Unfold", "No reconstructed spectrum!"); return; }
 
 
   TFile *outMatrix;
-  if(isPrompt) outMatrix = new TFile(Form("%s/combineMatrix.root",outDir.Data()),"recreate");
-  else outMatrix = new TFile(Form("%s/combineMatrixFD.root",outDir.Data()),"recreate");
+  if(isPrompt) outMatrix = new TFile(Form("%s/combineMatrix%s.root",outDir.Data(),(fBin!=0)?Form("%d",fBin):""),"recreate");
+  else outMatrix = new TFile(Form("%s/combineMatrixFD%s.root",outDir.Data(),(fBin!=0)?Form("%d",fBin):""),"recreate");
   fMatrixProd->Write();
   Matrix->Write();
   MatrixProb->Write();
   hMtxPro->Write();
   outMatrix->Close();
 
-  Matrix->GetXaxis()->SetRangeUser(fptbinsJetMeasA[0],fptbinsJetMeasA[fptbinsJetMeasN]+5);
-  Matrix->GetYaxis()->SetRangeUser(3,fptbinsJetTrueA[fptbinsJetTrueN]);
+  if(fObservable == kXsection){
+      Matrix->GetXaxis()->SetRangeUser(fptbinsJetMeasA[0],fptbinsJetMeasA[fptbinsJetMeasN]+5);
+      Matrix->GetYaxis()->SetRangeUser(3,fptbinsJetTrueA[fptbinsJetTrueN]);
+      MatrixProb->GetXaxis()->SetRangeUser(fptbinsJetMeasA[0],fptbinsJetMeasA[fptbinsJetMeasN]+5);
+      MatrixProb->GetYaxis()->SetRangeUser(3,fptbinsJetTrueA[fptbinsJetTrueN]);
+  }
+  if(fObservable == kFragmentation){
+      Matrix->GetXaxis()->SetRangeUser(fzbinsJetMeasA[0],fzbinsJetMeasA[fzbinsJetMeasN]+0.2);
+      if(isPrompt)Matrix->GetYaxis()->SetRangeUser(3,fzbinsJetTrueA[fzbinsJetTrueN]);
+      else Matrix->GetYaxis()->SetRangeUser(3,fzbinsJetTrueAPrompt[fzbinsJetTrueN]);
+      MatrixProb->GetXaxis()->SetRangeUser(fzbinsJetMeasA[0],fzbinsJetMeasA[fzbinsJetMeasN]+0.2);
+      if(isPrompt)MatrixProb->GetYaxis()->SetRangeUser(3,fzbinsJetTrueA[fzbinsJetTrueN]);
+      else MatrixProb->GetYaxis()->SetRangeUser(3,fzbinsJetTrueAPrompt[fzbinsJetTrueN]);
+  }
 
-  MatrixProb->GetXaxis()->SetRangeUser(fptbinsJetMeasA[0],fptbinsJetMeasA[fptbinsJetMeasN]+5);
-  MatrixProb->GetYaxis()->SetRangeUser(3,fptbinsJetTrueA[fptbinsJetTrueN]);
+
 
 
   shift = 0.41;
@@ -259,6 +316,8 @@ if (!fMeasSpectrum) { Error("Unfold", "No reconstructed spectrum!"); return; }
   pv3->SetTextSize(0.03f);
   pv3->SetTextAlign(11);
   pv3->AddText(Form("|#it{#eta}_{jet}| < 0.%d, %d < p_{T,%s} < %d GeV/#it{c}",9-Rpar,static_cast<Int_t>(fptbinsDA[0]),fDmesonS.Data(),static_cast<Int_t>(fptbinsDA[fptbinsDN])));
+  if(fObservable==kFragmentation)pv3->AddText(Form("%d < p_{T,ch. jet} < %d",static_cast<Int_t>(fzptJetMeasA[fBin-1]),static_cast<Int_t>(fzptJetMeasA[fBin])));
+
 
   TCanvas *cMatrixProdReb = new TCanvas();
   cMatrixProdReb->SetLogz();
@@ -278,23 +337,23 @@ if (!fMeasSpectrum) { Error("Unfold", "No reconstructed spectrum!"); return; }
 
 		if(isPrompt){
 			if(useDeltaPt) {
-         cMatrix->SaveAs(Form("%s/plots/Matrices.png",outDir.Data()));
-         cMatrixProb->SaveAs(Form("%s/plots/MatricesProb.png",outDir.Data()));
+         cMatrix->SaveAs(Form("%s/plots%s/Matrices.png",outDir.Data(),(zBin!=0)?Form("%d",zBin):""));
+         cMatrixProb->SaveAs(Form("%s/plots%s/MatricesProb.png",outDir.Data(),(zBin!=0)?Form("%d",zBin):""));
        }
-			cMatrixProd->SaveAs(Form("%s/plots/ProdMatrix.png",outDir.Data()));
-      cMatrixProdProb->SaveAs(Form("%s/plots/ProdMatrixProb.png",outDir.Data()));
-			cMatrixProdReb->SaveAs(Form("%s/plots/ProdMatrixRebin.png",outDir.Data()));
-      cMatrixProdProbReb->SaveAs(Form("%s/plots/ProdMatrixPropRebin.png",outDir.Data()));
+            cMatrixProd->SaveAs(Form("%s/plots%s/ProdMatrix.png",outDir.Data(),(zBin!=0)?Form("%d",zBin):""));
+      cMatrixProdProb->SaveAs(Form("%s/plots%s/ProdMatrixProb.png",outDir.Data(),(zBin!=0)?Form("%d",zBin):""));
+            cMatrixProdReb->SaveAs(Form("%s/plots%s/ProdMatrixRebin.png",outDir.Data(),(zBin!=0)?Form("%d",zBin):""));
+      cMatrixProdProbReb->SaveAs(Form("%s/plots%s/ProdMatrixPropRebin.png",outDir.Data(),(zBin!=0)?Form("%d",zBin):""));
 		}
 		else {
 			if(useDeltaPt) {
-        cMatrix->SaveAs(Form("%s/plots/MatricesFD.png",outDir.Data()));
-        cMatrixProb->SaveAs(Form("%s/plots/MatricesProbFD.png",outDir.Data()));
+        cMatrix->SaveAs(Form("%s/plots%s/MatricesFD.png",outDir.Data(),(zBin!=0)?Form("%d",zBin):""));
+        cMatrixProb->SaveAs(Form("%s/plots%s/MatricesProbFD.png",outDir.Data(),(zBin!=0)?Form("%d",zBin):""));
       }
-      cMatrixProd->SaveAs(Form("%s/plots/ProdMatrixFD.png",outDir.Data()));
-      cMatrixProdProb->SaveAs(Form("%s/plots/ProdMatrixProbFD.png",outDir.Data()));
-			cMatrixProdReb->SaveAs(Form("%s/plots/ProdMatrixRebinFD.png",outDir.Data()));
-      cMatrixProdProbReb->SaveAs(Form("%s/plots/ProdMatrixPropRebinFD.png",outDir.Data()));
+      cMatrixProd->SaveAs(Form("%s/plots%s/ProdMatrixFD.png",outDir.Data(),(zBin!=0)?Form("%d",zBin):""));
+      cMatrixProdProb->SaveAs(Form("%s/plots%s/ProdMatrixProbFD.png",outDir.Data(),(zBin!=0)?Form("%d",zBin):""));
+            cMatrixProdReb->SaveAs(Form("%s/plots%s/ProdMatrixRebinFD.png",outDir.Data(),(zBin!=0)?Form("%d",zBin):""));
+      cMatrixProdProbReb->SaveAs(Form("%s/plots%s/ProdMatrixPropRebinFD.png",outDir.Data(),(zBin!=0)?Form("%d",zBin):""));
 		}
 
 	return;
@@ -452,8 +511,8 @@ int MtxPlots(TString outDir, TString outName) {
         hMtxPro->Draw("colz");
     }
 
-    cMtx->SaveAs(Form("%s/plots/%s_probMtx.pdf",outDir.Data(),outName.Data()));
-    cMtx->SaveAs(Form("%s/plots/%s_probMtx.png",outDir.Data(),outName.Data()));
+    cMtx->SaveAs(Form("%s/plots%s/%s_probMtx.pdf",outDir.Data(),outName.Data(),(fBin!=0)?Form("%d",fBin):""));
+    cMtx->SaveAs(Form("%s/plots%s/%s_probMtx.png",outDir.Data(),outName.Data(),(fBin!=0)?Form("%d",fBin):""));
 
   if(fSystem){
     TCanvas *cSlices=new TCanvas("ProbSlice", "Probability slices",1000,1000);
@@ -464,8 +523,8 @@ int MtxPlots(TString outDir, TString outName) {
     plotSlice(cSlices->cd(4), hMtxPP,hMtxDpt,hMtxRe,hMtxPro,20,25);
     plotSlice(cSlices->cd(5), hMtxPP,hMtxDpt,hMtxRe,hMtxPro,25,30);
 
-    cSlices->SaveAs(Form("%s/plots/%s_probSlices.pdf",outDir.Data(),outName.Data()));
-    cSlices->SaveAs(Form("%s/plots/%s_probSlices.png",outDir.Data(),outName.Data()));
+    cSlices->SaveAs(Form("%s/plots%s/%s_probSlices.pdf",outDir.Data(),outName.Data(),(fBin!=0)?Form("%d",fBin):""));
+    cSlices->SaveAs(Form("%s/plots%s/%s_probSlices.png",outDir.Data(),outName.Data(),(fBin!=0)?Form("%d",fBin):""));
   }
 
     return 0;
