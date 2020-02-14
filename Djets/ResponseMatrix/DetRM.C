@@ -157,9 +157,9 @@ bool postfix = 0, TString listName = "FD", bool isprefix=0, Int_t zBin=0)
         hPtJet2d->SetName("hZJet2d");
         hPtJet2d->GetXaxis()->SetTitle("z^{rec.}");
         hPtJet2d->GetYaxis()->SetTitle("z^{gen.}");
-        hPtJet2d->GetXaxis()->SetRangeUser(fzbinsJetMeasA[0],fzbinsJetMeasA[fzbinsJetMeasN]+0.2);
-        if(isPrompt)hPtJet2d->GetYaxis()->SetRangeUser(fzbinsJetMeasA[0],fzbinsJetTrueA[fzbinsJetTrueN]+0.2);
-        else hPtJet2d->GetYaxis()->SetRangeUser(fzbinsJetMeasA[0],fzbinsJetTrueAPrompt[fzbinsJetTrueN]+0.2);
+        hPtJet2d->GetXaxis()->SetRangeUser(fzbinsJetMeasA[zBin-1][0],fzbinsJetMeasA[zBin-1][fzbinsJetMeasN[zBin-1]]);
+        if(isPrompt)hPtJet2d->GetYaxis()->SetRangeUser(fzbinsJetTrueAPrompt[zBin-1][0],fzbinsJetTrueAPrompt[zBin-1][fzbinsJetTrueN[zBin-1]]);
+        else hPtJet2d->GetYaxis()->SetRangeUser(fzbinsJetMeasA[zBin-1][0],fzbinsJetMeasA[zBin-1][fzbinsJetMeasN[zBin-1]]);
 
         hPtJetGen->SetName("hZJetGen");
         hPtJetRec->SetName("hZJetRec");

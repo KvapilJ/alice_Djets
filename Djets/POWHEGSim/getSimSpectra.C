@@ -8,7 +8,7 @@
 //
 
 #include "config.h"
-
+#include <fstream>
 //fDmesonSpecie = 1;
 //fRpar = 0.4;
 //Rpar = 4;
@@ -56,11 +56,21 @@ std::cout<<"A"<<std::endl;
     dptN=fptbinsDN;
 
     if(fObservable == Observable::kFragmentation){
+
+        if(quark == 0){
+            jetptmin = fzptJetTrueA[zBin-1];
+            jetptmax = fzptJetTrueA[zBin];
+            dptmin=fzptbinsDPromptA[zBin-1][0];
+            dptmax=fzptbinsDPromptA[zBin-1][fzptbinsDPromptN[zBin-1]];
+            dptN=fzptbinsDPromptN[zBin-1];
+        }
+        else if(quark == 1){
+            jetptmin = fzptJetMeasA[zBin-1];
+            jetptmax = fzptJetMeasA[zBin];
             dptmin=fzptbinsDA[zBin-1][0];
             dptmax=fzptbinsDA[zBin-1][fzptbinsDN[zBin-1]];
             dptN=fzptbinsDN[zBin-1];
-            jetptmin = fzptJetMeasA[zBin-1];
-            jetptmax = fzptJetMeasA[zBin];
+        }
             fzBin=zBin;
             isjetptcut=true;
     }
@@ -179,12 +189,14 @@ std::cout<<"BG"<<std::endl;
     for (Int_t j=0; j<dptN; j++) {
         hjetpt[j] = new TH1D(Form("hjetpt_%d",j),"hjetpt",100,0,100);
         hjetpt[j]->Sumw2();
-        hjetz[j] = new TH1D(Form("hjetz_%d",j),"hjetz",100,0,1.02);
+        hjetz[j] = new TH1D(Form("hjetz_%d",j),"hjetz",fzbinsJetMeasN[fzBin-1],fzbinsJetMeasA[fzBin-1]);
         hjetz[j]->Sumw2();
     }
     Double_t effC, effB, eff;
     hPt = new TH1D("hPt","hjetpt",100,0,100);
-    *hz = new TH1D("hz","hz",100,0,1.02);
+    *hz = new TH1D("hz","hz",fzbinsJetMeasN[fzBin-1],fzbinsJetMeasA[fzBin-1]);
+    //std::ofstream myfile;
+    //myfile.open ("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/simtocomp3.txt");
 std::cout<<"BH"<<std::endl;
     for (Int_t k=0; k<tree->GetEntries(); k++) {
     tree->GetEntry(k);
@@ -197,18 +209,22 @@ std::cout<<"BH"<<std::endl;
     else if(brD->fPartonType != 4) continue;
     if(brD->fAncestorPDG == 2212) continue; // check if not coming from proton
 //if(fObservable == Observable::kFragmentation)
+
     if(isDptcut){
       for (Int_t j=0; j<dptN; j++) {
         if ((brD->fPt < fptbinsDA[j] || brD->fPt >= fptbinsDA[j+1])&&(fObservable == Observable::kXsection)) continue;
         if ((brD->fPt < fzptbinsDA[fzBin-1][j] || brD->fPt >= fzptbinsDA[fzBin-1][j+1])&&(fObservable == Observable::kFragmentation)) continue;
         hjetpt[j]->Fill(brJet->fPt);
-        if (brJet->fPt > fzptJetMeasA[fzBin-1] && brJet->fPt <= fzptJetMeasA[fzBin]) hjetz[j]->Fill(brJet->fZ);
-        if(k<10)std::cout<<k<<" "<<fzptbinsDA[fzBin-1][j]<<" "<<fzptbinsDA[fzBin-1][j+1]<<" "<<fzptJetMeasA[fzBin-1]<<" "<< fzptJetMeasA[fzBin]<<std::endl;
+        if (brJet->fPt >= fzptJetMeasA[fzBin-1] && brJet->fPt < fzptJetMeasA[fzBin]){ hjetz[j]->Fill(brJet->fZ);
+        //myfile<<k<<" "<<brD->fPt<<" "<<brJet->fPt<<" "<<brJet->fZ<<std::endl;
+        }
       }//end of D-meson pT bin loop
     }
     else hPt->Fill(brJet->fPt);
     }
 
+
+//myfile.close();
 std::cout<<"BI"<<std::endl;
 if(isDptcut){
   for (Int_t j=0; j<dptN; j++){

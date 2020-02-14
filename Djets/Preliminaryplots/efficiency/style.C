@@ -1,4 +1,20 @@
 // rootlogon.C
+#include "TStyle.h"
+#include <iostream>
+#include "TString.h"
+#include "TH1.h"
+#include "TLegend.h"
+#include "TFile.h"
+#include "TLine.h"
+#include "THStack.h"
+#include "TMath.h"
+#include "TSystem.h"
+#include "TCanvas.h"
+#include "TGaxis.h"
+#include "TROOT.h"
+#include "TColor.h"
+#include "AliAnalysisTaskTrackingSysPropagation.h"
+#include <fstream>
 
 void style()
 {// Add my own options here:

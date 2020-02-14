@@ -13,9 +13,9 @@ double dy = 2*jetEta;
 double *sysCutVar, *systuncP;
 double DTrackEff = 100;
 double globalUnc = 100;
-//int fptbinsJetFinalN;
+//int xAxisBins;
 Double_t *xAxis;
-double plotmin = 5, plotmax=50;
+double plotmin = 0.4, plotmax=1;
 
 Color_t colors[] = {1,8,4,2,6,kOrange-1,kGray+2,kCyan+1,kMagenta+2,kViolet+5,kYellow+2};
 Int_t markers[] = {20,21,22,23,24,25,26,27,28,29,30,32,33,34};
@@ -39,10 +39,14 @@ void drawFinal(TString outPlotDir);
 TH1D *CentralPointsStatisticalUncertainty__4;
 TH1D *GeneratorLevel_JetPtSpectrum__3;
 Int_t fBin;
+Int_t xAxisBins;
 
 bool isSimSys = 1, isSys = 1, isSim = 1;
 TString sysUncDir;
 
+Bool_t pdf = 0;
+Int_t binMin = 1; //0.2
+//Int_t binMax = 7; //0.2
 void finalJetSpectra(
 TString dataFile = "/home/basia/Work/alice/analysis/pPb_run2/DzeroR03_RefDPt3PythiaEff_BaseCuts/Default_jetMeas3_50_jetTrue3_50_ppbinning/unfolding_Bayes_3/unfoldedSpectrum_unfoldedJetSpectrum.root",
 TString dataAnalysisFile = "/home/basia/Work/alice/analysis/pPb_run2/D0jet/outData/AnalysisResults_LHC16R03.root",
@@ -54,6 +58,7 @@ bool issim = 1,
 bool simsys = 1,
 TString listName = "",
 Int_t zBin = 0,
+Bool_t is2D = 0,
 bool oldCounter = 0,
 TString histBase = "unfoldedSpectrum"
 
@@ -70,11 +75,28 @@ TString histBase = "unfoldedSpectrum"
     outPlotDir+=(zBin!=0)?Form("%d",zBin):"";
     gSystem->Exec(Form("mkdir %s",outSpectraDir.Data()));
     gSystem->Exec(Form("mkdir %s",outPlotDir.Data()));
+    if(fObservable == kXsection){
+      xAxisBins = fptbinsJetFinalN;
+    }
+    if(fObservable == kFragmentation){
+      xAxisBins = fzbinsJetFinalN[fBin-1];
+      if(pdf)xAxisBins = xAxisBins - binMin+1;
+      if(is2D == true) histBase = Form("unfoldedSpectrumKineEff%d",fBin);
+    }
 
-    xAxis = new double[fptbinsJetFinalN+1];
-    for(int k=0; k<fptbinsJetFinalN+1; k++) xAxis[k] = fptbinsJetFinalA[k];
-    systuncP = new double[fptbinsJetFinalN];
-//    for(int k=0; k<fptbinsJetFinalN; k++) systuncP[k] = 0.15;
+    xAxis = new double[xAxisBins+1];
+    if(fObservable == kXsection){
+      for(int k=0; k<xAxisBins+1; k++) xAxis[k] = fptbinsJetFinalA[k];
+    }
+    if(fObservable == kFragmentation){
+      for(int k=0; k<xAxisBins+1; k++){
+          if(pdf) xAxis[k] = fzbinsJetFinalA[fBin-1][k+binMin-1];
+          else xAxis[k] = fzbinsJetFinalA[fBin-1][k];
+      }
+    }
+
+    systuncP = new double[xAxisBins];
+//    for(int k=0; k<xAxisBins; k++) systuncP[k] = 0.15;
 //    systuncErr_pp[ptbinsN] = {0.104599235179,0.0886904729946,0.114415907985,0.111763142404,0.15895282319,0.180252600536,0.199602104197};
 //    sysUncErr_pp[ptbinsN] = {0.104599395179,0.0886906329946,0.114416067985,0.111763302404,0.15895298319,0.180252760536,0.199602264197};//with BR 0.04% incl
 /*systuncP[0]=0.104599395179;
@@ -135,23 +157,127 @@ systuncP[6]=0.199602264197;*/
     systuncP[5]=0.1768756625;
     systuncP[6]=0.2544523531;
     systuncP[7]=0.2759402109;*/
-
-
-    systuncP[0]=0.01;
+/*
+if(fBin ==2){
+        systuncP[0]=0.53;
+        systuncP[1]=0.21;
+        systuncP[2]=0.17;
+        systuncP[3]=0.15;
+        systuncP[4]=0.14;
+        systuncP[5]=0.12;
+        systuncP[6]=0.11;
+}else if(fBin ==3){
+    systuncP[0]=0.34;
+    systuncP[1]=0.37;
+    systuncP[2]=0.24;
+    systuncP[3]=0.15;
+    systuncP[4]=0.10;
+    systuncP[5]=0.10;
+    systuncP[6]=0.10;
+} else if(fBin ==4){
+    systuncP[0]=0.63;
+    systuncP[1]=0.47;
+    systuncP[2]=0.20;
+    systuncP[3]=0.11;
+    systuncP[4]=0.10;
+    systuncP[5]=0.09;
+    systuncP[6]=0.10;
+}else if(fBin ==5){
+    systuncP[0]=0.97;
+    systuncP[1]=0.40;
+    systuncP[2]=0.16;
+    systuncP[3]=0.11;
+    systuncP[4]=0.12;
+    systuncP[5]=0.11;
+    systuncP[6]=0.11;
+}*/
+    if(!pdf){
+if(fBin ==1){
+        systuncP[0]=0.01;
         systuncP[1]=0.01;
         systuncP[2]=0.01;
         systuncP[3]=0.01;
         systuncP[4]=0.01;
-        systuncP[5]=0.01;
-        systuncP[6]=0.01;
-        systuncP[7]=0.01;
+        systuncP[5]=0.01;}
+else if(fBin ==2){
+        systuncP[0]=0.30;
+        systuncP[1]=0.23;
+        systuncP[2]=0.17;
+        systuncP[3]=0.12;
+        systuncP[4]=0.09;
+        systuncP[5]=0.10;
+        systuncP[6]=0.11;
+}else if(fBin ==3){
+    systuncP[0]=0.31;
+    systuncP[1]=0.36;
+    systuncP[2]=0.17;
+    systuncP[3]=0.11;
+    systuncP[4]=0.09;
+    systuncP[5]=0.09;
+    systuncP[6]=0.10;
+} else if(fBin ==4){
+    systuncP[0]=0.41;
+    systuncP[1]=0.16;
+    systuncP[2]=0.11;
+    systuncP[3]=0.09;
+    systuncP[4]=0.08;
+    systuncP[5]=0.10;
+}else if(fBin ==5){
+    systuncP[0]=0.40;
+    systuncP[1]=0.15;
+    systuncP[2]=0.11;
+    systuncP[3]=0.10;
+    systuncP[4]=0.09;
+    systuncP[5]=0.10;
+}
+    }
+    else{
+        if(fBin ==1){
+                systuncP[0]=0.01;
+                systuncP[1]=0.01;
+                systuncP[2]=0.01;
+                systuncP[3]=0.01;
+                systuncP[4]=0.01;
+                systuncP[5]=0.01;}
+        else if(fBin ==2){
+                systuncP[0]=0.29;
+                systuncP[1]=0.22;
+                systuncP[2]=0.16;
+                systuncP[3]=0.10;
+                systuncP[4]=0.08;
+                systuncP[5]=0.08;
+                systuncP[6]=0.09;
+        }else if(fBin ==3){
+            systuncP[0]=0.31;
+            systuncP[1]=0.36;
+            systuncP[2]=0.16;
+            systuncP[3]=0.09;
+            systuncP[4]=0.07;
+            systuncP[5]=0.07;
+            systuncP[6]=0.08;
+        } else if(fBin ==4){
+            systuncP[0]=0.41;
+            systuncP[1]=0.15;
+            systuncP[2]=0.09;
+            systuncP[3]=0.07;
+            systuncP[4]=0.06;
+            systuncP[5]=0.09;
+        }else if(fBin ==5){
+            systuncP[0]=0.39;
+            systuncP[1]=0.15;
+            systuncP[2]=0.10;
+            systuncP[3]=0.09;
+            systuncP[4]=0.08;
+            systuncP[5]=0.09;
+        }
+    }
 
 
 
 
 
-    sysCutVar = new double[fptbinsJetFinalN];
-    for(int k=0; k<fptbinsJetFinalN; k++) sysCutVar[k] = 0.0;
+    sysCutVar = new double[xAxisBins];
+    for(int k=0; k<xAxisBins; k++) sysCutVar[k] = 0.0;
 
     TFile *File = new TFile(dataAnalysisFile,"read");
     TDirectoryFile* dir;
@@ -199,8 +325,8 @@ std::cout<<"A"<<std::endl;
               file += "_Dpt"; file += fptbinsDA[0]; file += "_"; file += fptbinsDA[fptbinsDN];
           }
           else if(fObservable == Observable::kFragmentation) {
-              file += "_Dpt"; file += fzptbinsDA[zBin-1][0]; file += "_"; file += fzptbinsDA[zBin-1][fzptbinsDN[zBin-1]];
-              file += "_Jetpt"; file += fzptJetMeasA[zBin-1]; file += "_"; file += fzptJetMeasA[zBin];
+              file += "_Dpt"; file += fzptbinsDPromptA[zBin-1][0]; file += "_"; file += fzptbinsDPromptA[zBin-1][fzptbinsDPromptN[zBin-1]];
+              file += "_Jetpt"; file += fzptJetTrueA[zBin-1]; file += "_"; file += fzptJetTrueA[zBin];
           }
           if(fDmesonSpecie) file += "_Dstar";
           else file += "_Dzero";
@@ -210,32 +336,43 @@ std::cout<<"A"<<std::endl;
               htmp = dynamic_cast<TH1D*>(GetInputHist(file, "hPt", htmp));
               htmp->GetYaxis()->SetTitle("d#sigma/dp_{T} (mb)");
               hPrompt[nr] = dynamic_cast<TH1D*>(htmp->Clone(Form("hPrompt_%d",nr)));
-              hPrompt_binned[nr] = dynamic_cast<TH1D*>(htmp->Rebin(fptbinsJetFinalN,Form("hPrompt_binned_%d",nr),xAxis));
+              hPrompt_binned[nr] = dynamic_cast<TH1D*>(htmp->Rebin(xAxisBins,Form("hPrompt_binned_%d",nr),xAxis));
           }
           if(fObservable == kFragmentation){
               htmp = dynamic_cast<TH1D*>(GetInputHist(file, "hz", htmp));
               htmp->GetYaxis()->SetTitle("d#sigma/dz (mb)");
-              Int_t nBin = htmp->FindBin(1.0);
-              std::cout<<htmp->GetBinContent(nBin-1)<<" "<<htmp->GetBinContent(nBin)<<std::endl;
-              htmp->SetBinContent(nBin-1,htmp->GetBinContent(nBin-1)+htmp->GetBinContent(nBin));
-              htmp->SetBinContent(nBin,0);
-              std::cout<<htmp->GetBinContent(nBin-1)<<" "<<htmp->GetBinContent(nBin)<<std::endl;
+              //Int_t nBin = htmp->FindBin(1.0);
+              //std::cout<<htmp->GetBinContent(nBin-1)<<" "<<htmp->GetBinContent(nBin)<<std::endl;
+              //htmp->SetBinContent(nBin-1,htmp->GetBinContent(nBin-1)+htmp->GetBinContent(nBin));
+              //htmp->SetBinContent(nBin,0);
+              //std::cout<<htmp->GetBinContent(nBin-1)<<" "<<htmp->GetBinContent(nBin)<<std::endl;
               hPrompt[nr] = dynamic_cast<TH1D*>(htmp->Clone(Form("hFD_%d",nr)));
-              hPrompt_binned[nr] = dynamic_cast<TH1D*>(htmp->Rebin(fzbinsJetTrueN,Form("hFD_binned_%d",nr),fzbinsJetTrueA));
+              hPrompt_binned[nr] = dynamic_cast<TH1D*>(htmp->Rebin(fzbinsJetTrueN[fBin-1],Form("hFD_binned_%d",nr),fzbinsJetTrueAPrompt[fBin-1]));
+              if(pdf){
+                  hPrompt_binned[nr]->Scale(1./hPrompt_binned[nr]->Integral());
+                  hPrompt_binned[nr]->Scale(1,"width");
+              }
           }
       }
 std::cout<<"B"<<std::endl;
-      TH1D *htmp = dynamic_cast<TH1D*>(hPrompt[simNr]->Clone("htmp"));
+      TH1D *htmp = dynamic_cast<TH1D*>(hPrompt_binned[simNr]->Clone("htmp"));
       TH1D *hPrompt_central = dynamic_cast<TH1D*>(htmp->Clone("hPrompt_central"));
-      hPrompt_central_binned = dynamic_cast<TH1D*>(htmp->Rebin(fptbinsJetFinalN,"hPrompt_central_binned",xAxis));
+      hPrompt_central_binned = dynamic_cast<TH1D*>(htmp->Rebin(xAxisBins,"hPrompt_central_binned",xAxis));
 std::cout<<"BA"<<std::endl;
       setHistoDetails(hPrompt_central,4,24);
       setHistoDetails(hPrompt_central_binned,4,24);
-
+      //Double_t sim_central_int = hPrompt_central_binned->Integral();
+/*if(pdf){
+    hPrompt_central->Scale(1./sim_central_int);
+    hPrompt_central_binned->Scale(1./sim_central_int);
+    hPrompt_central_binned->Scale(1,"width");
+}*/
+if(!pdf){
       hPrompt_central->Scale(simScaling);
       hPrompt_central_binned->Scale(simScaling);
       hPrompt_central_binned->Scale(1,"width");
-      hPrompt_central_binned->Scale(1./dy);
+      hPrompt_central_binned->Scale(1./dy);//2*jetEta;
+}
 std::cout<<"BB"<<std::endl;
       if(isSimSys){
       // ----------------- prompt syst. (rebinned)---------------------
@@ -243,16 +380,30 @@ std::cout<<"BB"<<std::endl;
         hPrompt_up = dynamic_cast<TH1D*>(hPrompt_central_binned->Clone("hPrompt_up"));
         hPrompt_up = dynamic_cast<TH1D*>(GetUpSys(hPrompt_binned,nFiles,hPrompt_up));
         setHistoDetails(hPrompt_up,4,24,0,2,2);
+        //Double_t sim_up_int = hPrompt_up->Integral();
+ /* if(pdf){
+      hPrompt_up->Scale(1./sim_up_int);
+      hPrompt_up->Scale(1,"width");
+  }*/
+  if(!pdf){
         hPrompt_up->Scale(simScaling);
         hPrompt_up->Scale(1,"width");
         hPrompt_up->Scale(1./dy);
+  }
         // get down unc
         hPrompt_down = dynamic_cast<TH1D*>(hPrompt_central_binned->Clone("hPrompt_down"));
         hPrompt_down = dynamic_cast<TH1D*>(GetDownSys(hPrompt_binned,nFiles,hPrompt_down));
         setHistoDetails(hPrompt_down,4,24,0,2,2);
+       // Double_t sim_down_int = hPrompt_down->Integral();
+ /* if(pdf){
+      hPrompt_down->Scale(1./sim_down_int);
+      hPrompt_down->Scale(1,"width");
+  }*/
+  if(!pdf){
         hPrompt_down->Scale(simScaling);
         hPrompt_down->Scale(1,"width");
         hPrompt_down->Scale(1./dy);
+  }
       }
       std::cout<<"BC"<<std::endl;
     }
@@ -262,25 +413,34 @@ std::cout<<"BD"<<std::endl;
     hData_binned2 = dynamic_cast<TH1D*>(GetInputHist(dataFile, histBase, hData_binned2));
     std::cout<<"getting "<<dataFile<<" "<<histBase<<std::endl;
     if(!hData_binned2)std::cout<<"not histo"<<std::endl;
-    hData_binned = dynamic_cast<TH1D*>(hData_binned2->Rebin(fptbinsJetFinalN,"hData_binned", xAxis));
+    hData_binned = dynamic_cast<TH1D*>(hData_binned2->Rebin(xAxisBins,"hData_binned", xAxis));
+    Double_t data_int = hData_binned->Integral();
+    //std::cout<<hData_binned->GetXaxis()->GetBinLowEdge(binMin)<<" to "<<hData_binned->GetXaxis()->GetBinUpEdge(binMax)<<std::endl;
+
+if(pdf){
+  hData_binned->Scale(1./data_int);
+  hData_binned->Scale(1,"width");
+}else{
     hData_binned->Scale(1,"width");
     hData_binned->Scale(dataScaling);
     hData_binned->Scale(1./dy);
+}
     hData_binned->SetTitle("");
     //hData_binned->SetMinimum(1);
     hData_binned->SetMaximum(hData_binned->GetMaximum()*2);
     if(fObservable == Observable::kXsection)hData_binned->GetYaxis()->SetTitle("d^{2}#sigma/dp_{T}d#it{#eta} (mb)");
     if(fObservable == Observable::kFragmentation)hData_binned->GetYaxis()->SetTitle("d^{2}#sigma/dz_{#parallel}d#it{#eta} (mb)");
+    if(pdf)hData_binned->GetYaxis()->SetTitle("Probability Density");
 std::cout<<"BE"<<std::endl;
-    Double_t sysunc[fptbinsJetFinalN];
-    Double_t sysuncAbs[fptbinsJetFinalN];
-    Double_t statunc[fptbinsJetFinalN];
-    Double_t value[fptbinsJetFinalN];
-    Double_t ptval[fptbinsJetFinalN];
-    Double_t ptvalunc[fptbinsJetFinalN];
+    Double_t sysunc[xAxisBins];
+    Double_t sysuncAbs[xAxisBins];
+    Double_t statunc[xAxisBins];
+    Double_t value[xAxisBins];
+    Double_t ptval[xAxisBins];
+    Double_t ptvalunc[xAxisBins];
     std::cout<<"BF"<<std::endl;
     if(isSys) {
-      for(int j=0; j<fptbinsJetFinalN; j++){
+      for(int j=0; j<xAxisBins; j++){
               ptval[j] = (xAxis[j]+xAxis[j+1]) / 2.;
               ptvalunc[j] = (xAxis[j+1]-xAxis[j]) / 2.;
               value[j] = hData_binned->GetBinContent(hData_binned->GetXaxis()->FindBin(ptval[j]));
@@ -293,18 +453,18 @@ std::cout<<"BE"<<std::endl;
 
             //  cout << j << " sys: " << sysunc[j] << "\t\t stat: " << statunc[j] << endl;
       }
-      grsys = new TGraphAsymmErrors(fptbinsJetFinalN,ptval,value,ptvalunc,ptvalunc,sysuncAbs,sysuncAbs);
+      grsys = new TGraphAsymmErrors(xAxisBins,ptval,value,ptvalunc,ptvalunc,sysuncAbs,sysuncAbs);
     }
 
 std::cout<<"C"<<std::endl;
-    Double_t ptvaltheory[fptbinsJetFinalN];
+    Double_t ptvaltheory[xAxisBins];
     if(isSim && isSimSys){
-     // Double_t sysuncTheory[fptbinsJetFinalN];
-      Double_t ptvalunctheory[fptbinsJetFinalN];
-      Double_t valuetheory[fptbinsJetFinalN];
-      Double_t valuetheoryerrup[fptbinsJetFinalN];
-      Double_t valuetheoryerrdown[fptbinsJetFinalN];
-      for(int j=0; j<fptbinsJetFinalN; j++){
+     // Double_t sysuncTheory[xAxisBins];
+      Double_t ptvalunctheory[xAxisBins];
+      Double_t valuetheory[xAxisBins];
+      Double_t valuetheoryerrup[xAxisBins];
+      Double_t valuetheoryerrdown[xAxisBins];
+      for(int j=0; j<xAxisBins; j++){
               ptvaltheory[j] = (xAxis[j]+xAxis[j+1]) / 2.;
               ptvalunctheory[j] = (xAxis[j+1]-xAxis[j]) / 2.;
               valuetheory[j] = hPrompt_central_binned->GetBinContent(hPrompt_central_binned->GetXaxis()->FindBin(ptvaltheory[j]));
@@ -312,7 +472,7 @@ std::cout<<"C"<<std::endl;
               valuetheoryerrdown[j] = valuetheory[j] - hPrompt_down->GetBinContent(hPrompt_up->GetXaxis()->FindBin(ptvaltheory[j]));
 
       }
-      grsystheory = new TGraphAsymmErrors(fptbinsJetFinalN,ptvaltheory,valuetheory,ptvalunctheory,ptvalunctheory,valuetheoryerrdown,valuetheoryerrup);
+      grsystheory = new TGraphAsymmErrors(xAxisBins,ptvaltheory,valuetheory,ptvalunctheory,ptvalunctheory,valuetheoryerrdown,valuetheoryerrup);
     }
 
    //======= Ratio to powheg ======
@@ -331,9 +491,9 @@ std::cout<<"C"<<std::endl;
      }
        hData_binned_ratio = dynamic_cast<TH1D*>(hData_binned->Clone("hData_binned_ratio"));
        if(isSys){
-         double *sysuncRatio = new double[fptbinsJetFinalN];
-         double *valRatio = new double[fptbinsJetFinalN];
-         for(int j=0; j<fptbinsJetFinalN; j++){
+         double *sysuncRatio = new double[xAxisBins];
+         double *valRatio = new double[xAxisBins];
+         for(int j=0; j<xAxisBins; j++){
                  double pt = (xAxis[j]+xAxis[j+1]) / 2.;
                  double val = hData_binned->GetBinContent(hData_binned->GetXaxis()->FindBin(pt));
                  double valPred;
@@ -350,29 +510,33 @@ std::cout<<"C"<<std::endl;
                  hData_binned_ratio->SetBinContent(hData_binned_ratio->GetXaxis()->FindBin(pt),valRatio[j]);
                  hData_binned_ratio->SetBinError(hData_binned_ratio->GetXaxis()->FindBin(pt),err);
          }
-         grsysRatio = new TGraphAsymmErrors(fptbinsJetFinalN,ptval,valRatio,ptvalunc,ptvalunc,sysuncRatio,sysuncRatio);
+         grsysRatio = new TGraphAsymmErrors(xAxisBins,ptval,valRatio,ptvalunc,ptvalunc,sysuncRatio,sysuncRatio);
        }
-       hData_binned_ratio->SetMaximum(10);
-       if(zBin==1)hData_binned_ratio->SetMaximum(10);
-       if(zBin==2)hData_binned_ratio->SetMaximum(5);
-       if(zBin==1)hData_binned_ratio->GetYaxis()->SetRangeUser(0,10);
-       if(zBin==2)hData_binned_ratio->GetYaxis()->SetRangeUser(0,5);
+       //hData_binned_ratio->SetMaximum(10);
+       if(zBin==2)hData_binned_ratio->SetMaximum(10);
+       if(zBin==3)hData_binned_ratio->SetMaximum(5);
+       if(zBin==4)hData_binned_ratio->SetMaximum(10);
+       if(zBin==5)hData_binned_ratio->SetMaximum(4);
+       if(zBin==2)hData_binned_ratio->GetYaxis()->SetRangeUser(0,10);
+       if(zBin==3)hData_binned_ratio->GetYaxis()->SetRangeUser(0,5);
+       if(zBin==4)hData_binned_ratio->GetYaxis()->SetRangeUser(0,10);
+       if(zBin==5)hData_binned_ratio->GetYaxis()->SetRangeUser(0,5);
 
        if(isSimSys){
-        //double *sysuncTheoryratio = new double[fptbinsJetFinalN];
-        double *ptvaltheoryratio = new double[fptbinsJetFinalN];
-        double *ptvalunctheoryratio = new double[fptbinsJetFinalN];
-        double *valuetheoryratio = new double[fptbinsJetFinalN];
-        double *valuetheoryerrupratio = new double[fptbinsJetFinalN];
-        double *valuetheoryerrdownratio = new  double[fptbinsJetFinalN];
-        for(int j=0; j<fptbinsJetFinalN; j++){
+        //double *sysuncTheoryratio = new double[xAxisBins];
+        double *ptvaltheoryratio = new double[xAxisBins];
+        double *ptvalunctheoryratio = new double[xAxisBins];
+        double *valuetheoryratio = new double[xAxisBins];
+        double *valuetheoryerrupratio = new double[xAxisBins];
+        double *valuetheoryerrdownratio = new  double[xAxisBins];
+        for(int j=0; j<xAxisBins; j++){
               ptvaltheoryratio[j] = (xAxis[j]+xAxis[j+1]) / 2.;
               ptvalunctheoryratio[j] = (xAxis[j+1]-xAxis[j]) / 2.;
               valuetheoryratio[j] = hPrompt_central_binned_ratio->GetBinContent(hPrompt_central_binned_ratio->GetXaxis()->FindBin(ptvaltheory[j]));
               valuetheoryerrupratio[j] = hPrompt_up_ratio->GetBinContent(hPrompt_up_ratio->GetXaxis()->FindBin(ptvaltheory[j])) - valuetheoryratio[j];
               valuetheoryerrdownratio[j] = valuetheoryratio[j] - hPrompt_down_ratio->GetBinContent(hPrompt_down_ratio->GetXaxis()->FindBin(ptvaltheory[j]));
         }
-        grsystheoryratio = new TGraphAsymmErrors(fptbinsJetFinalN,ptvaltheoryratio,valuetheoryratio,ptvalunctheoryratio,ptvalunctheoryratio,valuetheoryerrdownratio,valuetheoryerrupratio);
+        grsystheoryratio = new TGraphAsymmErrors(xAxisBins,ptvaltheoryratio,valuetheoryratio,ptvalunctheoryratio,ptvalunctheoryratio,valuetheoryerrdownratio,valuetheoryerrupratio);
       }
 
 std::cout<<"D"<<std::endl;
@@ -440,20 +604,20 @@ void getSystematics(TString inDir, TString outPlotDir) {
 
   TCanvas *cUnc = new TCanvas("cUnc","cUnc",1200,800);
   TH1F *hist[nfiles+1];
-  double **sysUnc = new double*[fptbinsJetFinalN];
-  for(int i=0; i<fptbinsJetFinalN; i++)  sysUnc[i] = new double[nfiles+1];
+  double **sysUnc = new double*[xAxisBins];
+  for(int i=0; i<xAxisBins; i++)  sysUnc[i] = new double[nfiles+1];
 
-  hist[nfiles] = new TH1F("histUncN","Systematic uncertanties",fptbinsJetFinalN, xAxis);
-  hist[0] = new TH1F("histUnc0","Systematic uncertanties",fptbinsJetFinalN, xAxis);
-//  hist[1] = new TH1F("histUnc1","Systematic uncertanties",fptbinsJetFinalN, fptbinsJetTrueFinalpp);
+  hist[nfiles] = new TH1F("histUncN","Systematic uncertanties",xAxisBins, xAxis);
+  hist[0] = new TH1F("histUnc0","Systematic uncertanties",xAxisBins, xAxis);
+//  hist[1] = new TH1F("histUnc1","Systematic uncertanties",xAxisBins, fptbinsJetTrueFinalpp);
 
-  for(int k=0; k<fptbinsJetFinalN; k++) hist[nfiles]->SetBinContent(k+1,DTrackEff*100);
+  for(int k=0; k<xAxisBins; k++) hist[nfiles]->SetBinContent(k+1,DTrackEff*100);
   hist[nfiles]->SetMarkerColor(colors[nfiles+1]);
   hist[nfiles]->SetLineColor(colors[nfiles+1]);
   hist[nfiles]->SetLineStyle(linestyle[nfiles]);
 
-  for(int j=0; j<fptbinsJetFinalN; j++) hist[0]->SetBinContent(j+1,sysCutVar[j]);
-  //for(int j=0; j<fptbinsJetFinalN; j++) hist[1]->SetBinContent(j+1,sysRawYield[j]);
+  for(int j=0; j<xAxisBins; j++) hist[0]->SetBinContent(j+1,sysCutVar[j]);
+  //for(int j=0; j<xAxisBins; j++) hist[1]->SetBinContent(j+1,sysRawYield[j]);
 
   TLegend  *leg = new TLegend(0.45,0.55,0.85,0.85);
   for(int i=0; i<nfiles; i++){
@@ -473,7 +637,7 @@ void getSystematics(TString inDir, TString outPlotDir) {
     if(!i) hist[i]->Draw("hist");
     else hist[i]->Draw("histsame");
     std::cout << "systematics: " << desc[i] << std::endl;
-    for(int j=0; j<fptbinsJetFinalN; j++){
+    for(int j=0; j<xAxisBins; j++){
       double pt = (xAxis[j] + xAxis[j+1])/2.;
       int bin = hist[i]->GetXaxis()->FindBin(pt);
       if(bin) sysUnc[j][i] = hist[i]->GetBinContent(bin)*0.01;
@@ -492,7 +656,7 @@ void getSystematics(TString inDir, TString outPlotDir) {
   cUnc->SaveAs(Form("%s/JetPtSpectra_allUnc.svg",outPlotDir.Data()));
 
   TCanvas *cUnc2 = new TCanvas("cUnc2","cUnc2",1200,800);
-  TH1D *histUnc = new TH1D("histUnc","Systematic uncertanties",fptbinsJetFinalN, xAxis);
+  TH1D *histUnc = new TH1D("histUnc","Systematic uncertanties",xAxisBins, xAxis);
   histUnc->SetLineColor(2);
   histUnc->SetLineWidth(2);
   histUnc->SetLineStyle(2);
@@ -501,7 +665,7 @@ void getSystematics(TString inDir, TString outPlotDir) {
   if(fObservable == Observable::kXsection)histUnc->GetXaxis()->SetTitle("p_{T}^{ch,jet} (GeV/c)");
   if(fObservable == Observable::kFragmentation)histUnc->GetXaxis()->SetTitle("#it{z}_{#parallel}^{ch,jet}");
   histUnc->GetXaxis()->SetRangeUser(plotmin,plotmax);
-  for(int i=0; i<fptbinsJetFinalN; i++){
+  for(int i=0; i<xAxisBins; i++){
     double value = 0;
     for(int j=0; j<nfiles+1; j++){
       value += sysUnc[i][j]*sysUnc[i][j];
@@ -526,7 +690,7 @@ TH1* GetUpSys(TH1D **hh, const int nFiles, TH1D *hh_up){
 
         //double bin = 0, binerr = 0;
         double max = 0, maxerr = 0;
-        for(int j=1; j<fptbinsJetFinalN+1; j++ ){
+        for(int j=1; j<xAxisBins+1; j++ ){
             max = hh[0]->GetBinContent(j);
             for(int i=1;i<nFiles;i++){
                 if(hh[i]->GetBinContent(j) > max){
@@ -545,7 +709,7 @@ TH1* GetDownSys(TH1D **hh, const int nFiles, TH1D *hh_down){
         //double bin = 0, binerr = 0;
         double max = 0, maxerr = 0;
 
-        for(int j=1; j<fptbinsJetFinalN+1; j++ ){
+        for(int j=1; j<xAxisBins+1; j++ ){
       //for(int j=1; j<hh[0]->GetNbinsX()+1; j++ ){
             max = hh[0]->GetBinContent(j);
             for(int i=1;i<nFiles;i++){
@@ -631,7 +795,7 @@ void drawFinal(TString outPlotDir){
    FinalSpectrum_1->SetFillColor(0);
    FinalSpectrum_1->SetBorderMode(0);
    FinalSpectrum_1->SetBorderSize(2);
-   FinalSpectrum_1->SetLogy();
+   //FinalSpectrum_1->SetLogy();
    FinalSpectrum_1->SetTickx(1);
    FinalSpectrum_1->SetTicky(1);
    FinalSpectrum_1->SetLeftMargin(0.15f);
@@ -639,8 +803,8 @@ void drawFinal(TString outPlotDir){
    FinalSpectrum_1->SetFrameBorderMode(0);
    FinalSpectrum_1->SetFrameBorderMode(0);
 
-   TH1D *CentralPointsStatisticalUncertainty__1 = new TH1D("CentralPointsStatisticalUncertainty__1","Central Values",fptbinsJetFinalN, xAxis);
-   //TH1D *CentralPointsStatisticalUncertainty__1 = new TH1D("CentralPointsStatisticalUncertainty__1","Central Values",fptbinsJetFinalN2, xAxis2);
+   TH1D *CentralPointsStatisticalUncertainty__1 = new TH1D("CentralPointsStatisticalUncertainty__1","Central Values",xAxisBins, xAxis);
+   //TH1D *CentralPointsStatisticalUncertainty__1 = new TH1D("CentralPointsStatisticalUncertainty__1","Central Values",xAxisBins2, xAxis2);
    if(fSystem){
      CentralPointsStatisticalUncertainty__1->SetMinimum(2.e-04);
      CentralPointsStatisticalUncertainty__1->SetMaximum(500);
@@ -674,6 +838,7 @@ void drawFinal(TString outPlotDir){
    //CentralPointsStatisticalUncertainty__1->GetYaxis()->SetTitle("#frac{d^{2}#sigma}{d#it{p}_{T}d#it{#eta}} [mb (GeV/#it{c})^{-1}]");
    if(fObservable == Observable::kXsection)CentralPointsStatisticalUncertainty__1->GetYaxis()->SetTitle("#frac{d^{2}#sigma}{d#it{p}_{T}d#it{#eta}} mb (GeV/#it{c})^{-1}");
    if(fObservable == Observable::kFragmentation)CentralPointsStatisticalUncertainty__1->GetYaxis()->SetTitle("#frac{d^{2}#sigma}{d#it{z}_{#parallel}d#it{#eta}} mb");
+   if(pdf)CentralPointsStatisticalUncertainty__1->GetYaxis()->SetTitle("Probability Density");
    CentralPointsStatisticalUncertainty__1->GetYaxis()->SetLabelFont(43);
    CentralPointsStatisticalUncertainty__1->GetYaxis()->SetLabelSize(22);
    CentralPointsStatisticalUncertainty__1->GetYaxis()->SetTitleSize(26);
@@ -885,25 +1050,34 @@ if(isSim){
    leg->Draw();
 
    TPaveText *pt = nullptr;
-   if(fObservable==Observable::kXsection) pt = new TPaveText(0.2,0.7,0.85,0.95,"NB NDC");
-   if(fObservable==Observable::kFragmentation) pt = new TPaveText(0.2,0.62,0.85,0.95,"NB NDC");
+   TPaveText *pt2 = nullptr;
+   if(fObservable==Observable::kXsection) pt = new TPaveText(0.2,0.75,0.85,0.95,"NB NDC");
+   if(fObservable==Observable::kFragmentation) pt = new TPaveText(0.2,0.8,0.85,0.95,"NB NDC");
+   if(fObservable==Observable::kXsection) pt2 = new TPaveText(0.2,0.6,0.85,0.75,"NB NDC");
+   if(fObservable==Observable::kFragmentation) pt2 = new TPaveText(0.2,0.61,0.85,0.79,"NB NDC");
    pt->SetBorderSize(0);
    pt->SetFillStyle(0);
    pt->SetTextAlign(13);
    pt->SetTextFont(43);
    pt->SetTextSize(22);
+   pt2->SetBorderSize(0);
+   pt2->SetFillStyle(0);
+   pt2->SetTextAlign(13);
+   pt2->SetTextFont(43);
+   pt2->SetTextSize(22);
    //TText *text = pt->AddText("ALICE Preliminary");
    TText *text = new TText;
-   //text = pt->AddText("ALICE Preliminary"); //uncomment
+   text = pt->AddText("ALICE Preliminary"); //uncomment
    if(fSystem) text = pt->AddText("p-Pb, #sqrt{#it{s}_{NN}} = 13 TeV");
    else text = pt->AddText("pp, #sqrt{#it{s}} = 13 TeV");
    text = pt->AddText(Form("charged jets, anti-#it{k}_{T}, #it{R} = 0.%d, |#it{#eta}_{lab}^{jet}| < 0.%d",Rpar,9-Rpar));
-   text = pt->AddText(Form ("with D^{0}, %d < #it{p}_{T,D^{0}} < %d GeV/#it{c}",static_cast<int>(fptbinsDA[0]),static_cast<int>(fptbinsDA[fptbinsDN])));
-   if(fObservable==Observable::kFragmentation)text = pt->AddText(Form("%d < p_{T,ch. jet} < %d GeV/#it{c}",static_cast<Int_t>(fzptJetMeasA[fBin-1]),static_cast<Int_t>(fzptJetMeasA[fBin])));
+   text = pt2->AddText(Form ("with D^{0}, %d < #it{p}_{T,D^{0}} < %d GeV/#it{c}",static_cast<int>(fzptbinsDPromptA[fBin-1][0]),static_cast<int>(fzptbinsDPromptA[fBin-1][fzptbinsDPromptN[fBin-1]])));
+   if(fObservable==Observable::kFragmentation)text = pt2->AddText(Form("%d < p_{T,ch. jet} < %d GeV/#it{c}",static_cast<Int_t>(fzptJetMeasA[fBin-1]),static_cast<Int_t>(fzptJetMeasA[fBin])));
    pt->Draw();
+   pt2->Draw();
 
    // does nothing
-   TH1D *CentralPointsStatisticalUncertainty__4 = new TH1D("CentralPointsStatisticalUncertainty__4","Central Values",fptbinsJetFinalN, xAxis);
+   TH1D *CentralPointsStatisticalUncertainty__4 = new TH1D("CentralPointsStatisticalUncertainty__4","Central Values",xAxisBins, xAxis);
    CentralPointsStatisticalUncertainty__4->SetMinimum(2e-05);
    CentralPointsStatisticalUncertainty__4->SetMaximum(0.7);
    CentralPointsStatisticalUncertainty__4->SetEntries(8);
@@ -919,6 +1093,7 @@ if(isSim){
    CentralPointsStatisticalUncertainty__4->SetMarkerSize(0.9f);
    if(fObservable == Observable::kXsection)CentralPointsStatisticalUncertainty__4->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
    if(fObservable == Observable::kFragmentation)CentralPointsStatisticalUncertainty__4->GetXaxis()->SetTitle("#it{z}_{#parallel}^{ch,jet}");
+   //if(pdf)CentralPointsStatisticalUncertainty__4->GetXaxis()->SetRangeUser(hData_binned->GetXaxis()->GetBinLowEdge(binMin),hData_binned->GetXaxis()->GetBinUpEdge(binMax));
    CentralPointsStatisticalUncertainty__4->GetXaxis()->SetLabelFont(42);
    CentralPointsStatisticalUncertainty__4->GetXaxis()->SetLabelSize(0.035f);
    CentralPointsStatisticalUncertainty__4->GetXaxis()->SetTitleSize(0.035f);
@@ -955,7 +1130,7 @@ if(isSim){
    FinalSpectrum_2->SetFrameBorderMode(0);
 
    // central points data (values don't really needed)
-   TH1D *CentralPointsStatisticalUncertainty__5 = new TH1D("CentralPointsStatisticalUncertainty__5","Central Values",fptbinsJetFinalN, xAxis);
+   TH1D *CentralPointsStatisticalUncertainty__5 = new TH1D("CentralPointsStatisticalUncertainty__5","Central Values",xAxisBins, xAxis);
    CentralPointsStatisticalUncertainty__5->SetMinimum(0);
    CentralPointsStatisticalUncertainty__5->SetMaximum(3.3);
    CentralPointsStatisticalUncertainty__5->SetEntries(8);
@@ -1094,7 +1269,7 @@ if(isSys) {
      grae->Draw("2");
   }
    // just for graphics, data not really needed
-   TH1D *CentralPointsStatisticalUncertainty__7 = new TH1D("CentralPointsStatisticalUncertainty__7","Central Values",fptbinsJetFinalN, xAxis);
+   TH1D *CentralPointsStatisticalUncertainty__7 = new TH1D("CentralPointsStatisticalUncertainty__7","Central Values",xAxisBins, xAxis);
    CentralPointsStatisticalUncertainty__7->SetMinimum(0);
    CentralPointsStatisticalUncertainty__7->SetMaximum(2.49);
    CentralPointsStatisticalUncertainty__7->SetEntries(8);

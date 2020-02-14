@@ -96,7 +96,7 @@ void NimaCompare(
           sparse = dynamic_cast<THnSparseF*>(histList->FindObject("hsDphiz"));
           sparse->GetAxis(1)->SetRangeUser(5,50);  //jet pt
           sparse->GetAxis(2)->SetRangeUser(2,36); //D pt    3- mass 4 - y D, 5 - eta jet
-          sparse->GetAxis(5)->SetRangeUser(-0.5,0.5); //Nima
+          sparse->GetAxis(5)->SetRangeUser(-0.5,0.5); //
           if(i==0){
               hJetPt=dynamic_cast<TH1D*>(sparse->Projection(1));
               hDPt=dynamic_cast<TH1D*>(sparse->Projection(2));

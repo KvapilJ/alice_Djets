@@ -73,8 +73,14 @@ bool isjetptcut = 0, double jetptmin = 5, double jetptmax = 30, Int_t zBin=0 )
         }
         }
         if(fObservable == Observable::kFragmentation){
-            file += "_Dpt"; file +=  fzptbinsDA[zBin-1][0]; file += "_"; file += fzptbinsDA[zBin-1][fzptbinsDN[zBin-1]];
-            file += "_Jetpt"; file +=  fzptJetMeasA[zBin-1]; file += "_"; file += fzptJetMeasA[zBin];
+            if(quark == 0){
+            file += "_Dpt"; file +=  fzptbinsDPromptA[zBin-1][0]; file += "_"; file += fzptbinsDPromptA[zBin-1][fzptbinsDPromptN[zBin-1]];
+            file += "_Jetpt"; file +=  fzptJetTrueA[zBin-1]; file += "_"; file += fzptJetTrueA[zBin];
+            }
+            else if(quark == 1){
+                file += "_Dpt"; file +=  fzptbinsDA[zBin-1][0]; file += "_"; file += fzptbinsDA[zBin-1][fzptbinsDN[zBin-1]];
+                file += "_Jetpt"; file +=  fzptJetMeasA[zBin-1]; file += "_"; file += fzptJetMeasA[zBin];
+                }
         }
         if(jet && isEff) file += "_effScaled";
         if(fDmesonSpecie) file += "_Dstar";
@@ -91,7 +97,7 @@ bool isjetptcut = 0, double jetptmin = 5, double jetptmax = 30, Int_t zBin=0 )
             htmp = (TH1D*) GetInputHist(file, "hz", htmp);
             htmp->GetYaxis()->SetTitle("d#sigma/dz (mb)");
             hSpectrum[nr] = (TH1D*)htmp->Clone(Form("hSpectrum_%d",nr));
-            hSpectrum_binned[nr] = (TH1D*)htmp->Rebin(fzbinsJetTrueN,Form("hSpectrum_binned_%d",nr),fzbinsJetTrueA);
+            hSpectrum_binned[nr] = (TH1D*)htmp->Rebin(fzbinsJetMeasN[fBin-1],Form("hSpectrum_binned_%d",nr),fzbinsJetMeasA[fBin-1]);
         }
         //htmp->Scale(sigma_c[nr]);
 
@@ -104,7 +110,7 @@ bool isjetptcut = 0, double jetptmin = 5, double jetptmax = 30, Int_t zBin=0 )
     TH1D *hSpectrum_central = (TH1D*)htmp->Clone("hSpectrum_central");
     TH1D *hSpectrum_central_binned =nullptr;
     if(fObservable == kXsection)hSpectrum_central_binned = (TH1D*)htmp->Rebin(fptbinsJetTrueN,"hSpectrum_central_binned",fptbinsJetTrueA);
-    if(fObservable == kFragmentation)hSpectrum_central_binned = (TH1D*)htmp->Rebin(fzbinsJetTrueN,"hSpectrum_central_binned",fzbinsJetTrueA);
+    if(fObservable == kFragmentation)hSpectrum_central_binned = (TH1D*)htmp->Rebin(fzbinsJetMeasN[fBin-1],"hSpectrum_central_binned",fzbinsJetMeasA[fBin-1]);
 
     setHistoDetails(hSpectrum_central,4,24);
     setHistoDetails(hSpectrum_central_binned,4,24);
@@ -195,7 +201,7 @@ TH1* GetUpSys(TH1D **hFD, const int nFiles, TH1D *hFD_up){
         double max = 0, maxerr = 0;
         Int_t ObsN = 0;
         if(fObservable == Observable::kXsection) ObsN=fptbinsJetTrueN;
-        if(fObservable == Observable::kFragmentation) ObsN=fzbinsJetTrueN;
+        if(fObservable == Observable::kFragmentation) ObsN=fzbinsJetMeasN[fBin-1];
         for(int j=1; j<=ObsN; j++ ){
             max = hFD[0]->GetBinContent(j);
             for(int i=1;i<nFiles;i++){
@@ -216,7 +222,7 @@ TH1* GetDownSys(TH1D **hFD, const int nFiles, TH1D *hFD_down){
         double max = 0, maxerr = 0;
         Int_t ObsN = 0;
         if(fObservable == Observable::kXsection) ObsN=fptbinsJetTrueN;
-        if(fObservable == Observable::kFragmentation) ObsN=fzbinsJetTrueN;
+        if(fObservable == Observable::kFragmentation) ObsN=fzbinsJetMeasN[fBin-1];
         for(int j=1; j<=ObsN; j++ ){
             max = hFD[0]->GetBinContent(j);
             for(int i=1;i<nFiles;i++){
@@ -270,8 +276,8 @@ void compareSpectra(TH1D **hFD, const int nFiles, bool isjet, bool quark, TStrin
     if(isjet) { plotmin = fptbinsJetTrueA[0]; plotmax = fptbinsJetTrueA[fptbinsJetTrueN]; }
     else { plotmin = fptbinsDA[0]; plotmax = fptbinsDA[fptbinsDN]; }
     if(fObservable == Observable::kFragmentation){
-        plotmin=fzbinsJetTrueA[0];
-        plotmax=fzbinsJetTrueA[fzbinsJetTrueN];
+        plotmin=fzbinsJetMeasA[fBin-1][0];
+        plotmax=fzbinsJetMeasA[fBin-1][fzbinsJetMeasN[fBin-1]];
     }
     TH1D *hh = nullptr;
     //if(fObservable==kXsection){

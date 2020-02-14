@@ -9,22 +9,41 @@
 #include <iostream>
 #include "style.C"
 
-const int ptbinsJetN = 11;
-double ptbinsJet[ptbinsJetN+1] = {2,3,4,5,6,8,10,12,14,20,30,50};//{ 3,4,5,6,8,10,14,20,30,50 };
 
+const int ptbinsJetN = 7;
+double ptbinsJet[ptbinsJetN+1] = {0.2,0.4,0.5,0.6,0.7,0.8,0.9,1.0};//{ 3,4,5,6,8,10,14,20,30,50 };
+//jet pt 5-7
+/*
+TString jetDataFile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff2.root";
+TString tit = ": 5 < p_{T,jet} < 7 GeV/#it{c} (p_{T,D} > 2 GeV/#it{c})";
+*/
+//jet pt 7-10
+/*
+TString jetDataFile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff3.root";
+TString tit = ": 7 < p_{T,jet} < 10 GeV/#it{c} (p_{T,D} > 2 GeV/#it{c})";
+*/
+//jet pt 10-15
+/*
+TString jetDataFile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff4.root";
+TString tit = ": 10 < p_{T,jet} < 15 GeV/#it{c} (p_{T,D} > 2 GeV/#it{c})";
+*/
+//jet pt 15-50
+
+TString jetDataFile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff5.root";
+TString tit = ": 15 < p_{T,jet} < 50 GeV/#it{c} (p_{T,D} > 3 GeV/#it{c})";
 // Pb-Pb binning
 TString out = "out";
-TString jetDataFile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_FINAL/Default_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff.root";
+
 
 void compareVariationAnalysis(char *outDir = "JetPtComparison" )
 {
 
     style();
 
-    double plotmin = 5;
-    double plotmax = 50;
+    double plotmin = 0.2;
+    double plotmax = 1.0;
 
-    TString jetSimFile = "out/FinalRawYieldCentralPlusSystUncertainty_Dzero.root";
+    TString jetSimFile = "FinalRawYieldCentralPlusSystUncertainty_Dzero.root";
     TFile *outFile = new TFile(Form("%s/YieldExtraction.root",out.Data()),"RECREATE");
 
 	  TFile *jetPtFile2 = new TFile(jetDataFile,"read");
@@ -55,10 +74,10 @@ void compareVariationAnalysis(char *outDir = "JetPtComparison" )
     hjetDataFile->Scale(1,"width");
     hjetSimFile->Scale(1,"width");
     hjetSimFile->GetYaxis()->SetTitle("eff. corr yield");
-    hjetSimFile->GetXaxis()->SetTitle("p_{T}^{ch,jet} (GeV/c)");
+    hjetSimFile->GetXaxis()->SetTitle("z_{#parallel}");
     hjetSimFile->GetXaxis()->SetTitleSize(0.05);
     hjetSimFile->GetXaxis()->SetRangeUser(plotmin, plotmax);
-    hjetDataFile->GetXaxis()->SetTitle("p_{T}^{ch,jet} (GeV/c)");
+    hjetDataFile->GetXaxis()->SetTitle("z_{#parallel}");
     hjetDataFile->GetXaxis()->SetRangeUser(plotmin, plotmax);
     hjetDataFile->GetXaxis()->SetTitleSize(0.05);
 
@@ -135,7 +154,7 @@ void compareVariationAnalysis(char *outDir = "JetPtComparison" )
     }
 
      relUncVarSB->GetYaxis()->SetTitleOffset(1.5);
-     relUncVarSB->GetYaxis()->SetRangeUser(0,10);
+     relUncVarSB->GetYaxis()->SetRangeUser(0,12);
     relUncVarSB->GetYaxis()->SetTitle("Yield ext. syst. unc.");
     relUncVarSB->SetTitle("");
 
@@ -143,9 +162,11 @@ void compareVariationAnalysis(char *outDir = "JetPtComparison" )
 
     TCanvas *cJetVarUn = new TCanvas("cJetVarUn","cJetVarUn",800,600);
     relUncVarSB->Draw("h");
+    //relUncVarSB->SetTitle(tit);
     //relUncVarEff->Draw("hsame");
 
-    TLegend *leg32 = new TLegend(0.15,0.7,0.45,0.9,"Yield extr. method");
+
+    TLegend *leg32 = new TLegend(0.15,0.7,0.85,0.9,"Yield extr. method" + tit);
     leg32->AddEntry(hjetDataFile,"SB","p");
     leg32->Draw("same");
 

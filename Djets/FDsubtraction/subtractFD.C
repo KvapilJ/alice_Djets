@@ -46,9 +46,9 @@ bool oldCounter = 0)
       maxObsBinN = fptbinsJetMeasN;
     }
     if(fObservable == kFragmentation){
-      plotmin = fzbinsJetTrueA[0];
-      plotmax = fzbinsJetTrueA[fzbinsJetTrueN];
-      maxObsBinN = fzbinsJetMeasN;
+      plotmin = fzbinsJetMeasA[zBin-1][0];
+      plotmax = fzbinsJetMeasA[zBin-1][fzbinsJetMeasN[zBin-1]];
+      maxObsBinN = fzbinsJetMeasN[zBin-1];
     }
     fBin=zBin;
 
@@ -98,7 +98,7 @@ bool oldCounter = 0)
     hData = dynamic_cast<TH1D*>(GetInputHist(dataFile, "hjetptspectrum", hData));
     TH1D *hData_binned =nullptr;
     if(fObservable == kXsection) hData_binned= dynamic_cast<TH1D*>(hData->Rebin(fptbinsJetMeasN,"hData_binned", fptbinsJetMeasA));
-    if(fObservable == kFragmentation) hData_binned= dynamic_cast<TH1D*>(hData->Rebin(fzbinsJetMeasN,"hData_binned", fzbinsJetMeasA));
+    if(fObservable == kFragmentation) hData_binned= dynamic_cast<TH1D*>(hData->Rebin(fzbinsJetMeasN[zBin-1],"hData_binned", fzbinsJetMeasA[zBin-1]));
 
     // ----------------- B->D simulation ---------------------
     int cent = 0;
@@ -134,7 +134,7 @@ bool oldCounter = 0)
             htmp = dynamic_cast<TH1D*>(GetInputHist(file, "hz", htmp));
             htmp->GetYaxis()->SetTitle("d#sigma/dz (mb)");
             hFD[nr] = dynamic_cast<TH1D*>(htmp->Clone(Form("hFD_%d",nr)));
-            hFD_binned[nr] = dynamic_cast<TH1D*>(htmp->Rebin(fzbinsJetTrueN,Form("hFD_binned_%d",nr),fzbinsJetTrueA));
+            hFD_binned[nr] = dynamic_cast<TH1D*>(htmp->Rebin(fzbinsJetMeasN[zBin-1],Form("hFD_binned_%d",nr),fzbinsJetMeasA[zBin-1]));
         }
 
         //htmp->Scale(sigma_c[nr]);
@@ -148,7 +148,7 @@ bool oldCounter = 0)
     TH1D *hFD_central = dynamic_cast<TH1D*>(htmp->Clone("hFD_central"));
     TH1D *hFD_central_binned = nullptr;
     if(fObservable == kXsection)hFD_central_binned=dynamic_cast<TH1D*>(htmp->Rebin(fptbinsJetTrueN,"hFD_central_binned",fptbinsJetTrueA));
-    if(fObservable == kFragmentation)hFD_central_binned=dynamic_cast<TH1D*>(htmp->Rebin(fzbinsJetTrueN,"hFD_central_binned",fzbinsJetTrueA));
+    if(fObservable == kFragmentation)hFD_central_binned=dynamic_cast<TH1D*>(htmp->Rebin(fzbinsJetMeasN[zBin-1],"hFD_central_binned",fzbinsJetMeasA[zBin-1]));
 
     setHistoDetails(hFD_central,4,24);
     setHistoDetails(hFD_central_binned,4,24);
@@ -360,7 +360,7 @@ void subtractB_afterFolding(TString matrixFile,TH1D *hFD_central_binned,TH1D *hF
      pv3->SetTextFont(42);
      pv3->SetTextSize(0.04f);
      pv3->SetTextAlign(11);
-     pv3->AddText(Form("%d < p_{T,%s} < %d GeV/#it{c}",static_cast<Int_t>(fptbinsDA[0]),fDmesonS.Data(),static_cast<Int_t>(fptbinsDA[fptbinsDN])));
+     pv3->AddText(Form("%d < p_{T,%s} < %d GeV/#it{c}",static_cast<Int_t>(fzptbinsDA[fBin][0]),fDmesonS.Data(),static_cast<Int_t>(fzptbinsDA[fBin-1][fzptbinsDN[fBin-1]])));
      if(fObservable==Observable::kFragmentation)pv3->AddText(Form("%d < p_{T,ch. jet} < %d GeV/#it{c}",static_cast<Int_t>(fzptJetMeasA[fBin-1]),static_cast<Int_t>(fzptJetMeasA[fBin])));
 
     setHistoDetails(hData_binned,kGreen+2,21,1.2,2,1);
@@ -441,7 +441,9 @@ void subtractB_afterFolding(TString matrixFile,TH1D *hFD_central_binned,TH1D *hF
     pv3->SetTextFont(42);
     pv3->SetTextSize(0.04f);
     pv3->SetTextAlign(11);
-    pv3->AddText(Form("%d < p_{T,%s} < %d GeV/#it{c}",static_cast<Int_t>(fptbinsDA[0]),fDmesonS.Data(),static_cast<Int_t>(fptbinsDA[fptbinsDN])));
+    pv3->AddText(Form("%d < p_{T,%s} < %d GeV/#it{c}",static_cast<Int_t>(fzptbinsDA[fBin][0]),fDmesonS.Data(),static_cast<Int_t>(fzptbinsDA[fBin-1][fzptbinsDN[fBin-1]])));
+    if(fObservable==Observable::kFragmentation)pv3->AddText(Form("%d < p_{T,ch. jet} < %d GeV/#it{c}",static_cast<Int_t>(fzptJetMeasA[fBin-1]),static_cast<Int_t>(fzptJetMeasA[fBin-1])));
+
     TCanvas *cSpectrumRebinUnc = new TCanvas("cSpectrumRebinUnc","cSpectrumRebinUnc",800,500);
     JetPtSpectra_FDsubUn->Draw();
     pv3->Draw("same");
@@ -683,7 +685,7 @@ TH1* foldB(TString matrixFile, TH1D *hFD, TH1D *folded ){
       folded = new TH1D("folded","folded",fptbinsJetMeasN,fptbinsJetMeasA);
     }
     if(fObservable == kFragmentation){
-      folded = new TH1D("folded","folded",fzbinsJetTrueN,fzbinsJetTrueA);
+      folded = new TH1D("folded","folded",fzbinsJetMeasN[fBin-1],fzbinsJetMeasA[fBin-1]);
     }
 
 

@@ -1,0 +1,52 @@
+
+Processing makeTFile4CutsD0Jet_pp5TeV_root6T3.C...
+Changing the pt bins
+PID is used
+This is the object I'm going to save:
+Minimum vtx type 3
+Minimum vtx contr 1
+Max vtx red chi2 1000000.000000
+Min SPD mult 0
+Use PID 1  OldPid=0
+Remove daughters from vtx 1
+Physics selection: Yes
+Pileup rejection: Yes
+Check for candidates with pt < 3.00, that daughters fullfill kFirst criteria
+Array of variables
+inv. mass [GeV]	dca [cm]	cosThetaStar	pTK [GeV/c]	pTPi [GeV/c]	d0K [cm]	d0Pi [cm]	d0d0 [cm^2]	cosThetaPoint	|cosThetaPointXY|	NormDecayLenghtXY	
+Array of optimization
+0	1	1	0	0	0	0	1	1	0	0	
+Array of upper/lower cut
+1	1	1	0	0	1	1	1	0	0	0	
+Array of ptbin limits
+0	0.5	1	2	3	4	5	6	7	8	10	12	16	24	9999	
+Matrix of cuts
+fCutsRD[0][0] = 0.4	fCutsRD[0][1] = 0.4	fCutsRD[0][2] = 0.4	fCutsRD[0][3] = 0.4	fCutsRD[0][4] = 0.4	fCutsRD[0][5] = 0.4	fCutsRD[0][6] = 0.4	fCutsRD[0][7] = 0.4	fCutsRD[0][8] = 0.4	fCutsRD[0][9] = 0.4	fCutsRD[0][10] = 0.4	fCutsRD[0][11] = 0.4	fCutsRD[0][12] = 0.4	fCutsRD[0][13] = 0.4	
+fCutsRD[1][0] = 0.0275	fCutsRD[1][1] = 0.0275	fCutsRD[1][2] = 0.0275	fCutsRD[1][3] = 0.0275	fCutsRD[1][4] = 0.0275	fCutsRD[1][5] = 0.0275	fCutsRD[1][6] = 0.0275	fCutsRD[1][7] = 0.0275	fCutsRD[1][8] = 0.0275	fCutsRD[1][9] = 0.0275	fCutsRD[1][10] = 0.0275	fCutsRD[1][11] = 0.0275	fCutsRD[1][12] = 0.0275	fCutsRD[1][13] = 0.0275	
+fCutsRD[2][0] = 0.8	fCutsRD[2][1] = 0.8	fCutsRD[2][2] = 0.8	fCutsRD[2][3] = 0.8	fCutsRD[2][4] = 0.8	fCutsRD[2][5] = 0.8	fCutsRD[2][6] = 0.8	fCutsRD[2][7] = 0.8	fCutsRD[2][8] = 0.8	fCutsRD[2][9] = 0.9	fCutsRD[2][10] = 0.9	fCutsRD[2][11] = 1	fCutsRD[2][12] = 1	fCutsRD[2][13] = 1	
+fCutsRD[3][0] = 0.5	fCutsRD[3][1] = 0.5	fCutsRD[3][2] = 0.5	fCutsRD[3][3] = 0.7	fCutsRD[3][4] = 0.7	fCutsRD[3][5] = 0.7	fCutsRD[3][6] = 0.7	fCutsRD[3][7] = 0.7	fCutsRD[3][8] = 0.7	fCutsRD[3][9] = 0.7	fCutsRD[3][10] = 0.7	fCutsRD[3][11] = 0.7	fCutsRD[3][12] = 0.7	fCutsRD[3][13] = 0.7	
+fCutsRD[4][0] = 0.5	fCutsRD[4][1] = 0.5	fCutsRD[4][2] = 0.5	fCutsRD[4][3] = 0.7	fCutsRD[4][4] = 0.7	fCutsRD[4][5] = 0.7	fCutsRD[4][6] = 0.7	fCutsRD[4][7] = 0.7	fCutsRD[4][8] = 0.7	fCutsRD[4][9] = 0.7	fCutsRD[4][10] = 0.7	fCutsRD[4][11] = 0.7	fCutsRD[4][12] = 0.7	fCutsRD[4][13] = 0.7	
+fCutsRD[5][0] = 0.1	fCutsRD[5][1] = 0.1	fCutsRD[5][2] = 0.1	fCutsRD[5][3] = 0.1	fCutsRD[5][4] = 0.1	fCutsRD[5][5] = 0.1	fCutsRD[5][6] = 0.1	fCutsRD[5][7] = 0.1	fCutsRD[5][8] = 0.1	fCutsRD[5][9] = 0.1	fCutsRD[5][10] = 0.1	fCutsRD[5][11] = 0.1	fCutsRD[5][12] = 0.1	fCutsRD[5][13] = 0.1	
+fCutsRD[6][0] = 0.1	fCutsRD[6][1] = 0.1	fCutsRD[6][2] = 0.1	fCutsRD[6][3] = 0.1	fCutsRD[6][4] = 0.1	fCutsRD[6][5] = 0.1	fCutsRD[6][6] = 0.1	fCutsRD[6][7] = 0.1	fCutsRD[6][8] = 0.1	fCutsRD[6][9] = 0.1	fCutsRD[6][10] = 0.1	fCutsRD[6][11] = 0.1	fCutsRD[6][12] = 0.1	fCutsRD[6][13] = 0.1	
+fCutsRD[7][0] = -0.0004	fCutsRD[7][1] = -0.0004	fCutsRD[7][2] = -0.0004	fCutsRD[7][3] = -0.0004	fCutsRD[7][4] = -0.0004	fCutsRD[7][5] = -0.0002	fCutsRD[7][6] = -0.00015	fCutsRD[7][7] = -0.00012	fCutsRD[7][8] = -0.00012	fCutsRD[7][9] = -8e-05	fCutsRD[7][10] = -8e-05	fCutsRD[7][11] = 5e-05	fCutsRD[7][12] = 5e-05	fCutsRD[7][13] = 5e-05	
+fCutsRD[8][0] = 0.95	fCutsRD[8][1] = 0.95	fCutsRD[8][2] = 0.95	fCutsRD[8][3] = 0.95	fCutsRD[8][4] = 0.95	fCutsRD[8][5] = 0.95	fCutsRD[8][6] = 0.95	fCutsRD[8][7] = 0.95	fCutsRD[8][8] = 0.95	fCutsRD[8][9] = 0.95	fCutsRD[8][10] = 0.95	fCutsRD[8][11] = 0.95	fCutsRD[8][12] = 0.95	fCutsRD[8][13] = 0.9	
+fCutsRD[9][0] = 0	fCutsRD[9][1] = 0	fCutsRD[9][2] = 0	fCutsRD[9][3] = 0	fCutsRD[9][4] = 0	fCutsRD[9][5] = 0	fCutsRD[9][6] = 0	fCutsRD[9][7] = 0	fCutsRD[9][8] = 0	fCutsRD[9][9] = 0	fCutsRD[9][10] = 0	fCutsRD[9][11] = 0	fCutsRD[9][12] = 0	fCutsRD[9][13] = 0	
+fCutsRD[10][0] = 5	fCutsRD[10][1] = 5	fCutsRD[10][2] = 5	fCutsRD[10][3] = 5	fCutsRD[10][4] = 5	fCutsRD[10][5] = 5	fCutsRD[10][6] = 4	fCutsRD[10][7] = 4	fCutsRD[10][8] = 4	fCutsRD[10][9] = 3	fCutsRD[10][10] = 3	fCutsRD[10][11] = 3	fCutsRD[10][12] = 3	fCutsRD[10][13] = 3	
+
+fUsePreselect=0 
+Detectors used for PID: TPC TOF 
+Minimum TPC PID clusters = 0
+Maximum momentum for using TPC PID = 999999.000000
+TOF Mismatch probablility cut = 0.010000
+Maximum momentum for combined PID TPC PID = 999999.000000
+--- Matching algorithm = 1 ---
+nSigmaTOF = 3.00
+Compatibility band at nSigmaTOF=3.00 for p>2.00
+nSigmaTPC:
+   pt<0.60      	 nsigmaTPC= 2.00
+   0.60<pt<0.80 	 nsigmaTPC= 1.00
+   pt>0.80      	 nsigmaTPC= 0.00
+Compatibility band at nSigmaTPC=3.00
+EnableNSigmaTPCDataCorr = 0, -1
+Cuts on d0meas-d0exp:
+1.500000   1.500000   1.500000   1.500000   1.500000   1.500000   1.500000   1.500000   1.500000   1.500000   1.500000   1.500000   1.500000   1.500000   

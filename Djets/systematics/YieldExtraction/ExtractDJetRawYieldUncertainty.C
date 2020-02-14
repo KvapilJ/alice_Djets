@@ -10,14 +10,46 @@
 
 double sigmajet[] = {0,0};
 
-const int ptbinsDN = 11;
-double ptDbins[ptbinsDN+1] = {2,3,4,5,6,7,8,10,12,16,24,36};
+//jet pT 5-7
+/*
+const int ptbinsDN = 5;
+Int_t nDbins = ptbinsDN;
+double ptDbins[ptbinsDN+1] = {2,3,4,5,6,7};
+Int_t nJetbins = 7;
+Double_t ptJetbins[8] = {0.2,0.4,0.5,0.6,0.7,0.8,0.9,1.02};
+double sigmaD[ptbinsDN] = {0.0098287,0.010816,0.01564,0.01215793,0.0126723};
+TString efffile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/efficiency/DjetEff_prompt_jetpt5.00_7.00.root";
+*/
+//jet pT 7-10
+/*
+const int ptbinsDN = 7;
+Int_t nDbins = ptbinsDN;
+double ptDbins[ptbinsDN+1] = {2,3,4,5,6,7,8,10};
+Int_t nJetbins = 7;
+Double_t ptJetbins[8] = {0.2,0.4,0.5,0.6,0.7,0.8,0.9,1.02};
+double sigmaD[ptbinsDN] = {0.00987739,0.0108197,0.013632,0.0120964,0.0127563,0.0132041,0.0138195};
+TString efffile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/efficiency/DjetEff_prompt_jetpt7.00_10.00.root";
+*/
+//jet pT 10-15
+/*
+const int ptbinsDN = 9;
+Int_t nDbins = ptbinsDN;
+double ptDbins[ptbinsDN+1] = {2,3,4,5,6,7,8,10,12,15};
+Int_t nJetbins = 7;
+Double_t ptJetbins[8] = {0.2,0.4,0.5,0.6,0.7,0.8,0.9,1.02};
+double sigmaD[ptbinsDN] = {0.00924995,0.0103910,0.013041,0.019755,0.0130200,0.0133732,0.0140825,0.0150483,0.015597};
+TString efffile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/efficiency/DjetEff_prompt_jetpt10.00_15.00.root";
+*/
+//jet pT 15-50
 
-//double sigmaD[ptbinsDN] = {0.00991,0.01075,0.01141,0.01215,0.01275,0.01316,0.0139,0.01477,0.01584,0.01806,0.02198}; // set up sigma of the D signal from MC
-double sigmaD[ptbinsDN] = {0.00994,0.01076,0.01145,0.0122,0.01273,0.01324,0.01403,0.01483,0.0159,0.01812,0.02164}; // set up sigma of the D signal from MC
+const int ptbinsDN = 10;
+Int_t nDbins = ptbinsDN;
+double ptDbins[ptbinsDN+1] = {3,4,5,6,7,8,10,12,16,24,36};
+Int_t nJetbins = 7;
+Double_t ptJetbins[8] = {0.2,0.4,0.5,0.6,0.7,0.8,0.9,1.02};
+double sigmaD[ptbinsDN] = {0.0100185,0.013675,0.0122513,0.0126742,0.0125983,0.013976,0.0149387,0.0161679,0.01808516,0.0211933};
+TString efffile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/efficiency/DjetEff_prompt_jetpt15.00_50.00.root";
 
-TString efffile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/efficiency/DjetEff_prompt_jetpt5_50.root";
-//TString sigmaFile = "";
 
 // forward declaration
 void EvaluateBinPerBinUncertainty(
@@ -45,8 +77,8 @@ void SetInputParametersDstar(AliDJetRawYieldUncertaintyLocal *interface);
 void ExtractDJetRawYieldUncertainty(){
   gROOT->LoadMacro("AliDJetRawYieldUncertaintyLocal.cxx+g");
 
-  //for(int i=0; i<ptbinsDN; i++)
-  //  EvaluateBinPerBinUncertainty(i);
+  for(int i=0; i<ptbinsDN; i++)
+    EvaluateBinPerBinUncertainty(i);
 
   ExtractDJetRawYieldUncertaintyFull();
 
@@ -167,11 +199,11 @@ void ExtractDJetRawYieldUncertainty_FromSB_CoherentTrialChoice(AliDJetRawYieldUn
 void SetInputParametersDzero(AliDJetRawYieldUncertaintyLocal *interface){
 
   //Dstar cfg
-  Int_t nDbins = 11;
-  Double_t ptDbins[12] = {2,3,4,5,6,7,8,10,12,16,24,36};
+  //Int_t nDbins = 5;
+  //Double_t ptDbins[12] = {2,3,4,5,6,7};
 
-  Int_t nJetbins = 11;
-  Double_t ptJetbins[12] = {2,3,4,5,6,8,10,12,14,20,30,50};
+ // Int_t nJetbins = 6;
+ // Double_t ptJetbins[12] = {0.4,0.5,0.6,0.7,0.8,0.9,1.02};
 // Pb-Pb binning
 //  Int_t nJetbins = 7;
 //  Double_t ptJetbins[8] = {3,5,10,15,20,25,35,50};
@@ -191,9 +223,9 @@ void SetInputParametersDzero(AliDJetRawYieldUncertaintyLocal *interface){
 //  Bool_t bkgVar[8] = {kTRUE,kFALSE,kTRUE,kFALSE,kFALSE,kFALSE,kFALSE,kFALSE}; //set bgk variations: exp, lin, pol2, pol3, pol4, pol5, PowLaw, PowLaw*Exp
   Bool_t bkgVar[8] = {kTRUE,kTRUE,kFALSE,kFALSE,kFALSE,kFALSE,kFALSE,kFALSE}; //set bgk variations: exp, lin, pol2, pol3, pol4, pol5, PowLaw, PowLaw*Exp
 
-  Int_t nRebinSteps=2;
+  Int_t nRebinSteps=1;
   //Int_t rebinStep[2]={1};
-  Int_t rebinStep[2]={1,2};
+  Int_t rebinStep[1]={1};
   Int_t nMinMassSteps=2;
   Double_t minMassStep[2]={1.72,1.74};
   Int_t nMaxMassSteps=2;
@@ -219,7 +251,7 @@ void SetInputParametersDzero(AliDJetRawYieldUncertaintyLocal *interface){
                 1,1, 1};  // fixed mean, fixed sigma*/
 
 
-  interface->SetInputFilename("/home/kvapil/work/analysis/pp_run2/D0jet/data_250319/data/AnalysisResults_Run2.root");
+  interface->SetInputFilename("/mnt/hgfs/vmware/data_250319/data/AnalysisResults_Run2.root");
   interface->SetInputDirname("DmesonsForJetCorrelations");
   interface->SetInputListname("histosD0MBN");
   interface->SetInputObjectname("hsDphiz");
@@ -253,12 +285,12 @@ void SetInputParametersDzero(AliDJetRawYieldUncertaintyLocal *interface){
 void SetInputParametersDstar(AliDJetRawYieldUncertaintyLocal *interface){
 
   //Dstar cfg
-  Int_t nDbins = 10;
-  Double_t ptDbins[11] = {3,4,5,6,7,8,10,12,16,24,36};
+//  Int_t nDbins = 10;
+//  Double_t ptDbins[11] = {3,4,5,6,7,8,10,12,16,24,36};
 
-  Int_t nJetbins = 9;
+//  Int_t nJetbins = 9;
  // Double_t ptJetbins[9] = {2,4,6,8,10,12,16,24,40};
-  Double_t ptJetbins[10] = {3,4,5,6,8,10,14,20,30,50};
+//  Double_t ptJetbins[10] = {3,4,5,6,8,10,14,20,30,50};
 
   Double_t DMesonEff[10];
   TFile *FileEff = new TFile("/home/basia/Work/alice/analysis/pPb_run2/Efficiencies/out_806Preliminary/DjetEff_prompt_jetpt2_50.root");

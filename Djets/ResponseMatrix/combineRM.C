@@ -65,7 +65,7 @@ if (useDeltaPt) {
 if(fObservable == kXsection)LoadDetectorMatrix(detRMFile.Data(),"hPtJet2d","hPtJetGen","hPtJetRec",0);
 if(fObservable == kFragmentation)LoadDetectorMatrix(detRMFile.Data(),"hZJet2d","hZJetGen","hZJetRec",0);
 
-
+std::cout<<"A"<<std::endl;
 if (!fTrueSpectrum) { Error("Unfold", "No true spectrum!");	return; }
 if (!fMeasSpectrum) { Error("Unfold", "No reconstructed spectrum!"); return; }
 
@@ -87,7 +87,7 @@ if (!fMeasSpectrum) { Error("Unfold", "No reconstructed spectrum!"); return; }
   				hNormY->Divide(priorhisto);
   				WeightMatrixY(fMatrixProd,hNormY,fdivide);
   	}
-
+std::cout<<"B"<<std::endl;
     cMatrix->Divide(2,1);
   	cMatrix->cd(1);
   	gPad->SetLogz();
@@ -110,7 +110,7 @@ if (!fMeasSpectrum) { Error("Unfold", "No reconstructed spectrum!"); return; }
     fMatrixProd->GetYaxis()->SetTitle("z_{#parallel}^{gen.}");
   }
 
-
+std::cout<<"C"<<std::endl;
 	fMatrixProd->SetTitle("Combined Matrix");
 
   if(fSystem) MtxPlots(outDir,"probability");
@@ -129,13 +129,13 @@ if (!fMeasSpectrum) { Error("Unfold", "No reconstructed spectrum!"); return; }
       Matrix->GetYaxis()->SetTitle("p_{T,ch jet}^{gen.} (GeV/#it{c})");
   }
   if(fObservable == kFragmentation){
-      if(isPrompt)Matrix = Rebin2D("Matrix", fMatrixProd, fzbinsJetMeasN, fzbinsJetMeasA, fzbinsJetTrueN, fzbinsJetTrueAPrompt,0);
-      else Matrix = Rebin2D("Matrix", fMatrixProd, fzbinsJetMeasN, fzbinsJetMeasA, fzbinsJetTrueN, fzbinsJetTrueA,0);
+      if(isPrompt)Matrix = Rebin2D("Matrix", fMatrixProd, fzbinsJetMeasN[fBin-1], fzbinsJetMeasA[fBin-1], fzbinsJetTrueN[fBin-1], fzbinsJetTrueAPrompt[fBin-1],0);
+      else Matrix = Rebin2D("Matrix", fMatrixProd, fzbinsJetMeasN[fBin-1], fzbinsJetMeasA[fBin-1], fzbinsJetMeasN[fBin-1], fzbinsJetMeasA[fBin-1],0);
       Matrix->GetXaxis()->SetTitle("z_{#parallel}^{rec.}");
       Matrix->GetYaxis()->SetTitle("z_{#parallel}^{gen.}");
-      Matrix->GetXaxis()->SetRangeUser(fzbinsJetMeasA[0],fzbinsJetMeasA[fzbinsJetMeasN]+0.2);
-      if(isPrompt)Matrix->GetYaxis()->SetRangeUser(fzbinsJetMeasA[0],fzbinsJetTrueA[fzbinsJetTrueN]);
-      else Matrix->GetYaxis()->SetRangeUser(fzbinsJetMeasA[0],fzbinsJetTrueAPrompt[fzbinsJetTrueN]);
+      Matrix->GetXaxis()->SetRangeUser(fzbinsJetMeasA[fBin-1][0],fzbinsJetMeasA[fBin-1][fzbinsJetMeasN[fBin-1]]);
+      if(isPrompt)Matrix->GetYaxis()->SetRangeUser(fzbinsJetMeasA[fBin-1][0],fzbinsJetMeasA[fBin-1][fzbinsJetMeasN[fBin-1]]);
+      else Matrix->GetYaxis()->SetRangeUser(fzbinsJetMeasA[fBin-1][0],fzbinsJetTrueAPrompt[fBin-1][fzbinsJetTrueN[fBin-1]]);
   }
   Matrix->SetTitle("Combined Matrix");
 
@@ -146,12 +146,12 @@ if (!fMeasSpectrum) { Error("Unfold", "No reconstructed spectrum!"); return; }
       MatrixProb->GetYaxis()->SetTitle("p_{T,ch jet}^{gen.} (GeV/#it{c})");
   }
   if(fObservable == kFragmentation){
-      if(isPrompt)MatrixProb=Rebin2D("MatrixProb", fMatrixProd, fzbinsJetMeasN, fzbinsJetMeasA, fzbinsJetTrueN, fzbinsJetTrueA,0);
-      else MatrixProb=Rebin2D("MatrixProb", fMatrixProd, fzbinsJetMeasN, fzbinsJetMeasA, fzbinsJetTrueN, fzbinsJetTrueAPrompt,0);
+      if(isPrompt)MatrixProb=Rebin2D("MatrixProb", fMatrixProd, fzbinsJetMeasN[fBin-1], fzbinsJetMeasA[fBin-1], fzbinsJetTrueN[fBin-1], fzbinsJetTrueAPrompt[fBin-1],0);
+      else MatrixProb=Rebin2D("MatrixProb", fMatrixProd, fzbinsJetMeasN[fBin-1], fzbinsJetMeasA[fBin-1], fzbinsJetMeasN[fBin-1], fzbinsJetMeasA[fBin-1],0);
       MatrixProb->GetXaxis()->SetTitle("z_{#parallel}^{rec.}");
       MatrixProb->GetYaxis()->SetTitle("z_{#parallel}^{gen.}");
   }
-
+std::cout<<"D"<<std::endl;
   MatrixProb->SetTitle("Combined Prob Matrix");
   NormMatrixY(MatrixProb);
   MatrixProb->GetZaxis()->SetRangeUser(0.0001,1);
@@ -185,7 +185,7 @@ if (!fMeasSpectrum) { Error("Unfold", "No reconstructed spectrum!"); return; }
   	hMtxPP->Draw("colz");
   }
 
-
+std::cout<<"E"<<std::endl;
   TPaveText *pvEn= new TPaveText(0.2,0.80,0.8,0.85,"brNDC");
   pvEn->SetFillStyle(0);
   pvEn->SetBorderSize(0);
@@ -234,13 +234,13 @@ if (!fMeasSpectrum) { Error("Unfold", "No reconstructed spectrum!"); return; }
   pv3->SetTextFont(42);
   pv3->SetTextSize(0.03f);
   pv3->SetTextAlign(11);
-  pv3->AddText(Form("%d < p_{T,%s} < %d GeV/#it{c}",static_cast<Int_t>(fptbinsDA[0]),fDmesonS.Data(),static_cast<Int_t>(fptbinsDA[fptbinsDN])));
-  if(fObservable==kFragmentation)pv3->AddText(Form("%d < p_{T,ch. jet} < %d",static_cast<Int_t>(fzptJetMeasA[fBin-1]),static_cast<Int_t>(fzptJetMeasA[fBin])));
+  pv3->AddText(Form("%d < p_{T,%s} < %d GeV/#it{c}",static_cast<Int_t>(fzptbinsDA[fBin-1][0]),fDmesonS.Data(),static_cast<Int_t>(fzptbinsDA[fBin-1][fzptbinsDN[fBin-1]])));
+  if(fObservable==kFragmentation)pv3->AddText(Form("%d < p_{T,ch. jet} < %d  GeV/#it{c}",static_cast<Int_t>(fzptJetMeasA[fBin-1]),static_cast<Int_t>(fzptJetMeasA[fBin])));
 
 	TCanvas *cMatrixProd = new TCanvas();
 	cMatrixProd->SetLogz();
 	fMatrixProd->Draw("colz");
-
+std::cout<<"F"<<std::endl;
   pv3->Draw("same");
   pvEn->Draw("same");
   pvD->Draw("same");
@@ -274,12 +274,12 @@ if (!fMeasSpectrum) { Error("Unfold", "No reconstructed spectrum!"); return; }
       MatrixProb->GetYaxis()->SetRangeUser(3,fptbinsJetTrueA[fptbinsJetTrueN]);
   }
   if(fObservable == kFragmentation){
-      Matrix->GetXaxis()->SetRangeUser(fzbinsJetMeasA[0],fzbinsJetMeasA[fzbinsJetMeasN]+0.2);
-      if(isPrompt)Matrix->GetYaxis()->SetRangeUser(3,fzbinsJetTrueA[fzbinsJetTrueN]);
-      else Matrix->GetYaxis()->SetRangeUser(3,fzbinsJetTrueAPrompt[fzbinsJetTrueN]);
-      MatrixProb->GetXaxis()->SetRangeUser(fzbinsJetMeasA[0],fzbinsJetMeasA[fzbinsJetMeasN]+0.2);
-      if(isPrompt)MatrixProb->GetYaxis()->SetRangeUser(3,fzbinsJetTrueA[fzbinsJetTrueN]);
-      else MatrixProb->GetYaxis()->SetRangeUser(3,fzbinsJetTrueAPrompt[fzbinsJetTrueN]);
+      Matrix->GetXaxis()->SetRangeUser(fzbinsJetMeasA[fBin-1][0],fzbinsJetMeasA[fBin-1][fzbinsJetMeasN[fBin-1]]);
+      if(isPrompt)Matrix->GetYaxis()->SetRangeUser(3,fzbinsJetTrueAPrompt[fBin-1][fzbinsJetTrueN[fBin-1]]);
+      else Matrix->GetYaxis()->SetRangeUser(3,fzbinsJetMeasA[fBin-1][fzbinsJetMeasN[fBin-1]]);
+      MatrixProb->GetXaxis()->SetRangeUser(fzbinsJetMeasA[fBin-1][0],fzbinsJetMeasA[fBin-1][fzbinsJetMeasN[fBin-1]]);
+      if(isPrompt)MatrixProb->GetYaxis()->SetRangeUser(3,fzbinsJetTrueAPrompt[fBin-1][fzbinsJetTrueN[fBin-1]]);
+      else MatrixProb->GetYaxis()->SetRangeUser(3,fzbinsJetMeasA[fBin-1][fzbinsJetMeasN[fBin-1]]);
   }
 
 
@@ -315,8 +315,8 @@ if (!fMeasSpectrum) { Error("Unfold", "No reconstructed spectrum!"); return; }
   pv3->SetTextFont(42);
   pv3->SetTextSize(0.03f);
   pv3->SetTextAlign(11);
-  pv3->AddText(Form("|#it{#eta}_{jet}| < 0.%d, %d < p_{T,%s} < %d GeV/#it{c}",9-Rpar,static_cast<Int_t>(fptbinsDA[0]),fDmesonS.Data(),static_cast<Int_t>(fptbinsDA[fptbinsDN])));
-  if(fObservable==kFragmentation)pv3->AddText(Form("%d < p_{T,ch. jet} < %d",static_cast<Int_t>(fzptJetMeasA[fBin-1]),static_cast<Int_t>(fzptJetMeasA[fBin])));
+  pv3->AddText(Form("|#it{#eta}_{jet}| < 0.%d, %d < p_{T,%s} < %d GeV/#it{c}",9-Rpar,static_cast<Int_t>(fzptbinsDA[fBin-1][0]),fDmesonS.Data(),static_cast<Int_t>(fzptbinsDA[fBin-1][fzptbinsDN[fBin-1]])));
+  if(fObservable==kFragmentation)pv3->AddText(Form("%d < p_{T,ch. jet} < %d  GeV/#it{c}",static_cast<Int_t>(fzptJetMeasA[fBin-1]),static_cast<Int_t>(fzptJetMeasA[fBin])));
 
 
   TCanvas *cMatrixProdReb = new TCanvas();
@@ -334,7 +334,7 @@ if (!fMeasSpectrum) { Error("Unfold", "No reconstructed spectrum!"); return; }
   pvD->Draw("same");
   pvJet->Draw("same");
   pv3->Draw("same");
-
+std::cout<<"G"<<std::endl;
 		if(isPrompt){
 			if(useDeltaPt) {
          cMatrix->SaveAs(Form("%s/plots%s/Matrices.png",outDir.Data(),(zBin!=0)?Form("%d",zBin):""));

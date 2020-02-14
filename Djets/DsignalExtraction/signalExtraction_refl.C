@@ -16,8 +16,34 @@ void signalExtraction_refl(
   Int_t zBin = 0
 )
 {
-  const Int_t     fptbinsDN = 12;
-  Double_t        fptbinsDA[fptbinsDN+1] = { 1,2,3,4,5,6,7,8,10,12,16,24,36};
+  Int_t     fptbinsDNl = 0;//12;
+  Double_t        fptbinsDAl[12] ;//Double_t        fptbinsDA[fptbinsDN+1]= { 1,2,3,4,5,6,7,8,10,12,16,24,36};
+
+  if(fObservable == kFragmentation){
+      fptbinsDNl = fzptbinsDN[zBin-1];
+      for(Int_t i = 0; i<= fptbinsDN;i++){
+          fptbinsDAl[i] = fzptbinsDA[zBin-1][i];
+          std::cout<<"z "<<zBin<<" bin "<<i<<" val "<<fptbinsDAl[i]<<std::endl;
+      }
+  }
+  else{
+      fptbinsDNl = fptbinsDN;
+      for(Int_t i = 0;i<=fptbinsDN;i++){
+          fptbinsDAl[i] = fptbinsDA[i];
+      }
+
+  }
+
+  /*
+  const int     fzptbinsDN[fzptJetMeasN]={3,5,7,9,11};
+  double        fzptbinsDA[fzptJetMeasN][12] = {{2,3,4,5},
+                                               {2,3,4,5,6,7},
+                                               {2,3,4,5,6,7,8,10},
+                                               {2,3,4,5,6,7,8,10,12,15},
+                                               {2,3,4,5,6,7,8,10,12,16,24,36}};*/
+  //for pwgJE
+  //const Int_t     fptbinsDN = 7;
+  //Double_t        fptbinsDA[fptbinsDN+1]{2,4,5,6,7,8,12,24};
   Int_t fRebinMass = 2;
   Double_t jetmin = -10, jetmax = 50;
   Double_t zmin = -2, zmax = 2;
@@ -94,8 +120,8 @@ void signalExtraction_refl(
       }
     }
 
-    TH1D *hsig[fptbinsDN], *hrefl[fptbinsDN];
-    TH1D *hFitReflNewTemp[fptbinsDN], *ratio[fptbinsDN];
+    TH1D *hsig[fptbinsDNl], *hrefl[fptbinsDNl];
+    TH1D *hFitReflNewTemp[fptbinsDNl], *ratio[fptbinsDNl];
     TString formulaSig = "[0]/([2]*TMath::Sqrt(2*TMath::Pi()))*exp(-(x-[1])*(x-[1])/(2*[2]*[2]))";
     TString formulaRef = "[0]/(TMath::Sqrt(2.*TMath::Pi())*[2])*TMath::Exp(-(x-[1])*(x-[1])/(2.*[2]*[2]))+[3]/( TMath::Sqrt(2.*TMath::Pi())*[5])*TMath::Exp(-(x-[4])*(x-[4])/(2.*[5]*[5]))";
 
@@ -110,16 +136,16 @@ void signalExtraction_refl(
 
     std::ofstream myfile (Form("%s/Sigmas%s%s.txt",outdir.Data(), postfix ? listName.Data() : "pp" ,(zBin!=0)?Form("%d",zBin):""));
 
-    for(int i=0; i<fptbinsDN; i++){
-      hsig[i] = dynamic_cast<TH1D*>(hInvMassptDSig->ProjectionX(Form("histSgn_%d_%d",static_cast<int>(fptbinsDA[i]),static_cast<int>(fptbinsDA[i+1])),hInvMassptDSig->GetYaxis()->FindBin(fptbinsDA[i]), hInvMassptDSig->GetYaxis()->FindBin(fptbinsDA[i+1])-1));
-      hrefl[i] = dynamic_cast<TH1D*>(hInvMassptDRefl->ProjectionX(Form("hrefl_%d_%d",static_cast<int>(fptbinsDA[i]),static_cast<int>(fptbinsDA[i+1])),hInvMassptDRefl->GetYaxis()->FindBin(fptbinsDA[i]), hInvMassptDRefl->GetYaxis()->FindBin(fptbinsDA[i+1])-1));
+    for(int i=0; i<fptbinsDNl; i++){
+      hsig[i] = dynamic_cast<TH1D*>(hInvMassptDSig->ProjectionX(Form("histSgn_%d_%d",static_cast<int>(fptbinsDAl[i]),static_cast<int>(fptbinsDAl[i+1])),hInvMassptDSig->GetYaxis()->FindBin(fptbinsDA[i]), hInvMassptDSig->GetYaxis()->FindBin(fptbinsDA[i+1])-1));
+      hrefl[i] = dynamic_cast<TH1D*>(hInvMassptDRefl->ProjectionX(Form("hrefl_%d_%d",static_cast<int>(fptbinsDAl[i]),static_cast<int>(fptbinsDAl[i+1])),hInvMassptDRefl->GetYaxis()->FindBin(fptbinsDA[i]), hInvMassptDRefl->GetYaxis()->FindBin(fptbinsDA[i+1])-1));
       hsig[i]->Rebin(fRebinMass);
       hrefl[i]->Rebin(fRebinMass);
 
       hsig[i]->GetXaxis()->SetRangeUser(minf,maxf);
       hrefl[i]->GetXaxis()->SetRangeUser(minf,maxf);
-      hsig[i]->SetTitle(Form("%.1lf < pt^{D} < %.1lf",fptbinsDA[i],fptbinsDA[i+1]));
-      hrefl[i]->SetTitle(Form("%.1lf < pt^{D} < %.1lf",fptbinsDA[i],fptbinsDA[i+1]));
+      hsig[i]->SetTitle(Form("%.1lf < pt^{D} < %.1lf",fptbinsDAl[i],fptbinsDAl[i+1]));
+      hrefl[i]->SetTitle(Form("%.1lf < pt^{D} < %.1lf",fptbinsDAl[i],fptbinsDAl[i+1]));
 
       TF1 *gaussMCSignal=new TF1("gaussMCSig",formulaSig.Data(),minf,maxf);
       gaussMCSignal->SetParName(0,"IntegralSgn");
@@ -136,10 +162,10 @@ void signalExtraction_refl(
 
 
       if(hsig[i]->GetEntries() > 1){
-        myfile <<"pT:"<<fptbinsDA[i]<<"-"<<fptbinsDA[i+1]<<": "<<gaussMCSignal->GetParameter(2)<<" "<<gaussMCSignal->GetParError(2)<<"\n";
+        myfile <<"pT:"<<fptbinsDAl[i]<<"-"<<fptbinsDAl[i+1]<<": "<<gaussMCSignal->GetParameter(2)<<" "<<gaussMCSignal->GetParError(2)<<"\n";
       }
       else
-        myfile <<"pT:"<<fptbinsDA[i]<<"-"<<fptbinsDA[i+1]<<": "<<"no entries"<<"\n";
+        myfile <<"pT:"<<fptbinsDAl[i]<<"-"<<fptbinsDAl[i+1]<<": "<<"no entries"<<"\n";
 
       cRefl->cd(i+1);
       TF1 *doublegaussMCRefl=new TF1("doublegaussMCRefl",formulaRef.Data(),minf,maxf);
@@ -162,8 +188,8 @@ void signalExtraction_refl(
       cRefl2->cd(i+1);
       TF1 *fFitRefl = hrefl[i]->GetFunction("doublegaussMCRefl");
       //fFitReflection->cd();
-      hFitReflNewTemp[i] = dynamic_cast<TH1D*>(hrefl[i]->Clone(Form("histRflFittedDoubleGaus_pt%d_%d",static_cast<int>(fptbinsDA[i]),static_cast<int>(fptbinsDA[i+1]))));
-      ratio[i] = dynamic_cast<TH1D*>(hrefl[i]->Clone(Form("ratioRelDistr_pt%d_%d", static_cast<int>(fptbinsDA[i]),static_cast<int>(fptbinsDA[i+1]))));
+      hFitReflNewTemp[i] = dynamic_cast<TH1D*>(hrefl[i]->Clone(Form("histRflFittedDoubleGaus_pt%d_%d",static_cast<int>(fptbinsDAl[i]),static_cast<int>(fptbinsDAl[i+1]))));
+      ratio[i] = dynamic_cast<TH1D*>(hrefl[i]->Clone(Form("ratioRelDistr_pt%d_%d", static_cast<int>(fptbinsDAl[i]),static_cast<int>(fptbinsDAl[i+1]))));
 
       for(Int_t iBin2=1; iBin2<=hrefl[i]->GetNbinsX(); iBin2++){
         hFitReflNewTemp[i]->SetBinContent(iBin2, 0.);
@@ -188,7 +214,7 @@ void signalExtraction_refl(
     // --------------------------------------------------------
     // ----------- write to output file
     TFile *ofile = new TFile(Form("%s/reflectionTemplates_%s%s.root",outdir.Data(), postfix ? listName.Data() : "pp" ,(zBin!=0)?Form("%d",zBin):""),"RECREATE");
-    for(int i=0; i<fptbinsDN; i++){
+    for(int i=0; i<fptbinsDNl; i++){
       hsig[i]->Write();
       hrefl[i]->Write();
       hFitReflNewTemp[i]->Write();

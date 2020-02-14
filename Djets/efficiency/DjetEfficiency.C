@@ -74,12 +74,10 @@ Double_t jetptmin = 2, Double_t jetptmax = 50, Bool_t recoPt = 0, Bool_t postfix
         THnSparseF* sMC = dynamic_cast<THnSparseF*>(histList[i]->FindObject("ResponseMatrix"));
         sparseMC[i] = dynamic_cast<THnSparseF*>(sMC->Clone(Form("sparseMC_%d",i)));
         if(fDmesonSpecie){ sparseMC[i]->GetAxis(5)->SetRangeUser(jetptmin,jetptmax); // Dstar tmp
-            std::cout<<"if fDmesonSpecie"<<std::endl;
         }
             else { 	sparseMC[i]->GetAxis(6)->SetRangeUser(jetptmin,jetptmax); // jet pT gen
             sparseMC[i]->GetAxis(9)->SetRangeUser(-(0.9-fRpar),0.9-fRpar); // MC jet eta
         //    sparseMC[i]->GetAxis(8)->SetRangeUser(-(0.9-fRpar),0.9-fRpar); // MC D y
-            std::cout<<"1 else fDmesonSpecie"<<std::endl;
             std::cout<<"jet pT: "<<jetptmin<<" "<<jetptmax<<" eta "<<0.9-fRpar<<std::endl;
         }
             if(fDmesonSpecie) hMC[i] = dynamic_cast<TH1D*>(sparseMC[i]->Projection(6)); // Dstar tmp
@@ -94,21 +92,15 @@ Double_t jetptmin = 2, Double_t jetptmax = 50, Bool_t recoPt = 0, Bool_t postfix
             else {
                 if(fDmesonSpecie)sparsereco[i]->GetAxis(5)->SetRangeUser(jetptmin,jetptmax); // Dstar tmp
                 else{ sparsereco[i]->GetAxis(6)->SetRangeUser(jetptmin,jetptmax); // jet pT gen
-                    std::cout<<"2 else fDmesonSpecie"<<std::endl;
-                    std::cout<<"jet pT: "<<jetptmin<<" "<<jetptmax<<std::endl;
                 }
             sparsereco[i]->GetAxis(1)->SetRangeUser(0,100); // jet pT reco
-            std::cout<<"jet reco pT: "<<"0 140"<<std::endl;
             }
         if(!fDmesonSpecie){ sparsereco[i]->GetAxis(4)->SetRangeUser(-(0.9-fRpar),0.9-fRpar); // reco jet eta //4reco 9 mc
         //                    sparsereco[i]->GetAxis(8)->SetRangeUser(-(0.9-fRpar),0.9-fRpar); // MC D y
-            std::cout<<"3 else fDmesonSpecie"<<std::endl;
-            std::cout<<" eta "<<0.9-fRpar<<std::endl;
         }
 
             if(fDmesonSpecie)hreco[i] = dynamic_cast<TH1D*>(sparsereco[i]->Projection(6)); // Dstar tmp
             else{ hreco[i] = dynamic_cast<TH1D*>(sparsereco[i]->Projection(7)); // Dpt gen
-             std::cout<<"projecting 7"<<std::endl;
             }
 
         hreco[i]->SetName(Form("hreco_%d",i));
@@ -174,13 +166,13 @@ Double_t jetptmin = 2, Double_t jetptmax = 50, Bool_t recoPt = 0, Bool_t postfix
     TCanvas *cEffReb = new TCanvas();
     hEff_reb->Draw("ep");
 
-    TString out = Form("%s/DjetEffRaw_%s_jetpt%d_%d", outDir.Data(), isPrompt ? "prompt" : "nonPrompt", static_cast<int>(jetptmin),static_cast<int>(jetptmax) );
+    TString out = Form("%s/DjetEffRaw_%s_jetpt%.2f_%.2f", outDir.Data(), isPrompt ? "prompt" : "nonPrompt", static_cast<float>(jetptmin),static_cast<float>(jetptmax) );
     SaveCanvas(cEff,out);
 
-    out = Form("%s/DjetEff_%s_jetpt%d_%d", outDir.Data(), isPrompt ? "prompt" : "nonPrompt", static_cast<int>(jetptmin),static_cast<int>(jetptmax) );
+    out = Form("%s/DjetEff_%s_jetpt%.2f_%.2f", outDir.Data(), isPrompt ? "prompt" : "nonPrompt", static_cast<float>(jetptmin),static_cast<float>(jetptmax) );
     SaveCanvas(cEffReb,out);
 
-    TFile *outFile = new TFile(Form("%s/DjetEff_%s_jetpt%d_%d.root", outDir.Data(), isPrompt ? "prompt" : "nonPrompt", static_cast<int>(jetptmin), static_cast<int>(jetptmax) ),"RECREATE");
+    TFile *outFile = new TFile(Form("%s/DjetEff_%s_jetpt%.2f_%.2f.root", outDir.Data(), isPrompt ? "prompt" : "nonPrompt", static_cast<float>(jetptmin), static_cast<float>(jetptmax) ),"RECREATE");
     hEff->Write();
     hEff_reb->Write();
     hMCpt->Write();

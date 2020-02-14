@@ -276,7 +276,7 @@ Bool_t rawJetSpectra(TString outdir, TString prod){
     pvEn->SetFillStyle(0);
     pvEn->SetBorderSize(0);
     pvEn->SetTextFont(42);
-    pvEn->SetTextSize(0.075f);
+    pvEn->SetTextSize(0.06f);
     pvEn->SetTextAlign(11);
     pvEn->AddText(Form("%s",fSystemS.Data()));
 
@@ -285,7 +285,7 @@ Bool_t rawJetSpectra(TString outdir, TString prod){
     pvD->SetFillStyle(0);
     pvD->SetBorderSize(0);
     pvD->SetTextFont(42);
-    pvD->SetTextSize(0.085f);
+    pvD->SetTextSize(0.06f);
     pvD->SetTextAlign(11);
     if(fDmesonSpecie) pvD->AddText("D^{*+} #rightarrow D^{0}#pi^{+} and charge conj.");
     else pvD->AddText("D^{0} #rightarrow K^{-}#pi^{+} and charge conj.");
@@ -296,9 +296,9 @@ Bool_t rawJetSpectra(TString outdir, TString prod){
     pvJet->SetFillStyle(0);
     pvJet->SetBorderSize(0);
     pvJet->SetTextFont(42);
-    pvJet->SetTextSize(0.085f);
+    pvJet->SetTextSize(0.06f);
     pvJet->AddText(Form("in Charged Jets, Anti-#it{k}_{T}, #it{R} = 0.%d",Rpar));
-    if(fObservable==Observable::kFragmentation)pvJet->AddText(Form("%d < p_{T,ch. jet} < %d",static_cast<Int_t>(fzptJetMeasA[fBin-1]),static_cast<Int_t>(fzptJetMeasA[fBin])));
+    if(fObservable==Observable::kFragmentation)pvJet->AddText(Form("%d < p_{T,ch. jet} < %d GeV/c",static_cast<Int_t>(fzptJetMeasA[fBin-1]),static_cast<Int_t>(fzptJetMeasA[fBin])));
     pvJet->SetTextAlign(11);
 
     TPaveText *pvEta = nullptr;
@@ -307,16 +307,25 @@ Bool_t rawJetSpectra(TString outdir, TString prod){
     pvEta->SetFillStyle(0);
     pvEta->SetBorderSize(0);
     pvEta->SetTextFont(42);
-    pvEta->SetTextSize(0.085f);
+    pvEta->SetTextSize(0.06f);
     pvEta->SetTextAlign(11);
     pvEta->AddText(Form("|#it{#eta}_{jet}| < 0.%d",9-Rpar));
 
 
     int xnx = 3, xny=4;
-    if(ptbinsDN_>4 && ptbinsDN_<7) { xnx = 2; xny=3; }
-    else if(ptbinsDN_>6 && ptbinsDN_<10) { xnx = 3; xny=3; }
-    else if(ptbinsDN_>9 && ptbinsDN_<13) { xnx = 3; xny=4; }
-    else { xnx = 4; xny=4; }
+    if(fObservable==Observable::kXsection){
+        if(ptbinsDN_>4 && ptbinsDN_<7) { xnx = 2; xny=3; }
+        else if(ptbinsDN_>6 && ptbinsDN_<10) { xnx = 3; xny=3; }
+        else if(ptbinsDN_>9 && ptbinsDN_<13) { xnx = 3; xny=4; }
+        else { xnx = 4; xny=4; }
+    }
+    else{
+        if(ptbinsDN_<=3) { xnx = 2; xny=2; }
+        else if(ptbinsDN_>=4 && ptbinsDN_<=5) { xnx = 2; xny=3; }
+        else if(ptbinsDN_>=6 && ptbinsDN_<=8) { xnx = 3; xny=3; }
+        else if(ptbinsDN_>=9 && ptbinsDN_<=11) { xnx = 3; xny=4; }
+        else { xnx = 4; xny=4; }
+    }
 
     TCanvas *c2 = new TCanvas("c2","c2",1200,1200);
     c2->Divide(xnx,xny);
@@ -326,6 +335,7 @@ Bool_t rawJetSpectra(TString outdir, TString prod){
     c2jetcorr->Divide(xnx,xny);
 
     int firstPtBin = 0;
+    if(ptbinsDA_[0] == 1) firstPtBin = 2;
     if(ptbinsDA_[0] == 2) firstPtBin = 3;
     else if(ptbinsDA_[0] == 3) firstPtBin = 4;
     else if(ptbinsDA_[0] == 4) firstPtBin = 5;
@@ -360,7 +370,7 @@ Bool_t rawJetSpectra(TString outdir, TString prod){
           if(fSystem) SetReflection(fitterp,hmin,hmax,RS,i+firstPtBin); // older way from Fabio's templates for p-Pb
           else SetReflection(fitterp,hmin,hmax,RS,static_cast<Int_t>(ptbinsDA_[i]),static_cast<Int_t>(ptbinsDA_[i+1])); // new for pp (new templates from D-jet code)
         }
-        //fitterp->SetFixGaussianSigma(reflSig); //added fixing singma on MC
+        fitterp->SetFixGaussianSigma(reflSig); //added fixing singma on MC
 
         fitterp->MassFitter(kFALSE);
         //fitterp->PrintFunctions();
@@ -561,9 +571,9 @@ Bool_t rawJetSpectra(TString outdir, TString prod){
             hjetpt_sb[i]->GetXaxis()->SetRangeUser(jetplotmin,jetplotmax);
         }
         else if(fObservable == Observable::kFragmentation){
-            hjetpt[i]->GetXaxis()->SetRangeUser(fzbinsJetTrueA[0],fzbinsJetTrueA[fzbinsJetTrueN]);
+            hjetpt[i]->GetXaxis()->SetRangeUser(fzbinsJetMeasA[fBin-1][0],fzbinsJetMeasA[fBin-1][fzbinsJetMeasN[fBin-1]]);
             hjetpt[i]->GetXaxis()->SetTitle("z_{#parallel}");
-            hjetpt_sb[i]->GetXaxis()->SetRangeUser(fzbinsJetTrueA[0],fzbinsJetTrueA[fzbinsJetTrueN]);
+            hjetpt_sb[i]->GetXaxis()->SetRangeUser(fzbinsJetMeasA[fBin-1][0],fzbinsJetMeasA[fBin-1][fzbinsJetMeasN[fBin-1]]);
         }
 
         // scale background from side bands to the background under the peak
@@ -782,7 +792,7 @@ void  saveSpectraPlots(TString outdir,TString prod){
       else if(fObservable == Observable::kFragmentation){
         hrawjetptspectrum->GetYaxis()->SetTitle("dN/dz_{#parallel}");
         hrawjetptspectrum->GetXaxis()->SetTitle("z_{#parallel}");
-        hrawjetptspectrum->GetXaxis()->SetRangeUser(fzbinsJetTrueA[0],fzbinsJetTrueA[fzbinsJetTrueN]);
+        hrawjetptspectrum->GetXaxis()->SetRangeUser(fzbinsJetMeasA[fBin-1][0],fzbinsJetMeasA[fBin-1][fzbinsJetMeasN[fBin-1]]);
       }
       hrawjetptspectrum->Draw();
       if(isdetails) pvProd->Draw("same");
@@ -797,7 +807,7 @@ void  saveSpectraPlots(TString outdir,TString prod){
       else if(fObservable == Observable::kFragmentation){
         hjetptspectrum->GetYaxis()->SetTitle("dN/dz_{#parallel}");
         hjetptspectrum->GetXaxis()->SetTitle("z_{#parallel}");
-        hjetptspectrum->GetXaxis()->SetRangeUser(fzbinsJetTrueA[0],fzbinsJetTrueA[fzbinsJetTrueN]);
+        hjetptspectrum->GetXaxis()->SetRangeUser(fzbinsJetMeasA[fBin-1][0],fzbinsJetMeasA[fBin-1][fzbinsJetMeasN[fBin-1]]);
       }
 
       hjetptspectrum->SetMinimum(1);
@@ -826,9 +836,9 @@ void  saveSpectraPlots(TString outdir,TString prod){
         hjetptspectrumRebEvntScaled = static_cast<TH1F*>(hjetptspectrumReb_tmp->Rebin(fptbinsJetMeasN,"hjetptspectrumRebEvntScaled",fptbinsJetMeasA));
       }
       else if(fObservable == Observable::kFragmentation){
-        hjetptspectrumReb = static_cast<TH1F*>(hjetptspectrumReb_tmp->Rebin(fzbinsJetTrueN,"hjetptspectrumReb",fzbinsJetTrueA));
-        hjetptspectrumRebScaled = static_cast<TH1F*>(hjetptspectrumReb_tmp->Rebin(fzbinsJetTrueN,"hjetptspectrumRebScaled",fzbinsJetTrueA));
-        hjetptspectrumRebEvntScaled = static_cast<TH1F*>(hjetptspectrumReb_tmp->Rebin(fzbinsJetTrueN,"hjetptspectrumRebEvntScaled",fzbinsJetTrueA));
+        hjetptspectrumReb = static_cast<TH1F*>(hjetptspectrumReb_tmp->Rebin(fzbinsJetMeasN[fBin-1],"hjetptspectrumReb",fzbinsJetMeasA[fBin-1]));
+        hjetptspectrumRebScaled = static_cast<TH1F*>(hjetptspectrumReb_tmp->Rebin(fzbinsJetMeasN[fBin-1],"hjetptspectrumRebScaled",fzbinsJetMeasA[fBin-1]));
+        hjetptspectrumRebEvntScaled = static_cast<TH1F*>(hjetptspectrumReb_tmp->Rebin(fzbinsJetMeasN[fBin-1],"hjetptspectrumRebEvntScaled",fzbinsJetMeasA[fBin-1]));
       }
       hjetptspectrumRebEvntScaled->Scale(1./nEvents);
       setHistoDetails(hjetptspectrumReb,0,kBlue,20,static_cast<Size_t>(1.2)); // with bin width scaling

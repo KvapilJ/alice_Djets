@@ -197,7 +197,7 @@ Bool_t AliDJetRawYieldUncertaintyLocal::ExtractInputMassPlotDzeroSideband() {
 
     std::cout << "Extracting input mass plot: " << fpTmin << " to " << fpTmax << std::endl;
 
-    double jetmin = 0, jetmax = 50;
+    double jetmin = 15, jetmax = 50;
     const int ND = 4;
     TDirectoryFile* dir=(TDirectoryFile*)fFileInput->Get(fDirName.Data());
     TList *histList;
@@ -206,17 +206,17 @@ Bool_t AliDJetRawYieldUncertaintyLocal::ExtractInputMassPlotDzeroSideband() {
     for(int i=0;i<ND; i++){
         histList =  (TList*)dir->Get(Form("%s%d",fListName.Data(),i));
         sparse = (THnSparseF*)histList->FindObject(fObjectName.Data());
-        sparse->GetAxis(0)->SetRangeUser(fzmin,fzmax);
+        sparse->GetAxis(1)->SetRangeUser(jetmin,jetmax);
         //sparse->GetAxis(1)->SetRangeUser(jetmin,jetmax);
-        if(i==0) hInvMassptD=(TH3D*)sparse->Projection(3,1,2);
-        else hInvMassptD->Add((TH3D*)sparse->Projection(3,1,2));
+        if(i==0) hInvMassptD=(TH3D*)sparse->Projection(3,0,2);
+        else hInvMassptD->Add((TH3D*)sparse->Projection(3,0,2));
     }
     if(!hInvMassptD) return kFALSE;
 
 	// TCanvas *c = new TCanvas;
    //hInvMassptD->Draw();
 
-    fMassPlot = (TH1D*)(hInvMassptD->ProjectionX("projX",hInvMassptD->GetYaxis()->FindBin(jetmin),hInvMassptD->GetYaxis()->FindBin(jetmax)-1,hInvMassptD->GetZaxis()->FindBin(fpTmin), hInvMassptD->GetZaxis()->FindBin(fpTmax)-1))->Clone("inputSpectrum");
+    fMassPlot = (TH1D*)(hInvMassptD->ProjectionX("projX",hInvMassptD->GetYaxis()->FindBin(fzmin),hInvMassptD->GetYaxis()->FindBin(fzmax)-1,hInvMassptD->GetZaxis()->FindBin(fpTmin), hInvMassptD->GetZaxis()->FindBin(fpTmax)-1))->Clone("inputSpectrum");
 
     if(!fMassPlot) {
       std::cout << "Error in extracting the mass plot! Exiting..." << std::endl;
@@ -842,7 +842,7 @@ Bool_t AliDJetRawYieldUncertaintyLocal::EvaluateUncertaintyDzeroSideband() {
 		std::cout << "File " << fFileInput << " cannot be opened! check your file path!" << std::endl; return kFALSE;
 	}
 
-  double jetmin = 0, jetmax = 50;
+  double jetmin = 15, jetmax = 50;
   double fzmin = -2, fzmax = 2;
   const int ND = 4;
   TDirectoryFile* dir=(TDirectoryFile*)fFileInput->Get(fDirName.Data());
@@ -852,10 +852,10 @@ Bool_t AliDJetRawYieldUncertaintyLocal::EvaluateUncertaintyDzeroSideband() {
   for(int i=0;i<ND; i++){
       histList =  (TList*)dir->Get(Form("%s%d",fListName.Data(),i));
       sparse = (THnSparseF*)histList->FindObject(fObjectName.Data());
-      sparse->GetAxis(0)->SetRangeUser(fzmin,fzmax);
-      //sparse->GetAxis(1)->SetRangeUser(jetmin,jetmax);
-      if(i==0) hInvMassptD=(TH3D*)sparse->Projection(3,1,2);
-      else hInvMassptD->Add((TH3D*)sparse->Projection(3,1,2));
+      //sparse->GetAxis(0)->SetRangeUser(fzmin,fzmax);
+      sparse->GetAxis(1)->SetRangeUser(jetmin,jetmax);
+      if(i==0) hInvMassptD=(TH3D*)sparse->Projection(3,0,2);
+      else hInvMassptD->Add((TH3D*)sparse->Projection(3,0,2));
   }
   if(!hInvMassptD) return kFALSE;
 
@@ -928,7 +928,7 @@ Bool_t AliDJetRawYieldUncertaintyLocal::EvaluateUncertaintyDzeroSideband() {
 			Double_t sigma = hSigma->GetBinContent(rnd);
 			Double_t bkg = hBkg->GetBinContent(rnd);
 
-      TH1F *hmass = (TH1F*)(hInvMassptD->ProjectionX("projX",hInvMassptD->GetYaxis()->FindBin(jetmin),hInvMassptD->GetYaxis()->FindBin(jetmax)-1,hInvMassptD->GetZaxis()->FindBin(fpTmin), hInvMassptD->GetZaxis()->FindBin(fpTmax)-1));
+      TH1F *hmass = (TH1F*)(hInvMassptD->ProjectionX("projX",hInvMassptD->GetYaxis()->FindBin(fzmin),hInvMassptD->GetYaxis()->FindBin(fzmax)-1,hInvMassptD->GetZaxis()->FindBin(fpTmin), hInvMassptD->GetZaxis()->FindBin(fpTmax)-1));
       Float_t hmin = hmass->GetBinLowEdge(2);
       Float_t hmax = hmass->GetBinLowEdge(hmass->GetNbinsX());
 			Float_t signal_l_min = mean - 9 * sigma;
@@ -956,7 +956,7 @@ Bool_t AliDJetRawYieldUncertaintyLocal::EvaluateUncertaintyDzeroSideband() {
             std::cout << "Error! At least one variation with no entries! Exiting..." << std::endl;
         return kFALSE;
             }
-            scaling = bkg / hjetpt_s->Integral(hjetpt_s->FindBin(jetmin),hjetpt_s->FindBin(jetmax));
+            scaling = bkg / hjetpt_s->Integral(hjetpt_s->FindBin(fzmin),hjetpt_s->FindBin(fzmax));
 
       }
       else { //rebin spectrum
@@ -982,7 +982,7 @@ Bool_t AliDJetRawYieldUncertaintyLocal::EvaluateUncertaintyDzeroSideband() {
           std::cout << "Error! At least one variation with no entries! Exiting reb..." << iDbin << std::endl;
           return kFALSE;
         }
-        scaling = bkg / tmphjetpt_s->Integral(tmphjetpt_s->FindBin(jetmin),tmphjetpt_s->FindBin(jetmax)); //integral btw 0 and 50 pTJet (where you get the bkg from the mass plot)
+        scaling = bkg / tmphjetpt_s->Integral(tmphjetpt_s->FindBin(fzmin),tmphjetpt_s->FindBin(fzmax)); //integral btw 0 and 50 pTJet (where you get the bkg from the mass plot)
 
         for(int j=1; j<=tmphjetpt->GetNbinsX(); j++) {
           Double_t centerbin = tmphjetpt->GetBinCenter(j); //bin of hjetpt corresponding to j-th bin of THnSparse projection

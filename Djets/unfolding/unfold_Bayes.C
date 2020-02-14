@@ -73,8 +73,8 @@ gSystem->Exec(Form("mkdir  %s/plots%s",outDir.Data(),(zBin!=0)?Form("%d",zBin):"
 	double plotmin = fptbinsJetTrueA[0] ;
 	double plotmax = fptbinsJetTrueA[fptbinsJetTrueN];
     if (fObservable == Observable::kFragmentation){
-        plotmin = fzbinsJetTrueAPrompt[0] ;
-        plotmax = fzbinsJetTrueAPrompt[fzbinsJetTrueN];
+        plotmin = fzbinsJetTrueAPrompt[fBin-1][0] ;
+        plotmax = fzbinsJetTrueAPrompt[fBin-1][fzbinsJetTrueN[fBin-1]];
     }
 
 
@@ -175,10 +175,10 @@ else if(fObservable == Observable::kFragmentation)LoadDetectorMatrix(detRMfile.D
         fRawRebin=dynamic_cast<TH1D*>(fRawSpectrum->Rebin(fptbinsJetMeasN, "fRawRebin", fptbinsJetMeasA));
     }
     if (fObservable == Observable::kFragmentation){
-        Matrix = Rebin2D("Matrix", fMatrixProd, fzbinsJetMeasN, fzbinsJetMeasA, fzbinsJetTrueN, fzbinsJetTrueAPrompt,0);
-        hProjXeffRebin=dynamic_cast<TH1D*>(hProjXeff->Rebin(fzbinsJetMeasN, "hProjXeffRebin", fzbinsJetMeasA));
-        hProjYeffRebin=dynamic_cast<TH1D*>(hProjYeff->Rebin(fzbinsJetTrueN, "hProjYeffRebin", fzbinsJetTrueAPrompt));
-        fRawRebin=dynamic_cast<TH1D*>(fRawSpectrum->Rebin(fzbinsJetMeasN, "fRawRebin", fzbinsJetMeasA));
+        Matrix = Rebin2D("Matrix", fMatrixProd, fzbinsJetMeasN[fBin-1], fzbinsJetMeasA[fBin-1], fzbinsJetTrueN[fBin-1], fzbinsJetTrueAPrompt[fBin-1],0);
+        hProjXeffRebin=dynamic_cast<TH1D*>(hProjXeff->Rebin(fzbinsJetMeasN[fBin-1], "hProjXeffRebin", fzbinsJetMeasA[fBin-1]));
+        hProjYeffRebin=dynamic_cast<TH1D*>(hProjYeff->Rebin(fzbinsJetTrueN[fBin-1], "hProjYeffRebin", fzbinsJetTrueAPrompt[fBin-1]));
+        fRawRebin=dynamic_cast<TH1D*>(fRawSpectrum->Rebin(fzbinsJetMeasN[fBin-1], "fRawRebin", fzbinsJetMeasA[fBin-1]));
     }
 
 
@@ -284,7 +284,7 @@ else if(fObservable == Observable::kFragmentation)LoadDetectorMatrix(detRMfile.D
         }
        //if(counter == fptbinsJetMeasN-2) cout << "!!!!!! bin found: " << ivar+1 << endl;
         if(fObservable == Observable::kXsection)hRatio[ivar]->GetXaxis()->SetRangeUser(fptbinsJetMeasA[0],fptbinsJetMeasA[fptbinsJetMeasN]);
-        if(fObservable == Observable::kFragmentation){hRatio[ivar]->GetXaxis()->SetRangeUser(fzbinsJetMeasA[0],fzbinsJetMeasA[fzbinsJetMeasN]);
+        if(fObservable == Observable::kFragmentation){hRatio[ivar]->GetXaxis()->SetRangeUser(fzbinsJetMeasA[fBin-1][0],fzbinsJetMeasA[fBin-1][fzbinsJetMeasN[fBin-1]]);
            hRatio[ivar]->GetYaxis()->SetRangeUser(0.9,1.1);
         }
 
@@ -307,7 +307,7 @@ else if(fObservable == Observable::kFragmentation)LoadDetectorMatrix(detRMfile.D
 
     TLine *line = nullptr;
     if(fObservable == Observable::kXsection) line= new TLine(fptbinsJetMeasA[0],1,fptbinsJetMeasA[fptbinsJetMeasN],1);
-    if(fObservable == Observable::kFragmentation) line= new TLine(fzbinsJetMeasA[0],1,fzbinsJetMeasA[fzbinsJetMeasN],1);
+    if(fObservable == Observable::kFragmentation) line= new TLine(fzbinsJetMeasA[fBin-1][0],1,fzbinsJetMeasA[fBin-1][fzbinsJetMeasN[fBin-1]],1);
     line->SetLineStyle(2);
     line->SetLineWidth(2);
     line->Draw("same");
@@ -524,11 +524,11 @@ else if(fObservable == Observable::kFragmentation)LoadDetectorMatrix(detRMfile.D
         else    fRawRebinClone = dynamic_cast<TH1D*>(fRawRebin->Clone("fRawRebinClone"));
     }
     if(fObservable == Observable::kFragmentation){
-        hratio = dynamic_cast<TH1D*>(fUnfoldedBayes[regBayes-1]->Rebin(fzbinsJetTrueN,"hratio",fzbinsJetTrueAPrompt));
-        if (fzbinsJetTrueN != fzbinsJetMeasN){
-            fRawRebinClone = new TH1D("fRawRebinClone","Measured hist, True rebinned",fzbinsJetTrueN,fzbinsJetTrueAPrompt);
+        hratio = dynamic_cast<TH1D*>(fUnfoldedBayes[regBayes-1]->Rebin(fzbinsJetTrueN[fBin-1],"hratio",fzbinsJetTrueAPrompt[fBin-1]));
+        if (fzbinsJetTrueN[fBin-1] != fzbinsJetMeasN[fBin-1]){
+            fRawRebinClone = new TH1D("fRawRebinClone","Measured hist, True rebinned",fzbinsJetTrueN[fBin-1],fzbinsJetTrueAPrompt[fBin-1]);
                 int istart = 0;
-                while (fzbinsJetTrueAPrompt[0] != fzbinsJetMeasA[istart]){
+                while (fzbinsJetTrueAPrompt[fBin-1][0] != fzbinsJetMeasA[fBin-1][istart]){
                 istart++;
                 }
           for(int j=0; j<=fRawRebinClone->GetNbinsX()+1;j++){
@@ -699,7 +699,7 @@ if(fObservable == Observable::kXsection){
     else fRawSpectrum = dynamic_cast<TH1D*>(spectrum->Clone("fRawSpectrum"));
 }
 if(fObservable == Observable::kFragmentation){
-    if(rebin)  fRawSpectrum = dynamic_cast<TH1D*>(spectrum->Rebin(fzbinsJetMeasN,"fRawSpectrum",fzbinsJetMeasA));
+    if(rebin)  fRawSpectrum = dynamic_cast<TH1D*>(spectrum->Rebin(fzbinsJetMeasN[fBin-1],"fRawSpectrum",fzbinsJetMeasA[fBin-1]));
     else fRawSpectrum = dynamic_cast<TH1D*>(spectrum->Clone("fRawSpectrum"));
 }
 
@@ -879,7 +879,7 @@ int plotSlice(TVirtualPad * p, TH2D * hMtxPP, TH2D * hMtxDpt, TH2D * hMtxRe, TH2
         binno = static_cast<Int_t>(fptbinsJetTrueA[1]-fptbinsJetTrueA[0]);
     }
     if(fObservable == Observable::kFragmentation){
-        binno = static_cast<Int_t>(fzbinsJetTrueAPrompt[1]-fzbinsJetTrueAPrompt[0]);
+        binno = static_cast<Int_t>(fzbinsJetTrueAPrompt[fBin-1][1]-fzbinsJetTrueAPrompt[fBin-1][0]);
     }
 
 
@@ -1052,8 +1052,8 @@ TF1* getPriorFunction(int prior, TH1D* spect, int priorType, TH1D* rawspectrum) 
         fithi = fptbinsJetMeasA[fptbinsJetMeasN]; // fFitPtMax;
     }
     if(fObservable == Observable::kFragmentation){
-        fitlo = fzbinsJetMeasA[0]; // fFitPtMin;
-        fithi = fzbinsJetMeasA[fzbinsJetMeasN]; // fFitPtMax;
+        fitlo = fzbinsJetMeasA[fBin-1][0]; // fFitPtMin;
+        fithi = fzbinsJetMeasA[fBin-1][fzbinsJetMeasN[fBin-1]]; // fFitPtMax;
     }
 	//fithi = 30;
 
@@ -1084,7 +1084,7 @@ TF1* getPriorFunction(int prior, TH1D* spect, int priorType, TH1D* rawspectrum) 
         else if(priorType == 7) { fPriorFunction->FixParameter(1,4.4); fPriorFunction->FixParameter(2,5);}
         else if(priorType == 8) { fPriorFunction->SetParLimits(1,2,8); fPriorFunction->SetParLimits(2,2,8);
             if(fObservable == Observable::kXsection)fitlo = fptbinsJetMeasA[0];
-            if(fObservable == Observable::kFragmentation)fitlo = fzbinsJetMeasA[0];
+            if(fObservable == Observable::kFragmentation)fitlo = fzbinsJetMeasA[fBin-1][0];
         }
         if(priorType == 8) { rawspectrum->Fit(fPriorFunction, fitopt,"",fitlo,fithi); }
         else spect->Fit(fPriorFunction, fitopt,"",fitlo,fithi);

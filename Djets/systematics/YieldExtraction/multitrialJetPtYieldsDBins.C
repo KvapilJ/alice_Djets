@@ -22,14 +22,30 @@ void multitrialJetPtYieldsDBins(char *outDir = "JetPtComparison" )
     const int sigmameanvar = 6;
     const int bkgvar = 8;
 
-    double plotmin = 100;
-    if (!ilog) plotmin = 50;
+    double plotmin = 0.2;
+    if (!ilog) plotmin = 0.2;
 
-    const int ptbinsJetN = 6;
     //double ptbinsJet[ptbinsJetN+1] = { 0,2,4,6,8,10,12,15,30,50 };
-    double ptbinsJet[ptbinsJetN+1] = { 4,6,8,10,12,16,24 };
+    //double ptbinsJet[ptbinsJetN+1] = { 2,3,4,5,6,7 };
+        //jet 5-7
+/*
+    const int ptbinsJetN = 5;
+    int ptbinsmin[] = {2,3,4,5,6};
+    int ptbinsmax[] = {3,4,5,6,7};
+*/
+    /*
+    const int ptbinsJetN = 7;
+    int ptbinsmin[] = {2,3,4,5,6,7,8};
+    int ptbinsmax[] = {3,4,5,6,7,8,10};*/
+/*
+    const int ptbinsJetN = 9;
+    int ptbinsmin[] = {2,3,4,5,6,7,8,10,12};
+    int ptbinsmax[] = {3,4,5,6,7,8,10,12,15};*/
+    const int ptbinsJetN = 10;
+    int ptbinsmin[] = {3,4,5,6,7,8,10,12,16,24};
+    int ptbinsmax[] = {4,5,6,7,8,10,12,16,24,36};
 
-    TFile *file = TFile::Open("out/DistributionOfFinalYields_SBApproach_Dzero_AfterDbinSum.root","read");
+    TFile *file = TFile::Open("DistributionOfFinalYields_SBApproach_Dzero_AfterDbinSum.root","read");
     TCanvas *cAll = (TCanvas*)file->Get("cDistr");
     cAll->Draw();
     cAll->SaveAs("out/JetPtTrialsDBinsAll.pdf");
@@ -39,7 +55,7 @@ void multitrialJetPtYieldsDBins(char *outDir = "JetPtComparison" )
     cAll->SaveAs("out/JetPtTrialsDBinsAll_log.pdf");
     cAll->SaveAs("out/JetPtTrialsDBinsAll_log.png");
 
-    TFile *fileAv = TFile::Open("out/AverageOfFinalYields_SBApproach_Dzero_AllDBins.root","read");
+    TFile *fileAv = TFile::Open("AverageOfFinalYields_SBApproach_Dzero_AllDBins.root","read");
     TCanvas *cAv = (TCanvas*)fileAv->Get("cDistrAllAvgs");
 
    /*
@@ -70,17 +86,16 @@ void multitrialJetPtYieldsDBins(char *outDir = "JetPtComparison" )
     cAv->SaveAs("plots/JetPtTrialsAvDBins_log.pdf");
     cAv->SaveAs("plots/JetPtTrialsAvDBins_log.png");*/
 
-    int ptbinsmin[] = {2,3,4,5,6,7,8,10,12,24};
-    int ptbinsmax[] = {3,4,5,6,7,8,10,12,24,36};
 
-    for(int i=0; i<10; i++){
+
+    for(int i=0; i<ptbinsJetN; i++){
 
        TPaveText *pv1 = new TPaveText(0.75,0.8,0.9,0.9,"brNDC");
       pv1->SetFillStyle(0);
       pv1->SetBorderSize(0);
       pv1->AddText(Form("%d < p_{T}^{D0} < %d",ptbinsmin[i],ptbinsmax[i]));
 
-      TFile *fileBin = TFile::Open(Form("out/DistributionOfFinalYields_SBApproach_Dzero_Bin%d.root",i),"read");
+      TFile *fileBin = TFile::Open(Form("DistributionOfFinalYields_SBApproach_Dzero_Bin%d.root",i),"read");
        TCanvas *cc = (TCanvas*)fileBin->Get(Form("cDistr%d",i));
        cc->Draw();
        //TH1D *h = (TH1D*)cc->DrawFrame(0.,0.,1.,1.);
