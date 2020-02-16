@@ -360,7 +360,7 @@ void subtractB_afterFolding(TString matrixFile,TH1D *hFD_central_binned,TH1D *hF
      pv3->SetTextFont(42);
      pv3->SetTextSize(0.04f);
      pv3->SetTextAlign(11);
-     pv3->AddText(Form("%d < p_{T,%s} < %d GeV/#it{c}",static_cast<Int_t>(fzptbinsDA[fBin][0]),fDmesonS.Data(),static_cast<Int_t>(fzptbinsDA[fBin-1][fzptbinsDN[fBin-1]])));
+     pv3->AddText(Form("%d < p_{T,%s} < %d GeV/#it{c}",static_cast<Int_t>(fzptbinsDA[fBin-1][0]),fDmesonS.Data(),static_cast<Int_t>(fzptbinsDA[fBin-1][fzptbinsDN[fBin-1]])));
      if(fObservable==Observable::kFragmentation)pv3->AddText(Form("%d < p_{T,ch. jet} < %d GeV/#it{c}",static_cast<Int_t>(fzptJetMeasA[fBin-1]),static_cast<Int_t>(fzptJetMeasA[fBin])));
 
     setHistoDetails(hData_binned,kGreen+2,21,1.2,2,1);

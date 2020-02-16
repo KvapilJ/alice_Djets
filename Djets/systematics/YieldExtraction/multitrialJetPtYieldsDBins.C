@@ -16,14 +16,14 @@ void multitrialJetPtYieldsDBins(char *outDir = "JetPtComparison" )
 
     style();
 
-    int Rpar = 4;
+    int Rpar = 6;
 
     const int nTrials = 48;
     const int sigmameanvar = 6;
     const int bkgvar = 8;
 
-    double plotmin = 0.2;
-    if (!ilog) plotmin = 0.2;
+    double plotmin = 0.4;
+    if (!ilog) plotmin = 0.4;
 
     //double ptbinsJet[ptbinsJetN+1] = { 0,2,4,6,8,10,12,15,30,50 };
     //double ptbinsJet[ptbinsJetN+1] = { 2,3,4,5,6,7 };
@@ -33,17 +33,37 @@ void multitrialJetPtYieldsDBins(char *outDir = "JetPtComparison" )
     int ptbinsmin[] = {2,3,4,5,6};
     int ptbinsmax[] = {3,4,5,6,7};
 */
-    /*
-    const int ptbinsJetN = 7;
-    int ptbinsmin[] = {2,3,4,5,6,7,8};
-    int ptbinsmax[] = {3,4,5,6,7,8,10};*/
 /*
-    const int ptbinsJetN = 9;
-    int ptbinsmin[] = {2,3,4,5,6,7,8,10,12};
-    int ptbinsmax[] = {3,4,5,6,7,8,10,12,15};*/
-    const int ptbinsJetN = 10;
-    int ptbinsmin[] = {3,4,5,6,7,8,10,12,16,24};
-    int ptbinsmax[] = {4,5,6,7,8,10,12,16,24,36};
+    const int ptbinsJetN = 5;
+    int ptbinsmin[] = {4,5,6,7,8};
+    int ptbinsmax[] = {5,6,7,8,10};*/
+/*
+    const int ptbinsJetN = 6;
+    int ptbinsmin[] = {5,6,7,8,10,12};
+    int ptbinsmax[] = {6,7,8,10,12,16};
+*/
+    /*
+    const int ptbinsJetN = 4;
+    int ptbinsmin[] = {10,12,16,24};
+    int ptbinsmax[] = {12,16,24,36};
+*/
+
+    //jet 5-7
+/*
+const int ptbinsJetN = 5;
+int ptbinsmin[] = {2,3,4,5,6};
+int ptbinsmax[] = {3,4,5,6,7};
+*/
+/*
+const int ptbinsJetN = 6;
+int ptbinsmin[] = {3,4,5,6,7,8};
+int ptbinsmax[] = {4,5,6,7,8,10};
+*/
+const int ptbinsJetN = 8;
+int ptbinsmin[] = {5,6,7,8,10,12,16,24};
+int ptbinsmax[] = {6,7,8,10,12,16,24,36};
+
+
 
     TFile *file = TFile::Open("DistributionOfFinalYields_SBApproach_Dzero_AfterDbinSum.root","read");
     TCanvas *cAll = (TCanvas*)file->Get("cDistr");

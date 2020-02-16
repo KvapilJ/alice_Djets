@@ -303,7 +303,7 @@ Bool_t AliDJetRawYieldUncertaintyLocal::ExtractInputMassPlotDstarSideband() {
 
     std::cout << "Extracting input mass plot: " << fpTmin << " to " << fpTmax << std::endl;
 
-    double jetmin = 0, jetmax = 50;
+    double jetmin = 5, jetmax = 7;
 
     TDirectoryFile* dir=(TDirectoryFile*)fFileInput->Get(fDirName.Data());
 
@@ -871,6 +871,7 @@ Bool_t AliDJetRawYieldUncertaintyLocal::EvaluateUncertaintyDzeroSideband() {
 	for (Int_t i = 0; i<fnDbins; i++) for (Int_t j = 0; j<fnJetbins; j++) for (Int_t k = 0; k<fnMaxTrials; k++) arrYldBinPerBin[i][j][k] = 0;
 
 	for (int iDbin = 0; iDbin<fnDbins; iDbin++) {
+        std::cout<<"doing dbon no: "<<iDbin<<std::endl;
 
 		//open file with summary of variations from MultiTrial - get histos of variations
 		TFile *fileMult = TFile::Open(Form("RawYieldSyst_%s_%1.1fto%1.1f.root", fDmesonLabel.Data(), fDbinpTedges[iDbin], fDbinpTedges[iDbin + 1]), "read");
@@ -897,6 +898,7 @@ Bool_t AliDJetRawYieldUncertaintyLocal::EvaluateUncertaintyDzeroSideband() {
 		if (fDebug) std::cout << "Running bin pT(D) " << iDbin << std::endl;
 
 		for (int iTrial = 0; iTrial<fnMaxTrials; iTrial++) {
+            std::cout<<"doing trial no: "<<iTrial<<std::endl;
 
 			Bool_t extractOk = kFALSE;
 			Int_t rnd = -1;
@@ -1074,7 +1076,7 @@ Bool_t AliDJetRawYieldUncertaintyLocal::EvaluateUncertaintyDzeroSideband() {
 	fJetYieldCentral->SetStats(kFALSE);
 	fJetYieldCentral->Draw();
 	fJetYieldCentral->SaveAs(Form("FinalRawYieldCentralPlusSystUncertainty_%s.root", fDmesonLabel.Data()));
-
+std::cout<<"saving"<<std::endl;
 	if (fDebug) {
 		//ADVANCED - save distribution of final jet yields (summing all pT(D) bins) in a single plot
 		TCanvas *cDistr = new TCanvas("cDistr", "cDistr", 900, 600);

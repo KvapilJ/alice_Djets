@@ -10,6 +10,90 @@
 
 double sigmajet[] = {0,0};
 
+//R=0.2 Auro cut
+//jet pT 5-7
+/*
+const int ptbinsDN = 5;
+Int_t nDbins = ptbinsDN;
+double ptDbins[ptbinsDN+1] = {2,3,4,5,6,7};
+Int_t nJetbins = 5;
+Double_t ptJetbins[6] = {0.4,0.6,0.7,0.8,0.9,1.02};
+double sigmaD[ptbinsDN] = {0.0102504,0.0108028,0.0114731,0.0119894,0.0125301};
+TString efffile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_R02_PF/Default_AnalysisResults_Run2.root/efficiency/DjetEff_prompt_jetpt5.00_7.00.root";
+*/
+//jet pT 7-10
+/*
+const int ptbinsDN = 5;
+Int_t nDbins = ptbinsDN;
+double ptDbins[ptbinsDN+1] = {4,5,6,7,8,10};
+Int_t nJetbins = 5;
+Double_t ptJetbins[6] = {0.4,0.6,0.7,0.8,0.9,1.02};
+double sigmaD[ptbinsDN] = {0.0110202,0.0119156,0.012648,0.0130363,0.0136231};
+TString efffile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_R02_PF/Default_AnalysisResults_Run2.root/efficiency/DjetEff_prompt_jetpt7.00_10.00.root";
+*/
+//jet pT 10-15
+/*
+const int ptbinsDN = 6;
+Int_t nDbins = ptbinsDN;
+double ptDbins[ptbinsDN+1] = {5,6,7,8,10,12,16};
+Int_t nJetbins = 5;
+Double_t ptJetbins[6] = {0.4,0.6,0.7,0.8,0.9,1.02};
+double sigmaD[ptbinsDN] = {0.0118665,0.0129832,0.0131168,0.0140017,0.0147457,0.0155646};
+TString efffile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_R02_PF/Default_AnalysisResults_Run2.root/efficiency/DjetEff_prompt_jetpt10.00_15.00.root";
+*/
+//jet pT 15-50
+/*
+const int ptbinsDN = 4;
+Int_t nDbins = ptbinsDN;
+double ptDbins[ptbinsDN+1] = {10,12,16,24,36};
+Int_t nJetbins = 5;
+Double_t ptJetbins[6] = {0.4,0.6,0.7,0.8,0.9,1.02};
+double sigmaD[ptbinsDN] = {0.0150308,0.0161267,0.0179026,0.0207994};
+TString efffile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_R02_PF/Default_AnalysisResults_Run2.root/efficiency/DjetEff_prompt_jetpt15.00_50.00.root";
+*/
+
+//R=0.6 Auro cut
+//jet pT 5-7
+/*
+const int ptbinsDN = 5;
+Int_t nDbins = ptbinsDN;
+double ptDbins[ptbinsDN+1] = {2,3,4,5,6,7};
+Int_t nJetbins = 5;
+Double_t ptJetbins[6] = {0.4,0.6,0.7,0.8,0.9,1.02};
+double sigmaD[ptbinsDN] = {0.0100361,0.0110518,0.0117309,0.0124376,0.012916};
+TString efffile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_R06_PF/Default_AnalysisResults_Run2.root/efficiency/DjetEff_prompt_jetpt5.00_7.00.root";
+*/
+//jet pT 7-10
+/*
+const int ptbinsDN = 6;
+Int_t nDbins = ptbinsDN;
+double ptDbins[ptbinsDN+1] = {3,4,5,6,7,8,10};
+Int_t nJetbins = 5;
+Double_t ptJetbins[6] = {0.4,0.6,0.7,0.8,0.9,1.02};
+double sigmaD[ptbinsDN] = {0.0110064,0.011737,0.012391,0.0131071,0.0134761,0.0138046};
+TString efffile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_R06_PF/Default_AnalysisResults_Run2.root/efficiency/DjetEff_prompt_jetpt7.00_10.00.root";
+*/
+//jet pT 10-15
+/*
+const int ptbinsDN = 6;
+Int_t nDbins = ptbinsDN;
+double ptDbins[ptbinsDN+1] = {5,6,7,8,10,12,16};
+Int_t nJetbins = 5;
+Double_t ptJetbins[6] = {0.4,0.6,0.7,0.8,0.9,1.02};
+double sigmaD[ptbinsDN] = {0.012461,0.0131079,0.0132998,0.0142677,0.0151312,0.0160561};
+TString efffile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_R06_PF/Default_AnalysisResults_Run2.root/efficiency/DjetEff_prompt_jetpt10.00_15.00.root";
+*/
+//jet pT 15-50
+
+const int ptbinsDN = 8;
+Int_t nDbins = ptbinsDN;
+double ptDbins[ptbinsDN+1] = {5,6,7,8,10,12,16,24,36};
+Int_t nJetbins = 5;
+Double_t ptJetbins[6] = {0.4,0.6,0.7,0.8,0.9,1.02};
+double sigmaD[ptbinsDN] = {0.0118596,0.0127518,0.0137553,0.0146126,0.0149556,0.0161776,0.0179858,0.0212306};
+TString efffile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_R06_PF/Default_AnalysisResults_Run2.root/efficiency/DjetEff_prompt_jetpt15.00_50.00.root";
+
+//R=0.4
 //jet pT 5-7
 /*
 const int ptbinsDN = 5;
@@ -41,7 +125,7 @@ double sigmaD[ptbinsDN] = {0.00924995,0.0103910,0.013041,0.019755,0.0130200,0.01
 TString efffile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/efficiency/DjetEff_prompt_jetpt10.00_15.00.root";
 */
 //jet pT 15-50
-
+/*
 const int ptbinsDN = 10;
 Int_t nDbins = ptbinsDN;
 double ptDbins[ptbinsDN+1] = {3,4,5,6,7,8,10,12,16,24,36};
@@ -49,7 +133,7 @@ Int_t nJetbins = 7;
 Double_t ptJetbins[8] = {0.2,0.4,0.5,0.6,0.7,0.8,0.9,1.02};
 double sigmaD[ptbinsDN] = {0.0100185,0.013675,0.0122513,0.0126742,0.0125983,0.013976,0.0149387,0.0161679,0.01808516,0.0211933};
 TString efffile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/efficiency/DjetEff_prompt_jetpt15.00_50.00.root";
-
+*/
 
 // forward declaration
 void EvaluateBinPerBinUncertainty(
@@ -63,7 +147,7 @@ void EvaluateBinPerBinUncertainty(
 void ExtractDJetRawYieldUncertaintyFull(
    AliDJetRawYieldUncertaintyLocal::DMesonSpecies specie=AliDJetRawYieldUncertaintyLocal::kD0toKpi,  //D-meson decay channel
    AliDJetRawYieldUncertaintyLocal::YieldMethod  method=AliDJetRawYieldUncertaintyLocal::kSideband,  //yield extraction method
-   Int_t nTrials=40,  	     //only for SB method: number of random trials for each pT(D) bin to build pT(jet) spectrum variations
+   Int_t nTrials=37,  	     //only for SB method: number of random trials for each pT(D) bin to build pT(jet) spectrum variations
    Bool_t allowRepet=kFALSE  //only for SB method: allow repetitions in the extraction of trials in a give pT(D) bin
    );
 void ExtractDJetRawYieldUncertainty_FromSB_CoherentTrialChoice(

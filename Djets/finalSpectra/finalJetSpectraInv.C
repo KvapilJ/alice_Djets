@@ -102,8 +102,8 @@ TString histBase = "unfoldedSpectrum"
     systuncP[3] = 0.001;
     systuncP[4] = 0.001;
     systuncP[5] = 0.001;
-    systuncP[6] = 0.001;
-    systuncP[7] = 0.001;
+   // systuncP[6] = 0.001;
+   // systuncP[7] = 0.001;
    // systuncP[8] = 0.001;
 //    for(int k=0; k<xAxisBins; k++) systuncP[k] = 0.15;
 //    systuncErr_pp[ptbinsN] = {0.104599235179,0.0886904729946,0.114415907985,0.111763142404,0.15895282319,0.180252600536,0.199602104197};
@@ -202,7 +202,7 @@ if(fBin ==2){
 }*/
 
     //R z prelim
-    /*
+/*
     if(!pdf){
 if(fBin ==1){
         systuncP[0]=0.01;
@@ -283,8 +283,8 @@ else if(fBin ==2){
             systuncP[5]=0.09;
         }
     }
-
-*///prelim end here
+*/
+//prelim end here
 
 
 
@@ -359,7 +359,7 @@ std::cout<<"A"<<std::endl;
               //htmp->SetBinContent(nBin,0);
               //std::cout<<htmp->GetBinContent(nBin-1)<<" "<<htmp->GetBinContent(nBin)<<std::endl;
               hPrompt[nr] = dynamic_cast<TH1D*>(htmp->Clone(Form("hFD_%d",nr)));
-              hPrompt_binned[nr] = dynamic_cast<TH1D*>(htmp->Rebin(fzbinsJetTrueN[fBin-1],Form("hFD_binned_%d",nr),fzbinsJetTrueAPrompt[fBin-1]));
+              hPrompt_binned[nr] = dynamic_cast<TH1D*>(htmp->Rebin(fzbinsJetFinalN[fBin-1],Form("hFD_binned_%d",nr),fzbinsJetFinalA[fBin-1]));
               if(pdf){
                   hPrompt_binned[nr]->Scale(1./hPrompt_binned[nr]->Integral());
                   hPrompt_binned[nr]->Scale(1,"width");

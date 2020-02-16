@@ -9,54 +9,52 @@ void runSysRatio(){
                        ": 15 < p_{T,jet} < 50 GeV/#it{c} (p_{T,D} > 3 GeV/#it{c})"};
 
     TString defaulfile = "Default_AnalysisResults_Run2.root/unfolding_2D_5/unfoldedSpectrum_unfoldedJetSpectrum.root";
+    TString path = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_R04_PF_oldmc/";
 
-    //B Feed-Down systematics
-    SysRatio *BFD = new SysRatio(2,"B meson Feed-Down");
-    BFD->SetPath("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/");
-    BFD->SetOutPath("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Systematics");
+//B Feed-Down systematics
+    SysRatio *BFDu = new SysRatio(1,"B meson Feed-Down up");
+    BFDu->SetPath(path);
+    BFDu->SetOutPath(path+"systematics");
 
-    TString BFDfilelist[2] = {"Default_AnalysisResults_Run2.root/unfolding_2D_5_FDsysUp/unfoldedSpectrum_unfoldedJetSpectrum.root",
-                              "Default_AnalysisResults_Run2.root/unfolding_2D_5_FDsysDown/unfoldedSpectrum_unfoldedJetSpectrum.root"};
-    TString BFDlegendlist[2] ={"FD up",
-                               "FD down"};
+    TString BFDfilelistu[1] = {"Default_AnalysisResults_Run2.root/unfolding_2D_5_FDsysUp/unfoldedSpectrum_unfoldedJetSpectrum.root"};
+    TString BFDlegendlistu[1] ={"FD up"};
 
-    BFD->SetDefaultFile(defaulfile);
-    BFD->SetVarFilelist(BFDfilelist);
-    BFD->SetVarLegendDesc(BFDlegendlist);
-    BFD->SetMethod(SysRatio::Method::kMax);
+    BFDu->SetDefaultFile(defaulfile);
+    BFDu->SetVarFilelist(BFDfilelistu);
+    BFDu->SetVarLegendDesc(BFDlegendlistu);
+    BFDu->SetMethod(SysRatio::Method::kMax);
 
     for(Int_t z = 1; z <= 5; z++){
-        BFD->SetOutFolder(Form("BFD%d",z));
-        BFD->SetTitle("BFD variation"+zbin[z-1]);
-        BFD->SetHistoName(Form("unfoldedSpectrumKineEff%d",z));
-        BFD->Run();
+        BFDu->SetOutFolder(Form("BFDup%d",z));
+        BFDu->SetTitle("BFD variation up"+zbin[z-1]);
+        BFDu->SetHistoName(Form("unfoldedSpectrumKineEff%d",z));
+        BFDu->Run();
     }
-return;
-    //reflections
-/*    SysRatio *REFL = new SysRatio(2,"Reflection variation");
-    REFL->SetPath("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/");
-    REFL->SetOutPath("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Systematics");
 
-    TString REFLfilelist[2] = {"ReflSys05_AnalysisResults_Run2.root/unfolding_2D_5/unfoldedSpectrum_unfoldedJetSpectrum.root",
-                               "ReflSys15_AnalysisResults_Run2.root/unfolding_2D_5/unfoldedSpectrum_unfoldedJetSpectrum.root"};
-    TString REFLlegendlist[2] ={"Reflection -50%",
-                               "Reflection +50%"};
+//B Feed-Down systematics
+    SysRatio *BFDd = new SysRatio(1,"B meson Feed-Down down");
+    BFDd->SetPath(path);
+    BFDd->SetOutPath(path+"systematics");
 
-    REFL->SetDefaultFile(defaulfile);
-    REFL->SetVarFilelist(REFLfilelist);
-    REFL->SetVarLegendDesc(REFLlegendlist);
-    REFL->SetMethod(SysRatio::Method::kMax);
+    TString BFDfilelistd[1] = {"Default_AnalysisResults_Run2.root/unfolding_2D_5_FDsysDown/unfoldedSpectrum_unfoldedJetSpectrum.root"};
+    TString BFDlegendlistd[1] ={"FD down"};
+
+    BFDd->SetDefaultFile(defaulfile);
+    BFDd->SetVarFilelist(BFDfilelistd);
+    BFDd->SetVarLegendDesc(BFDlegendlistd);
+    BFDd->SetMethod(SysRatio::Method::kMax);
 
     for(Int_t z = 1; z <= 5; z++){
-        REFL->SetOutFolder(Form("REFL%d",z));
-        REFL->SetTitle("Reflection variation"+zbin[z-1]);
-        REFL->SetHistoName(Form("unfoldedSpectrumKineEff%d",z));
-        REFL->Run();
-    }*/
+        BFDd->SetOutFolder(Form("BFDdown%d",z));
+        BFDd->SetTitle("BFD variation down"+zbin[z-1]);
+        BFDd->SetHistoName(Form("unfoldedSpectrumKineEff%d",z));
+        BFDd->Run();
+    }
 
+//reflections
     SysRatio *REFL = new SysRatio(2,"Reflection variation");
-    REFL->SetPath("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/");
-    REFL->SetOutPath("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Systematics");
+    REFL->SetPath(path);
+    REFL->SetOutPath(path+"systematics");
 
     TString REFLlegendlist[2] ={"Reflection -50%",
                                    "Reflection +50%"};
@@ -81,33 +79,21 @@ return;
         REFL->Run();
     }
 
-    //SB range variation
+//SB range variation
     SysRatio *SBRANGE = new SysRatio(6,"Signal and Background range variation");
-    SBRANGE->SetPath("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/");
-    SBRANGE->SetOutPath("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Systematics");
-/*
-    TString SBRANGEfilelist[6] = {"S2SB38_AnalysisResults_Run2.root/unfolding_2D_5/unfoldedSpectrum_unfoldedJetSpectrum.root",
-                                  "S2SB410_AnalysisResults_Run2.root/unfolding_2D_5/unfoldedSpectrum_unfoldedJetSpectrum.root",
-                                  "S2SB412_AnalysisResults_Run2.root/unfolding_2D_5/unfoldedSpectrum_unfoldedJetSpectrum.root",
-                                  "S2SB415_AnalysisResults_Run2.root/unfolding_2D_5/unfoldedSpectrum_unfoldedJetSpectrum.root",
-                                  "S3SB49_AnalysisResults_Run2.root/unfolding_2D_5/unfoldedSpectrum_unfoldedJetSpectrum.root",
-                                  "S3SB412_AnalysisResults_Run2.root/unfolding_2D_5/unfoldedSpectrum_unfoldedJetSpectrum.root"};
-                                  */
+    SBRANGE->SetPath(path);
+    SBRANGE->SetOutPath(path+"systematics");
+
     TString SBRANGElegendlist[6] ={"S:2#sigma, B:3-8#sigma",
                                    "S:2#sigma, B:4-10#sigma",
                                    "S:2#sigma, B:4-12#sigma",
                                    "S:2#sigma, B:4-15#sigma",
                                    "S:3#sigma, B:4-9#sigma",
                                    "S:3#sigma, B:4-12#sigma"};
-/*
-    SBRANGE->SetDefaultLegend("S:2#sigma, B:4-9#sigma (Def)");
-    SBRANGE->SetDefaultFile(defaulfile);
-    SBRANGE->SetVarFilelist(SBRANGEfilelist);
-    SBRANGE->SetVarLegendDesc(SBRANGElegendlist);*/
+
 
     for(Int_t z = 1; z <= 5; z++){
         TString SBRANGEdefaulfile = Form("Default_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z);
-        //TString SBRANGEdefaulfile = Form("Default_AnalysisResults_Run2.root/FDsubtraction/JetPtSpectrum_FDsub%d.root",z);
         SBRANGE->SetDefaultFile(SBRANGEdefaulfile);
         TString SBRANGEfilelist[6];
         SBRANGEfilelist[0]= Form("S2SB38_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z);
@@ -117,13 +103,6 @@ return;
         SBRANGEfilelist[4]= Form("S3SB49_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z);
         SBRANGEfilelist[5]= Form("S3SB412_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z);
 
-        //SBRANGEfilelist[0]= Form("S2SB38_AnalysisResults_Run2.root/FDsubtraction/JetPtSpectrum_FDsub%d.root",z);
-        //SBRANGEfilelist[1]= Form("S2SB410_AnalysisResults_Run2.root/FDsubtraction/JetPtSpectrum_FDsub%d.root",z);
-        //SBRANGEfilelist[2]= Form("S2SB412_AnalysisResults_Run2.root/FDsubtraction/JetPtSpectrum_FDsub%d.root",z);
-        //SBRANGEfilelist[3]= Form("S2SB415_AnalysisResults_Run2.root/FDsubtraction/JetPtSpectrum_FDsub%d.root",z);
-        //SBRANGEfilelist[4]= Form("S3SB49_AnalysisResults_Run2.root/FDsubtraction/JetPtSpectrum_FDsub%d.root",z);
-        //SBRANGEfilelist[5]= Form("S3SB412_AnalysisResults_Run2.root/FDsubtraction/JetPtSpectrum_FDsub%d.root",z);
-
         SBRANGE->SetVarFilelist(SBRANGEfilelist);
         SBRANGE->SetVarLegendDesc(SBRANGElegendlist);
         SBRANGE->SetOutFolder(Form("SBRANGE%d",z));
@@ -131,7 +110,7 @@ return;
         SBRANGE->SetHistoName("hjetptspectrumReb");
         SBRANGE->Run();
     }
-
+/*
     //JES
     SysRatio *JES = new SysRatio(1,"JES");
     JES->SetPath("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/");
@@ -150,20 +129,22 @@ return;
         JES->SetHistoName(Form("unfoldedSpectrumKineEff%d",z));
         JES->Run();
     }
-
-    //CUTS
+*/
+ //CUTS
     SysRatio *CUTS = new SysRatio(3,"CUTS");
-    CUTS->SetPath("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/");
-    CUTS->SetOutPath("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Systematics");
+    CUTS->SetPath(path);
+    CUTS->SetOutPath(path+"systematics");
     TString CUTSdefaulfile = "Cuts_VarDef/Default/unfolding_2D_5/unfoldedSpectrum_unfoldedJetSpectrum.root";
 
-    TString CUTSfilelist[3] = {"Cuts_L2/Default/unfolding_2D_5/unfoldedSpectrum_unfoldedJetSpectrum.root",
+    TString CUTSfilelist[4] = {"Cuts_L2/Default/unfolding_2D_5/unfoldedSpectrum_unfoldedJetSpectrum.root",
                                "Cuts_L3/Default/unfolding_2D_5/unfoldedSpectrum_unfoldedJetSpectrum.root",
                                "Cuts_T2/Default/unfolding_2D_5/unfoldedSpectrum_unfoldedJetSpectrum.root",
+                               "Cuts_T3/Default/unfolding_2D_5/unfoldedSpectrum_unfoldedJetSpectrum.root"
                               };
-    TString CUTSlegendlist[3] ={"Looser 1",
+    TString CUTSlegendlist[4] ={"Looser 1",
                                 "Looser 2",
                                 "Tighter 1",
+                                "Tighter 2"
                                };
 
     CUTS->SetDefaultFile(CUTSdefaulfile);
@@ -180,8 +161,8 @@ return;
 
     //Unfolding Iterations
     SysRatio *UNFITER = new SysRatio(2,"Unfolding iterations");
-    UNFITER->SetPath("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/");
-    UNFITER->SetOutPath("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Systematics");
+    UNFITER->SetPath(path);
+    UNFITER->SetOutPath(path+"systematics");
 
     TString UNFITERfilelist[2] = {"Default_AnalysisResults_Run2.root/unfolding_2D_4/unfoldedSpectrum_unfoldedJetSpectrum.root",
                                   "Default_AnalysisResults_Run2.root/unfolding_2D_6/unfoldedSpectrum_unfoldedJetSpectrum.root"};
@@ -201,8 +182,8 @@ return;
 
     //Prior Variation
     SysRatio *PRIOR = new SysRatio(8,"Prior variation");
-    PRIOR->SetPath("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/");
-    PRIOR->SetOutPath("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Systematics");
+    PRIOR->SetPath(path);
+    PRIOR->SetOutPath(path+"systematics");
 
     TString PRIORfilelist[8] = {"Default_AnalysisResults_Run2.root/unfolding_2D_5prior0/unfoldedSpectrum_unfoldedJetSpectrum.root",
                                 "Default_AnalysisResults_Run2.root/unfolding_2D_5prior1/unfoldedSpectrum_unfoldedJetSpectrum.root",
@@ -293,12 +274,13 @@ return;
 
     //Int_t prompt = 1;
     SysRatio *CUTSEFF = new SysRatio(3,"CUTSEFF");
-    CUTSEFF->SetPath("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/");
-    CUTSEFF->SetOutPath("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Systematics");
+    CUTSEFF->SetPath(path);
+    CUTSEFF->SetOutPath(path+"systematics");
 
-    TString CUTSEFFlegendlist[3] ={"Looser 1",
+    TString CUTSEFFlegendlist[4] ={"Looser 1",
                                 "Looser 2",
                                 "Tighter 1",
+                                    "Tighter 2"
                                };
 
     const char *pt[6] = {"2.00","5.00","7.00","10.00","15.00","50.00"};
@@ -308,10 +290,11 @@ return;
         for(Int_t z = 1; z <= 5; z++){
             TString CUTSEFFdefaulfile = Form("Cuts_VarDef/Default/efficiency/DjetEff_%s_jetpt%s_%s.root",promp[prompt],pt[z-1],pt[z]);
             CUTSEFF->SetDefaultFile(CUTSEFFdefaulfile);
-            TString CUTSEFFfilelist[3];
+            TString CUTSEFFfilelist[4];
             CUTSEFFfilelist[0]= Form("Cuts_L2/Default/efficiency/DjetEff_%s_jetpt%s_%s.root",promp[prompt],pt[z-1],pt[z]);
             CUTSEFFfilelist[1]= Form("Cuts_L3/Default/efficiency/DjetEff_%s_jetpt%s_%s.root",promp[prompt],pt[z-1],pt[z]);
             CUTSEFFfilelist[2]= Form("Cuts_T2/Default/efficiency/DjetEff_%s_jetpt%s_%s.root",promp[prompt],pt[z-1],pt[z]);
+            CUTSEFFfilelist[3]= Form("Cuts_T3/Default/efficiency/DjetEff_%s_jetpt%s_%s.root",promp[prompt],pt[z-1],pt[z]);
             CUTSEFF->SetVarFilelist(CUTSEFFfilelist);
             CUTSEFF->SetVarLegendDesc(CUTSEFFlegendlist);
             CUTSEFF->SetMethod(SysRatio::Method::kError);

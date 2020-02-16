@@ -211,17 +211,17 @@ void SysRatio::Draw(){
     cStack_->cd(1)->SetLeftMargin(0.15f);
     cStack_->cd(1)->SetRightMargin(0.1f);
     cStack_->cd(1)->SetBottomMargin(0.15f);
-    cStack_->cd(1)->SetLogy();
+  //  cStack_->cd(1)->SetLogy();
     hStackMain_->Draw("nostack");
     leg_->Draw("same");
- //   hStackMain_->GetYaxis()->SetTitle("dN/dz_{#parallel}");
- //   hStackMain_->GetXaxis()->SetTitle("z_{#parallel}");
- //   hStackMain_->SetMaximum(1.1*max);
- //   hStackMain_->SetMinimum(0);
-    hStackMain_->GetYaxis()->SetTitle("dN/dp_{T, ch. jet}");
-    hStackMain_->GetXaxis()->SetTitle("p_{T, ch. jet}");
-    hStackMain_->SetMaximum(3*max);
-    hStackMain_->SetMinimum(0.2*min);
+    hStackMain_->GetYaxis()->SetTitle("yield");
+    hStackMain_->GetXaxis()->SetTitle("z_{#parallel}");
+    hStackMain_->SetMaximum(1.1*max);
+    hStackMain_->SetMinimum(0);
+  //  hStackMain_->GetYaxis()->SetTitle("dN/dp_{T, ch. jet}");
+  //  hStackMain_->GetXaxis()->SetTitle("p_{T, ch. jet}");
+  //  hStackMain_->SetMaximum(3*max);
+  //  hStackMain_->SetMinimum(0.2*min);
     cStack_->cd(2);
     cStack_->cd(2)->SetLeftMargin(0.15f);
     cStack_->cd(2)->SetRightMargin(0.15f);
@@ -230,8 +230,8 @@ void SysRatio::Draw(){
     hStackRatio_->GetYaxis()->SetTitle("ratio to central ("+legendDefDesc_+")");
     hStackRatio_->SetMinimum(3*minR-2); //2*m-1
     hStackRatio_->SetMaximum(maxR*(1+0.3*(maxR-1)/maxR)); //2.1*m-1.1
-//    hStackRatio_->GetXaxis()->SetTitle("z_{#parallel}");
-    hStackRatio_->GetXaxis()->SetTitle("p_{T, ch. jet}");
+    hStackRatio_->GetXaxis()->SetTitle("z_{#parallel}");
+//    hStackRatio_->GetXaxis()->SetTitle("p_{T, ch. jet}");
     hStackRatio_->GetYaxis()->SetDecimals();
     legRatio_->Draw("same");
     line_->Draw("same");

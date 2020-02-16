@@ -137,8 +137,8 @@ void signalExtraction_refl(
     std::ofstream myfile (Form("%s/Sigmas%s%s.txt",outdir.Data(), postfix ? listName.Data() : "pp" ,(zBin!=0)?Form("%d",zBin):""));
 
     for(int i=0; i<fptbinsDNl; i++){
-      hsig[i] = dynamic_cast<TH1D*>(hInvMassptDSig->ProjectionX(Form("histSgn_%d_%d",static_cast<int>(fptbinsDAl[i]),static_cast<int>(fptbinsDAl[i+1])),hInvMassptDSig->GetYaxis()->FindBin(fptbinsDA[i]), hInvMassptDSig->GetYaxis()->FindBin(fptbinsDA[i+1])-1));
-      hrefl[i] = dynamic_cast<TH1D*>(hInvMassptDRefl->ProjectionX(Form("hrefl_%d_%d",static_cast<int>(fptbinsDAl[i]),static_cast<int>(fptbinsDAl[i+1])),hInvMassptDRefl->GetYaxis()->FindBin(fptbinsDA[i]), hInvMassptDRefl->GetYaxis()->FindBin(fptbinsDA[i+1])-1));
+      hsig[i] = dynamic_cast<TH1D*>(hInvMassptDSig->ProjectionX(Form("histSgn_%d_%d",static_cast<int>(fptbinsDAl[i]),static_cast<int>(fptbinsDAl[i+1])),hInvMassptDSig->GetYaxis()->FindBin(fptbinsDAl[i]), hInvMassptDSig->GetYaxis()->FindBin(fptbinsDAl[i+1])-1));
+      hrefl[i] = dynamic_cast<TH1D*>(hInvMassptDRefl->ProjectionX(Form("hrefl_%d_%d",static_cast<int>(fptbinsDAl[i]),static_cast<int>(fptbinsDAl[i+1])),hInvMassptDRefl->GetYaxis()->FindBin(fptbinsDAl[i]), hInvMassptDRefl->GetYaxis()->FindBin(fptbinsDAl[i+1])-1));
       hsig[i]->Rebin(fRebinMass);
       hrefl[i]->Rebin(fRebinMass);
 

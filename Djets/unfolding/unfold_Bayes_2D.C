@@ -85,8 +85,8 @@ bool debug = 0
     double plotmin = fptbinsJetTrueA[0] ;
     double plotmax = fptbinsJetTrueA[fptbinsJetTrueN];
     if (fObservable == Observable::kFragmentation){
-        plotmin = fzbinsJetTrueAPrompt[fBin-1][0] ;
-        plotmax = fzbinsJetTrueAPrompt[fBin-1][fzbinsJetTrueN[fBin-1]];
+        plotmin = fzbinsJetTrueAPrompt[1][0] ;
+        plotmax = fzbinsJetTrueAPrompt[1][fzbinsJetTrueN[1]];
     }
 
     TString outName = "unfoldedSpectrum";
@@ -273,7 +273,7 @@ else LoadRawSpectrum(datafile.Data(),"hData_binned_sub");
     TPaveText *AnaInfoPtRatio[fzptJetMeasN];
     for(Int_t i = 0; i<fzptJetMeasN;i++){
         std::cout<<"legend "<<i<<std::endl;
-        AnaInfoPt[i] = new TPaveText(0.6,0.15,0.9,0.3,"brNDC");
+        AnaInfoPt[i] = new TPaveText(0.2,0.15,0.5,0.3,"brNDC");
         AnaInfoPt[i]->SetFillStyle(0);
         AnaInfoPt[i]->SetBorderSize(0);
         AnaInfoPt[i]->SetTextFont(42);
@@ -531,6 +531,7 @@ std::cout<<"here"<<std::endl;
             std::cout<<i<<" "<<j<<std::endl;
             Double_t binRaw = fRawSpectrum->GetYaxis()->GetBinCenter(i);
             Double_t binTrue = fUnfoldedBayes[ivar]->GetYaxis()->GetBinCenter(j);
+            std::cout<<binRaw<<" "<<binTrue<<std::endl;
 
             //if(TMath::Abs(binRaw-binTrue) > 1e-10 && i!=1) continue;
             //std::cout<<"raw "<<i<<" "<<binRaw<<" true "<<j<<" "<<binTrue<<" "<<TMath::Abs(binRaw-binTrue)<<std::endl;
@@ -595,10 +596,10 @@ std::cout<<"C"<<std::endl;
         UnfProjection[ivar][i-1]->SetMarkerStyle(22);
         RefoldProjection[ivar][i-1]->SetMarkerStyle(23);
         UnfProjection[ivar][i-1]->GetXaxis()->SetTitle("z_{#parallel}");
-        UnfProjection[ivar][i-1]->GetYaxis()->SetTitle("dN/dz_{#parallel}");
+        UnfProjection[ivar][i-1]->GetYaxis()->SetTitle("Yield");
         UnfProjection[ivar][i-1]->SetTitle(Form("Unfolded spectra, Bayes reg=%d",ivar+1));
         RefoldProjection[ivar][i-1]->GetXaxis()->SetTitle("z_{#parallel}");
-        RefoldProjection[ivar][i-1]->GetYaxis()->SetTitle("dN/dz_{#parallel}");
+        RefoldProjection[ivar][i-1]->GetYaxis()->SetTitle("Yield");
         RefoldProjection[ivar][i-1]->SetTitle(Form("Unfolded spectra, Bayes reg=%d",ivar+1));
         UnfProjection[ivar][i-1]->GetXaxis()->SetRangeUser(fzbinsJetTrueAPrompt[i-1][0],fzbinsJetTrueAPrompt[i-1][fzbinsJetTrueN[i-1]]);
         RefoldProjection[ivar][i-1]->GetXaxis()->SetRangeUser(fzbinsJetTrueAPrompt[i-1][0],fzbinsJetTrueAPrompt[i-1][fzbinsJetTrueN[i-1]]);
@@ -698,19 +699,21 @@ std::cout<<"here3"<<std::endl;
         hRefProjRatioDef[i-1]->GetLowerPad()->cd();
         hUnfProjRatioDef[i-1]->GetLowerRefGraph()->Draw("psame");*/
 
-                hUnfProjRatioDef[i-1]->Draw();
+hUnfProjRatioDef[i-1]->SetH1DrawOpt("E");
+hUnfProjRatioDef[i-1]->SetH2DrawOpt("E");
                 hRefProjRatioDef[i-1]->Draw();
+                hUnfProjRatioDef[i-1]->Draw();
 
-                hRefProjRatioDef[i-1]->GetUpperPad()->cd();
-            dynamic_cast<TH1D*>(hUnfProjRatioDef[i-1]->GetUpperRefObject())->Draw("same");
+                hUnfProjRatioDef[i-1]->GetUpperPad()->cd();
+            dynamic_cast<TH1D*>(hRefProjRatioDef[i-1]->GetUpperRefObject())->Draw("same");
                 if(i==1)ls->Draw("same");
                 if(i==1)AnaInfo->Draw("same");
                 AnaInfoPt[i-1]->Draw("same");
-                hRefProjRatioDef[i-1]->GetUpperRefYaxis()->SetRangeUser(0,dynamic_cast<TH1D*>(hRefProjRatioDef[i-1]->GetUpperRefObject())->GetMaximum()*1.2);
-                hRefProjRatioDef[i-1]->GetLowerRefGraph()->GetYaxis()->SetRangeUser(0.6,1.4);
-                hRefProjRatioDef[i-1]->GetLowerRefGraph()->GetYaxis()->SetTitle("X/measured");
-                hRefProjRatioDef[i-1]->GetLowerPad()->cd();
-             hUnfProjRatioDef[i-1]->GetLowerRefGraph()->Draw("psame");
+                hUnfProjRatioDef[i-1]->GetUpperRefYaxis()->SetRangeUser(0,dynamic_cast<TH1D*>(hRefProjRatioDef[i-1]->GetUpperRefObject())->GetMaximum()*1.2);
+                hUnfProjRatioDef[i-1]->GetLowerRefGraph()->GetYaxis()->SetRangeUser(0.6,1.4);
+                hUnfProjRatioDef[i-1]->GetLowerRefGraph()->GetYaxis()->SetTitle("X/measured");
+                hUnfProjRatioDef[i-1]->GetLowerPad()->cd();
+             hRefProjRatioDef[i-1]->GetLowerRefGraph()->Draw("psame");
         //hSpectraS[i-1]->Add(RawProjection[i-1]);
         //hSpectraS[i-1]->Add(UnfProjection[i-1]);
         //hSpectraS[i-1]->Add(RefoldProjection[i-1]);
@@ -828,20 +831,21 @@ std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MC
 
     //ROOunfold init
     std::cout<<"RooUnfold Init"<<std::endl;
-    TH2D* hTrainTrue= new TH2D ("traintrue", "Binning Truth",fzbinsJetTrueN[fzptJetMeasN-1],fzbinsJetTrueAPrompt[fzptJetMeasN-1],fzptJetTrueN,fzptJetTrueA);
+    Int_t fzptJetMeasNl = 3;
+    TH2D* hTrainTrue= new TH2D ("traintrue", "Binning Truth",fzbinsJetTrueN[fzptJetMeasNl-1],fzbinsJetTrueAPrompt[fzptJetMeasNl-1],fzptJetTrueN,fzptJetTrueA);
 
 
     for(Int_t i=0;i<fzbinsJetTrueN[fzptJetMeasN-1];i++){
         std::cout<<"binning   "<<i<<" "<<fzbinsJetTrueAPrompt[fzptJetMeasN-1][i]<<std::endl;
     }
-    TH2D* hTrain= new TH2D ("train", "Binning Measured",fzbinsJetMeasN[fzptJetMeasN-1],fzbinsJetMeasA[fzptJetMeasN-1],fzptJetMeasN,fzptJetMeasA);
-    TH2D* hTrainTrueClosure= new TH2D ("traintrueclosure", "Binning Truth Closure",fzbinsJetTrueN[fzptJetMeasN-1],fzbinsJetTrueAPrompt[fzptJetMeasN-1],fzptJetTrueN,fzptJetTrueA);
-    TH2D* hTrainClosure= new TH2D ("trainclosure", "Binning Measured Closure",fzbinsJetMeasN[fzptJetMeasN-1],fzbinsJetMeasA[fzptJetMeasN-1],fzptJetMeasN,fzptJetMeasA);
-    fTrueSpectrumKineNum= new TH2D ("fTrueSpectrumKineNum", "True Spectrum Kine Num",fzbinsJetTrueN[fzptJetMeasN-1],fzbinsJetTrueAPrompt[fzptJetMeasN-1],fzptJetMeasN,fzptJetMeasA);
-    fTrueSpectrumKineDen= new TH2D ("fTrueSpectrumKineDen", "True Spectrum Kine Den",fzbinsJetTrueN[fzptJetMeasN-1],fzbinsJetTrueAPrompt[fzptJetMeasN-1],fzptJetMeasN,fzptJetMeasA);
+    TH2D* hTrain= new TH2D ("train", "Binning Measured",fzbinsJetMeasN[fzptJetMeasNl-1],fzbinsJetMeasA[fzptJetMeasNl-1],fzptJetMeasN,fzptJetMeasA);
+    TH2D* hTrainTrueClosure= new TH2D ("traintrueclosure", "Binning Truth Closure",fzbinsJetTrueN[fzptJetMeasNl-1],fzbinsJetTrueAPrompt[fzptJetMeasNl-1],fzptJetTrueN,fzptJetTrueA);
+    TH2D* hTrainClosure= new TH2D ("trainclosure", "Binning Measured Closure",fzbinsJetMeasN[fzptJetMeasNl-1],fzbinsJetMeasA[fzptJetMeasNl-1],fzptJetMeasN,fzptJetMeasA);
+    fTrueSpectrumKineNum= new TH2D ("fTrueSpectrumKineNum", "True Spectrum Kine Num",fzbinsJetTrueN[fzptJetMeasNl-1],fzbinsJetTrueAPrompt[fzptJetMeasNl-1],fzptJetMeasN,fzptJetMeasA);
+    fTrueSpectrumKineDen= new TH2D ("fTrueSpectrumKineDen", "True Spectrum Kine Den",fzbinsJetTrueN[fzptJetMeasNl-1],fzbinsJetTrueAPrompt[fzptJetMeasNl-1],fzptJetMeasN,fzptJetMeasA);
 
-    fMeasSpectrumKineNum= new TH2D ("fMeasSpectrumKineNum", "Meas Spectrum Kine Num MC",fzbinsJetMeasN[fzptJetMeasN-1],fzbinsJetMeasA[fzptJetMeasN-1],fzptJetMeasN,fzptJetMeasA);
-    fMeasSpectrumKineDen= new TH2D ("fMeasSpectrumKineDen", "Meas Spectrum Kine Den MC",fzbinsJetMeasN[fzptJetMeasN-1],fzbinsJetMeasA[fzptJetMeasN-1],fzptJetMeasN,fzptJetMeasA);
+    fMeasSpectrumKineNum= new TH2D ("fMeasSpectrumKineNum", "Meas Spectrum Kine Num MC",fzbinsJetMeasN[fzptJetMeasNl-1],fzbinsJetMeasA[fzptJetMeasNl-1],fzptJetMeasN,fzptJetMeasA);
+    fMeasSpectrumKineDen= new TH2D ("fMeasSpectrumKineDen", "Meas Spectrum Kine Den MC",fzbinsJetMeasN[fzptJetMeasNl-1],fzbinsJetMeasA[fzptJetMeasNl-1],fzptJetMeasN,fzptJetMeasA);
 
 
     std::cout<<"Response Setup"<<std::endl;
@@ -959,7 +963,7 @@ std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MC
               if(jmatch[5]>1.0) zShiftTrue = jmatch[5] - 0.02;
               else zShiftTrue = jmatch[5];
 
-              if(0 <= jmatch[6] && jmatch[6] <= 100 && 0.2 <= zShiftTrue){
+              if(0 <= jmatch[6] && jmatch[6] <= 50 && 0.2 <= zShiftTrue){
                   //std::cout<<fzptJetMeasA[0]<<" "<<jmatch[1]<<" "<<fzptJetMeasA[fzptJetMeasN]<<" "<<zShiftTrue<<" "<<jmatch[6]<<std::endl;
                   fMeasSpectrumKineNum->Fill(jmatch[0],jmatch[1]);
               }
@@ -1023,7 +1027,7 @@ std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MC
     TPaveText *pvReco[fzptJetMeasN];
     for(Int_t i = 0;i < fzptJetTrueN;i++){
         for(Int_t j = 0;j < fzptJetMeasN;j++){
-            resSlices[i][j]=new TH2D(Form("ResponseSlice%d_%d",i,j),Form("ResponseSlice%d_%d",i,j),fzbinsJetTrueN[fzptJetMeasN-1],fzbinsJetTrueAPrompt[fzptJetMeasN-1],fzbinsJetMeasN[fzptJetMeasN-1],fzbinsJetMeasA[fzptJetMeasN-1]);
+            resSlices[i][j]=new TH2D(Form("ResponseSlice%d_%d",i,j),Form("ResponseSlice%d_%d",i,j),fzbinsJetTrueN[fzptJetMeasNl-1],fzbinsJetTrueAPrompt[fzptJetMeasNl-1],fzbinsJetMeasN[fzptJetMeasNl-1],fzbinsJetMeasA[fzptJetMeasNl-1]);
             resSlices[i][j]->GetXaxis()->SetTitle("z^{true}");
             resSlices[i][j]->GetYaxis()->SetTitle("z^{reco}");
         }
@@ -1062,10 +1066,10 @@ std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MC
         std::cout<<recoID+1<<" reco under "<<res->GetBinContent(recoID+1,0)<<" over "<<res->GetBinContent(recoID+1,res->GetNbinsY()+1)<<std::endl;
         for(Int_t trueID = 0;trueID < res->GetNbinsY();trueID++){
             //if(recoID==0)std::cout<<trueID<<" true under "<<res->GetBinContent(0,trueID+1)<<" over "<<res->GetBinContent(res->GetNbinsX()+1,trueID+1)<<std::endl;
-            Int_t recoPtbin = recoID/fzbinsJetMeasN[fzptJetMeasN-1];
-            Int_t recoZbin = recoID%fzbinsJetMeasN[fzptJetMeasN-1];
-            Int_t truePtbin = trueID/fzbinsJetTrueN[fzptJetMeasN-1];
-            Int_t trueZbin = trueID%fzbinsJetTrueN[fzptJetMeasN-1];
+            Int_t recoPtbin = recoID/fzbinsJetMeasN[fzptJetMeasNl-1];
+            Int_t recoZbin = recoID%fzbinsJetMeasN[fzptJetMeasNl-1];
+            Int_t truePtbin = trueID/fzbinsJetTrueN[fzptJetMeasNl-1];
+            Int_t trueZbin = trueID%fzbinsJetTrueN[fzptJetMeasNl-1];
             resSlices[truePtbin][recoPtbin]->SetBinContent(trueZbin+1,recoZbin+1,res->GetBinContent(recoID+1,trueID+1));
         }
     }

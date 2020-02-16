@@ -343,6 +343,7 @@ Bool_t rawJetSpectra(TString outdir, TString prod){
     else if(ptbinsDA_[0] == 6) firstPtBin = 7;
     else if(ptbinsDA_[0] == 7) firstPtBin = 8;
     else if(ptbinsDA_[0] == 8) firstPtBin = 9;
+    else if(ptbinsDA_[0] == 10) firstPtBin = 10;
     if(!firstPtBin) { std::cout << "==== Wrong first value of the D pT (should be 2,3 or 4) === \n"; return kFALSE; }
     Float_t RS = 0;
 
@@ -370,7 +371,7 @@ Bool_t rawJetSpectra(TString outdir, TString prod){
           if(fSystem) SetReflection(fitterp,hmin,hmax,RS,i+firstPtBin); // older way from Fabio's templates for p-Pb
           else SetReflection(fitterp,hmin,hmax,RS,static_cast<Int_t>(ptbinsDA_[i]),static_cast<Int_t>(ptbinsDA_[i+1])); // new for pp (new templates from D-jet code)
         }
-        fitterp->SetFixGaussianSigma(reflSig); //added fixing singma on MC
+      //  fitterp->SetFixGaussianSigma(reflSig); //added fixing singma on MC
 
         fitterp->MassFitter(kFALSE);
         //fitterp->PrintFunctions();

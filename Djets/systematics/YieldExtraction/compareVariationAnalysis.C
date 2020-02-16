@@ -10,37 +10,60 @@
 #include "style.C"
 
 
-const int ptbinsJetN = 7;
-double ptbinsJet[ptbinsJetN+1] = {0.2,0.4,0.5,0.6,0.7,0.8,0.9,1.0};//{ 3,4,5,6,8,10,14,20,30,50 };
+const int ptbinsJetN = 5;
+double ptbinsJet[ptbinsJetN+1] = {0.4,0.6,0.7,0.8,0.9,1.0};//{ 3,4,5,6,8,10,14,20,30,50 };
 //jet pt 5-7
 /*
-TString jetDataFile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff2.root";
+TString jetDataFile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_R02_PF/Default_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff2.root";
 TString tit = ": 5 < p_{T,jet} < 7 GeV/#it{c} (p_{T,D} > 2 GeV/#it{c})";
 */
 //jet pt 7-10
 /*
-TString jetDataFile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff3.root";
+TString jetDataFile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_R02_PF/Default_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff3.root";
 TString tit = ": 7 < p_{T,jet} < 10 GeV/#it{c} (p_{T,D} > 2 GeV/#it{c})";
 */
 //jet pt 10-15
 /*
-TString jetDataFile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff4.root";
+TString jetDataFile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_R02_PF/Default_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff4.root";
 TString tit = ": 10 < p_{T,jet} < 15 GeV/#it{c} (p_{T,D} > 2 GeV/#it{c})";
 */
 //jet pt 15-50
-
-TString jetDataFile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff5.root";
+/*
+TString jetDataFile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_R02_PF/Default_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff5.root";
 TString tit = ": 15 < p_{T,jet} < 50 GeV/#it{c} (p_{T,D} > 3 GeV/#it{c})";
+*/
+//auro R=0.6
+//jet pt 5-7
+/*
+TString jetDataFile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_R06_PF/Default_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff2.root";
+TString tit = ": 5 < p_{T,jet} < 7 GeV/#it{c} (p_{T,D} > 2 GeV/#it{c})";
+*/
+//jet pt 7-10
+/*
+TString jetDataFile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_R06_PF/Default_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff3.root";
+TString tit = ": 7 < p_{T,jet} < 10 GeV/#it{c} (p_{T,D} > 3 GeV/#it{c})";
+*/
+//jet pt 10-15
+/*
+TString jetDataFile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_R06_PF/Default_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff4.root";
+TString tit = ": 10 < p_{T,jet} < 15 GeV/#it{c} (p_{T,D} > 5 GeV/#it{c})";
+*/
+//jet pt 15-50
+
+TString jetDataFile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_R06_PF/Default_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff5.root";
+TString tit = ": 15 < p_{T,jet} < 50 GeV/#it{c} (p_{T,D} > 5 GeV/#it{c})";
+
+
 // Pb-Pb binning
-TString out = "out";
+//TString out = "out";
 
 
-void compareVariationAnalysis(char *outDir = "JetPtComparison" )
+void compareVariationAnalysis(TString out = "JetPtComparison" )
 {
 
     style();
 
-    double plotmin = 0.2;
+    double plotmin = 0.4;
     double plotmax = 1.0;
 
     TString jetSimFile = "FinalRawYieldCentralPlusSystUncertainty_Dzero.root";
