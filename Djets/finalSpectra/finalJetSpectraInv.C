@@ -96,13 +96,22 @@ TString histBase = "unfoldedSpectrum"
     }
 
     systuncP = new double[xAxisBins];
-    systuncP[0] = 0.001;
-    systuncP[1] = 0.001;
-    systuncP[2] = 0.001;
-    systuncP[3] = 0.001;
-    systuncP[4] = 0.001;
-    systuncP[5] = 0.001;
-   // systuncP[6] = 0.001;
+    //r=0.2
+ /*   systuncP[0] = 0.10;
+    systuncP[1] = 0.10;
+    systuncP[2] = 0.106;
+    systuncP[3] = 0.112;
+    systuncP[4] = 0.13;
+    systuncP[5] = 0.148;
+    systuncP[6] = 0.20;*/
+    //r=0.6
+  /*  systuncP[0] = 0.11;
+    systuncP[1] = 0.117;
+    systuncP[2] = 0.124;
+    systuncP[3] = 0.134;
+    systuncP[4] = 0.1658;
+    systuncP[5] = 0.1911;
+    systuncP[6] = 0.305;*/
    // systuncP[7] = 0.001;
    // systuncP[8] = 0.001;
 //    for(int k=0; k<xAxisBins; k++) systuncP[k] = 0.15;
@@ -158,14 +167,14 @@ systuncP[6]=0.199602264197;*/
     systuncP[6]=0.2566671;
     systuncP[7]=0.494086025;
 */
- /*   systuncP[0]=0.1186433732;
+    systuncP[0]=0.1186433732;
     systuncP[1]=0.1233541649;
     systuncP[2]=0.1345037174;
     systuncP[3]=0.1418705396;
     systuncP[4]=0.1602310831;
     systuncP[5]=0.1768756625;
     systuncP[6]=0.2544523531;
-    systuncP[7]=0.2759402109;*/
+    systuncP[7]=0.2759402109;
 /*
 if(fBin ==2){
         systuncP[0]=0.53;
@@ -285,6 +294,90 @@ else if(fBin ==2){
     }
 */
 //prelim end here
+
+
+//R=0.2
+/*
+    if(fBin ==2){
+            systuncP[0]=0.22;
+            systuncP[1]=0.175;
+            systuncP[2]=0.095;
+            systuncP[3]=0.089;
+            systuncP[4]=0.099;
+    }else if(fBin ==3){
+        systuncP[0]=0.84;
+        systuncP[1]=0.138;
+        systuncP[2]=0.105;
+        systuncP[3]=0.098;
+        systuncP[4]=0.098;
+    } else if(fBin ==4){
+        systuncP[0]=0.53;
+        systuncP[1]=0.13;
+        systuncP[2]=0.096;
+        systuncP[3]=0.098;
+        systuncP[4]=0.098;
+    }else if(fBin ==5){
+        systuncP[0]=0.34;
+        systuncP[1]=0.13;
+        systuncP[2]=0.096;
+        systuncP[3]=0.09;
+        systuncP[4]=0.12;
+    }
+*/
+    //R=0.6
+     /*   if(fBin ==2){
+                systuncP[0]=0.12;
+                systuncP[1]=0.13;
+                systuncP[2]=0.10;
+                systuncP[3]=0.10;
+                systuncP[4]=0.10;
+        }else if(fBin ==3){
+            systuncP[0]=0.13;
+            systuncP[1]=0.10;
+            systuncP[2]=0.09;
+            systuncP[3]=0.094;
+            systuncP[4]=0.10;
+        } else if(fBin ==4){
+            systuncP[0]=0.125;
+            systuncP[1]=0.1;
+            systuncP[2]=0.12;
+            systuncP[3]=0.08;
+            systuncP[4]=0.15;
+        }else if(fBin ==5){
+            systuncP[0]=0.147;
+            systuncP[1]=0.105;
+            systuncP[2]=0.1;
+            systuncP[3]=0.10;
+            systuncP[4]=0.109;
+        }
+*/
+
+    //R=0.4
+  /*      if(fBin ==2){
+                systuncP[0]=0.186;
+                systuncP[1]=0.15;
+                systuncP[2]=0.138;
+                systuncP[3]=0.116;
+                systuncP[4]=0.105;
+        }else if(fBin ==3){
+            systuncP[0]=0.243;
+            systuncP[1]=0.156;
+            systuncP[2]=0.101;
+            systuncP[3]=0.095;
+            systuncP[4]=0.095;
+        } else if(fBin ==4){
+            systuncP[0]=0.18;
+            systuncP[1]=0.105;
+            systuncP[2]=0.092;
+            systuncP[3]=0.085;
+            systuncP[4]=0.096;
+        }else if(fBin ==5){
+            systuncP[0]=0.20;
+            systuncP[1]=0.098;
+            systuncP[2]=0.113;
+            systuncP[3]=0.095;
+            systuncP[4]=0.11;
+        }*/
 
 
 
@@ -1083,7 +1176,7 @@ if(isSim){
    if(fSystem) text = pt->AddText("p-Pb, #sqrt{#it{s}_{NN}} = 13 TeV");
    else text = pt->AddText("pp, #sqrt{#it{s}} = 13 TeV");
    text = pt->AddText(Form("charged jets, anti-#it{k}_{T}, #it{R} = 0.%d, |#it{#eta}_{lab}^{jet}| < 0.%d",Rpar,9-Rpar));
-   text = pt2->AddText(Form ("with D^{0}, %d < #it{p}_{T,D^{0}} < %d GeV/#it{c}",static_cast<int>(fptbinsDA[0]),static_cast<int>(fptbinsDA[fptbinsDN])));
+   if(fObservable==Observable::kXsection)text = pt2->AddText(Form ("with D^{0}, %d < #it{p}_{T,D^{0}} < %d GeV/#it{c}",static_cast<int>(fptbinsDA[0]),static_cast<int>(fptbinsDA[fptbinsDN])));
    if(fObservable==Observable::kFragmentation)text = pt2->AddText(Form ("with D^{0}, %d < #it{p}_{T,D^{0}} < %d GeV/#it{c}",static_cast<int>(fzptbinsDPromptA[fBin-1][0]),static_cast<int>(fzptbinsDPromptA[fBin-1][fzptbinsDPromptN[fBin-1]])));
    if(fObservable==Observable::kFragmentation)text = pt2->AddText(Form("%d < #it{p}_{T,ch. jet} < %d GeV/#it{c}",static_cast<Int_t>(fzptJetMeasA[fBin-1]),static_cast<Int_t>(fzptJetMeasA[fBin])));
    pt->Draw();

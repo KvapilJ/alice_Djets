@@ -8,10 +8,10 @@ void runSysRatioXsec(){
 
     TString defaulfileUnf = "Default_AnalysisResults_Run2.root/unfolding_Bayes_5/unfoldedSpectrum_unfoldedJetSpectrum.root";
     TString defaulfileSignal = "Default_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff.root";
-    TString path = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_R06/";
+    TString path = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/";
 
 //B Feed-Down systematics
-    SysRatio *BFD = new SysRatio(2,"B meson Feed-Down");
+/*    SysRatio *BFD = new SysRatio(2,"B meson Feed-Down");
     BFD->SetPath(path);
     BFD->SetOutPath(path+"systematics");
 
@@ -29,9 +29,9 @@ void runSysRatioXsec(){
     BFD->SetTitle("BFD variation");
     BFD->SetHistoName("unfoldedSpectrum");
     BFD->Run();
-
+*/
 //reflection
-    SysRatio *REFL = new SysRatio(2,"Reflection variation");
+ /*   SysRatio *REFL = new SysRatio(2,"Reflection variation");
     REFL->SetPath(path);
     REFL->SetOutPath(path+"systematics");
 
@@ -47,10 +47,10 @@ void runSysRatioXsec(){
     REFL->SetOutFolder("REFL");
     REFL->SetHistoName("hjetptspectrumReb");
     REFL->Run();
-
+*/
 
 //SB range variation
-    SysRatio *SBRANGE = new SysRatio(6,"Signal and Background range variation");
+/*    SysRatio *SBRANGE = new SysRatio(6,"Signal and Background range variation");
     SBRANGE->SetPath(path);
     SBRANGE->SetOutPath(path+"systematics");
 
@@ -75,7 +75,7 @@ void runSysRatioXsec(){
     SBRANGE->SetOutFolder("SBRANGE");
     SBRANGE->SetHistoName("hjetptspectrumReb");
     SBRANGE->Run();
-
+*/
 
     //JES
     /*
@@ -98,7 +98,7 @@ void runSysRatioXsec(){
     }
 */
 //CUTS
-    SysRatio *CUTS = new SysRatio(4,"CUTS");
+ /*   SysRatio *CUTS = new SysRatio(4,"CUTS");
     CUTS->SetPath(path);
     CUTS->SetOutPath(path+"systematics");
     TString CUTSdefaulfile = "Cuts_VarDef/Default/unfolding_Bayes_5/unfoldedSpectrum_unfoldedJetSpectrum.root";
@@ -121,9 +121,9 @@ void runSysRatioXsec(){
 
     CUTS->SetOutFolder("CUTS");
     CUTS->SetHistoName("unfoldedSpectrum");
-    CUTS->Run();
+    CUTS->Run();*/
 //CUS efficiency
-    SysRatio *CUTSEFF = new SysRatio(4,"CUTSEFF");
+   /* SysRatio *CUTSEFF = new SysRatio(4,"CUTSEFF");
     CUTSEFF->SetPath(path);
     CUTSEFF->SetOutPath(path+"systematics");
 
@@ -150,10 +150,10 @@ void runSysRatioXsec(){
         CUTSEFF->SetHistoName("hEff_reb");
         CUTSEFF->Run();
     }
-
+*/
 
 //Unfolding Iterations
-    SysRatio *UNFITER = new SysRatio(11,"Unfolding Bayes iterations and ranges");
+/*    SysRatio *UNFITER = new SysRatio(11,"Unfolding Bayes iterations and ranges");
     UNFITER->SetPath(path);
     UNFITER->SetOutPath(path+"systematics");
 
@@ -191,14 +191,14 @@ void runSysRatioXsec(){
     UNFITER->SetOutFolder("UNFITERRANGE");
     UNFITER->SetHistoName("hData_binned");
     UNFITER->Run();
-
+*/
 
 //Prior Variation
-    SysRatio *PRIOR = new SysRatio(9,"Prior variation");
+    SysRatio *PRIOR = new SysRatio(8,"Prior variation");
     PRIOR->SetPath(path);
     PRIOR->SetOutPath(path+"systematics");
 
-    TString PRIORfilelist[9] = {"Default_AnalysisResults_Run2.root/unfolding_Bayes_5_priorType0/unfoldedSpectrum_unfoldedJetSpectrum.root",
+    TString PRIORfilelist[8] = {"Default_AnalysisResults_Run2.root/unfolding_Bayes_5_priorType0/unfoldedSpectrum_unfoldedJetSpectrum.root",
                                 "Default_AnalysisResults_Run2.root/unfolding_Bayes_5_priorType1/unfoldedSpectrum_unfoldedJetSpectrum.root",
                                 "Default_AnalysisResults_Run2.root/unfolding_Bayes_5_priorType2/unfoldedSpectrum_unfoldedJetSpectrum.root",
                                 "Default_AnalysisResults_Run2.root/unfolding_Bayes_5_priorType3/unfoldedSpectrum_unfoldedJetSpectrum.root",
@@ -206,8 +206,9 @@ void runSysRatioXsec(){
                                 "Default_AnalysisResults_Run2.root/unfolding_Bayes_5_priorType5/unfoldedSpectrum_unfoldedJetSpectrum.root",
                                 "Default_AnalysisResults_Run2.root/unfolding_Bayes_5_priorType6/unfoldedSpectrum_unfoldedJetSpectrum.root",
                                 "Default_AnalysisResults_Run2.root/unfolding_Bayes_5_priorType7/unfoldedSpectrum_unfoldedJetSpectrum.root",
-                                "Default_AnalysisResults_Run2.root/unfolding_Bayes_5_priorType8/unfoldedSpectrum_unfoldedJetSpectrum.root"};
-    TString PRIORlegendlist[9] ={"prior0",
+                               // "Default_AnalysisResults_Run2.root/unfolding_Bayes_5_priorType8/unfoldedSpectrum_unfoldedJetSpectrum.root"
+                               };
+    TString PRIORlegendlist[8] ={"prior0",
                                  "prior1",
                                  "prior2",
                                  "prior3",
@@ -215,7 +216,7 @@ void runSysRatioXsec(){
                                  "prior5",
                                  "prior6",
                                  "prior7",
-                                 "prior8"
+                                 //"prior8"
                                };
 
     PRIOR->SetDefaultFile(defaulfileUnf);
@@ -226,7 +227,7 @@ void runSysRatioXsec(){
     PRIOR->Run();
 
 //SVD Variation
-    SysRatio *UNFSVD = new SysRatio(3,"SVD variation");
+ /*   SysRatio *UNFSVD = new SysRatio(3,"SVD variation");
     UNFSVD->SetPath(path);
     UNFSVD->SetOutPath(path+"systematics");
 
@@ -245,6 +246,6 @@ void runSysRatioXsec(){
     UNFSVD->SetOutFolder("SVD");
     UNFSVD->SetHistoName("unfoldedSpectrum");
     UNFSVD->Run();
-
+*/
 
 }

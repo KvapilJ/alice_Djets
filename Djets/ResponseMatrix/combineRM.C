@@ -269,9 +269,9 @@ std::cout<<"F"<<std::endl;
 
   if(fObservable == kXsection){
       Matrix->GetXaxis()->SetRangeUser(fptbinsJetMeasA[0],fptbinsJetMeasA[fptbinsJetMeasN]+5);
-      Matrix->GetYaxis()->SetRangeUser(3,fptbinsJetTrueA[fptbinsJetTrueN]);
+      Matrix->GetYaxis()->SetRangeUser(2,fptbinsJetTrueA[fptbinsJetTrueN]);
       MatrixProb->GetXaxis()->SetRangeUser(fptbinsJetMeasA[0],fptbinsJetMeasA[fptbinsJetMeasN]+5);
-      MatrixProb->GetYaxis()->SetRangeUser(3,fptbinsJetTrueA[fptbinsJetTrueN]);
+      MatrixProb->GetYaxis()->SetRangeUser(2,fptbinsJetTrueA[fptbinsJetTrueN]);
   }
   if(fObservable == kFragmentation){
       Matrix->GetXaxis()->SetRangeUser(fzbinsJetMeasA[fBin-1][0],fzbinsJetMeasA[fBin-1][fzbinsJetMeasN[fBin-1]]);

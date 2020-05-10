@@ -25,6 +25,8 @@ TH2D* fTrueSpectrumKineNum;
 TH2D* fTrueSpectrumKineDen;
 TH2D* fMeasSpectrumKineNum;
 TH2D* fMeasSpectrumKineDen;
+TString fefffile;
+Bool_t fuseEff;
 
 //RooUnfoldResponse *response = new RooUnfoldResponse();
 
@@ -36,7 +38,7 @@ Color_t colortable2[] = {kMagenta, kViolet, kBlue, kCyan+2,kRed+1, kGreen+4, kGr
 Style_t linesytle[] = {1,2,3,4,5,6,7,8,9,10,11,12,13};
      // Int_t fColors[] = {1,2,8,4,kOrange-1,6,kGray+1,kCyan+1,kMagenta+2,kGreen+3,kViolet+5,kYellow+2};
 //int * LoadDetectorMatrix(TString fn){};
-std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MCfile, TString out, Double_t RMfraction = 0, TH2D* prior = nullptr);
+std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MCfile, TString out, Double_t RMfraction = 0, TH2D* prior = nullptr, Bool_t ispostfix = false, TString postfix = "");
 int LoadBackgroundMatrix(TString fn, TString mxname);
 int LoadRawSpectrum(TString fn, TString sname);
 TH2D * getResponseMatrix(bool useDeltaPt);
@@ -49,7 +51,7 @@ TH2D* getPriorFunction(TH2D* baseweight, TF2* modfunc, Int_t modsign= 0, Int_t m
 TH2D* NormMatrixY(const char* name, TH2D* Mtx);
 void NormMatrixY(TH2D * Mtx);
 TH2D * getPearsonCoeffs(const TMatrixD &covMatrix);
-void SparseToTree(TString h);
+void SparseToTree(TString h, Bool_t isPostfix, TString postfix);
 
 /***********************************
 ############# begining of the macro ##################
@@ -69,6 +71,10 @@ Int_t zBin = 0,
 bool useDeltaPt = 1,  // if to use a separate bkg. fluctuation matrix
 bool isFDUpSpec = 0,
 bool isFDDownSpec = 0,
+TString effFold = "",
+bool useEff = 1,
+bool isPostfix = 0,
+TString postfix = "",
 bool fDoWeighting = 1,
 bool fdivide = 1,
 bool overflow = 1,  // if to use overflow in the unfolding
@@ -90,6 +96,8 @@ bool debug = 0
     }
 
     TString outName = "unfoldedSpectrum";
+    fefffile = effFold;
+    fuseEff = useEff;
 
 /***********************************
 ############# load raw spectrum and response matrices ##################
@@ -117,7 +125,7 @@ else if(isFDDownSpec) LoadRawSpectrum(datafile.Data(),"hData_binned_sub_down");
 else LoadRawSpectrum(datafile.Data(),"hData_binned_sub");
 //RooUnfoldResponse *response = new RooUnfoldResponse();
     RooUnfoldResponse *response, *responseClosure;
-    std::tie(response, responseClosure) = LoadDetectorMatrix(MCfile,outDir+"/plots",0.48,nullptr);
+    std::tie(response, responseClosure) = LoadDetectorMatrix(MCfile,outDir+"/plots",0.48,nullptr,isPostfix,postfix);
 
 
     if (!fRawSpectrum)  { Error("Unfold", "No raw spectrum!"); return;	}
@@ -210,7 +218,7 @@ else LoadRawSpectrum(datafile.Data(),"hData_binned_sub");
         cprior->cd();
         prior->Draw("colz text");
         cprior->SaveAs(outDir+"/plots/priorweight.png");
-        std::tie(response, responseClosure) = LoadDetectorMatrix(MCfile,outDir+"/plots",0.48,prior);
+        std::tie(response, responseClosure) = LoadDetectorMatrix(MCfile,outDir+"/plots",0.48,prior,isPostfix,postfix);
     }
 
 /*
@@ -435,6 +443,7 @@ else LoadRawSpectrum(datafile.Data(),"hData_binned_sub");
     // =============== Projections in 1D
 
     TH1D *RawProjection[fzptJetMeasN];
+    TH1D *fMeasSpectrumProjection[fzptJetMeasN];
     TH1D *UnfProjection[NTrials][fzptJetMeasN];
     TH1D *RefoldProjection[NTrials][fzptJetMeasN];
     TH1D *hUnfolded_Unc[NTrials][fzptJetMeasN];
@@ -525,6 +534,9 @@ std::cout<<"here"<<std::endl;
                 PriorProj[j-1] = fTrueSpectrum->ProjectionX(Form("Prior%d",j-1),j,j);
                 PriorProj[j-1]->Scale(1./PriorProj[j-1]->Integral());
             }
+            if(ivar ==0 && j == 1){
+                fMeasSpectrumProjection[i-1] = fMeasSpectrum->ProjectionX(Form("fMeasSpectrumproj%d",i),i,i);
+            }
             if(i!=j)continue;
             //auro if((i == 1 && j==1)||(i == 2 && j==1)||(i == 3 && j==2)||(i == 4 && j==3)||(i == 5 && j==4)||(i == 6 && j==5) ){
 
@@ -536,8 +548,9 @@ std::cout<<"here"<<std::endl;
             //if(TMath::Abs(binRaw-binTrue) > 1e-10 && i!=1) continue;
             //std::cout<<"raw "<<i<<" "<<binRaw<<" true "<<j<<" "<<binTrue<<" "<<TMath::Abs(binRaw-binTrue)<<std::endl;
             if(ivar == 0)RawProjection[i-1] = fRawSpectrum->ProjectionX(Form("Rawproj%d",i),i,i);
+
             UnfProjection[ivar][i-1] = fUnfoldedBayes[ivar]->ProjectionX(Form("Unfproj%d%d",ivar,i),j,j);
-            UnfProjection[ivar][i-1]->Divide(hKineRatioProj[i-1]);
+   //         UnfProjection[ivar][i-1]->Divide(hKineRatioProj[i-1]);
             RefoldProjection[ivar][i-1] = refolded[ivar]->ProjectionX(Form("Refoldedproj%d%d",ivar,i),i,i);
             UnfProjectionClosure[ivar][i-1] = fUnfoldedBayesClosure[ivar]->ProjectionX(Form("UnfprojClosure%d%d",ivar,i),j,j);
             if(ivar == 0)TrueProjectionClosure[i-1] = fTrueSpectrumClosure->ProjectionX(Form("TrueprojCloseure%d",i),j,j);
@@ -785,6 +798,7 @@ std::cout<<"SS"<<std::endl;
     for(Int_t i = 1; i<=fzptJetMeasN;i++){
         std::cout<<i<<" F"<<std::endl;
         RawProjection[i-1]->Write();
+        fMeasSpectrumProjection[i-1]->Write();
         std::cout<<i<<" F2"<<std::endl;
         UnfProjection[regBayes-1][i-1]->Write(Form("unfoldedSpectrum%d",i));
         std::cout<<i<<" F3"<<std::endl;
@@ -794,6 +808,8 @@ std::cout<<"SS"<<std::endl;
         std::cout<<i<<" F5"<<std::endl;
         hunfoldedSpectrumKineEff[i-1]->Write(Form("unfoldedSpectrumKineEff%d",i));
         hKineRatioProjMC[i-1]->Write(Form("KinematicsEffMC%d",i));
+        UnfProjectionClosure[regBayes-1][i-1]->Write(Form("unfoldedSpectrumClosure%d",i));
+        TrueProjectionClosure[i-1]->Write(Form("TrueSpectrumClosure%d",i));
 
     }
 std::cout<<"SSS"<<std::endl;
@@ -802,7 +818,7 @@ std::cout<<"SSS"<<std::endl;
 }
 
 
-std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MCfile, TString out, Double_t RMfraction, TH2D *prior) {
+std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MCfile, TString out, Double_t RMfraction, TH2D *prior, Bool_t isPostix,TString postfix) {
     // Read the TTree reader init
     //TFile *fTreeSparse = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/RM.root","READ");
     TFile *fTreeSparse = new TFile(MCfile,"READ");
@@ -812,13 +828,18 @@ std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MC
     TTree *tree_ = dynamic_cast<TTree*>(fTreeSparse->Get("ResponseMatrixSum_tree"));
     if(!tree_){
         TString tmp(MCfile);
-        tmp.Remove(MCfile.Length()-5,5).Append("TTree.root");
+        TString treepost = "";
+        treepost += "TTree";
+        if(isPostix) treepost+=postfix;
+        treepost += ".root";
+        tmp.Remove(MCfile.Length()-5,5).Append(treepost);
         std::cout<<"MC file do not contain TTree, trying to open TTree sparse in default path!"<<std::endl;
         std::cout<<"opening: "<<tmp<<std::endl;
         fTreeSparse = new TFile(tmp,"READ");
         if(!(fTreeSparse->IsOpen())){
             std::cout<<"TTree file not found, converting MC THnSparse to TTree now!"<<std::endl;
-            SparseToTree(MCfile);
+            SparseToTree(MCfile, isPostix,postfix);
+            std::cout<<"reading TTree: "<<tmp<<std::endl;
             fTreeSparse = new TFile(tmp,"READ");
             tree_ = dynamic_cast<TTree*>(fTreeSparse->Get("ResponseMatrixSum_tree"));
         }
@@ -828,6 +849,17 @@ std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MC
 
     tree_->SetBranchAddress("coord",&jmatch);
     tree_->SetBranchAddress("bincontent",&bincontent);
+
+    TFile *Feff[fBin];
+    TH1D *eff[fBin];
+
+    for (Int_t ifile = 0; ifile<fBin;ifile++){
+        if(fuseEff == true){
+            std::cout<<"efffile: "<<fefffile+Form("/DjetEff_prompt_jetpt%.2f_%.2f.root",fzptJetMeasA[ifile],fzptJetMeasA[ifile+1])<<std::endl;
+            Feff[ifile] = new TFile (fefffile+Form("/DjetEff_prompt_jetpt%.2f_%.2f.root",fzptJetMeasA[ifile],fzptJetMeasA[ifile+1]));
+            eff[ifile] = dynamic_cast<TH1D*>(Feff[ifile]->Get("hEff_reb"));
+        }
+    }
 
     //ROOunfold init
     std::cout<<"RooUnfold Init"<<std::endl;
@@ -911,9 +943,23 @@ std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MC
                     (zShiftTrue>=0.4 && 0 <= jmatch[6] &&jmatch[6] <= 5)
 
                     ){*/
-              hTrainTrue->Fill (zShiftTrue,jmatch[6],bincontent*priorWeight);
-              hTrain->Fill (jmatch[0],jmatch[1],bincontent*priorWeight);
-              response->Fill (jmatch[0],jmatch[1],zShiftTrue,jmatch[6],bincontent*priorWeight);
+
+
+              Int_t effBin = -1;
+              Double_t peff = 1.0;
+              if(fuseEff == true){
+                for (Int_t ifile = 0; ifile<fBin;ifile++){
+                  if(fzptJetMeasA[ifile] < jmatch[1] && jmatch[1] <= fzptJetMeasA[ifile+1]) effBin = ifile;
+                }
+                peff = eff[effBin]->GetBinContent(eff[effBin]->FindBin(jmatch[2]));
+              }
+
+
+//std::cout<<"Jet pT: "<<jmatch[1]<<" id: "<<effBin<<" DpT: "<<jmatch[2]<<" eff "<<peff<<std::endl;
+
+              hTrainTrue->Fill (zShiftTrue,jmatch[6],bincontent*priorWeight/peff);
+              hTrain->Fill (jmatch[0],jmatch[1],bincontent*priorWeight/peff);
+              response->Fill (jmatch[0],jmatch[1],zShiftTrue,jmatch[6],bincontent*priorWeight/peff);
               //std::cout<<display<<" "<<jmatch[1]<<" "<<jmatch[2]<<" "<<jmatch[0]<<" "<<jmatch[6]<<" "<<jmatch[7]<<" "<<jmatch[5]<<" "<<bincontent<<std::endl;
               //std::cout<<display<<std::endl;
               //display++;
@@ -927,12 +973,13 @@ std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MC
               }
               if(RMw+SPw != bincontent) std::cout<<"WARNING CLOSURE WEIGHT VIOLATION!!! "<<RMw+SPw<<"!="<<bincontent<<std::endl;
               //fill response matrix and reco+true plots for closure test
-              responseClosure->Fill (jmatch[0],jmatch[1],zShiftTrue,jmatch[6],RMw*priorWeight);
+              responseClosure->Fill (jmatch[0],jmatch[1],zShiftTrue,jmatch[6],RMw*priorWeight/peff);
               //std::cout<<i<<" "<<jmatch[1]<<" "<<jmatch[2]<<" "<<jmatch[0]<<" "<<jmatch[6]<<" "<<jmatch[7]<<" "<<jmatch[5]<<std::endl;
-              hTrainTrueClosure->Fill (zShiftTrue,jmatch[6],SPw*priorWeight);
-              hTrainClosure->Fill (jmatch[0],jmatch[1],SPw*priorWeight);
+              hTrainTrueClosure->Fill (zShiftTrue,jmatch[6],SPw*priorWeight/peff);
+              hTrainClosure->Fill (jmatch[0],jmatch[1],SPw*priorWeight/peff);
               cutOK=false;
           }
+
           if(cutKineOK == true){
               //for z_true shift values z=1 into previous bin
               Double_t zShiftTrue = -1;
@@ -963,7 +1010,7 @@ std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MC
               if(jmatch[5]>1.0) zShiftTrue = jmatch[5] - 0.02;
               else zShiftTrue = jmatch[5];
 
-              if(0 <= jmatch[6] && jmatch[6] <= 50 && 0.2 <= zShiftTrue){
+              if(0 <= jmatch[6] && jmatch[6] <= 50 && 0 <= zShiftTrue){
                   //std::cout<<fzptJetMeasA[0]<<" "<<jmatch[1]<<" "<<fzptJetMeasA[fzptJetMeasN]<<" "<<zShiftTrue<<" "<<jmatch[6]<<std::endl;
                   fMeasSpectrumKineNum->Fill(jmatch[0],jmatch[1]);
               }
@@ -1556,7 +1603,7 @@ TH2D * getPearsonCoeffs(const TMatrixD &covMatrix) {
     return PearsonCoeffs;
 }
 
-void SparseToTree(TString MCfile)
+void SparseToTree(TString MCfile, Bool_t isPostfix, TString postfix)
 {
 // Read the THnSparse
     TFile *File = new TFile(MCfile,"read");
@@ -1569,7 +1616,7 @@ void SparseToTree(TString MCfile)
     THnSparseF *h = nullptr;
 
     for(int i=0; i<2; i++){
-        histList[i] =  (TList*)dir->Get(Form("%s%dMCrec",histName.Data(),i));
+        histList[i] =  (TList*)dir->Get(Form("%s%d%sMCrec",histName.Data(),i,isPostfix?postfix.Data():""));
         sparseMC[i] = (THnSparseF*)histList[i]->FindObject("ResponseMatrix");
         std::cout<<sparseMC[i]->GetNbins()<<std::endl;
         if(!i)h = dynamic_cast<THnSparseF*>(sparseMC[0]->Clone("ResponseMatrixSum"));
@@ -1581,7 +1628,9 @@ void SparseToTree(TString MCfile)
     // and one for the bin content.
     TString outName(MCfile);
     outName.Remove(outName.Length()-5,5);
-    outName+="TTree.root";
+    outName+="TTree";
+    if(isPostfix)outName+=postfix;
+    outName+=".root";
     std::cout<<"Converting THnSparse: "<<MCfile<<std::endl;
     std::cout<<"Into TTree: "<<outName<<std::endl;
    TFile *File2 = new TFile(outName,"RECREATE");

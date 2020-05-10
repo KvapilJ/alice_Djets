@@ -46,6 +46,8 @@ bool postfix = 0, TString listName = "FD", bool isprefix=0, Int_t zBin=0)
     TH1F *hPtG[NDMC];
     TH1F *hPtR[NDMC];
 
+    TH3F* sparseMCeff[NDMC];
+
       TList *histList[NDMC];
       THnSparseF *sparseMC[NDMC];
 
@@ -53,6 +55,10 @@ bool postfix = 0, TString listName = "FD", bool isprefix=0, Int_t zBin=0)
     TH2F *hPtJet2d;
     TH1F *hPtJetGen;
     TH1F *hPtJetRec;
+
+   // TFile *Feff = new TFile ("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_nonPrompt_jetpt5.00_50.00.root");
+  //  TH1D *eff = dynamic_cast<TH1D*>(Feff->Get("hEff_reb"));
+    TH1D *eff =nullptr;
 
 
         for(int i=0; i<NDMC; i++){
@@ -92,11 +98,42 @@ bool postfix = 0, TString listName = "FD", bool isprefix=0, Int_t zBin=0)
     }
 
         if(fObservable == kXsection){
+            if(true){
             if(fDmesonSpecie) hPtJet[i] = (TH2F*)sparseMC[i]->Projection(5,1,"E"); //Dstar tmp
             else hPtJet[i] = (TH2F*)sparseMC[i]->Projection(6,1,"E");
             if(fDmesonSpecie) hPtG[i] = (TH1F*)sparseMC[i]->Projection(5); //Dstar tmp
             else   hPtG[i] = (TH1F*)sparseMC[i]->Projection(6);
             hPtR[i] = (TH1F*)sparseMC[i]->Projection(1);
+            }else{
+                sparseMCeff[i] = (TH3F*)sparseMC[i]->Projection(6,1,2,"E");
+                for(Int_t jg = 1;jg <= sparseMCeff[i]->GetNbinsX();jg++){
+                    for(Int_t jr = 1;jr <= sparseMCeff[i]->GetNbinsY();jr++){
+                        for(Int_t dr = 1;dr <= sparseMCeff[i]->GetNbinsZ();dr++){
+                           /* std::cout<<jg<<" "<<jr<<" "<<dr<<" jetG: "<<((TAxis*)sparseMCeff->GetXaxis())->GetBinCenter(jg)
+                                    <<" jetR: "<<((TAxis*)sparseMCeff->GetYaxis())->GetBinCenter(jr)<<
+                                      " DR: "<<((TAxis*)sparseMCeff->GetZaxis())->GetBinCenter(dr)
+                                   <<" eff: "<<
+                                      eff->GetBinContent(eff->FindBin(((TAxis*)sparseMCeff->GetZaxis())->GetBinCenter(dr)))<<std::endl;*/
+
+                            sparseMCeff[i]->SetBinContent(jg,jr,dr,sparseMCeff[i]->GetBinContent(jg,jr,dr)/eff->GetBinContent(eff->FindBin(((TAxis*)sparseMCeff[i]->GetZaxis())->GetBinCenter(dr))));
+
+                        }
+                    }
+                }
+
+                hPtJet[i] = (TH2F*)sparseMCeff[i]->Project3D("xy");
+                hPtG[i] = (TH1F*)sparseMCeff[i]->ProjectionX();
+                hPtR[i] = (TH1F*)sparseMCeff[i]->ProjectionY();
+
+
+
+
+
+
+
+
+            }
+
         }
         if(fObservable == kFragmentation){
             if(fDmesonSpecie) hPtJet[i] = (TH2F*)sparseMC[i]->Projection(4,0,"E"); //Dstar tmp

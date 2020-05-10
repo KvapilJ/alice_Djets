@@ -80,11 +80,11 @@ void runSysRatio(){
     }
 
 //SB range variation
-    SysRatio *SBRANGE = new SysRatio(6,"Signal and Background range variation");
+    SysRatio *SBRANGE = new SysRatio(5,"Signal and Background range variation");
     SBRANGE->SetPath(path);
     SBRANGE->SetOutPath(path+"systematics");
 
-    TString SBRANGElegendlist[6] ={"S:2#sigma, B:3-8#sigma",
+    TString SBRANGElegendlist[6] ={//"S:2#sigma, B:3-8#sigma",
                                    "S:2#sigma, B:4-10#sigma",
                                    "S:2#sigma, B:4-12#sigma",
                                    "S:2#sigma, B:4-15#sigma",
@@ -96,12 +96,12 @@ void runSysRatio(){
         TString SBRANGEdefaulfile = Form("Default_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z);
         SBRANGE->SetDefaultFile(SBRANGEdefaulfile);
         TString SBRANGEfilelist[6];
-        SBRANGEfilelist[0]= Form("S2SB38_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z);
-        SBRANGEfilelist[1]= Form("S2SB410_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z);
-        SBRANGEfilelist[2]= Form("S2SB412_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z);
-        SBRANGEfilelist[3]= Form("S2SB415_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z);
-        SBRANGEfilelist[4]= Form("S3SB49_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z);
-        SBRANGEfilelist[5]= Form("S3SB412_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z);
+       // SBRANGEfilelist[0]= Form("S2SB38_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z);
+        SBRANGEfilelist[0]= Form("S2SB410_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z);
+        SBRANGEfilelist[1]= Form("S2SB412_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z);
+        SBRANGEfilelist[2]= Form("S2SB415_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z);
+        SBRANGEfilelist[3]= Form("S3SB49_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z);
+        SBRANGEfilelist[4]= Form("S3SB412_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z);
 
         SBRANGE->SetVarFilelist(SBRANGEfilelist);
         SBRANGE->SetVarLegendDesc(SBRANGElegendlist);
