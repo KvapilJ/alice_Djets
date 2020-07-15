@@ -169,9 +169,9 @@ std::cout<<"A"<<std::endl;
 
         TH2D* htmp2 =new TH2D("htmp2","htmp2",fzbinsJetMeasN[fzptJetMeasN-1],fzbinsJetMeasA[fzptJetMeasN-1],fzptJetMeasN,fzptJetMeasA);
         for (Int_t pt = 0; pt < fzptJetMeasN;pt++){
-            for (Int_t z = 0; z < hFD_up_binned[0]->GetNbinsX();z++){
-                htmp2->SetBinContent(z,pt,hFD_up_binned[pt]->GetBinContent(z));
-                htmp2->SetBinError(z,pt,hFD_up_binned[pt]->GetBinError(z));
+            for (Int_t z = 1; z <= hFD_up_binned[0]->GetNbinsX();z++){
+                htmp2->SetBinContent(z,pt+1,hFD_up_binned[pt]->GetBinContent(z));
+                htmp2->SetBinError(z,pt+1,hFD_up_binned[pt]->GetBinError(z));
             }
         }
 
@@ -179,13 +179,13 @@ std::cout<<"A"<<std::endl;
 
         TH2D* htmp3 =new TH2D("htmp3","htmp3",fzbinsJetMeasN[fzptJetMeasN-1],fzbinsJetMeasA[fzptJetMeasN-1],fzptJetMeasN,fzptJetMeasA);
         for (Int_t pt = 0; pt < fzptJetMeasN;pt++){
-            for (Int_t z = 0; z < hFD_down_binned[0]->GetNbinsX();z++){
-                htmp2->SetBinContent(z,pt,hFD_down_binned[pt]->GetBinContent(z));
-                htmp2->SetBinError(z,pt,hFD_down_binned[pt]->GetBinError(z));
+            for (Int_t z = 1; z <= hFD_down_binned[0]->GetNbinsX();z++){
+                htmp3->SetBinContent(z,pt+1,hFD_down_binned[pt]->GetBinContent(z));
+                htmp3->SetBinError(z,pt+1,hFD_down_binned[pt]->GetBinError(z));
             }
         }
 
-        hFD_down_binned2D = dynamic_cast<TH2D*>(htmp2->Clone("hFD_down_binned2D"));
+        hFD_down_binned2D = dynamic_cast<TH2D*>(htmp3->Clone("hFD_down_binned2D"));
     }
 
 
@@ -204,6 +204,8 @@ std::cout<<"A"<<std::endl;
 
 
 hFD_central_binned->Multiply(hKineRatioRec);
+if(isSys)hFD_up_binned2D->Multiply(hKineRatioRec);
+if(isSys)hFD_down_binned2D->Multiply(hKineRatioRec);
 
 std::cout<<"B"<<std::endl;
     TH2D *hFD_central_binned_fold = dynamic_cast<TH2D*>(foldB(response, hFD_central_binned,hFD_central_binned_fold));
@@ -213,8 +215,19 @@ std::cout<<"B"<<std::endl;
     TH2D *hFD_down_binned_fold = nullptr;
     if(isSys)hFD_up_binned_fold = dynamic_cast<TH2D*>(foldB(response, hFD_up_binned2D,hFD_up_binned_fold));
     if(isSys)hFD_down_binned_fold = dynamic_cast<TH2D*>(foldB(response, hFD_down_binned2D,hFD_down_binned_fold));
+/*
+    for(Int_t ii = 1; ii <= hFD_central_binned_fold->GetNbinsX();ii++){
+        std::cout<<"bef: "<<hFD_central_binned_fold->GetBinContent(ii,3)<<" "<<hKineRatioMC->GetBinContent(ii,3)<<" "<<hFD_central_binned_fold->GetBinContent(ii,3)/hKineRatioMC->GetBinContent(ii,3)<<std::endl;
+    }
+*/
 
-hFD_up_binned_fold->Divide(hKineRatioMC);
+hFD_central_binned_fold->Divide(hKineRatioMC);
+if(isSys)hFD_up_binned_fold->Divide(hKineRatioMC);
+if(isSys)hFD_down_binned_fold->Divide(hKineRatioMC);
+/*
+for(Int_t ii = 1; ii <= hFD_central_binned_fold->GetNbinsX();ii++){
+    std::cout<<"pos: "<<hFD_central_binned_fold->GetBinContent(ii,3)<<std::endl;
+}*/
 std::cout<<"B"<<std::endl;
          /////////////////////// fold B->D spectra ///////////////////////////////////
         subtractB_afterFolding(hFD_central_binned, hFD_central_binned_fold,hFD_up_binned_fold,hFD_down_binned_fold,hData_binned,hKineRatioMC,hKineRatioRec,outPlotDir,outSpectraDir, isSys);
@@ -364,7 +377,7 @@ std::cout<<"C"<<std::endl;
      Double_t zshiftx = 0;
      Double_t zshifty = 0;
      Double_t letsConfuseEveryoneWithTheseShifts = 0;
-     if(fObservable==Observable::kFragmentation){ zshiftx=-0.3;
+     if(fObservable==Observable::kFragmentation){ zshiftx=-0.37;
          zshifty=0.2;
          letsConfuseEveryoneWithTheseShifts=-0.1;
      }
@@ -396,48 +409,73 @@ std::cout<<"C"<<std::endl;
      pvEta->AddText(Form("|#it{#eta}_{jet}| < 0.%d",9-Rpar));
 
      shift+=dshift;
-     TPaveText *pv3 = new TPaveText(0.5+zshiftx,0.65-shift+zshifty+letsConfuseEveryoneWithTheseShifts,0.9+zshiftx,0.7-shift+zshifty,"brNDC");
+     TPaveText *pv3 = nullptr;
+
+             std::cout<<"C"<<std::endl;
+
+TH1D *hData_binned1D[fzptJetMeasN];
+TH1D *hData_binned_sub1D[fzptJetMeasN];
+TH1D *hFD_central_binned_fold1D[fzptJetMeasN];
+TH1D *hFD_up_fold1D[fzptJetMeasN];
+TH1D *hFD_down_fold1D[fzptJetMeasN];
+TH1D *hData_binned_sub_up1D[fzptJetMeasN];
+TH1D *hData_binned_sub_down1D[fzptJetMeasN];
+TCanvas *cSpectra[fzptJetMeasN];
+TLegend *leg1[fzptJetMeasN];
+
+
+
+for (Int_t bin = 1; bin <= fzptJetMeasN; bin++){
+    hData_binned1D[bin-1] = hData_binned->ProjectionX("hData_binned",bin,bin);
+    hData_binned_sub1D[bin-1]= hData_binned_sub->ProjectionX("hData_binned_sub",bin,bin);
+    hFD_central_binned_fold1D[bin-1]= hFD_central_binned_fold->ProjectionX("hFD_central_binned_fold",bin,bin);
+    if(isSys){
+        hFD_up_fold1D[bin-1]= hFD_up_fold->ProjectionX("hFD_up_fold",bin,bin);
+        hFD_down_fold1D[bin-1]= hFD_down_fold->ProjectionX("hFD_down_fold",bin,bin);
+        hData_binned_sub_up1D[bin-1]= hData_binned_sub_up->ProjectionX("hData_binned_sub_up",bin,bin);;
+        hData_binned_sub_down1D[bin-1]= hData_binned_sub_down->ProjectionX("hData_binned_sub_down",bin,bin);
+    }
+
+     setHistoDetails(hData_binned1D[bin-1],kGreen+2,21,1.2,2,1);
+     setHistoDetails(hFD_central_binned_fold1D[bin-1],4,24);
+     setHistoDetails(hData_binned_sub1D[bin-1],2,20);
+     hData_binned1D[bin-1]->Scale(1,"width");
+     hData_binned_sub1D[bin-1]->Scale(1,"width");
+     hFD_central_binned_fold1D[bin-1]->Scale(1,"width");
+     if(isSys){
+       hFD_up_fold1D[bin-1]->Scale(1,"width");
+       hFD_down_fold1D[bin-1]->Scale(1,"width");
+       //hFD_up_fold1D[bin-1]->Scale(1,"width");
+       //hFD_down_fold1D[bin-1]->Scale(1,"width");
+       hData_binned_sub_up1D[bin-1]->Scale(1,"width");
+       hData_binned_sub_down1D[bin-1]->Scale(1,"width");
+    }
+     // compare data and central sim with unc
+     cSpectra[bin-1] = new TCanvas(Form("cSpectra%d",bin),Form("cSpectra%d",bin),1000,800);
+     cSpectra[bin-1]->SetLogy();
+     cSpectra[bin-1]->cd();
+     hData_binned1D[bin-1]->GetXaxis()->SetRangeUser(plotmin,plotmax);
+     hData_binned1D[bin-1]->Draw();
+     hFD_central_binned_fold1D[bin-1]->Draw("same hist");
+     hData_binned_sub1D[bin-1]->Draw("same");
+     hData_binned1D[bin-1]->GetYaxis()->SetRangeUser(1E2,1E9);
+
+    if(isSys){
+         hFD_up_fold1D[bin-1]->Draw("same");
+         hFD_down_fold1D[bin-1]->Draw("same");
+         hData_binned_sub_up1D[bin-1]->Draw("same");
+         hData_binned_sub_down1D[bin-1]->Draw("same");
+    }
+
+    pv3 = new TPaveText(0.5+zshiftx,0.65-shift+zshifty+letsConfuseEveryoneWithTheseShifts,0.9+zshiftx,0.7-shift+zshifty,"brNDC");
      pv3->SetFillStyle(0);
      pv3->SetBorderSize(0);
      pv3->SetTextFont(42);
      pv3->SetTextSize(0.04f);
      pv3->SetTextAlign(11);
-    // pv3->AddText(Form("%d < p_{T,%s} < %d GeV/#it{c}",static_cast<Int_t>(fzptbinsDA[fBin-1][0]),fDmesonS.Data(),static_cast<Int_t>(fzptbinsDA[fBin-1][fzptbinsDN[fBin-1]])));
-     //if(fObservable==Observable::kFragmentation)pv3->AddText(Form("%d < p_{T,ch. jet} < %d GeV/#it{c}",static_cast<Int_t>(fzptJetMeasA[fBin-1]),static_cast<Int_t>(fzptJetMeasA[fBin])));
-std::cout<<"C"<<std::endl;
-    setHistoDetails(hData_binned,kGreen+2,21,1.2,2,1);
-     hData_binned->Scale(1,"width");
-     hData_binned_sub->Scale(1,"width");
-     hFD_central_binned_fold->Scale(1,"width");
-     if(isSys){
-       hFD_up_fold->Scale(1,"width");
-       hFD_down_fold->Scale(1,"width");
-       hFD_up_fold->Scale(1,"width");
-       hFD_down_fold->Scale(1,"width");
-       hData_binned_sub_up->Scale(1,"width");
-       hData_binned_sub_down->Scale(1,"width");
-}
-    // compare data and central sim with unc
-    TCanvas *cSpectra = new TCanvas("cSpectra","cSpectra",1000,800);
-    cSpectra->SetLogy();
-    hData_binned->GetXaxis()->SetRangeUser(plotmin,plotmax);
-    hData_binned->Draw();
-    //hFD_central_binned ->Draw("same");
-    hFD_central_binned_fold ->Draw("same");
-    hData_binned_sub->Draw("same");
-std::cout<<"C"<<std::endl;
-    if(fObservable == kFragmentation){
-        hData_binned->GetYaxis()->SetRangeUser(1E2,1E9);
-        //if(fBin==4)hData_binned->GetYaxis()->SetRangeUser(1E1,1E8);
-    }
-if(isSys){
-        //hFD_up->Draw("same");
-        //hFD_down->Draw("same");
-        hFD_up_fold->Draw("same");
-        hFD_down_fold->Draw("same");
-        hData_binned_sub_up->Draw("same");
-        hData_binned_sub_down->Draw("same");
-}
+     pv3->AddText(Form("%d < p_{T,%s} < %d GeV/#it{c}",static_cast<Int_t>(fzptbinsDA[bin-1][0]),fDmesonS.Data(),static_cast<Int_t>(fzptbinsDA[bin-1][fzptbinsDN[bin-1]])));
+     pv3->AddText(Form("%d < p_{T,ch. jet} < %d GeV/#it{c}",static_cast<Int_t>(fzptJetMeasA[bin-1]),static_cast<Int_t>(fzptJetMeasA[bin])));
+
 
     pv3->Draw("same");
     pvEn->Draw("same");
@@ -445,75 +483,109 @@ if(isSys){
     pvJet->Draw("same");
     pvEta->Draw("same");
 
-    TLegend *leg1 = new TLegend(0.55,0.65,0.95,0.89);
-    leg1->SetBorderSize(0);
-    //leg1->SetStyle(0);
-    leg1->AddEntry(hData_binned,"Uncorrected D-Jet yield","p");
-    leg1->AddEntry(hFD_central_binned_fold,"B Feed-Down (POWHEG+PYTHIA)","p");
-    leg1->AddEntry(hData_binned_sub,"FD corrected yield","p");
-    leg1->Draw("same");
+    leg1[bin-1] = new TLegend(0.55,0.65,0.95,0.89);
+    leg1[bin-1]->SetBorderSize(0);
+    leg1[bin-1]->AddEntry(hData_binned1D[bin-1],"Uncorrected D-Jet yield","p");
+    leg1[bin-1]->AddEntry(hFD_central_binned_fold1D[bin-1],"B Feed-Down (POWHEG+PYTHIA)","p");
+    leg1[bin-1]->AddEntry(hData_binned_sub1D[bin-1],"FD corrected yield","p");
+    leg1[bin-1]->Draw("same");
 
-    cSpectra->SaveAs(Form("%s/JetPtSpectra_FDsub.png",outPlotDir.Data()));
-    cSpectra->SaveAs(Form("%s/JetPtSpectra_FDsub.pdf",outPlotDir.Data()));
-    cSpectra->SaveAs(Form("%s/JetPtSpectra_FDsub.svg",outPlotDir.Data()));
+    cSpectra[bin-1]->SaveAs(Form("%s/JetPtSpectra_FDsub%d.png",outPlotDir.Data(),bin));
+    cSpectra[bin-1]->SaveAs(Form("%s/JetPtSpectra_FDsub%d.pdf",outPlotDir.Data(),bin));
+}
+
 
     TH2D*JetPtSpectra_FDsubUn = dynamic_cast<TH2D*>(hData_binned_sub->Clone("JetPtSpectra_FDsubUn"));
-    JetPtSpectra_FDsubUn->GetYaxis()->SetTitle("Rel. unc.");
+    JetPtSpectra_FDsubUn->GetZaxis()->SetTitle("Rel. unc.");
     JetPtSpectra_FDsubUn->SetLineColor(kGreen+1);
     JetPtSpectra_FDsubUn->SetMarkerColor(kGreen+1);
 std::cout<<"C"<<std::endl;
     for(int i=1; i<=hData_binned_sub->GetNbinsX();i++){
          for(int j=1; j<=hData_binned_sub->GetNbinsY();j++){
-                double err;
-                if(hData_binned_sub->GetBinContent(i,j) > 10E-20) err = hData_binned_sub->GetBinError(i,j)/hData_binned_sub->GetBinContent(i,j);
-                else err = 0;
-                JetPtSpectra_FDsubUn->SetBinContent(i,j,err);
-                JetPtSpectra_FDsubUn->SetBinError(i,j,0);
-    }
+            double err;
+            if(hData_binned_sub->GetBinContent(i,j) > 10E-20) err = hData_binned_sub->GetBinError(i,j)/hData_binned_sub->GetBinContent(i,j);
+            else err = 0;
+            JetPtSpectra_FDsubUn->SetBinContent(i,j,err);
+            JetPtSpectra_FDsubUn->SetBinError(i,j,0);
+        }
     }
 
     JetPtSpectra_FDsubUn->SetMaximum(JetPtSpectra_FDsubUn->GetMaximum()*1.2);
     JetPtSpectra_FDsubUn->SetMinimum(0);
 
     shift+=0.07;
-    pv3 = new TPaveText(0.7,0.65-shift,0.9,0.7-shift,"brNDC");
-    pv3->SetFillStyle(0);
-    pv3->SetBorderSize(0);
-    pv3->SetTextFont(42);
-    pv3->SetTextSize(0.04f);
-    pv3->SetTextAlign(11);
-   // pv3->AddText(Form("%d < p_{T,%s} < %d GeV/#it{c}",static_cast<Int_t>(fzptbinsDA[fBin][0]),fDmesonS.Data(),static_cast<Int_t>(fzptbinsDA[fBin-1][fzptbinsDN[fBin-1]])));
-    if(fObservable==Observable::kFragmentation)pv3->AddText(Form("%d < p_{T,ch. jet} < %d GeV/#it{c}",static_cast<Int_t>(fzptJetMeasA[0]),static_cast<Int_t>(fzptJetMeasA[0])));
-std::cout<<"C"<<std::endl;
-    TCanvas *cSpectrumRebinUnc = new TCanvas("cSpectrumRebinUnc","cSpectrumRebinUnc",800,500);
-    JetPtSpectra_FDsubUn->Draw();
-    pv3->Draw("same");
 
-    cSpectrumRebinUnc->SaveAs(Form("%s/JetPtSpectra_FDsubUnc.png",outPlotDir.Data()));
-    cSpectrumRebinUnc->SaveAs(Form("%s/JetPtSpectra_FDsubUnc.pdf",outPlotDir.Data()));
-    cSpectrumRebinUnc->SaveAs(Form("%s/JetPtSpectra_FDsubUnc.svg",outPlotDir.Data()));
+    TH1D *JetPtSpectra_FDsubUn1D[fzptJetMeasN];
+    TCanvas *cSpectrumRebinUnc1D[fzptJetMeasN];
+    for (Int_t bin = 1; bin <= fzptJetMeasN; bin++){
+        JetPtSpectra_FDsubUn1D[bin-1] = JetPtSpectra_FDsubUn->ProjectionX("JetPtSpectra_FDsubUn1D",bin,bin);
+        pv3 = new TPaveText(0.7,0.65-shift,0.9,0.7-shift,"brNDC");
+        pv3->SetFillStyle(0);
+        pv3->SetBorderSize(0);
+        pv3->SetTextFont(42);
+        pv3->SetTextSize(0.04f);
+        pv3->SetTextAlign(11);
+        pv3->AddText(Form("%d < p_{T,%s} < %d GeV/#it{c}",static_cast<Int_t>(fzptbinsDA[bin-1][0]),fDmesonS.Data(),static_cast<Int_t>(fzptbinsDA[bin-1][fzptbinsDN[bin-1]])));
+        pv3->AddText(Form("%d < p_{T,ch. jet} < %d GeV/#it{c}",static_cast<Int_t>(fzptJetMeasA[0]),static_cast<Int_t>(fzptJetMeasA[0])));
 
-    TCanvas *cRatio = new TCanvas("cRatio","cRatio",1000,500);
-    hFD_ratio->GetYaxis()->SetRangeUser(0,hFD_ratio->GetMaximum()*2);
-    hFD_ratio->GetXaxis()->SetRangeUser(plotmin,plotmax);
-    hFD_ratio->Draw();
-    if(isSys) hFD_ratio_up->Draw("same");
-    if(isSys) hFD_ratio_down->Draw("same");
+        cSpectrumRebinUnc1D[bin-1] = new TCanvas(Form("cSpectrumRebinUnc1D%d",bin),Form("cSpectrumRebinUnc1D%d",bin),800,500);
+        JetPtSpectra_FDsubUn1D[bin-1]->Draw();
+        pv3->Draw("same");
+
+        cSpectrumRebinUnc1D[bin-1]->SaveAs(Form("%s/JetPtSpectra_FDsubUnc%d.png",outPlotDir.Data(),bin));
+        cSpectrumRebinUnc1D[bin-1]->SaveAs(Form("%s/JetPtSpectra_FDsubUnc%d.pdf",outPlotDir.Data(),bin));
 
 
-    cRatio->SaveAs(Form("%s/FDratio.png",outPlotDir.Data()));
-    cRatio->SaveAs(Form("%s/FDratio.pdf",outPlotDir.Data()));
-    cRatio->SaveAs(Form("%s/FDratio.svg",outPlotDir.Data()));
-
-    if(isSys){
-        TCanvas *cFDUnc = new TCanvas("cFDUnc","cFDUnc",1000,500);
-        hFDUnc->GetYaxis()->SetRangeUser(0,hFDUnc->GetMaximum()*1.5);
-        hFDUnc->GetXaxis()->SetRangeUser(plotmin,plotmax);
-        hFDUnc->Draw();
-        cFDUnc->SaveAs(Form("%s/FDUnc_beforeUnf.png",outPlotDir.Data()));
-        cFDUnc->SaveAs(Form("%s/FDUnc_beforeUnf.pdf",outPlotDir.Data()));
-        cFDUnc->SaveAs(Form("%s/FDUnc_beforeUnf.svg",outPlotDir.Data()));
     }
+
+    TH1D *hFD_ratio1D[fzptJetMeasN];
+    TH1D *hFD_ratio_up1D[fzptJetMeasN];
+    TH1D *hFD_ratio_down1D[fzptJetMeasN];
+    TH1D *hFDUnc1D[fzptJetMeasN];
+    TCanvas *cRatio1D[fzptJetMeasN];
+    TCanvas *cFDUnc1D[fzptJetMeasN];
+    for (Int_t bin = 1; bin <= fzptJetMeasN; bin++){
+        hFD_ratio1D[bin-1] = hFD_ratio->ProjectionX("hFD_ratio1D",bin,bin);
+        if(isSys)hFD_ratio_up1D[bin-1] = hFD_ratio_up->ProjectionX("hFD_ratio_up1D",bin,bin);
+        if(isSys)hFD_ratio_down1D[bin-1] = hFD_ratio_down->ProjectionX("hFD_ratio_down1D",bin,bin);
+        cRatio1D[bin-1] = new TCanvas(Form("cRatio1D%d",bin),Form("cRatio1D%d",bin),1000,500);
+        hFD_ratio1D[bin-1]->GetYaxis()->SetRangeUser(0,hFD_ratio->GetMaximum()*2);
+        hFD_ratio1D[bin-1]->GetXaxis()->SetRangeUser(plotmin,plotmax);
+        hFD_ratio1D[bin-1]->Draw();
+        if(isSys) hFD_ratio_up1D[bin-1]->Draw("same");
+        if(isSys) hFD_ratio_down1D[bin-1]->Draw("same");
+        pv3 = new TPaveText(0.7,0.65-shift,0.9,0.7-shift,"brNDC");
+        pv3->SetFillStyle(0);
+        pv3->SetBorderSize(0);
+        pv3->SetTextFont(42);
+        pv3->SetTextSize(0.04f);
+        pv3->SetTextAlign(11);
+        pv3->AddText(Form("%d < p_{T,%s} < %d GeV/#it{c}",static_cast<Int_t>(fzptbinsDA[bin-1][0]),fDmesonS.Data(),static_cast<Int_t>(fzptbinsDA[bin-1][fzptbinsDN[bin-1]])));
+        pv3->AddText(Form("%d < p_{T,ch. jet} < %d GeV/#it{c}",static_cast<Int_t>(fzptJetMeasA[0]),static_cast<Int_t>(fzptJetMeasA[0])));
+        pv3->Draw("same");
+
+        cRatio1D[bin-1]->SaveAs(Form("%s/FDratio%d.png",outPlotDir.Data(),bin));
+        cRatio1D[bin-1]->SaveAs(Form("%s/FDratio%d.pdf",outPlotDir.Data(),bin));
+
+
+        if(isSys){
+            hFDUnc1D[bin-1] = hFDUnc->ProjectionX("hFDUnc1D",bin,bin);
+            cFDUnc1D[bin-1] = new TCanvas(Form("cFDUnc1D%d",bin),Form("cFDUnc1D%d",bin),1000,500);
+            hFDUnc1D[bin-1]->GetYaxis()->SetRangeUser(0,hFDUnc1D[bin-1]->GetMaximum()*1.5);
+            hFDUnc1D[bin-1]->GetXaxis()->SetRangeUser(plotmin,plotmax);
+            hFDUnc1D[bin-1]->Draw();
+            cFDUnc1D[bin-1]->SaveAs(Form("%s/FDUnc_beforeUnf%d.png",outPlotDir.Data(),bin));
+            cFDUnc1D[bin-1]->SaveAs(Form("%s/FDUnc_beforeUnf%d.pdf",outPlotDir.Data(),bin));
+        }
+
+    }
+
+
+
+
+
+
+
 
 return;
 }
@@ -526,7 +598,7 @@ TH1* GetUpSys(TH1D **hFD, const int nFiles, TH1D *hFD_up){
         double max = 0, maxerr = 0;
 
 
-        for(int j=1; j<=maxObsBinN; j++ ){
+        for(int j=1; j<=hFD[0]->GetNbinsX(); j++ ){
             max = hFD[0]->GetBinContent(j);
             for(int i=1;i<nFiles;i++){
                 if(hFD[i]->GetBinContent(j) > max){
@@ -551,7 +623,7 @@ TH1* GetDownSys(TH1D **hFD, const int nFiles, TH1D *hFD_down){
         double max = 0, maxerr = 0;
 
 
-        for(int j=1; j<=maxObsBinN; j++ ){
+        for(int j=1; j<=hFD[0]->GetNbinsX(); j++ ){
             max = hFD[0]->GetBinContent(j);
             for(int i=1;i<nFiles;i++){
                 if(hFD[i]->GetBinContent(j) < max){
@@ -755,27 +827,37 @@ RooUnfoldResponse* LoadDetectorMatrix(TString MCfile, TString out, Bool_t isPost
       if (jmatch[0]>=0 && jmatch[1]>=0 && -(0.9-fRpar) <= jmatch[4] && jmatch[4] <= 0.9-fRpar && -(0.9-fRpar) <= jmatch[9] && jmatch[9] <= 0.9-fRpar) { //found on reco also + eta true and eta reco cut
           //DpT cuts
           for(Int_t z = 0;z < fzptJetMeasN;z++){
-              if(fzptJetMeasA[z] <= jmatch[1] && jmatch[1] <= fzptJetMeasA[z+1]){ //jet det
-                  if(fzptbinsDA[z][0] <= jmatch[2] && jmatch[2] <= fzptbinsDA[z][fzptbinsDN[z]]){ //D det
-
-                     if(jmatch[0]>=fzbinsJetMeasA[z][0]){
-                         //if(fzptbinsDA[z][0] <= jmatch[7] && jmatch[7] <= fzptbinsDA[z][fzptbinsDN[z]]) //D mc
+              if(fzptJetMeasA[z] <= jmatch[1] && jmatch[1] < fzptJetMeasA[z+1]){ //jet det
+                  if(2 <= jmatch[6] && jmatch[6] < 50){ //jet mc
+                  if(fzptbinsDA[z][0] <= jmatch[2] && jmatch[2] < fzptbinsDA[z][fzptbinsDN[z]]){ //D det
+                    if(fzptbinsDA[z][0] <= jmatch[7] && jmatch[7] < fzptbinsDA[z][fzptbinsDN[z]]){ //D mc
+                        if(jmatch[0]>=fzbinsJetMeasA[z][0] && jmatch[5]>=fzbinsJetTrueAPrompt[z][0]){
                              cutOK = true;
+                         }
+                    }
                      }
                   }
               }
           }
           for(Int_t z = 0;z < fzptJetMeasN;z++){
-              if(fzptJetMeasA[z] <= jmatch[6] && jmatch[6] <= fzptJetMeasA[z+1]){ //jet mc
-                  if(fzptbinsDA[z][0] <= jmatch[2] && jmatch[2] <= fzptbinsDA[z][fzptbinsDN[z]]){ //D det
-                      cutKineOK = true;
+              if(fzptJetMeasA[z] <= jmatch[6] && jmatch[6] < fzptJetMeasA[z+1]){ //jet mc
+                  if(fzptbinsDA[z][0] <= jmatch[2] && jmatch[2] < fzptbinsDA[z][fzptbinsDN[z]]){ //D det
+                      if(fzptbinsDA[z][0] <= jmatch[7] && jmatch[7] < fzptbinsDA[z][fzptbinsDN[z]]){ //D mc
+                      if(jmatch[5]>=fzbinsJetTrueAPrompt[z][0]){ //z mc
+                        cutKineOK = true;
+                      }
+                      }
                   }
               }
           }
           for(Int_t z = 0;z < fzptJetMeasN;z++){
-              if(fzptJetMeasA[z] <= jmatch[1] && jmatch[1] <= fzptJetMeasA[z+1]){ //jet det
-                  if(fzptbinsDA[z][0] <= jmatch[7] && jmatch[7] <= fzptbinsDA[z][fzptbinsDN[z]]){ //D mc
-                      cutKineMCOK = true;
+              if(fzptJetMeasA[z] <= jmatch[1] && jmatch[1] < fzptJetMeasA[z+1]){ //jet det
+                  if(fzptbinsDA[z][0] <= jmatch[2] && jmatch[2] < fzptbinsDA[z][fzptbinsDN[z]]){ //D det
+                  if(fzptbinsDA[z][0] <= jmatch[7] && jmatch[7] < fzptbinsDA[z][fzptbinsDN[z]]){ //D mc
+                      if(jmatch[0]>=fzbinsJetMeasA[z][0]){
+                        cutKineMCOK = true;
+                      }
+                      }
                   }
               }
           }
@@ -803,8 +885,8 @@ RooUnfoldResponse* LoadDetectorMatrix(TString MCfile, TString out, Bool_t isPost
           if(cutKineOK == true){
 
               for(Int_t z = 0;z < fzptJetMeasN;z++){
-                  if(fzptJetMeasA[z] <= jmatch[6] && jmatch[6] <= fzptJetMeasA[z+1]){ //jet mc
-                      if(fzbinsJetMeasA[z][0] <= jmatch[0] && jmatch[0] <= fzbinsJetMeasA[z][fzbinsJetMeasN[z]] && 2 <= jmatch[1] && jmatch[1] <= 50){ //z det
+                  if(fzptJetMeasA[z] <= jmatch[6] && jmatch[6] <=fzptJetMeasA[z+1]){ //jet mc
+                      if(fzbinsJetMeasA[z][0] <= jmatch[0] && jmatch[0] <= fzbinsJetMeasA[z][fzbinsJetMeasN[z]] && 2 <= jmatch[1] && jmatch[1] < 50){ //z det
                          fTrueSpectrumKineNum->Fill(jmatch[5],jmatch[6]);
                       }
                   }
@@ -819,7 +901,7 @@ RooUnfoldResponse* LoadDetectorMatrix(TString MCfile, TString out, Bool_t isPost
           if(cutKineMCOK == true){
               //for z_true shift values z=1 into previous bin
 
-              if(2 <= jmatch[6] && jmatch[6] <= 50 && 0.4 <= jmatch[5]){
+              if(2 <= jmatch[6] && jmatch[6] < 50 && 0.4 <= jmatch[5]){
                   //std::cout<<fzptJetMeasA[0]<<" "<<jmatch[1]<<" "<<fzptJetMeasA[fzptJetMeasN]<<" "<<zShiftTrue<<" "<<jmatch[6]<<std::endl;
                   fMeasSpectrumKineNum->Fill(jmatch[0],jmatch[1]);
               }
@@ -843,7 +925,7 @@ RooUnfoldResponse* LoadDetectorMatrix(TString MCfile, TString out, Bool_t isPost
 
     }
 
-    TCanvas *c = new TCanvas("c","Unfolding2D_measured_true",1600,800);
+    TCanvas *c = new TCanvas("c","Folding2D_measured_true",1600,800);
     c->Divide(2,1);
     c->cd(1);
     c->cd(1)->SetLogz();
@@ -851,8 +933,8 @@ RooUnfoldResponse* LoadDetectorMatrix(TString MCfile, TString out, Bool_t isPost
     c->cd(2);
     c->cd(2)->SetLogz();
     response->Htruth()->Draw("colz");
-    c->SaveAs(out+"/Unfolding2D_Response_MeasuredTrue.png");
-    c->SaveAs(out+"/Unfolding2D_Response_MeasuredTrue.pdf");
+    c->SaveAs(out+"/Folding2D_Response_MeasuredTrue.png");
+    c->SaveAs(out+"/Folding2D_Response_MeasuredTrue.pdf");
 
     TPaveText *AnaInfo= new TPaveText(0.2,0.1,0.9,0.9,"brNDC");
     AnaInfo->SetFillStyle(0);
@@ -901,8 +983,8 @@ RooUnfoldResponse* LoadDetectorMatrix(TString MCfile, TString out, Bool_t isPost
     cc->cd();
     cc->SetLogz();
     res->Draw("colz");
-    cc->SaveAs(out+"/Unfolding2D_ResponseMatrix.png");
-    cc->SaveAs(out+"/Unfolding2D_ResponseMatrix.pdf");
+    cc->SaveAs(out+"/Folding2D_ResponseMatrix.png");
+    cc->SaveAs(out+"/Folding2D_ResponseMatrix.pdf");
 
     for(Int_t recoID = 0;recoID < res->GetNbinsX();recoID++){
         std::cout<<recoID+1<<" reco under "<<res->GetBinContent(recoID+1,0)<<" over "<<res->GetBinContent(recoID+1,res->GetNbinsY()+1)<<std::endl;

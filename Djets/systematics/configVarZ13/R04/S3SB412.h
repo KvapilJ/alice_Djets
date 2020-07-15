@@ -74,34 +74,74 @@ enum Observable {kXsection=0, kFragmentation=1};
     double        fptbinsJetTrueA[fptbinsJetTrueN+1] = {2,3,4,5,6,8,10,12,14,20,30,50};
     const int     fptbinsJetMeasN = 11;
    double        fptbinsJetMeasA[fptbinsJetMeasN+1] = {2,3,4,5,6,8,10,12,14,20,30,50};
-//    const int     fptbinsJetFinalN = 8;
-//    double        fptbinsJetFinalA[fptbinsJetFinalN+1] = { 5,6,8,10,12,14,20,30,50};
-   const int     fptbinsJetFinalN = 6;
-   double        fptbinsJetFinalA[fptbinsJetFinalN+1] = {0.0,0.40,0.60,0.70,0.80,0.90,1.00};
+    const int     fptbinsJetFinalN = 8;
+    double        fptbinsJetFinalA[fptbinsJetFinalN+1] = { 5,6,8,10,12,14,20,30,50};
+  // const int     fptbinsJetFinalN = 6;
+ //  double        fptbinsJetFinalA[fptbinsJetFinalN+1] = {0.0,0.40,0.60,0.70,0.80,0.90,1.00};
 
+//auro
    const int     fzptJetMeasN = 5;
-   const int     fzbinsJetFinalN[fzptJetMeasN] = {6,6,6,6,6};
-   double        fzbinsJetFinalA[fzptJetMeasN][10] ={{0.0,0.4,0.6,0.7,0.8,0.9,1.0},
-                                                     {0.0,0.4,0.6,0.7,0.8,0.9,1.0},
-                                                     {0.0,0.4,0.6,0.7,0.8,0.9,1.0},
-                                                     {0.0,0.4,0.6,0.7,0.8,0.9,1.0},
-                                                     {0.0,0.4,0.6,0.7,0.8,0.9,1.0}};
+   /*
+   const int     fzbinsJetFinalN[fzptJetMeasN] = {5,5,5,5,5};
+   double        fzbinsJetFinalA[fzptJetMeasN][10] ={{0.4,0.6,0.7,0.8,0.9,1.0},
+                                                     {0.4,0.6,0.7,0.8,0.9,1.0},
+                                                     {0.4,0.6,0.7,0.8,0.9,1.0},
+                                                     {0.4,0.6,0.7,0.8,0.9,1.0},
+                                                     {0.4,0.6,0.7,0.8,0.9,1.0}};*/
+//13tev
+   const int     fzbinsJetFinalN[fzptJetMeasN] = {7,7,7,7,7};
+   double        fzbinsJetFinalA[fzptJetMeasN][10] ={{0.2,0.4,0.5,0.6,0.7,0.8,0.9,1.0},
+                                                     {0.2,0.4,0.5,0.6,0.7,0.8,0.9,1.0},
+                                                     {0.2,0.4,0.5,0.6,0.7,0.8,0.9,1.0},
+                                                     {0.2,0.4,0.5,0.6,0.7,0.8,0.9,1.0},
+                                                     {0.2,0.4,0.5,0.6,0.7,0.8,0.9,1.0}};
 
     double        fzptJetMeasA[fzptJetMeasN+1] = {2,5,7,10,15,50}; //this must be changed in run.csh as WELL !!!!
     const int     fzptJetTrueN = 5;
-    double        fzptJetTrueA[fzptJetTrueN+1] = {0,5,7,10,15,50};
-    const int     fzptbinsDN[fzptJetMeasN]={3,5,6,6,8};
+    double        fzptJetTrueA[fzptJetTrueN+1] = {2,5,7,10,15,50};
+
+    //R=0.2
+/*
+    const int     fzptbinsDN[fzptJetMeasN]={3,5,5,6,4};
+    double        fzptbinsDA[fzptJetMeasN][12] = {{2,3,4,5},
+                                                 {2,3,4,5,6,7},
+                                                 {4,5,6,7,8,10},
+                                                 {5,6,7,8,10,12,15},
+                                                 {10,12,16,24,36}};
+    const int     fzptbinsDPromptN[fzptJetMeasN]={3,5,5,6,4};
+    double        fzptbinsDPromptA[fzptJetMeasN][12] = {{2,3,4,5},
+                                                        {2,3,4,5,6,7},
+                                                        {4,5,6,7,8,10},
+                                                        {5,6,7,8,10,12,15},
+                                                        {10,12,16,24,36}};
+*/
+    //R=0.6 and 0.4
+//auro
+  /*  const int     fzptbinsDN[fzptJetMeasN]={3,5,6,6,8};
     double        fzptbinsDA[fzptJetMeasN][12] = {{2,3,4,5},
                                                  {2,3,4,5,6,7},
                                                  {3,4,5,6,7,8,10},
-                                                 {5,6,7,8,10,12,16},
+                                                 {5,6,7,8,10,12,15},
                                                  {5,6,7,8,10,12,16,24,36}};
     const int     fzptbinsDPromptN[fzptJetMeasN]={3,5,6,6,8};
     double        fzptbinsDPromptA[fzptJetMeasN][12] = {{2,3,4,5},
                                                         {2,3,4,5,6,7},
                                                         {3,4,5,6,7,8,10},
-                                                        {5,6,7,8,10,12,16},
-                                                        {5,6,7,8,10,12,16,24,36}};
+                                                        {5,6,7,8,10,12,15},
+                                                        {5,6,7,8,10,12,16,24,36}};*/
+   //13 TeV
+    const int     fzptbinsDN[fzptJetMeasN]={3,5,7,9,10};
+    double        fzptbinsDA[fzptJetMeasN][12] = {{2,3,4,5},
+                                                 {2,3,4,5,6,7},
+                                                 {2,3,4,5,6,7,8,10},
+                                                 {2,3,4,5,6,7,8,10,12,15},
+                                                 {3,4,5,6,7,8,10,12,16,24,36}};
+    const int     fzptbinsDPromptN[fzptJetMeasN]={3,5,7,9,10};
+    double        fzptbinsDPromptA[fzptJetMeasN][12] = {{2,3,4,5},
+                                                        {2,3,4,5,6,7},
+                                                        {2,3,4,5,6,7,8,10},
+                                                        {2,3,4,5,6,7,8,10,12,15},
+                                                        {3,4,5,6,7,8,10,12,16,24,36}};
     /*
    const int     fzptJetMeasN = 1;
    const int     fzbinsJetFinalN[fzptJetMeasN] = {9};
@@ -116,20 +156,37 @@ enum Observable {kXsection=0, kFragmentation=1};
 
     //====== z range ---- set up your min, max z ======
     double        zmin = -2, zmax = 2.; // for D-jet pT spectrum
-    const int     fzbinsJetMeasN[fzptJetMeasN] = {6,6,6,6,6};
+    //auro
+   /* const int     fzbinsJetMeasN[fzptJetMeasN] = {5,5,5,5,5};
     double        fzbinsJetMeasA[fzptJetMeasN][10] = {
-                                                      {0.4,0.5,0.6,0.7,0.8,0.9,1.02},
-                                                      {0.4,0.5,0.6,0.7,0.8,0.9,1.02},
-                                                     { 0.4,0.5,0.6,0.7,0.8,0.9,1.02},
-                                                     { 0.4,0.5,0.6,0.7,0.8,0.9,1.02},
-                                                     { 0.4,0.5,0.6,0.7,0.8,0.9,1.02}};
-    const int     fzbinsJetTrueN[fzptJetMeasN] = {6,6,6,6,6};
+                                                      {0.4,0.6,0.7,0.8,0.9,1.02},
+                                                      {0.4,0.6,0.7,0.8,0.9,1.02},
+                                                     { 0.4,0.6,0.7,0.8,0.9,1.02},
+                                                     { 0.4,0.6,0.7,0.8,0.9,1.02},
+                                                     { 0.4,0.6,0.7,0.8,0.9,1.02}};
+    const int     fzbinsJetTrueN[fzptJetMeasN] = {5,5,5,5,5};
     double        fzbinsJetTrueAPrompt[fzptJetMeasN][10] = {
-                                                      {0.0,0.4,0.6,0.7,0.8,0.9,1.0},
-                                                      {0.0,0.4,0.6,0.7,0.8,0.9,1.0},
-                                                     { 0.0,0.4,0.6,0.7,0.8,0.9,1.0},
-                                                     { 0.0,0.4,0.6,0.7,0.8,0.9,1.0},
-                                                     { 0.0,0.4,0.6,0.7,0.8,0.9,1.0}};
+                                                      {0.4,0.6,0.7,0.8,0.9,1.0},
+                                                      {0.4,0.6,0.7,0.8,0.9,1.0},
+                                                     { 0.4,0.6,0.7,0.8,0.9,1.0},
+                                                     { 0.4,0.6,0.7,0.8,0.9,1.0},
+                                                     { 0.4,0.6,0.7,0.8,0.9,1.0}};*/
+    //13tev
+    const int     fzbinsJetMeasN[fzptJetMeasN] = {7,7,7,7,7};
+    double        fzbinsJetMeasA[fzptJetMeasN][10] = {
+                                                      {0.2,0.4,0.5,0.6,0.7,0.8,0.9,1.02},
+                                                      {0.2,0.4,0.5,0.6,0.7,0.8,0.9,1.02},
+                                                     { 0.2,0.4,0.5,0.6,0.7,0.8,0.9,1.02},
+                                                     { 0.2,0.4,0.5,0.6,0.7,0.8,0.9,1.02},
+                                                     { 0.2,0.4,0.5,0.6,0.7,0.8,0.9,1.02}};
+    const int     fzbinsJetTrueN[fzptJetMeasN] = {7,7,7,7,7};
+    double        fzbinsJetTrueAPrompt[fzptJetMeasN][10] = {
+                                                      {0.2,0.4,0.5,0.6,0.7,0.8,0.9,1.0},
+                                                      {0.2,0.4,0.5,0.6,0.7,0.8,0.9,1.0},
+                                                     { 0.2,0.4,0.5,0.6,0.7,0.8,0.9,1.0},
+                                                     { 0.2,0.4,0.5,0.6,0.7,0.8,0.9,1.0},
+                                                     { 0.2,0.4,0.5,0.6,0.7,0.8,0.9,1.0}};
+
 
    /* double        fzbinsJetTrueAPrompt[fzptJetMeasN][10] = {{0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0}};
     const int     fzbinsJetMeasN[fzptJetMeasN] = {9};
@@ -146,6 +203,8 @@ enum Observable {kXsection=0, kFragmentation=1};
 
     Int_t fColors[] = {1,2,8,4,kOrange-1,6,kGray+1,kCyan+1,kMagenta+2,kGreen+3,kViolet+5,kYellow+2};
     Int_t fMarkers[] = {20,21,22,23,24,25,26,27,28,29,30,32,33,34};
+
+
     ///============== POWHEG simulations ============================
     //======= set up here names of your simulation files =======
 /*
@@ -157,69 +216,61 @@ enum Observable {kXsection=0, kFragmentation=1};
     };
 */
     TString fRunB[] = {
-      "AnalysisResults_FastSim_powheg+pythia6+evtgen_beauty_1549024771",	//central
-      "AnalysisResults_FastSim_powheg+pythia6+evtgen_beauty_1549277129",	//mb4.5
-      "AnalysisResults_FastSim_powheg+pythia6+evtgen_beauty_1550062899",	//mb5
-      "AnalysisResults_FastSim_powheg+pythia6+evtgen_beauty_1550137218",	//R05F1
-      "AnalysisResults_FastSim_powheg+pythia6+evtgen_beauty_1549640561",	//R1F05
-      "AnalysisResults_FastSim_powheg+pythia6+evtgen_beauty_1549973280",	//R125
-      "AnalysisResults_FastSim_powheg+pythia6+evtgen_beauty_1554379646",	//R2F1
-      "AnalysisResults_FastSim_powheg+pythia6+evtgen_beauty_1549618884",	//R0.5F0.5
-      "AnalysisResults_FastSim_powheg+pythia6+evtgen_beauty_1554711712",	//R2F2
-      "AnalysisResults_FastSim_powheg+pythia6+evtgen_beauty_1554808125",	//pdf 21200
-      "AnalysisResults_FastSim_powheg+pythia6_beauty_1504199953"	//pdf 10800
+
+        "AnalysisResults_FastSim_powheg+pythia6+evtgen_beauty_central",
+        "AnalysisResults_FastSim_powheg+pythia6+evtgen_beauty_mb45",
+        "AnalysisResults_FastSim_powheg+pythia6+evtgen_beauty_mb5",
+        "AnalysisResults_FastSim_powheg+pythia6+evtgen_beauty_uF05uR05",
+        "AnalysisResults_FastSim_powheg+pythia6+evtgen_beauty_uF05uR1",
+        "AnalysisResults_FastSim_powheg+pythia6+evtgen_beauty_uF1uR05_2",
+        "AnalysisResults_FastSim_powheg+pythia6+evtgen_beauty_uF1uR2",
+        "AnalysisResults_FastSim_powheg+pythia6+evtgen_beauty_uF2uR1",
+        "AnalysisResults_FastSim_powheg+pythia6+evtgen_beauty_uF2uR2",
+        "AnalysisResults_FastSim_powheg+pythia6_beauty_noEvtgen"
     };
 
-/*
-    TString fDescB[] = {
-      "central",
-      "muR=1,muF=0.5" ,
-      "muR=0.5,muF=1",
-      "muR=2,muF=1"
-    };
-*/
     TString fDescB[] = {
       "central",
       "m_{b}=4.5",
       "m_{b}=5",
-      "muR=0.5,muF=1",
-      "muR=1,muF=0.5" ,
-      "muR=1,muF=2",
-      "muR=2,muF=1",
-      "muR=0.5,muF=0.5",
-      "muR=2,muF=2",
-      "PDF 21200",
-      "PDF 10800"
+      "#mu_{F}=0.5, #mu_{R}=0.5",
+      "#mu_{F}=0.5, #mu_{R}=1" ,
+      "#mu_{F}=1, #mu_{R}=0.5",
+      "#mu_{F}=1, #mu_{R}=2",
+      "#mu_{F}=2, #mu_{R}=1",
+      "#mu_{F}=2, #mu_{R}=2",
+      "noEvtGen"
     };
 
 
     TString fRunC[] = {
-      "AnalysisResults_FastSim_powheg+pythia6_charm_1549014986",
-      "AnalysisResults_FastSim_powheg+pythia6_charm_1556529849",
-    "AnalysisResults_FastSim_powheg+pythia6_charm_1556531679",
-    "AnalysisResults_FastSim_powheg+pythia6_charm_1557130640",
-    "AnalysisResults_FastSim_powheg+pythia6_charm_1557131019",
-    "AnalysisResults_FastSim_powheg+pythia6_charm_1557314618",
-    "AnalysisResults_FastSim_powheg+pythia6_charm_1557315004",
-    "AnalysisResults_FastSim_powheg+pythia6_charm_1557483108",
-    "AnalysisResults_FastSim_powheg+pythia6_charm_1557488527",
-    "AnalysisResults_FastSim_powheg+pythia6_charm_1557603973",
-    "AnalysisResults_FastSim_powheg+pythia6_charm_1557651402",
-    "AnalysisResults_FastSim_powheg+pythia6_charm_1557694660",
-    "AnalysisResults_FastSim_powheg+pythia6_charm_1557829599",
-    };
+        "AnalysisResults_FastSim_powheg+pythia6_charm_central",
+        "AnalysisResults_FastSim_powheg+pythia6_charm_mc13",
+        "AnalysisResults_FastSim_powheg+pythia6_charm_mc17",
+        "AnalysisResults_FastSim_powheg+pythia6_charm_uF1uR05",
+        "AnalysisResults_FastSim_powheg+pythia6_charm_uF05uR1",
+        "AnalysisResults_FastSim_powheg+pythia6_charm_uF2uR1",
+        "AnalysisResults_FastSim_powheg+pythia6_charm_uF1uR2",
+        "AnalysisResults_FastSim_powheg+pythia6_charm_uF05uR05",
+        "AnalysisResults_FastSim_powheg+pythia6_charm_uF2uR2",
+        "AnalysisResults_FastSim_powheg+pythia6_charm_PDF212001",
+        "AnalysisResults_FastSim_powheg+pythia6_charm_PDF212002",
+        "AnalysisResults_FastSim_powheg+pythia6_charm_PDF212003",
+        "AnalysisResults_FastSim_powheg+pythia6_charm_PDF212004",
+        };
     TString fDescC[] = {
       "central",
       "m_{c}=1.3",
       "m_{c}=1.7",
-      "muR=0.5,muF=1",
-      "muR=1,muF=0.5",
-      "muR=1,muF=2",
-      "muR=2,muF=1",
-      "muR=0.5,muF=0.5",
-      "muR=2,muF=2",
+      "#mu_{F}=1, #mu_{R}=0.5",
+      "#mu_{F}=0.5, #mu_{R}=1" ,
+      "#mu_{F}=2, #mu_{R}=1",
+      "#mu_{F}=1, #mu_{R}=2",
+      "#mu_{F}=0.5, #mu_{R}=0.5",
+      "#mu_{F}=2, #mu_{R}=2",
       "PDF=21200 1",
-         "PDF=21200 2",
-         "PDF=21200 3",
-         "PDF=21200 4",
+      "PDF=21200 2",
+      "PDF=21200 3",
+      "PDF=21200 4",
     };
+

@@ -14,7 +14,7 @@ double ptbinsJet[ptbinsJetN+1] = {2,3,4,5,6,8,10,12,14,20,30,50};//{ 3,4,5,6,8,1
 
 // Pb-Pb binning
 TString out = "out";
-TString jetDataFile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_FINAL/Default_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff.root";
+TString jetDataFile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_finalX06/Default_AnalysisResults_Run2w18b.root/signalExtraction/JetPtSpectra_SB_eff.root";
 
 void compareVariationAnalysis(char *outDir = "JetPtComparison" )
 {

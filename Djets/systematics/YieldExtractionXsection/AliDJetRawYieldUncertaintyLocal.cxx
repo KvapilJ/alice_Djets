@@ -197,7 +197,7 @@ Bool_t AliDJetRawYieldUncertaintyLocal::ExtractInputMassPlotDzeroSideband() {
 
     std::cout << "Extracting input mass plot: " << fpTmin << " to " << fpTmax << std::endl;
 
-    double jetmin = 0, jetmax = 50;
+    double jetmin = 2, jetmax = 50;
     const int ND = 4;
     TDirectoryFile* dir=(TDirectoryFile*)fFileInput->Get(fDirName.Data());
     TList *histList;
@@ -303,7 +303,7 @@ Bool_t AliDJetRawYieldUncertaintyLocal::ExtractInputMassPlotDstarSideband() {
 
     std::cout << "Extracting input mass plot: " << fpTmin << " to " << fpTmax << std::endl;
 
-    double jetmin = 0, jetmax = 50;
+    double jetmin = 2, jetmax = 50;
 
     TDirectoryFile* dir=(TDirectoryFile*)fFileInput->Get(fDirName.Data());
 
@@ -842,7 +842,7 @@ Bool_t AliDJetRawYieldUncertaintyLocal::EvaluateUncertaintyDzeroSideband() {
 		std::cout << "File " << fFileInput << " cannot be opened! check your file path!" << std::endl; return kFALSE;
 	}
 
-  double jetmin = 0, jetmax = 50;
+  double jetmin = 2, jetmax = 50;
   double fzmin = -2, fzmax = 2;
   const int ND = 4;
   TDirectoryFile* dir=(TDirectoryFile*)fFileInput->Get(fDirName.Data());
@@ -1441,7 +1441,7 @@ Bool_t AliDJetRawYieldUncertaintyLocal::EvaluateUncertaintyDstarEffScale() {
 //___________________________________________________________________________________________
 Bool_t AliDJetRawYieldUncertaintyLocal::EvaluateUncertaintyDstarSideband() {
 
-  double jetmin = 0, jetmax = 50;
+  double jetmin = 2, jetmax = 50;
   fzmin = -2;
   fzmax = 2;
 
@@ -1780,7 +1780,7 @@ Bool_t AliDJetRawYieldUncertaintyLocal::EvaluateUncertaintyDstarSideband() {
 //___________________________________________________________________________________________
 Bool_t AliDJetRawYieldUncertaintyLocal::EvaluateUncertaintyDstarSideband_CoherentTrialChoice() {
 
-  double jetmin = 0, jetmax = 50;
+  double jetmin = 2, jetmax = 50;
 
   //Reload input object to extract projections in jet pT for each D-mass pTrange
   fFileInput = TFile::Open(fFileNameInput.Data(),"read");

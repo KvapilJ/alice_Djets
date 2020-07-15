@@ -371,7 +371,7 @@ Bool_t rawJetSpectra(TString outdir, TString prod){
           if(fSystem) SetReflection(fitterp,hmin,hmax,RS,i+firstPtBin); // older way from Fabio's templates for p-Pb
           else SetReflection(fitterp,hmin,hmax,RS,static_cast<Int_t>(ptbinsDA_[i]),static_cast<Int_t>(ptbinsDA_[i+1])); // new for pp (new templates from D-jet code)
         }
-      //  fitterp->SetFixGaussianSigma(reflSig); //added fixing singma on MC
+     //   fitterp->SetFixGaussianSigma(reflSig); //added fixing singma on MC
 
         fitterp->MassFitter(kFALSE);
         //fitterp->PrintFunctions();
@@ -453,6 +453,8 @@ Bool_t rawJetSpectra(TString outdir, TString prod){
           ref1 = (bkgRfit[i]->Integral(min_sb1,max_sb1)/static_cast<Double_t>(hmass[i]->GetBinWidth(1))) - sb1;
           ref2 = (bkgRfit[i]->Integral(min_sb2,max_sb2)/static_cast<Double_t>(hmass[i]->GetBinWidth(1))) - sb2;
         }
+
+        std::cout<<"R/B:"<<ref/bkg<<" (R1+R2)/(B1+B2):"<<(ref1+ref2)/(sb1+sb2)<<std::endl;
 
         Double_t signf=0,signferr=0,sob=0,soberr=0;
         fitterp->Significance(static_cast<Double_t>(fsigmaSignal),signf,signferr);

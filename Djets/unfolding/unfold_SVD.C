@@ -52,7 +52,7 @@ bool isFDUpSpec = 0,
 bool isFDDownSpec = 0,
 bool fDoWeighting = 1,
 bool fdivide = 1,
-bool overflow = 1,  // if to use overflow in the unfolding
+bool overflow = 0,  // if to use overflow in the unfolding
 const int NTrials = 9,//10,  //number of total trials
 bool debug = 0
 )

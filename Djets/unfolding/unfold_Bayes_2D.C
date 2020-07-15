@@ -162,7 +162,7 @@ else LoadRawSpectrum(datafile.Data(),"hData_binned_sub");
 
     //get pripr
     if(isPrior == 1){
-        outDir+=Form("prior%d",priorType);
+        //outDir+=Form("prior%d",priorType);
         gSystem->Exec(Form("mkdir  %s",outDir.Data()));
         gSystem->Exec(Form("mkdir  %s/plots",outDir.Data()));
         RooUnfoldBayes unfoldPrior (response, fRawSpectrum, regBayes);
@@ -303,6 +303,12 @@ else LoadRawSpectrum(datafile.Data(),"hData_binned_sub");
     TH2D* hKineRatioMC = dynamic_cast<TH2D*>(fMeasSpectrumKineNum->Clone("hKineRatioMC"));
     hKineRatioMC->Sumw2("B");
     hKineRatioMC->Divide(hKineRatioMC,fMeasSpectrumKineDen,1,1,"B");
+    for(Int_t x = 1; x<=hKineRatioMC->GetNbinsX();x++){
+        for(Int_t y = 1; y<=hKineRatioMC->GetNbinsY();y++){
+            hKineRatioMC->SetBinError(x,y,0);
+        }
+    }
+
     TH1D* hKineRatioProjMC[fzptJetMeasN];
     TCanvas *cKineRatioProjMC = new TCanvas("cKineRatioProjMC","cKineRatioProjMC",3200,2400);
     cKineRatioProjMC->Divide(3,2);
@@ -327,6 +333,7 @@ else LoadRawSpectrum(datafile.Data(),"hData_binned_sub");
     cKineRatioProjMC->SaveAs(Form("%s/plots/%s_KineDetMult.pdf",outDir.Data(),outName.Data()));
     cKineRatioProjMC->SaveAs(Form("%s/plots/%s_KineDetMult.png",outDir.Data(),outName.Data()));
     fRawSpectrum->Multiply(hKineRatioMC);
+    fMeasSpectrumClosure->Multiply(hKineRatioMC);
     TCanvas *te = new TCanvas ("te","te",1600,800);
     te->Divide(2,1);
     te->cd(1);
@@ -503,6 +510,11 @@ else LoadRawSpectrum(datafile.Data(),"hData_binned_sub");
  TH2D* hKineRatio = dynamic_cast<TH2D*>(fTrueSpectrumKineNum->Clone("hKineRatio"));
  hKineRatio->Sumw2();
  hKineRatio->Divide(hKineRatio,fTrueSpectrumKineDen,1,1,"B");
+ for(Int_t x = 1; x<=hKineRatio->GetNbinsX();x++){
+     for(Int_t y = 1; y<=hKineRatio->GetNbinsY();y++){
+         hKineRatio->SetBinError(x,y,0);
+     }
+ }
  TH1D* hKineRatioProj[fzptJetMeasN];
  TCanvas *cKineRatioProj = new TCanvas("cKineRatioProj","cKineRatioProj",3200,2400);
  cKineRatioProj->Divide(3,2);
@@ -522,8 +534,10 @@ else LoadRawSpectrum(datafile.Data(),"hData_binned_sub");
      hKineRatioProj[i-1]->Draw();
      AnaInfoPt[i-1]->Draw("same");
  std::cout<<i<<" B"<<std::endl;
-     //hunfoldedSpectrumKineEff[i-1] = dynamic_cast<TH1D*>(UnfProjection[regBayes-1][i-1]->Clone(Form("hunfoldedSpectrumKineEff%d",i)));
-     //hunfoldedSpectrumKineEff[i-1]->Divide(hKineRatioProj[i-1]);
+// if(!UnfProjection[regBayes-1][i-1]) std::cout<<"noexist"<<std::endl;
+   //  hunfoldedSpectrumKineEff[i-1] = dynamic_cast<TH1D*>(UnfProjection[regBayes-1][i-1]->Clone(Form("hunfoldedSpectrumKineEff%d",i)));
+   //  std::cout<<i<<"C"<<std::endl;
+   //  hunfoldedSpectrumKineEff[i-1]->Divide(hKineRatioProj[i-1]);
  }
 
 std::cout<<"here"<<std::endl;
@@ -550,9 +564,10 @@ std::cout<<"here"<<std::endl;
             if(ivar == 0)RawProjection[i-1] = fRawSpectrum->ProjectionX(Form("Rawproj%d",i),i,i);
 
             UnfProjection[ivar][i-1] = fUnfoldedBayes[ivar]->ProjectionX(Form("Unfproj%d%d",ivar,i),j,j);
-   //         UnfProjection[ivar][i-1]->Divide(hKineRatioProj[i-1]);
+           // UnfProjection[ivar][i-1]->Divide(hKineRatioProj[i-1]);
             RefoldProjection[ivar][i-1] = refolded[ivar]->ProjectionX(Form("Refoldedproj%d%d",ivar,i),i,i);
             UnfProjectionClosure[ivar][i-1] = fUnfoldedBayesClosure[ivar]->ProjectionX(Form("UnfprojClosure%d%d",ivar,i),j,j);
+            UnfProjectionClosure[ivar][i-1]->Divide(hKineRatioProj[i-1]);
             if(ivar == 0)TrueProjectionClosure[i-1] = fTrueSpectrumClosure->ProjectionX(Form("TrueprojCloseure%d",i),j,j);
       //  }//add
             }
@@ -656,6 +671,7 @@ std::cout<<"D"<<std::endl;
         if(ivar==regBayes-1)hUnfProjRatioDef[i-1] = new TRatioPlot(UnfProjection[regBayes-1][i-1],RawProjection[i-1],"divsym");
         if(ivar==regBayes-1)hRefProjRatioDef[i-1] = new TRatioPlot(RefoldProjection[regBayes-1][i-1],RawProjection[i-1],"divsym");
         if(ivar==regBayes-1)hunfoldedSpectrumKineEff[i-1] = dynamic_cast<TH1D*>(UnfProjection[regBayes-1][i-1]->Clone(Form("hunfoldedSpectrumKineEff%d",i)));
+        if(ivar==regBayes-1)hunfoldedSpectrumKineEff[i-1]->Divide(hKineRatioProj[i-1]);
 
 
          }
@@ -898,27 +914,38 @@ std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MC
       if (jmatch[0]>=0 && jmatch[1]>=0 && -(0.9-fRpar) <= jmatch[4] && jmatch[4] <= 0.9-fRpar && -(0.9-fRpar) <= jmatch[9] && jmatch[9] <= 0.9-fRpar) { //found on reco also + eta true and eta reco cut
           //DpT cuts
           for(Int_t z = 0;z < fzptJetMeasN;z++){
-              if(fzptJetMeasA[z] <= jmatch[1] && jmatch[1] <= fzptJetMeasA[z+1]){ //jet det
-                  if(fzptbinsDA[z][0] <= jmatch[2] && jmatch[2] <= fzptbinsDA[z][fzptbinsDN[z]]){ //D det
-
-                     if(jmatch[0]>=fzbinsJetMeasA[z][0]){
-                         //if(fzptbinsDA[z][0] <= jmatch[7] && jmatch[7] <= fzptbinsDA[z][fzptbinsDN[z]]) //D mc
+              if(fzptJetMeasA[z] <= jmatch[1] && jmatch[1] < fzptJetMeasA[z+1]){ //jet det
+                  if(2 <= jmatch[6] && jmatch[6] < 50){ //jet mc
+                  if(fzptbinsDA[z][0] <= jmatch[2] && jmatch[2] < fzptbinsDA[z][fzptbinsDN[z]]){ //D det
+                    if(fzptbinsDA[z][0] <= jmatch[7] && jmatch[7] < fzptbinsDA[z][fzptbinsDN[z]]){ //D mc
+                        if(jmatch[0]>=fzbinsJetMeasA[z][0] && jmatch[5]>=fzbinsJetTrueAPrompt[z][0]){ //z det, z mc
                              cutOK = true;
+                         }
+                        }
                      }
                   }
               }
           }
+          //c = reco & mc / reco
           for(Int_t z = 0;z < fzptJetMeasN;z++){
-              if(fzptJetMeasA[z] <= jmatch[6] && jmatch[6] <= fzptJetMeasA[z+1]){ //jet mc
-                  if(fzptbinsDA[z][0] <= jmatch[2] && jmatch[2] <= fzptbinsDA[z][fzptbinsDN[z]]){ //D det
-                      cutKineOK = true;
+              if(fzptJetMeasA[z] <= jmatch[6] && jmatch[6] < fzptJetMeasA[z+1]){ //jet mc
+                  if(fzptbinsDA[z][0] <= jmatch[2] && jmatch[2] < fzptbinsDA[z][fzptbinsDN[z]]){ //D det
+                      if(fzptbinsDA[z][0] <= jmatch[7] && jmatch[7] < fzptbinsDA[z][fzptbinsDN[z]]){ //D mc
+                      if(jmatch[5]>=fzbinsJetTrueAPrompt[z][0]){ //z mc
+                        cutKineOK = true;
+                      }
+                      }
                   }
               }
           }
           for(Int_t z = 0;z < fzptJetMeasN;z++){
-              if(fzptJetMeasA[z] <= jmatch[1] && jmatch[1] <= fzptJetMeasA[z+1]){ //jet det
-                  if(fzptbinsDA[z][0] <= jmatch[7] && jmatch[7] <= fzptbinsDA[z][fzptbinsDN[z]]){ //D mc
-                      cutKineMCOK = true;
+              if(fzptJetMeasA[z] <= jmatch[1] && jmatch[1] < fzptJetMeasA[z+1]){ //jet det
+                  if(fzptbinsDA[z][0] <= jmatch[2] && jmatch[2] < fzptbinsDA[z][fzptbinsDN[z]]){ //D det
+                  if(fzptbinsDA[z][0] <= jmatch[7] && jmatch[7] < fzptbinsDA[z][fzptbinsDN[z]]){ //D mc
+                      if(jmatch[0]>=fzbinsJetMeasA[z][0]){ //z det
+                        cutKineMCOK = true;
+                      }
+                      }
                   }
               }
           }
@@ -960,6 +987,8 @@ std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MC
               hTrainTrue->Fill (zShiftTrue,jmatch[6],bincontent*priorWeight/peff);
               hTrain->Fill (jmatch[0],jmatch[1],bincontent*priorWeight/peff);
               response->Fill (jmatch[0],jmatch[1],zShiftTrue,jmatch[6],bincontent*priorWeight/peff);
+              if(jmatch[0]<0.2 || zShiftTrue <0.2)std::cout<<"z bellow 0.4 "<<std::endl;
+              if(jmatch[1]<2 || jmatch[6] <2)std::cout<<"pt bellow 2 "<<std::endl;
               //std::cout<<display<<" "<<jmatch[1]<<" "<<jmatch[2]<<" "<<jmatch[0]<<" "<<jmatch[6]<<" "<<jmatch[7]<<" "<<jmatch[5]<<" "<<bincontent<<std::endl;
               //std::cout<<display<<std::endl;
               //display++;
@@ -971,14 +1000,24 @@ std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MC
                   if(random->Uniform(1) <= RMfraction) RMw++;
                   else SPw++;
               }
+
+
               if(RMw+SPw != bincontent) std::cout<<"WARNING CLOSURE WEIGHT VIOLATION!!! "<<RMw+SPw<<"!="<<bincontent<<std::endl;
               //fill response matrix and reco+true plots for closure test
-              responseClosure->Fill (jmatch[0],jmatch[1],zShiftTrue,jmatch[6],RMw*priorWeight/peff);
+            //responseClosure->Fill (jmatch[0],jmatch[1],zShiftTrue,jmatch[6],/*RMw*priorWeight*/bincontent/peff);
               //std::cout<<i<<" "<<jmatch[1]<<" "<<jmatch[2]<<" "<<jmatch[0]<<" "<<jmatch[6]<<" "<<jmatch[7]<<" "<<jmatch[5]<<std::endl;
-              hTrainTrueClosure->Fill (zShiftTrue,jmatch[6],SPw*priorWeight/peff);
-              hTrainClosure->Fill (jmatch[0],jmatch[1],SPw*priorWeight/peff);
+              //hTrainTrueClosure->Fill (zShiftTrue,jmatch[6],SPw*priorWeight);
+              //hTrainClosure->Fill (jmatch[0],jmatch[1],SPw*priorWeight);
+            //hTrainClosure->Fill (jmatch[0],jmatch[1],bincontent);
               cutOK=false;
           }
+
+
+
+          //jmatch[0]>=0 && jmatch[1]>=0 &&
+
+
+          //data
 
           if(cutKineOK == true){
               //for z_true shift values z=1 into previous bin
@@ -991,8 +1030,8 @@ std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MC
               if(jmatch[0]>1.0) zShiftDet = jmatch[0] - 0.02;
               else zShiftDet = jmatch[0];
               for(Int_t z = 0;z < fzptJetMeasN;z++){
-                  if(fzptJetMeasA[z] <= jmatch[6] && jmatch[6] <= fzptJetMeasA[z+1]){ //jet mc
-                      if(fzbinsJetMeasA[z][0] <= zShiftDet && zShiftDet <= fzbinsJetMeasA[z][fzbinsJetMeasN[z]] && 2 <= jmatch[1] && jmatch[1] <= 50){ //z det
+                  if(fzptJetMeasA[z] <= jmatch[6] && jmatch[6] < fzptJetMeasA[z+1]){ //jet mc
+                      if(fzbinsJetMeasA[z][0] <= zShiftDet && zShiftDet <= fzbinsJetMeasA[z][fzbinsJetMeasN[z]] && 2 <= jmatch[1] && jmatch[1] < 50){ //z det
                          fTrueSpectrumKineNum->Fill(zShiftTrue,jmatch[6]);
                       }
                   }
@@ -1010,7 +1049,7 @@ std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MC
               if(jmatch[5]>1.0) zShiftTrue = jmatch[5] - 0.02;
               else zShiftTrue = jmatch[5];
 
-              if(0 <= jmatch[6] && jmatch[6] <= 50 && 0 <= zShiftTrue){
+              if(2 <= jmatch[6] && jmatch[6] < 50 && 0.2 <= zShiftTrue){
                   //std::cout<<fzptJetMeasA[0]<<" "<<jmatch[1]<<" "<<fzptJetMeasA[fzptJetMeasN]<<" "<<zShiftTrue<<" "<<jmatch[6]<<std::endl;
                   fMeasSpectrumKineNum->Fill(jmatch[0],jmatch[1]);
               }
@@ -1031,6 +1070,66 @@ std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MC
               cutKineMCOK=false;
           }
       }
+
+      Double_t zShiftTruel = -1;
+      if(jmatch[5]>1.0) zShiftTruel = jmatch[5] - 0.02;
+      else zShiftTruel = jmatch[5];
+      Bool_t okok = false;
+      for(Int_t z = 0;z < fzptJetMeasN;z++){
+          if(fzptJetMeasA[z] <= jmatch[6] && jmatch[6] <= fzptJetMeasA[z+1]){ //jet mc
+              if(fzptbinsDA[z][0] <= jmatch[7] && jmatch[7] <= fzptbinsDA[z][fzptbinsDN[z]]){ //D mc
+                  if(-(0.9-fRpar) <= jmatch[9] && jmatch[9] <= 0.9-fRpar)okok = true;
+              }
+          }
+      }
+      Bool_t okokrec = false;
+      for(Int_t z = 0;z < fzptJetMeasN;z++){
+          if(fzptJetMeasA[z] <= jmatch[1] && jmatch[1] <= fzptJetMeasA[z+1]){ //jet det
+              if(fzptbinsDA[z][0] <= jmatch[2] && jmatch[2] <= fzptbinsDA[z][fzptbinsDN[z]]){ //D det
+                         okokrec = true;
+                 }
+              }
+          }
+
+
+      Int_t effBin = -1;
+      Double_t peff = 1.0;
+
+      Double_t RMw = 0;
+      Double_t SPw = 0;
+      for(Int_t iw = 0; iw < bincontent; iw++){
+          if(random->Uniform(1) <= RMfraction) RMw++;
+          else SPw++;
+      }
+
+
+      if(RMw+SPw != bincontent) std::cout<<"WARNING CLOSURE WEIGHT VIOLATION!!! "<<RMw+SPw<<"!="<<bincontent<<std::endl;
+
+
+
+      if(okok){
+        //  if(okokrec && jmatch[0]>=0 && jmatch[1]>=0 && -(0.9-fRpar) <= jmatch[4] && jmatch[4] <= 0.9-fRpar && -(0.9-fRpar) <= jmatch[9] && jmatch[9] <= 0.9-fRpar){
+        //    hTrainTrueClosure->Fill (zShiftTruel,jmatch[6],SPw);
+        //  }
+        //  else
+              hTrainTrueClosure->Fill (zShiftTruel,jmatch[6],SPw);
+      }
+
+
+      if(okokrec && jmatch[0]>=0 && jmatch[1]>=0 && -(0.9-fRpar) <= jmatch[4] && jmatch[4] <= 0.9-fRpar && -(0.9-fRpar) <= jmatch[9] && jmatch[9] <= 0.9-fRpar){
+          if(fuseEff == true){
+            for (Int_t ifile = 0; ifile<fBin;ifile++){
+              if(fzptJetMeasA[ifile] < jmatch[1] && jmatch[1] <= fzptJetMeasA[ifile+1]) effBin = ifile;
+            }
+            if(effBin <0 )std::cout<<"eff error "<<jmatch[6]<<" "<<jmatch[7]<<std::endl;
+            peff = eff[effBin]->GetBinContent(eff[effBin]->FindBin(jmatch[2]));
+          }
+          hTrainClosure->Fill (jmatch[0],jmatch[1],SPw/peff);
+          responseClosure->Fill (jmatch[0],jmatch[1],zShiftTruel,jmatch[6],RMw);
+      }
+          okok=false;
+          okokrec=false;
+
 
     }
 
@@ -1088,6 +1187,7 @@ std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MC
         pvTrue[i]->SetTextSize(0.1f);
         pvTrue[i]->SetTextAlign(11);
         pvTrue[i]->AddText(Form("%d < p_{T,jet}^{true} < %d GeV/#it{c}",static_cast<Int_t>(fzptJetTrueA[i]),static_cast<Int_t>(fzptJetTrueA[i+1])));
+        pvTrue[i]->AddText(Form("%d < p_{T,%s}^{true} < %d GeV/#it{c}",static_cast<Int_t>(fzptbinsDA[i][0]),fDmesonS.Data(),static_cast<Int_t>(fzptbinsDA[i][fzptbinsDN[i]])));
     }
     for(Int_t i = 0;i < fzptJetMeasN;i++){
         pvReco[i] = new TPaveText(0.2,0.3,0.8,0.7,"brNDC");

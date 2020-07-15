@@ -1,0 +1,1405 @@
+  1) BASE/1.0
+  2) AliEn-Runtime/v2-19-le-2
+  3) Python-modules/1.0-1
+  4) ROOT/v6-16-00-1
+  5) cgal/v4.6.3-2
+  6) fastjet/v3.2.1_1.024-alice3-2
+  7) Vc/1.4.1-1
+  8) AliEn-ROOT-Legacy/0.0.7-1
+  9) AliRoot/v5-09-47c-1
+ 10) RooUnfold/V02-00-01-alice4-2
+ 11) AliPhysics/latest-aliroot6-user-next-root6
+Use alienv list to list loaded modules. Use exit to exit this environment.
+[AliPhysics/latest-aliroot6-user-next-root6] ~ $> 
+[AliPhysics/latest-aliroot6-user-next-root6] ~ $> 
+[AliPhysics/latest-aliroot6-user-next-root6] ~ $> 
+[AliPhysics/latest-aliroot6-user-next-root6] ~ $> 
+[AliPhysics/latest-aliroot6-user-next-root6] ~ $> cd Desktop/alice_Djets/Djets/
+[AliPhysics/latest-aliroot6-user-next-root6] ~/Desktop/alice_Djets/Djets $> 
+[AliPhysics/latest-aliroot6-user-next-root6] ~/Desktop/alice_Djets/Djets $> ls
+ 57.png			  configDzeroR4.h	 Final				    'IntegralUnderFitFunc=7865.000000'	 logZ04FD	     Preliminaryplots	        runExample_analysis.csh      train.png
+ AliDJetsPtSpectrum.cxx   configDzeroR6Auro.h	 finalSpectra			     kine2.png				 logZ04finalCorrRM   QA			        runExample.csh		     treff.cxx
+ AliDJetsPtSpectrum.h	  configDzeroR6.h	 hTrain.png			     kineMC.png				 logZ06final	     QMapp		        runExample_main.csh	     trk.png
+ AnalysisResults.root	  configExampleDstar.h	 hTrainTrue.png			     kineMCtrue.png			 logZ06finalCorrRM   README		        runFullsub.csh		     unfolding
+ cc.png			  configExampleDzero.h	'IntegralUnderFitFunc=1308.000000'   kine.png				 logZ06finalRange    Reflection		        runJK.csh		     UnfToy.cxx
+ closure.png		  config.h		'IntegralUnderFitFunc=152.000000'    logDEF				 logZ2		     reflections_cristina       run_main.csh		     UnfToy_cxx_ACLiC_dict_rdict.pcm
+ configDzero3GeV.h	  cuts_pp		'IntegralUnderFitFunc=1538.000000'   logFull				 ls		     response2.png	        run_main_pp.csh		     UnfToy_cxx.d
+ configDzeroAuro.h	  cuts_pPb		'IntegralUnderFitFunc=1970.000000'   logsys				 me.png		     ResponseMatrix	        run_main_sys.csh	     UnfToy_cxx.so
+ configDzeroGian.h	  D0pp13TeVME.root	'IntegralUnderFitFunc=2842.000000'   logZ				 pdf204.png	     response.png	        sparsevstree2.png	     upgrade
+ configDzero.h		  D0pp13TeVTrkEff.root	'IntegralUnderFitFunc=3323.000000'   logZ02final			 pdf2.png	     responseSlice.png	        sparsevstreeNoBinScale.png   verification.cxx
+ configDzeroMY.h	  DsignalExtraction	'IntegralUnderFitFunc=5476.000000'   logZ02finalCorrRM			 plot2.png	     roman		        sparsevstree.png	     verification_cxx_ACLiC_dict_rdict.pcm
+ configDzeroPrelim.h	  efficiency		'IntegralUnderFitFunc=7143.000000'   logZ02test				 plot.png	    'run_analysis (copy).csh'   systematics		     verification_cxx.d
+ configDzeroR2.h	  fastSimulations_conf	'IntegralUnderFitFunc=716.000000'    logZ04				 plotsUnfToy	     run_analysis.csh	        test.csh		     verification_cxx.so
+ configDzeroR4Auro.h	  FDsubtraction		'IntegralUnderFitFunc=7245.000000'   logZ04cut				 POWHEGSim	     run.csh		        test.sh
+[AliPhysics/latest-aliroot6-user-next-root6] ~/Desktop/alice_Djets/Djets $> 
+[AliPhysics/latest-aliroot6-user-next-root6] ~/Desktop/alice_Djets/Djets $> 
+[AliPhysics/latest-aliroot6-user-next-root6] ~/Desktop/alice_Djets/Djets $> 
+[AliPhysics/latest-aliroot6-user-next-root6] ~/Desktop/alice_Djets/Djets $> aliroot -l -x -b -q unfolding/unfold_Bayes_2D.C+'("/home/kvapil/ALICE_HeavyFlavour/RooUnfold-1.1.1/libRooUnfold","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction2D/JetPtSpectrum_FDsub","/mnt/hgfs/vmware/data_R04_050219/MC/AnalysisResults_Run2w18b.root","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix/DetMatrix_prompt5.root","/ResponseMatrix/BkgRM03/0","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4",4,0,0,5,0,0,0,"/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency",1,0,"Cut")'
+
+Processing unfolding/unfold_Bayes_2D.C+("/home/kvapil/ALICE_HeavyFlavour/RooUnfold-1.1.1/libRooUnfold","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction2D/JetPtSpectrum_FDsub","/mnt/hgfs/vmware/data_R04_050219/MC/AnalysisResults_Run2w18b.root","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix/DetMatrix_prompt5.root","/ResponseMatrix/BkgRM03/0","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4",4,0,0,5,0,0,0,"/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency",1,0,"Cut")...
+I-TUnixSystem::ACLiC: creating shared library /home/kvapil/Desktop/alice_Djets/Djets/./unfolding/unfold_Bayes_2D_C.so
+In file included from /home/kvapil/Desktop/alice_Djets/Djets/./unfolding/config.h:31:0,
+                 from /home/kvapil/Desktop/alice_Djets/Djets/./unfolding/unfold_Bayes_2D.C:9,
+                 from /home/kvapil/Desktop/alice_Djets/Djets/./unfolding/unfold_Bayes_2D_C_ACLiC_dict.cxx:40:
+/home/kvapil/alice/sw/ubuntu1804_x86-64/ROOT/v6-16-00-1/include/TSVDUnfold.h:46:7: warning: ‘class TSVDUnfold’ has pointer data members [-Weffc++]
+ class TSVDUnfold : public TObject {
+       ^~~~~~~~~~
+/home/kvapil/alice/sw/ubuntu1804_x86-64/ROOT/v6-16-00-1/include/TSVDUnfold.h:46:7: warning:   but does not override ‘operator=(const TSVDUnfold&)’ [-Weffc++]
+In file included from /home/kvapil/Desktop/alice_Djets/Djets/./unfolding/config.h:38:0,
+                 from /home/kvapil/Desktop/alice_Djets/Djets/./unfolding/unfold_Bayes_2D.C:9,
+                 from /home/kvapil/Desktop/alice_Djets/Djets/./unfolding/unfold_Bayes_2D_C_ACLiC_dict.cxx:40:
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h: In constructor ‘RooUnfoldResponse::RooUnfoldResponse()’:
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:177:8: warning: ‘RooUnfoldResponse::_mdim’ should be initialized in the member initialization list [-Weffc++]
+ inline RooUnfoldResponse::RooUnfoldResponse() :
+        ^~~~~~~~~~~~~~~~~
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:177:8: warning: ‘RooUnfoldResponse::_tdim’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:177:8: warning: ‘RooUnfoldResponse::_nm’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:177:8: warning: ‘RooUnfoldResponse::_nt’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:177:8: warning: ‘RooUnfoldResponse::_mes’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:177:8: warning: ‘RooUnfoldResponse::_fak’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:177:8: warning: ‘RooUnfoldResponse::_tru’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:177:8: warning: ‘RooUnfoldResponse::_res’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:177:8: warning: ‘RooUnfoldResponse::_overflow’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:177:8: warning: ‘RooUnfoldResponse::_vMes’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:177:8: warning: ‘RooUnfoldResponse::_eMes’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:177:8: warning: ‘RooUnfoldResponse::_vFak’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:177:8: warning: ‘RooUnfoldResponse::_vTru’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:177:8: warning: ‘RooUnfoldResponse::_eTru’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:177:8: warning: ‘RooUnfoldResponse::_mRes’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:177:8: warning: ‘RooUnfoldResponse::_eRes’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:177:8: warning: ‘RooUnfoldResponse::_cached’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h: In constructor ‘RooUnfoldResponse::RooUnfoldResponse(const char*, const char*)’:
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:183:8: warning: ‘RooUnfoldResponse::_mdim’ should be initialized in the member initialization list [-Weffc++]
+ inline RooUnfoldResponse::RooUnfoldResponse(const char* name, const char* title) :
+        ^~~~~~~~~~~~~~~~~
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:183:8: warning: ‘RooUnfoldResponse::_tdim’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:183:8: warning: ‘RooUnfoldResponse::_nm’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:183:8: warning: ‘RooUnfoldResponse::_nt’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:183:8: warning: ‘RooUnfoldResponse::_mes’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:183:8: warning: ‘RooUnfoldResponse::_fak’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:183:8: warning: ‘RooUnfoldResponse::_tru’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:183:8: warning: ‘RooUnfoldResponse::_res’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:183:8: warning: ‘RooUnfoldResponse::_overflow’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:183:8: warning: ‘RooUnfoldResponse::_vMes’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:183:8: warning: ‘RooUnfoldResponse::_eMes’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:183:8: warning: ‘RooUnfoldResponse::_vFak’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:183:8: warning: ‘RooUnfoldResponse::_vTru’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:183:8: warning: ‘RooUnfoldResponse::_eTru’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:183:8: warning: ‘RooUnfoldResponse::_mRes’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:183:8: warning: ‘RooUnfoldResponse::_eRes’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:183:8: warning: ‘RooUnfoldResponse::_cached’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h: In constructor ‘RooUnfoldResponse::RooUnfoldResponse(const TString&, const TString&)’:
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:189:8: warning: ‘RooUnfoldResponse::_mdim’ should be initialized in the member initialization list [-Weffc++]
+ inline RooUnfoldResponse::RooUnfoldResponse(const TString& name, const TString& title) :
+        ^~~~~~~~~~~~~~~~~
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:189:8: warning: ‘RooUnfoldResponse::_tdim’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:189:8: warning: ‘RooUnfoldResponse::_nm’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:189:8: warning: ‘RooUnfoldResponse::_nt’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:189:8: warning: ‘RooUnfoldResponse::_mes’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:189:8: warning: ‘RooUnfoldResponse::_fak’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:189:8: warning: ‘RooUnfoldResponse::_tru’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:189:8: warning: ‘RooUnfoldResponse::_res’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:189:8: warning: ‘RooUnfoldResponse::_overflow’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:189:8: warning: ‘RooUnfoldResponse::_vMes’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:189:8: warning: ‘RooUnfoldResponse::_eMes’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:189:8: warning: ‘RooUnfoldResponse::_vFak’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:189:8: warning: ‘RooUnfoldResponse::_vTru’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:189:8: warning: ‘RooUnfoldResponse::_eTru’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:189:8: warning: ‘RooUnfoldResponse::_mRes’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:189:8: warning: ‘RooUnfoldResponse::_eRes’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldResponse.h:189:8: warning: ‘RooUnfoldResponse::_cached’ should be initialized in the member initialization list [-Weffc++]
+In file included from /home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:15:0,
+                 from /home/kvapil/Desktop/alice_Djets/Djets/./unfolding/config.h:39,
+                 from /home/kvapil/Desktop/alice_Djets/Djets/./unfolding/unfold_Bayes_2D.C:9,
+                 from /home/kvapil/Desktop/alice_Djets/Djets/./unfolding/unfold_Bayes_2D_C_ACLiC_dict.cxx:40:
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h: In constructor ‘RooUnfold::RooUnfold()’:
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:160:1: warning: ‘RooUnfold::_minparm’ should be initialized in the member initialization list [-Weffc++]
+ RooUnfold::RooUnfold()
+ ^~~~~~~~~
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:160:1: warning: ‘RooUnfold::_maxparm’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:160:1: warning: ‘RooUnfold::_stepsizeparm’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:160:1: warning: ‘RooUnfold::_defaultparm’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:160:1: warning: ‘RooUnfold::_verbose’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:160:1: warning: ‘RooUnfold::_nm’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:160:1: warning: ‘RooUnfold::_nt’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:160:1: warning: ‘RooUnfold::_overflow’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:160:1: warning: ‘RooUnfold::_NToys’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:160:1: warning: ‘RooUnfold::_unfolded’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:160:1: warning: ‘RooUnfold::_haveCov’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:160:1: warning: ‘RooUnfold::_have_err_mat’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:160:1: warning: ‘RooUnfold::_fail’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:160:1: warning: ‘RooUnfold::_haveErrors’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:160:1: warning: ‘RooUnfold::_haveCovMes’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:160:1: warning: ‘RooUnfold::_res’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:160:1: warning: ‘RooUnfold::_meas’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:160:1: warning: ‘RooUnfold::_measmine’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:160:1: warning: ‘RooUnfold::_rec’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:160:1: warning: ‘RooUnfold::_cov’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:160:1: warning: ‘RooUnfold::_variances’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:160:1: warning: ‘RooUnfold::_err_mat’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:160:1: warning: ‘RooUnfold::_vMes’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:160:1: warning: ‘RooUnfold::_eMes’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:160:1: warning: ‘RooUnfold::_covMes’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:160:1: warning: ‘RooUnfold::_covL’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h: In constructor ‘RooUnfold::RooUnfold(const char*, const char*)’:
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:168:1: warning: ‘RooUnfold::_minparm’ should be initialized in the member initialization list [-Weffc++]
+ RooUnfold::RooUnfold (const char*    name, const char*    title)
+ ^~~~~~~~~
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:168:1: warning: ‘RooUnfold::_maxparm’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:168:1: warning: ‘RooUnfold::_stepsizeparm’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:168:1: warning: ‘RooUnfold::_defaultparm’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:168:1: warning: ‘RooUnfold::_verbose’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:168:1: warning: ‘RooUnfold::_nm’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:168:1: warning: ‘RooUnfold::_nt’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:168:1: warning: ‘RooUnfold::_overflow’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:168:1: warning: ‘RooUnfold::_NToys’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:168:1: warning: ‘RooUnfold::_unfolded’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:168:1: warning: ‘RooUnfold::_haveCov’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:168:1: warning: ‘RooUnfold::_have_err_mat’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:168:1: warning: ‘RooUnfold::_fail’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:168:1: warning: ‘RooUnfold::_haveErrors’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:168:1: warning: ‘RooUnfold::_haveCovMes’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:168:1: warning: ‘RooUnfold::_res’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:168:1: warning: ‘RooUnfold::_meas’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:168:1: warning: ‘RooUnfold::_measmine’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:168:1: warning: ‘RooUnfold::_rec’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:168:1: warning: ‘RooUnfold::_cov’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:168:1: warning: ‘RooUnfold::_variances’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:168:1: warning: ‘RooUnfold::_err_mat’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:168:1: warning: ‘RooUnfold::_vMes’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:168:1: warning: ‘RooUnfold::_eMes’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:168:1: warning: ‘RooUnfold::_covMes’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:168:1: warning: ‘RooUnfold::_covL’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h: In constructor ‘RooUnfold::RooUnfold(const TString&, const TString&)’:
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:176:1: warning: ‘RooUnfold::_minparm’ should be initialized in the member initialization list [-Weffc++]
+ RooUnfold::RooUnfold (const TString& name, const TString& title)
+ ^~~~~~~~~
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:176:1: warning: ‘RooUnfold::_maxparm’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:176:1: warning: ‘RooUnfold::_stepsizeparm’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:176:1: warning: ‘RooUnfold::_defaultparm’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:176:1: warning: ‘RooUnfold::_verbose’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:176:1: warning: ‘RooUnfold::_nm’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:176:1: warning: ‘RooUnfold::_nt’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:176:1: warning: ‘RooUnfold::_overflow’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:176:1: warning: ‘RooUnfold::_NToys’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:176:1: warning: ‘RooUnfold::_unfolded’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:176:1: warning: ‘RooUnfold::_haveCov’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:176:1: warning: ‘RooUnfold::_have_err_mat’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:176:1: warning: ‘RooUnfold::_fail’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:176:1: warning: ‘RooUnfold::_haveErrors’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:176:1: warning: ‘RooUnfold::_haveCovMes’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:176:1: warning: ‘RooUnfold::_res’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:176:1: warning: ‘RooUnfold::_meas’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:176:1: warning: ‘RooUnfold::_measmine’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:176:1: warning: ‘RooUnfold::_rec’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:176:1: warning: ‘RooUnfold::_cov’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:176:1: warning: ‘RooUnfold::_variances’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:176:1: warning: ‘RooUnfold::_err_mat’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:176:1: warning: ‘RooUnfold::_vMes’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:176:1: warning: ‘RooUnfold::_eMes’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:176:1: warning: ‘RooUnfold::_covMes’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfold.h:176:1: warning: ‘RooUnfold::_covL’ should be initialized in the member initialization list [-Weffc++]
+In file included from /home/kvapil/Desktop/alice_Djets/Djets/./unfolding/config.h:39:0,
+                 from /home/kvapil/Desktop/alice_Djets/Djets/./unfolding/unfold_Bayes_2D.C:9,
+                 from /home/kvapil/Desktop/alice_Djets/Djets/./unfolding/unfold_Bayes_2D_C_ACLiC_dict.cxx:40:
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h: In constructor ‘RooUnfoldBayes::RooUnfoldBayes()’:
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:101:1: warning: ‘RooUnfoldBayes::_niter’ should be initialized in the member initialization list [-Weffc++]
+ RooUnfoldBayes::RooUnfoldBayes()
+ ^~~~~~~~~~~~~~
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:101:1: warning: ‘RooUnfoldBayes::_smoothit’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:101:1: warning: ‘RooUnfoldBayes::_nc’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:101:1: warning: ‘RooUnfoldBayes::_ne’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:101:1: warning: ‘RooUnfoldBayes::_nbartrue’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:101:1: warning: ‘RooUnfoldBayes::_nEstj’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:101:1: warning: ‘RooUnfoldBayes::_nCi’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:101:1: warning: ‘RooUnfoldBayes::_nbarCi’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:101:1: warning: ‘RooUnfoldBayes::_efficiencyCi’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:101:1: warning: ‘RooUnfoldBayes::_Nji’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:101:1: warning: ‘RooUnfoldBayes::_Mij’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:101:1: warning: ‘RooUnfoldBayes::_Vij’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:101:1: warning: ‘RooUnfoldBayes::_VnEstij’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:101:1: warning: ‘RooUnfoldBayes::_dnCidnEj’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h: In constructor ‘RooUnfoldBayes::RooUnfoldBayes(const char*, const char*)’:
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:109:1: warning: ‘RooUnfoldBayes::_niter’ should be initialized in the member initialization list [-Weffc++]
+ RooUnfoldBayes::RooUnfoldBayes (const char* name, const char* title)
+ ^~~~~~~~~~~~~~
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:109:1: warning: ‘RooUnfoldBayes::_smoothit’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:109:1: warning: ‘RooUnfoldBayes::_nc’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:109:1: warning: ‘RooUnfoldBayes::_ne’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:109:1: warning: ‘RooUnfoldBayes::_nbartrue’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:109:1: warning: ‘RooUnfoldBayes::_nEstj’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:109:1: warning: ‘RooUnfoldBayes::_nCi’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:109:1: warning: ‘RooUnfoldBayes::_nbarCi’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:109:1: warning: ‘RooUnfoldBayes::_efficiencyCi’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:109:1: warning: ‘RooUnfoldBayes::_Nji’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:109:1: warning: ‘RooUnfoldBayes::_Mij’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:109:1: warning: ‘RooUnfoldBayes::_Vij’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:109:1: warning: ‘RooUnfoldBayes::_VnEstij’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:109:1: warning: ‘RooUnfoldBayes::_dnCidnEj’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h: In constructor ‘RooUnfoldBayes::RooUnfoldBayes(const TString&, const TString&)’:
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:117:1: warning: ‘RooUnfoldBayes::_niter’ should be initialized in the member initialization list [-Weffc++]
+ RooUnfoldBayes::RooUnfoldBayes (const TString& name, const TString& title)
+ ^~~~~~~~~~~~~~
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:117:1: warning: ‘RooUnfoldBayes::_smoothit’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:117:1: warning: ‘RooUnfoldBayes::_nc’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:117:1: warning: ‘RooUnfoldBayes::_ne’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:117:1: warning: ‘RooUnfoldBayes::_nbartrue’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:117:1: warning: ‘RooUnfoldBayes::_nEstj’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:117:1: warning: ‘RooUnfoldBayes::_nCi’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:117:1: warning: ‘RooUnfoldBayes::_nbarCi’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:117:1: warning: ‘RooUnfoldBayes::_efficiencyCi’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:117:1: warning: ‘RooUnfoldBayes::_Nji’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:117:1: warning: ‘RooUnfoldBayes::_Mij’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:117:1: warning: ‘RooUnfoldBayes::_Vij’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:117:1: warning: ‘RooUnfoldBayes::_VnEstij’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBayes.h:117:1: warning: ‘RooUnfoldBayes::_dnCidnEj’ should be initialized in the member initialization list [-Weffc++]
+In file included from /home/kvapil/Desktop/alice_Djets/Djets/./unfolding/config.h:40:0,
+                 from /home/kvapil/Desktop/alice_Djets/Djets/./unfolding/unfold_Bayes_2D.C:9,
+                 from /home/kvapil/Desktop/alice_Djets/Djets/./unfolding/unfold_Bayes_2D_C_ACLiC_dict.cxx:40:
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h: In constructor ‘RooUnfoldSvd::RooUnfoldSvd()’:
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h:86:1: warning: ‘RooUnfoldSvd::_svd’ should be initialized in the member initialization list [-Weffc++]
+ RooUnfoldSvd::RooUnfoldSvd()
+ ^~~~~~~~~~~~
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h:86:1: warning: ‘RooUnfoldSvd::_kreg’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h:86:1: warning: ‘RooUnfoldSvd::_taureg’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h:86:1: warning: ‘RooUnfoldSvd::_use_tau_unfolding’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h:86:1: warning: ‘RooUnfoldSvd::_nb’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h:86:1: warning: ‘RooUnfoldSvd::_ntoyssvd’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h:86:1: warning: ‘RooUnfoldSvd::_meas1d’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h:86:1: warning: ‘RooUnfoldSvd::_train1d’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h:86:1: warning: ‘RooUnfoldSvd::_truth1d’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h:86:1: warning: ‘RooUnfoldSvd::_reshist’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h: In constructor ‘RooUnfoldSvd::RooUnfoldSvd(const char*, const char*)’:
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h:94:1: warning: ‘RooUnfoldSvd::_svd’ should be initialized in the member initialization list [-Weffc++]
+ RooUnfoldSvd::RooUnfoldSvd (const char* name, const char* title)
+ ^~~~~~~~~~~~
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h:94:1: warning: ‘RooUnfoldSvd::_kreg’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h:94:1: warning: ‘RooUnfoldSvd::_taureg’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h:94:1: warning: ‘RooUnfoldSvd::_use_tau_unfolding’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h:94:1: warning: ‘RooUnfoldSvd::_nb’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h:94:1: warning: ‘RooUnfoldSvd::_ntoyssvd’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h:94:1: warning: ‘RooUnfoldSvd::_meas1d’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h:94:1: warning: ‘RooUnfoldSvd::_train1d’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h:94:1: warning: ‘RooUnfoldSvd::_truth1d’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h:94:1: warning: ‘RooUnfoldSvd::_reshist’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h: In constructor ‘RooUnfoldSvd::RooUnfoldSvd(const TString&, const TString&)’:
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h:102:1: warning: ‘RooUnfoldSvd::_svd’ should be initialized in the member initialization list [-Weffc++]
+ RooUnfoldSvd::RooUnfoldSvd (const TString& name, const TString& title)
+ ^~~~~~~~~~~~
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h:102:1: warning: ‘RooUnfoldSvd::_kreg’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h:102:1: warning: ‘RooUnfoldSvd::_taureg’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h:102:1: warning: ‘RooUnfoldSvd::_use_tau_unfolding’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h:102:1: warning: ‘RooUnfoldSvd::_nb’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h:102:1: warning: ‘RooUnfoldSvd::_ntoyssvd’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h:102:1: warning: ‘RooUnfoldSvd::_meas1d’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h:102:1: warning: ‘RooUnfoldSvd::_train1d’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h:102:1: warning: ‘RooUnfoldSvd::_truth1d’ should be initialized in the member initialization list [-Weffc++]
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldSvd.h:102:1: warning: ‘RooUnfoldSvd::_reshist’ should be initialized in the member initialization list [-Weffc++]
+In file included from /home/kvapil/Desktop/alice_Djets/Djets/./unfolding/config.h:41:0,
+                 from /home/kvapil/Desktop/alice_Djets/Djets/./unfolding/unfold_Bayes_2D.C:9,
+                 from /home/kvapil/Desktop/alice_Djets/Djets/./unfolding/unfold_Bayes_2D_C_ACLiC_dict.cxx:40:
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBinByBin.h: In constructor ‘RooUnfoldBinByBin::RooUnfoldBinByBin()’:
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBinByBin.h:52:1: warning: ‘RooUnfoldBinByBin::_factors’ should be initialized in the member initialization list [-Weffc++]
+ RooUnfoldBinByBin::RooUnfoldBinByBin()
+ ^~~~~~~~~~~~~~~~~
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBinByBin.h: In constructor ‘RooUnfoldBinByBin::RooUnfoldBinByBin(const char*, const char*)’:
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBinByBin.h:60:1: warning: ‘RooUnfoldBinByBin::_factors’ should be initialized in the member initialization list [-Weffc++]
+ RooUnfoldBinByBin::RooUnfoldBinByBin (const char* name, const char* title)
+ ^~~~~~~~~~~~~~~~~
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBinByBin.h: In constructor ‘RooUnfoldBinByBin::RooUnfoldBinByBin(const TString&, const TString&)’:
+/home/kvapil/alice/sw/ubuntu1804_x86-64/RooUnfold/V02-00-01-alice4-2/include/RooUnfoldBinByBin.h:68:1: warning: ‘RooUnfoldBinByBin::_factors’ should be initialized in the member initialization list [-Weffc++]
+ RooUnfoldBinByBin::RooUnfoldBinByBin (const TString& name, const TString& title)
+ ^~~~~~~~~~~~~~~~~
+mkdir: cannot create directory ‘/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4’: No such file or directory
+mkdir: cannot create directory ‘/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4/plots’: No such file or directory
+loading: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction2D/JetPtSpectrum_FDsub1.root
+E-TFile::TFile: file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction2D/JetPtSpectrum_FDsub1.root does not exist
+E-LoadRawSpectrum: Raw spectrum file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction2D/JetPtSpectrum_FDsub not found.
+MC file do not contain TTree, trying to open TTree sparse in default path!
+opening: /mnt/hgfs/vmware/data_R04_050219/MC/AnalysisResults_Run2w18bTTree.root
+efffile: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt2.00_5.00.root
+E-TFile::TFile: file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt2.00_5.00.root does not exist
+efffile: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt5.00_7.00.root
+E-TFile::TFile: file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt5.00_7.00.root does not exist
+efffile: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt7.00_10.00.root
+E-TFile::TFile: file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt7.00_10.00.root does not exist
+efffile: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt10.00_15.00.root
+E-TFile::TFile: file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt10.00_15.00.root does not exist
+efffile: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt15.00_50.00.root
+E-TFile::TFile: file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt15.00_50.00.root does not exist
+RooUnfold Init
+binning   0 0.4
+binning   1 0.6
+binning   2 0.7
+binning   3 0.8
+binning   4 0.9
+Response Setup
+Looping over TTree to fill response matrix
+
+ *** Break *** segmentation violation
+^C^C^C^CcRoot > [AliPhysics/latest-aliroot6-user-next-root6] ~/Desktop/alice_Djets/Djets $> 
+[AliPhysics/latest-aliroot6-user-next-root6] ~/Desktop/alice_Djets/Djets $> 
+[AliPhysics/latest-aliroot6-user-next-root6] ~/Desktop/alice_Djets/Djets $> 
+[AliPhysics/latest-aliroot6-user-next-root6] ~/Desktop/alice_Djets/Djets $> 
+[AliPhysics/latest-aliroot6-user-next-root6] ~/Desktop/alice_Djets/Djets $> 
+[AliPhysics/latest-aliroot6-user-next-root6] ~/Desktop/alice_Djets/Djets $> 
+[AliPhysics/latest-aliroot6-user-next-root6] ~/Desktop/alice_Djets/Djets $> 
+[AliPhysics/latest-aliroot6-user-next-root6] ~/Desktop/alice_Djets/Djets $> 
+[AliPhysics/latest-aliroot6-user-next-root6] ~/Desktop/alice_Djets/Djets $> 
+[AliPhysics/latest-aliroot6-user-next-root6] ~/Desktop/alice_Djets/Djets $> 
+[AliPhysics/latest-aliroot6-user-next-root6] ~/Desktop/alice_Djets/Djets $> 
+[AliPhysics/latest-aliroot6-user-next-root6] ~/Desktop/alice_Djets/Djets $> 
+[AliPhysics/latest-aliroot6-user-next-root6] ~/Desktop/alice_Djets/Djets $> 
+[AliPhysics/latest-aliroot6-user-next-root6] ~/Desktop/alice_Djets/Djets $> 
+[AliPhysics/latest-aliroot6-user-next-root6] ~/Desktop/alice_Djets/Djets $> 
+[AliPhysics/latest-aliroot6-user-next-root6] ~/Desktop/alice_Djets/Djets $> aliroot -l -x -b -q unfolding/unfold_Bayes_2D.C+'("/home/kvapil/ALICE_HeavyFlavour/RooUnfold-1.1.1/libRooUnfold","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction2D/JetPtSpectrum_FDsub","/mnt/hgfs/vmware/data_R04_050219/MC/AnalysisResults_Run2w18b.root","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix/DetMatrix_prompt5.root","/ResponseMatrix/BkgRM03/0","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4",4,0,0,5,0,0,0,"/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency",1,0,"Cut")'
+
+Processing unfolding/unfold_Bayes_2D.C+("/home/kvapil/ALICE_HeavyFlavour/RooUnfold-1.1.1/libRooUnfold","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction2D/JetPtSpectrum_FDsub","/mnt/hgfs/vmware/data_R04_050219/MC/AnalysisResults_Run2w18b.root","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix/DetMatrix_prompt5.root","/ResponseMatrix/BkgRM03/0","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4",4,0,0,5,0,0,0,"/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency",1,0,"Cut")...
+loading: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction2D/JetPtSpectrum_FDsub1.root
+I-LoadRawSpectrum: hData_binned_sub loaded.
+loading: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction2D/JetPtSpectrum_FDsub2.root
+loading: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction2D/JetPtSpectrum_FDsub3.root
+loading: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction2D/JetPtSpectrum_FDsub4.root
+loading: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction2D/JetPtSpectrum_FDsub5.root
+ <message repeated 4 times>
+W-TH2D::Sumw2: Sum of squares of weights structure already created
+MC file do not contain TTree, trying to open TTree sparse in default path!
+opening: /mnt/hgfs/vmware/data_R04_050219/MC/AnalysisResults_Run2w18bTTree.root
+efffile: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt2.00_5.00.root
+efffile: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt5.00_7.00.root
+efffile: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt7.00_10.00.root
+efffile: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt10.00_15.00.root
+efffile: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt15.00_50.00.root
+RooUnfold Init
+binning   0 0.4
+binning   1 0.6
+binning   2 0.7
+binning   3 0.8
+binning   4 0.9
+Response Setup
+Looping over TTree to fill response matrix
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4/plots/Unfolding2D_Response_MeasuredTrue.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4/plots/Unfolding2D_Response_MeasuredTrue.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4/plots/Unfolding2D_Response_MeasuredTrue_Closure.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4/plots/Unfolding2D_Response_MeasuredTrue_Closure.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4/plots/Unfolding2D_ResponseMatrix.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4/plots/Unfolding2D_ResponseMatrix.pdf has been created
+1 reco under 0 over 0
+2 reco under 0 over 0
+3 reco under 0 over 0
+4 reco under 0 over 0
+5 reco under 0 over 0
+6 reco under 0 over 0
+7 reco under 0 over 0
+8 reco under 0 over 0
+9 reco under 0 over 0
+10 reco under 0 over 0
+11 reco under 0 over 0
+12 reco under 0 over 0
+13 reco under 0 over 0
+14 reco under 0 over 0
+15 reco under 0 over 0
+16 reco under 0 over 0
+17 reco under 0 over 0
+18 reco under 0 over 0
+19 reco under 0 over 0
+20 reco under 0 over 0
+21 reco under 0 over 0
+22 reco under 0 over 0
+23 reco under 0 over 0
+24 reco under 0 over 0
+25 reco under 0 over 0
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4/plots/Unfolding2D_Response_Slice.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4/plots/Unfolding2D_Response_Slice.pdf has been created
+raw Int: 572021 meas Int 1.5314e+07 10% 8.43881e+06 ratio 55.1051
+legend 0
+legend 1
+legend 2
+legend 3
+legend 4
+U
+1 A
+W-TH1D::Sumw2: Sum of squares of weights structure already created
+1 B
+2 A
+2 B
+3 A
+3 B
+4 A
+4 B
+5 A
+5 B
+ <message repeated 4 times>
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4/plots/unfoldedSpectrum_KineDetMult.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4/plots/unfoldedSpectrum_KineDetMult.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4/plots/unfoldedSpectrum_unfSpectra.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4/plots/unfoldedSpectrum_unfSpectra.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4/plots/unfoldedSpectrum_Pearson.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4/plots/unfoldedSpectrum_Pearson.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4/plots/unfoldedSpectrum_foldedRatio.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4/plots/unfoldedSpectrum_foldedRatio.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4/plots/unfoldedSpectrum_unfRatio.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4/plots/unfoldedSpectrum_unfRatio.png has been created
+U
+1 A
+W-TH1D::Sumw2: Sum of squares of weights structure already created
+1 B
+2 A
+2 B
+3 A
+3 B
+4 A
+4 B
+5 A
+5 B
+here
+1 1
+3.5 3.5
+C
+D
+2 2
+6 6
+C
+D
+3 3
+8.5 8.5
+C
+D
+4 4
+12.5 12.5
+C
+D
+5 5
+32.5 32.5
+C
+D
+1 1
+3.5 3.5
+C
+D
+2 2
+6 6
+C
+D
+3 3
+8.5 8.5
+C
+D
+4 4
+12.5 12.5
+C
+D
+5 5
+32.5 32.5
+C
+D
+1 1
+3.5 3.5
+C
+D
+2 2
+6 6
+C
+D
+3 3
+8.5 8.5
+C
+D
+4 4
+12.5 12.5
+C
+D
+5 5
+32.5 32.5
+C
+D
+1 1
+3.5 3.5
+C
+D
+2 2
+6 6
+C
+D
+3 3
+8.5 8.5
+C
+D
+4 4
+12.5 12.5
+C
+D
+5 5
+32.5 32.5
+C
+D
+1 1
+3.5 3.5
+C
+D
+2 2
+6 6
+C
+D
+3 3
+8.5 8.5
+C
+D
+4 4
+12.5 12.5
+C
+D
+5 5
+32.5 32.5
+C
+D
+1 1
+3.5 3.5
+C
+D
+2 2
+6 6
+C
+D
+3 3
+8.5 8.5
+C
+D
+4 4
+12.5 12.5
+C
+D
+5 5
+32.5 32.5
+C
+D
+1 1
+3.5 3.5
+C
+D
+2 2
+6 6
+C
+D
+3 3
+8.5 8.5
+C
+D
+4 4
+12.5 12.5
+C
+D
+5 5
+32.5 32.5
+C
+D
+1 1
+3.5 3.5
+C
+D
+2 2
+6 6
+C
+D
+3 3
+8.5 8.5
+C
+D
+4 4
+12.5 12.5
+C
+D
+5 5
+32.5 32.5
+C
+D
+1 1
+3.5 3.5
+C
+D
+2 2
+6 6
+C
+D
+3 3
+8.5 8.5
+C
+D
+4 4
+12.5 12.5
+C
+D
+5 5
+32.5 32.5
+C
+D
+1 1
+3.5 3.5
+C
+D
+2 2
+6 6
+C
+D
+3 3
+8.5 8.5
+C
+D
+4 4
+12.5 12.5
+C
+D
+5 5
+32.5 32.5
+C
+D
+here2
+ <message repeated 4 times>
+W-TH1D::Divide: Dividing histograms with different axis limits
+here3
+ <message repeated 4 times>
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4/plots/unfoldedSpectrum_RefoldingIter.png has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4/plots/unfoldedSpectrum_UnfoldingIter.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4/plots/unfoldedSpectrum_RefoldingIter.pdf has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4/plots/unfoldedSpectrum_UnfoldingIter.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4/plots/unfoldedSpectrum_projections.png has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4/plots/unfoldedSpectrum_projectionsUnc.png has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4/plots/unfoldedSpectrum_projectionsClosure.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4/plots/unfoldedSpectrum_projections.pdf has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4/plots/unfoldedSpectrum_projectionsUnc.pdf has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4/plots/unfoldedSpectrum_projectionsClosure.pdf has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4/plots/unfoldedSpectrum_KineTrueDiv.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_4/plots/unfoldedSpectrum_KineTrueDiv.png has been created
+UU
+S
+SS
+1 F
+1 F2
+1 F3
+1 F4
+1 F5
+2 F
+2 F2
+2 F3
+2 F4
+2 F5
+3 F
+3 F2
+3 F3
+3 F4
+3 F5
+4 F
+4 F2
+4 F3
+4 F4
+4 F5
+5 F
+5 F2
+5 F3
+5 F4
+5 F5
+SSS
+[AliPhysics/latest-aliroot6-user-next-root6] ~/Desktop/alice_Djets/Djets $> 
+[AliPhysics/latest-aliroot6-user-next-root6] ~/Desktop/alice_Djets/Djets $> aliroot -l -x -b -q unfolding/unfold_Bayes_2D.C+'("/home/kvapil/ALICE_HeavyFlavour/RooUnfold-1.1.1/libRooUnfold","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction2D/JetPtSpectrum_FDsub","/mnt/hgfs/vmware/data_R04_050219/MC/AnalysisResults_Run2w18b.root","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix/DetMatrix_prompt5.root","/ResponseMatrix/BkgRM03/0","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5",5,0,0,5,0,0,0,"/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency",1,0,"Cut")'
+
+Processing unfolding/unfold_Bayes_2D.C+("/home/kvapil/ALICE_HeavyFlavour/RooUnfold-1.1.1/libRooUnfold","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction2D/JetPtSpectrum_FDsub","/mnt/hgfs/vmware/data_R04_050219/MC/AnalysisResults_Run2w18b.root","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix/DetMatrix_prompt5.root","/ResponseMatrix/BkgRM03/0","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5",5,0,0,5,0,0,0,"/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency",1,0,"Cut")...
+mkdir: cannot create directory ‘/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5’: File exists
+mkdir: cannot create directory ‘/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/plots’: File exists
+loading: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction2D/JetPtSpectrum_FDsub1.root
+I-LoadRawSpectrum: hData_binned_sub loaded.
+loading: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction2D/JetPtSpectrum_FDsub2.root
+loading: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction2D/JetPtSpectrum_FDsub3.root
+loading: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction2D/JetPtSpectrum_FDsub4.root
+loading: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction2D/JetPtSpectrum_FDsub5.root
+ <message repeated 4 times>
+W-TH2D::Sumw2: Sum of squares of weights structure already created
+MC file do not contain TTree, trying to open TTree sparse in default path!
+opening: /mnt/hgfs/vmware/data_R04_050219/MC/AnalysisResults_Run2w18bTTree.root
+efffile: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt2.00_5.00.root
+efffile: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt5.00_7.00.root
+efffile: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt7.00_10.00.root
+efffile: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt10.00_15.00.root
+efffile: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt15.00_50.00.root
+RooUnfold Init
+binning   0 0.4
+binning   1 0.6
+binning   2 0.7
+binning   3 0.8
+binning   4 0.9
+Response Setup
+Looping over TTree to fill response matrix
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/plots/Unfolding2D_Response_MeasuredTrue.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/plots/Unfolding2D_Response_MeasuredTrue.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/plots/Unfolding2D_Response_MeasuredTrue_Closure.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/plots/Unfolding2D_Response_MeasuredTrue_Closure.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/plots/Unfolding2D_ResponseMatrix.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/plots/Unfolding2D_ResponseMatrix.pdf has been created
+1 reco under 0 over 0
+2 reco under 0 over 0
+3 reco under 0 over 0
+4 reco under 0 over 0
+5 reco under 0 over 0
+6 reco under 0 over 0
+7 reco under 0 over 0
+8 reco under 0 over 0
+9 reco under 0 over 0
+10 reco under 0 over 0
+11 reco under 0 over 0
+12 reco under 0 over 0
+13 reco under 0 over 0
+14 reco under 0 over 0
+15 reco under 0 over 0
+16 reco under 0 over 0
+17 reco under 0 over 0
+18 reco under 0 over 0
+19 reco under 0 over 0
+20 reco under 0 over 0
+21 reco under 0 over 0
+22 reco under 0 over 0
+23 reco under 0 over 0
+24 reco under 0 over 0
+25 reco under 0 over 0
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/plots/Unfolding2D_Response_Slice.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/plots/Unfolding2D_Response_Slice.pdf has been created
+raw Int: 572021 meas Int 1.5314e+07 10% 8.42996e+06 ratio 55.0473
+legend 0
+legend 1
+legend 2
+legend 3
+legend 4
+U
+1 A
+W-TH1D::Sumw2: Sum of squares of weights structure already created
+1 B
+2 A
+2 B
+3 A
+3 B
+4 A
+4 B
+5 A
+5 B
+ <message repeated 4 times>
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/plots/unfoldedSpectrum_KineDetMult.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/plots/unfoldedSpectrum_KineDetMult.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/plots/unfoldedSpectrum_unfSpectra.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/plots/unfoldedSpectrum_unfSpectra.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/plots/unfoldedSpectrum_Pearson.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/plots/unfoldedSpectrum_Pearson.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/plots/unfoldedSpectrum_foldedRatio.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/plots/unfoldedSpectrum_foldedRatio.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/plots/unfoldedSpectrum_unfRatio.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/plots/unfoldedSpectrum_unfRatio.png has been created
+U
+1 A
+W-TH1D::Sumw2: Sum of squares of weights structure already created
+1 B
+2 A
+2 B
+3 A
+3 B
+4 A
+4 B
+5 A
+5 B
+here
+1 1
+3.5 3.5
+C
+D
+2 2
+6 6
+C
+D
+3 3
+8.5 8.5
+C
+D
+4 4
+12.5 12.5
+C
+D
+5 5
+32.5 32.5
+C
+D
+1 1
+3.5 3.5
+C
+D
+2 2
+6 6
+C
+D
+3 3
+8.5 8.5
+C
+D
+4 4
+12.5 12.5
+C
+D
+5 5
+32.5 32.5
+C
+D
+1 1
+3.5 3.5
+C
+D
+2 2
+6 6
+C
+D
+3 3
+8.5 8.5
+C
+D
+4 4
+12.5 12.5
+C
+D
+5 5
+32.5 32.5
+C
+D
+1 1
+3.5 3.5
+C
+D
+2 2
+6 6
+C
+D
+3 3
+8.5 8.5
+C
+D
+4 4
+12.5 12.5
+C
+D
+5 5
+32.5 32.5
+C
+D
+1 1
+3.5 3.5
+C
+D
+2 2
+6 6
+C
+D
+3 3
+8.5 8.5
+C
+D
+4 4
+12.5 12.5
+C
+D
+5 5
+32.5 32.5
+C
+D
+1 1
+3.5 3.5
+C
+D
+2 2
+6 6
+C
+D
+3 3
+8.5 8.5
+C
+D
+4 4
+12.5 12.5
+C
+D
+5 5
+32.5 32.5
+C
+D
+1 1
+3.5 3.5
+C
+D
+2 2
+6 6
+C
+D
+3 3
+8.5 8.5
+C
+D
+4 4
+12.5 12.5
+C
+D
+5 5
+32.5 32.5
+C
+D
+1 1
+3.5 3.5
+C
+D
+2 2
+6 6
+C
+D
+3 3
+8.5 8.5
+C
+D
+4 4
+12.5 12.5
+C
+D
+5 5
+32.5 32.5
+C
+D
+1 1
+3.5 3.5
+C
+D
+2 2
+6 6
+C
+D
+3 3
+8.5 8.5
+C
+D
+4 4
+12.5 12.5
+C
+D
+5 5
+32.5 32.5
+C
+D
+1 1
+3.5 3.5
+C
+D
+2 2
+6 6
+C
+D
+3 3
+8.5 8.5
+C
+D
+4 4
+12.5 12.5
+C
+D
+5 5
+32.5 32.5
+C
+D
+here2
+ <message repeated 4 times>
+W-TH1D::Divide: Dividing histograms with different axis limits
+here3
+ <message repeated 4 times>
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/plots/unfoldedSpectrum_RefoldingIter.png has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/plots/unfoldedSpectrum_UnfoldingIter.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/plots/unfoldedSpectrum_RefoldingIter.pdf has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/plots/unfoldedSpectrum_UnfoldingIter.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/plots/unfoldedSpectrum_projections.png has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/plots/unfoldedSpectrum_projectionsUnc.png has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/plots/unfoldedSpectrum_projectionsClosure.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/plots/unfoldedSpectrum_projections.pdf has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/plots/unfoldedSpectrum_projectionsUnc.pdf has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/plots/unfoldedSpectrum_projectionsClosure.pdf has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/plots/unfoldedSpectrum_KineTrueDiv.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/plots/unfoldedSpectrum_KineTrueDiv.png has been created
+UU
+S
+SS
+1 F
+1 F2
+1 F3
+1 F4
+1 F5
+2 F
+2 F2
+2 F3
+2 F4
+2 F5
+3 F
+3 F2
+3 F3
+3 F4
+3 F5
+4 F
+4 F2
+4 F3
+4 F4
+4 F5
+5 F
+5 F2
+5 F3
+5 F4
+5 F5
+SSS
+[AliPhysics/latest-aliroot6-user-next-root6] ~/Desktop/alice_Djets/Djets $> 
+[AliPhysics/latest-aliroot6-user-next-root6] ~/Desktop/alice_Djets/Djets $> aliroot -l -x -b -q unfolding/unfold_Bayes_2D.C+'("/home/kvapil/ALICE_HeavyFlavour/RooUnfold-1.1.1/libRooUnfold","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction2D/JetPtSpectrum_FDsub","/mnt/hgfs/vmware/data_R04_050219/MC/AnalysisResults_Run2w18b.root","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix/DetMatrix_prompt5.root","/ResponseMatrix/BkgRM03/0","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6",6,0,0,5,0,0,0,"/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency",1,0,"Cut")'
+
+Processing unfolding/unfold_Bayes_2D.C+("/home/kvapil/ALICE_HeavyFlavour/RooUnfold-1.1.1/libRooUnfold","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction2D/JetPtSpectrum_FDsub","/mnt/hgfs/vmware/data_R04_050219/MC/AnalysisResults_Run2w18b.root","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix/DetMatrix_prompt5.root","/ResponseMatrix/BkgRM03/0","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6",6,0,0,5,0,0,0,"/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency",1,0,"Cut")...
+loading: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction2D/JetPtSpectrum_FDsub1.root
+I-LoadRawSpectrum: hData_binned_sub loaded.
+loading: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction2D/JetPtSpectrum_FDsub2.root
+loading: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction2D/JetPtSpectrum_FDsub3.root
+loading: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction2D/JetPtSpectrum_FDsub4.root
+loading: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction2D/JetPtSpectrum_FDsub5.root
+ <message repeated 4 times>
+W-TH2D::Sumw2: Sum of squares of weights structure already created
+MC file do not contain TTree, trying to open TTree sparse in default path!
+opening: /mnt/hgfs/vmware/data_R04_050219/MC/AnalysisResults_Run2w18bTTree.root
+efffile: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt2.00_5.00.root
+efffile: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt5.00_7.00.root
+efffile: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt7.00_10.00.root
+efffile: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt10.00_15.00.root
+efffile: /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt15.00_50.00.root
+RooUnfold Init
+binning   0 0.4
+binning   1 0.6
+binning   2 0.7
+binning   3 0.8
+binning   4 0.9
+Response Setup
+Looping over TTree to fill response matrix
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6/plots/Unfolding2D_Response_MeasuredTrue.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6/plots/Unfolding2D_Response_MeasuredTrue.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6/plots/Unfolding2D_Response_MeasuredTrue_Closure.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6/plots/Unfolding2D_Response_MeasuredTrue_Closure.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6/plots/Unfolding2D_ResponseMatrix.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6/plots/Unfolding2D_ResponseMatrix.pdf has been created
+1 reco under 0 over 0
+2 reco under 0 over 0
+3 reco under 0 over 0
+4 reco under 0 over 0
+5 reco under 0 over 0
+6 reco under 0 over 0
+7 reco under 0 over 0
+8 reco under 0 over 0
+9 reco under 0 over 0
+10 reco under 0 over 0
+11 reco under 0 over 0
+12 reco under 0 over 0
+13 reco under 0 over 0
+14 reco under 0 over 0
+15 reco under 0 over 0
+16 reco under 0 over 0
+17 reco under 0 over 0
+18 reco under 0 over 0
+19 reco under 0 over 0
+20 reco under 0 over 0
+21 reco under 0 over 0
+22 reco under 0 over 0
+23 reco under 0 over 0
+24 reco under 0 over 0
+25 reco under 0 over 0
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6/plots/Unfolding2D_Response_Slice.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6/plots/Unfolding2D_Response_Slice.pdf has been created
+raw Int: 572021 meas Int 1.5314e+07 10% 8.44935e+06 ratio 55.1739
+legend 0
+legend 1
+legend 2
+legend 3
+legend 4
+U
+1 A
+W-TH1D::Sumw2: Sum of squares of weights structure already created
+1 B
+2 A
+2 B
+3 A
+3 B
+4 A
+4 B
+5 A
+5 B
+ <message repeated 4 times>
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6/plots/unfoldedSpectrum_KineDetMult.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6/plots/unfoldedSpectrum_KineDetMult.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6/plots/unfoldedSpectrum_unfSpectra.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6/plots/unfoldedSpectrum_unfSpectra.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6/plots/unfoldedSpectrum_Pearson.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6/plots/unfoldedSpectrum_Pearson.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6/plots/unfoldedSpectrum_foldedRatio.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6/plots/unfoldedSpectrum_foldedRatio.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6/plots/unfoldedSpectrum_unfRatio.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6/plots/unfoldedSpectrum_unfRatio.png has been created
+U
+1 A
+W-TH1D::Sumw2: Sum of squares of weights structure already created
+1 B
+2 A
+2 B
+3 A
+3 B
+4 A
+4 B
+5 A
+5 B
+here
+1 1
+3.5 3.5
+C
+D
+2 2
+6 6
+C
+D
+3 3
+8.5 8.5
+C
+D
+4 4
+12.5 12.5
+C
+D
+5 5
+32.5 32.5
+C
+D
+1 1
+3.5 3.5
+C
+D
+2 2
+6 6
+C
+D
+3 3
+8.5 8.5
+C
+D
+4 4
+12.5 12.5
+C
+D
+5 5
+32.5 32.5
+C
+D
+1 1
+3.5 3.5
+C
+D
+2 2
+6 6
+C
+D
+3 3
+8.5 8.5
+C
+D
+4 4
+12.5 12.5
+C
+D
+5 5
+32.5 32.5
+C
+D
+1 1
+3.5 3.5
+C
+D
+2 2
+6 6
+C
+D
+3 3
+8.5 8.5
+C
+D
+4 4
+12.5 12.5
+C
+D
+5 5
+32.5 32.5
+C
+D
+1 1
+3.5 3.5
+C
+D
+2 2
+6 6
+C
+D
+3 3
+8.5 8.5
+C
+D
+4 4
+12.5 12.5
+C
+D
+5 5
+32.5 32.5
+C
+D
+1 1
+3.5 3.5
+C
+D
+2 2
+6 6
+C
+D
+3 3
+8.5 8.5
+C
+D
+4 4
+12.5 12.5
+C
+D
+5 5
+32.5 32.5
+C
+D
+1 1
+3.5 3.5
+C
+D
+2 2
+6 6
+C
+D
+3 3
+8.5 8.5
+C
+D
+4 4
+12.5 12.5
+C
+D
+5 5
+32.5 32.5
+C
+D
+1 1
+3.5 3.5
+C
+D
+2 2
+6 6
+C
+D
+3 3
+8.5 8.5
+C
+D
+4 4
+12.5 12.5
+C
+D
+5 5
+32.5 32.5
+C
+D
+1 1
+3.5 3.5
+C
+D
+2 2
+6 6
+C
+D
+3 3
+8.5 8.5
+C
+D
+4 4
+12.5 12.5
+C
+D
+5 5
+32.5 32.5
+C
+D
+1 1
+3.5 3.5
+C
+D
+2 2
+6 6
+C
+D
+3 3
+8.5 8.5
+C
+D
+4 4
+12.5 12.5
+C
+D
+5 5
+32.5 32.5
+C
+D
+here2
+ <message repeated 4 times>
+W-TH1D::Divide: Dividing histograms with different axis limits
+here3
+ <message repeated 4 times>
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6/plots/unfoldedSpectrum_RefoldingIter.png has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6/plots/unfoldedSpectrum_UnfoldingIter.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6/plots/unfoldedSpectrum_RefoldingIter.pdf has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6/plots/unfoldedSpectrum_UnfoldingIter.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6/plots/unfoldedSpectrum_projections.png has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6/plots/unfoldedSpectrum_projectionsUnc.png has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6/plots/unfoldedSpectrum_projectionsClosure.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6/plots/unfoldedSpectrum_projections.pdf has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6/plots/unfoldedSpectrum_projectionsUnc.pdf has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6/plots/unfoldedSpectrum_projectionsClosure.pdf has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6/plots/unfoldedSpectrum_KineTrueDiv.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_6/plots/unfoldedSpectrum_KineTrueDiv.png has been created
+UU
+S
+SS
+1 F
+1 F2
+1 F3
+1 F4
+1 F5
+2 F
+2 F2
+2 F3
+2 F4
+2 F5
+3 F
+3 F2
+3 F3
+3 F4
+3 F5
+4 F
+4 F2
+4 F3
+4 F4
+4 F5
+5 F
+5 F2
+5 F3
+5 F4
+5 F5
+SSS
+[AliPhysics/latest-aliroot6-user-next-root6] ~/Desktop/alice_Djets/Djets $> 
+[AliPhysics/latest-aliroot6-user-next-root6] ~/Desktop/alice_Djets/Djets $> 
+[AliPhysics/latest-aliroot6-user-next-root6] ~/Desktop/alice_Djets/Djets $> 
+[AliPhysics/latest-aliroot6-user-next-root6] ~/Desktop/alice_Djets/Djets $> 
+[AliPhysics/latest-aliroot6-user-next-root6] ~/Desktop/alice_Djets/Djets $> 
+

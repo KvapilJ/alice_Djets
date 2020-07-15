@@ -1,0 +1,887 @@
+0 5 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+mkdir: cannot create directory ‘/mnt/hgfs/vmware/data_R04_050219/MC/reflections/’: File exists
+
+Processing DsignalExtraction/signalExtraction_refl.C("/mnt/hgfs/vmware/data_R04_050219/MC/AnalysisResults_Run2w18b.root","/mnt/hgfs/vmware/data_R04_050219/MC/reflections/AnalysisResults_Run2w18b.root",0,"Cut",0,"kl",0)...
+mkdir: cannot create directory ‘/mnt/hgfs/vmware/data_R04_050219/MC/reflections/AnalysisResults_Run2w18b.root’: File exists
+mkdir: cannot create directory ‘/mnt/hgfs/vmware/data_R04_050219/MC/reflections/AnalysisResults_Run2w18b.root/plots’: File exists
+W-TFile::Append: Replacing existing TH1: hsDphiz_proj_6_2 (Potential memory leak).
+W-TFile::Append: Replacing existing TH1: hsDphiz_proj_7_2 (Potential memory leak).
+ FCN=2388.56 FROM MIGRAD    STATUS=CONVERGED      81 CALLS          82 TOTAL
+                     EDM=1.76533e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralSgn   4.09132e+02   1.43027e+00   3.41386e-02   3.60190e-07
+   2  Mean         1.86532e+00   3.50333e-05   8.89455e-07  -1.01974e+01
+   3  Sigma        9.91671e-03   3.14502e-05   7.50656e-07   1.50265e+01
+ FCN=104.048 FROM HESSE     STATUS=OK             40 CALLS         639 TOTAL
+                     EDM=1.2604e-08    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralRefl   4.26423e+01   1.57711e+00   7.13017e-04  -1.31123e-04
+   2  p1           1.83030e+00   2.78004e-03   1.09209e-06  -2.27541e-02
+   3  p2           5.74454e-02   1.43556e-03   8.18176e-07   4.74117e-02
+   4  p3           3.81947e+01   1.56600e+00   6.82272e-04   3.05342e-05
+   5  p4           1.94377e+00   1.52667e-03   7.53896e-07   5.63873e-02
+   6  p5           3.83083e-02   8.19090e-04   5.56705e-07  -1.55742e-01
+                               ERR DEF= 0.5
+ FCN=2.97193 FROM HESSE     STATUS=OK              5 CALLS          23 TOTAL
+                     EDM=1.04128e-21    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           5.15070e-01   3.81241e-01   7.41994e-05  -1.19702e-10
+ FCN=3864.65 FROM MIGRAD    STATUS=CONVERGED      85 CALLS          86 TOTAL
+                     EDM=9.43979e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralSgn   5.71731e+02   1.69076e+00   5.13290e-02  -8.01922e-04
+   2  Mean         1.86596e+00   3.19636e-05   9.70143e-07  -6.95667e+00
+   3  Sigma        1.07088e-02   2.92586e-05   8.88044e-07  -3.69451e-01
+ FCN=135.207 FROM HESSE     STATUS=OK             40 CALLS         854 TOTAL
+                     EDM=1.09183e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralRefl   3.61393e+01   3.56510e+00   8.32514e-04  -2.90911e-04
+   2  p1           1.76843e+00   5.94507e-03   1.76586e-06   5.32250e-02
+   3  p2           6.16854e-02   3.33094e-03   1.61557e-06   5.66780e-02
+   4  p3           1.05181e+02   3.55224e+00   1.23545e-03   1.49830e-04
+   5  p4           1.92195e+00   2.83637e-03   9.36978e-07   1.00963e-01
+   6  p5           7.07006e-02   1.47879e-03   7.78645e-07  -4.16588e-01
+                               ERR DEF= 0.5
+ FCN=0.134589 FROM HESSE     STATUS=OK              5 CALLS          25 TOTAL
+                     EDM=8.00966e-22    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           6.12208e-01   1.03976e+00   1.08157e-04  -3.84935e-11
+ FCN=4873.04 FROM MIGRAD    STATUS=CONVERGED      76 CALLS          77 TOTAL
+                     EDM=1.79355e-09    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralSgn   5.82185e+02   1.70614e+00   5.81608e-02  -1.18076e-05
+   2  Mean         1.86621e+00   3.36277e-05   1.14542e-06  -6.13843e-01
+   3  Sigma        1.13739e-02   3.12611e-05   1.06484e-06   1.70627e+00
+ FCN=88.6615 FROM HESSE     STATUS=OK             42 CALLS         812 TOTAL
+                     EDM=2.32812e-09    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralRefl   1.29910e+02   1.31795e+00   6.05347e-03   5.97000e-06
+   2  p1           1.88776e+00   1.14868e-03   6.73493e-06  -2.00062e-02
+   3  p2           1.28554e-01   1.71654e-03   7.44225e-06   2.54201e-02
+   4  p3           3.89636e+01   1.34710e+00   4.28817e-03   1.11859e-06
+   5  p4           1.86008e+00   7.20255e-04   4.38768e-06  -3.23215e-02
+   6  p5           3.16851e-02   8.18050e-04   3.63012e-06   2.26509e-02
+                               ERR DEF= 0.5
+ FCN=0.0106081 FROM HESSE     STATUS=OK              5 CALLS          25 TOTAL
+                     EDM=1.68468e-21    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           9.79295e-01   1.58261e+00   1.55370e-04  -3.66775e-11
+ FCN=4315.17 FROM MIGRAD    STATUS=CONVERGED      81 CALLS          82 TOTAL
+                     EDM=3.51158e-09    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralSgn   4.85899e+02   1.55868e+00   5.00008e-02  -2.05520e-05
+   2  Mean         1.86651e+00   3.90131e-05   1.24643e-06  -7.95959e-01
+   3  Sigma        1.20262e-02   3.60490e-05   1.15174e-06  -1.89208e+00
+ FCN=70.8742 FROM HESSE     STATUS=OK             40 CALLS         892 TOTAL
+                     EDM=1.31975e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralRefl   8.77587e+01   1.49750e+00   1.06571e-03  -2.89502e-04
+   2  p1           1.90641e+00   4.52821e-03   2.68616e-06   1.00324e-01
+   3  p2           1.70902e-01   8.04669e-03   3.06672e-06   2.20631e-02
+   4  p3           6.20672e+01   2.52541e+00   8.34991e-04  -2.33196e-04
+   5  p4           1.85711e+00   8.94067e-04   8.41117e-07   4.61178e-02
+   6  p5           5.22176e-02   1.18774e-03   7.04566e-07  -1.15119e-01
+                               ERR DEF= 0.5
+ FCN=0.00498967 FROM HESSE     STATUS=OK              5 CALLS          25 TOTAL
+                     EDM=9.8118e-28    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           9.96724e-01   1.44933e+00   1.41888e-04   3.05649e-14
+ FCN=3071.24 FROM MIGRAD    STATUS=CONVERGED      89 CALLS          90 TOTAL
+                     EDM=1.50723e-10    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralSgn   3.26074e+02   1.27686e+00   3.45574e-02  -6.03576e-06
+   2  Mean         1.86673e+00   5.00237e-05   1.34519e-06  -2.55766e-01
+   3  Sigma        1.26105e-02   4.57807e-05   1.23109e-06  -1.64382e-01
+W-Fit: Abnormal termination of minimization.
+ FCN=83.7307 FROM MIGRAD    STATUS=CALL LIMIT   1785 CALLS        1786 TOTAL
+                     EDM=0.000837089    STRATEGY= 1  ERROR MATRIX UNCERTAINTY  30.5 per cent
+  EXT PARAMETER                APPROXIMATE        STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralRefl   6.78566e+01   1.31114e+00   9.62522e-03  -2.50275e-02
+   2  p1           1.86202e+00   1.06866e-03   1.25042e-06  -7.58779e+00
+   3  p2           7.93104e-02   1.24668e-03   3.52305e-06  -1.63936e+01
+   4  p3           9.69519e+02   9.70433e+02   2.46095e+01  -1.16055e-03
+   5  p4           4.47232e+00   1.19643e+00   2.94461e-02   1.44105e+00
+   6  p5           1.38657e+00   3.49957e-01   7.36518e-03  -1.84856e+00
+                               ERR DEF= 0.5
+ FCN=0.0141534 FROM HESSE     STATUS=OK              5 CALLS          37 TOTAL
+                     EDM=1.5557e-28    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           9.86194e-01   1.19517e+00   1.17539e-04  -1.47587e-14
+ FCN=2227.28 FROM MIGRAD    STATUS=CONVERGED      81 CALLS          82 TOTAL
+                     EDM=6.21752e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralSgn   2.11859e+02   1.02922e+00   2.37226e-02   9.87209e-04
+   2  Mean         1.86680e+00   6.42973e-05   1.47224e-06   2.02291e+00
+   3  Sigma        1.30671e-02   5.89606e-05   1.34999e-06   7.22668e+00
+ FCN=65.2583 FROM MIGRAD    STATUS=FAILED       1353 CALLS        1354 TOTAL
+                     EDM=11.3663    STRATEGY= 1      ERR MATRIX NOT POS-DEF
+  EXT PARAMETER                APPROXIMATE        STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralRefl   5.81153e+01   1.52937e+08  -0.00000e+00   4.05750e-02
+   2  p1           1.87069e+00   1.52937e+08  -0.00000e+00   9.71498e-01
+   3  p2           1.09299e-01   1.52937e+08  -0.00000e+00   1.02879e+01
+   4  p3           9.61110e+06   1.89786e+09   0.00000e+00  -1.93209e-07
+   5  p4          -9.27250e+04   2.42429e+08   0.00000e+00  -3.75030e-07
+   6  p5           6.77597e+05   2.81360e+02   0.00000e+00   2.68916e-06
+                               ERR DEF= 0.5
+ FCN=0.0313411 FROM HESSE     STATUS=OK              5 CALLS          25 TOTAL
+                     EDM=1.52978e-26    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           9.89858e-01   1.00778e+00   9.99463e-05  -1.73566e-13
+ FCN=3189.83 FROM MIGRAD    STATUS=CONVERGED      92 CALLS          93 TOTAL
+                     EDM=2.47012e-12    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralSgn   2.99801e+02   1.22434e+00   3.37694e-02  -1.01239e-06
+   2  Mean         1.86686e+00   5.71001e-05   1.55874e-06   4.90920e-03
+   3  Sigma        1.37628e-02   5.26564e-05   1.43743e-06   3.38744e-02
+ FCN=49.8873 FROM HESSE     STATUS=OK             40 CALLS        1187 TOTAL
+                     EDM=2.65373e-08    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralRefl   7.50192e+01   2.22329e+00   6.35649e-04  -2.12102e-05
+   2  p1           1.89308e+00   3.93161e-03   1.13385e-06   4.97527e-02
+   3  p2           1.10816e-01   3.01732e-03   1.05994e-06   1.61499e-02
+   4  p3           9.02225e+00   2.11599e+00   3.60004e-04  -1.33493e-04
+   5  p4           1.71069e+00   5.79532e-03   3.68980e-06   8.06526e-03
+   6  p5           5.72090e-02   7.21404e-03   2.88642e-06  -9.22046e-03
+                               ERR DEF= 0.5
+ FCN=0.00649978 FROM HESSE     STATUS=OK              5 CALLS          25 TOTAL
+                     EDM=9.79708e-28    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           9.99633e-01   1.25902e+00   1.23350e-04  -3.51585e-14
+ FCN=1535.67 FROM MIGRAD    STATUS=CONVERGED      87 CALLS          88 TOTAL
+                     EDM=2.84383e-11    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralSgn   1.52962e+02   8.74533e-01   1.67393e-02   5.60126e-06
+   2  Mean         1.86699e+00   8.54197e-05   1.62408e-06   5.44293e-02
+   3  Sigma        1.47703e-02   7.63207e-05   1.45109e-06  -5.15691e-02
+ FCN=37.276 FROM HESSE     STATUS=OK             40 CALLS         603 TOTAL
+                     EDM=0.000867407    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralRefl   2.45605e+01   1.90681e+01   1.94408e-03  -7.60433e-04
+   2  p1           1.91193e+00   1.48199e-02   1.08079e-05  -7.52873e-03
+   3  p2           1.08796e-01   2.21853e-02   1.00843e-05   2.46178e-02
+   4  p3           2.45693e+01   1.78293e+01   2.49085e-03   8.69621e-04
+   5  p4           1.78523e+00   1.40156e-01   3.12863e-05   8.22690e-04
+   6  p5           1.85921e-01   4.65383e-02   2.27351e-05  -2.58440e-03
+                               ERR DEF= 0.5
+ FCN=0.0134224 FROM HESSE     STATUS=OK              5 CALLS          25 TOTAL
+                     EDM=1.90711e-27    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           9.86903e-01   9.31915e-01   9.16160e-05   6.62715e-14
+ FCN=1552.35 FROM MIGRAD    STATUS=CONVERGED      85 CALLS          86 TOTAL
+                     EDM=6.0795e-10    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralSgn   1.58698e+02   8.90781e-01   1.71425e-02   1.39774e-05
+   2  Mean         1.86692e+00   8.95789e-05   1.70855e-06   3.60579e-01
+   3  Sigma        1.57511e-02   8.02240e-05   1.53014e-06  -1.28504e-01
+ FCN=32.2885 FROM HESSE     STATUS=OK             40 CALLS        1237 TOTAL
+                     EDM=5.37518e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralRefl   4.93154e+00   2.26452e+00   2.88321e-04   1.16102e-04
+   2  p1           1.87355e+00   6.18297e-03   4.27502e-06  -1.09668e-04
+   3  p2           5.51467e-02   1.15745e-02   3.53010e-06  -3.73523e-02
+   4  p3           4.64329e+01   1.35611e+00   4.44012e-04  -4.44936e-04
+   5  p4           1.88188e+00   3.48895e-03   2.21907e-06  -1.07103e-03
+   6  p5           1.66654e-01   1.20622e-02   2.29290e-06   2.84179e-02
+                               ERR DEF= 0.5
+ FCN=0.0100486 FROM HESSE     STATUS=OK              5 CALLS          25 TOTAL
+                     EDM=9.76266e-28    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           9.90939e-01   9.63490e-01   9.45624e-05  -4.58619e-14
+ FCN=842.638 FROM MIGRAD    STATUS=CONVERGED      92 CALLS          93 TOTAL
+                     EDM=1.7919e-08    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralSgn   8.01718e+01   6.33134e-01   8.97933e-03   1.48809e-04
+   2  Mean         1.86673e+00   1.42268e-04   2.00638e-06   5.81759e-01
+   3  Sigma        1.78557e-02   1.29883e-04   1.83171e-06  -1.16126e+00
+ FCN=40.2735 FROM MIGRAD    STATUS=CALL LIMIT   1780 CALLS        1781 TOTAL
+                     EDM=1.11722e-05    STRATEGY= 1  ERROR MATRIX UNCERTAINTY  13.6 per cent
+  EXT PARAMETER                APPROXIMATE        STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralRefl   1.17577e+01   1.32503e+00   2.39048e-03  -3.42949e-03
+   2  p1           1.86993e+00   4.13627e-03  -8.99585e-06  -7.79538e-01
+   3  p2           8.68802e-02   6.02744e-03   1.65736e-05   4.79371e-01
+   4  p3           1.39889e+02   8.22571e+02   1.46919e+00  -2.22636e-04
+   5  p4           3.03000e+00   9.02877e+00   1.62588e-02   8.93925e-03
+   6  p5           1.58208e+00   6.25099e+00   1.08142e-02   1.61442e-02
+                               ERR DEF= 0.5
+ FCN=0.0423079 FROM HESSE     STATUS=OK              5 CALLS          25 TOTAL
+                     EDM=6.05472e-26    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           9.78033e-01   7.11889e-01   7.09758e-05  -4.88821e-13
+ FCN=199.05 FROM MIGRAD    STATUS=CONVERGED      85 CALLS          86 TOTAL
+                     EDM=5.09306e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralSgn   1.88248e+01   3.06796e-01   2.11880e-03  -1.66011e-04
+   2  Mean         1.86742e+00   3.41356e-04   2.35125e-06  -2.72167e+00
+   3  Sigma        2.08333e-02   3.05617e-04   2.10476e-06   1.53400e+00
+ FCN=52.8233 FROM HESSE     STATUS=NOT POSDEF     40 CALLS         369 TOTAL
+                     EDM=7.2527e-08    STRATEGY= 1      ERR MATRIX NOT POS-DEF
+  EXT PARAMETER                APPROXIMATE        STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralRefl   3.67755e+00   5.09140e-01   4.01225e-05   8.13287e-04
+   2  p1           1.87278e+00   6.95344e-02   1.62678e-06   8.87038e-03
+   3  p2           1.24481e-01   8.55229e-02   1.62590e-06   1.72271e-02
+   4  p3           3.67755e+00   5.09140e-01   4.01224e-05   8.13284e-04
+   5  p4           1.87278e+00   6.95343e-02   1.62678e-06   9.04371e-03
+   6  p5           1.24481e-01   8.55226e-02   1.62590e-06   1.75239e-02
+                               ERR DEF= 0.5
+ FCN=0.967306 FROM HESSE     STATUS=OK              5 CALLS          37 TOTAL
+                     EDM=1.08606e-21    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           8.72698e-01   3.41499e-01   4.67762e-05  -1.36475e-10
+z
+zptjetbin 0
+jes sys 0
+foldtype 0
+foldtype  0
+cut var je:  0
+
+Processing DjetEfficiency.C(1,"/mnt/hgfs/vmware/data_R04_050219/MC/AnalysisResults_Run2w18b.root","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency",5.00,50.00,0,0,"Cut",0,0)...
+jet pT: 5 50 eta 0.5
+jet pT: 5 50 eta 0.5
+W-TH1D::Sumw2: Sum of squares of weights structure already created
+ <message repeated 1 time>
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEffRaw_prompt_jetpt5.00_50.00.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEffRaw_prompt_jetpt5.00_50.00.pdf has been created
+I-TCanvas::Print: SVG file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEffRaw_prompt_jetpt5.00_50.00.svg has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt5.00_50.00.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt5.00_50.00.pdf has been created
+I-TCanvas::Print: SVG file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt5.00_50.00.svg has been created
+
+Processing DjetEfficiency.C(0,"/mnt/hgfs/vmware/data_R04_050219/MC/AnalysisResults_Run2w18b.root","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency",5.00,50.00,0,1,"FD",0,0)...
+mkdir: cannot create directory ‘/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency’: File exists
+jet pT: 5 50 eta 0.5
+jet pT: 5 50 eta 0.5
+W-TH1D::Sumw2: Sum of squares of weights structure already created
+ <message repeated 1 time>
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEffRaw_nonPrompt_jetpt5.00_50.00.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEffRaw_nonPrompt_jetpt5.00_50.00.pdf has been created
+I-TCanvas::Print: SVG file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEffRaw_nonPrompt_jetpt5.00_50.00.svg has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_nonPrompt_jetpt5.00_50.00.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_nonPrompt_jetpt5.00_50.00.pdf has been created
+I-TCanvas::Print: SVG file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_nonPrompt_jetpt5.00_50.00.svg has been created
+
+Processing drawEff.C("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt5.00_50.00.root","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_nonPrompt_jetpt5.00_50.00.root","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency",5.00,50.00,2,36,0)...
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_Sim_log_jetpt5_50.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_Sim_log_jetpt5_50.png has been created
+I-TCanvas::Print: SVG file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_Sim_log_jetpt5_50.svg has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_Sim_jetpt5_50.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_Sim_jetpt5_50.png has been created
+I-TCanvas::Print: SVG file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_Sim_jetpt5_50.svg has been created
+
+Processing signalExtraction_SB.C("/mnt/hgfs/vmware/data_R04_050219/data/AnalysisResults_Run2w18b.root", 1, "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt5.00_50.00.root",1, "/mnt/hgfs/vmware/data_R04_050219/MC/reflections/AnalysisResults_Run2w18b.root/reflectionTemplates_pp.root", 0, "Cut", "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/signalExtraction", 1, 0,"kl",0,0,0,0)...
+Warning in <TFile::Append>: Replacing existing TH1: hsDphiz_proj_3_1_2 (Potential memory leak).
+Warning in <TFile::Append>: Replacing existing TH1: hsDphiz_proj_3_1_2 (Potential memory leak).
+Warning in <TFile::Append>: Replacing existing TH1: hsDphiz_proj_3_1_2 (Potential memory leak).
+Processing bin: 2 3 GeV/c
+
+--- Reflection templates from simulation ---
+   ---> Reflection contribution using directly the histogram from simulation
+
+--- First fit with only background on the side bands - Exclusion region = 4.00 sigma ---
+ FCN=26.9618 FROM MINOS     STATUS=SUCCESSFUL     12 CALLS          75 TOTAL
+                     EDM=1.23187e-10    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  BkgInt       7.85749e+01   7.09253e-01  -6.66905e-04   8.67786e-07
+   2  Slope       -2.72582e+00   7.32618e-02   7.32618e-02  -2.77295e-06
+                               ERR DEF= 0.5
+
+--- Estimate signal counts in the peak region ---
+Compiled based function: funcbkg  based on a functor object.  Ndim = 1, Npar = 2
+   ---> IntegralUnderFitFunc=7294.000000  IntegralUnderHisto=3678.633753   EstimatedSignal=3615.366247
+   ---> Final fit includes reflections
+
+--- Final fit with signal+background on the full range ---
+ FCN=43.8395 FROM MINOS     STATUS=SUCCESSFUL     28 CALLS         227 TOTAL
+                     EDM=2.97234e-11    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  BkgInt       7.56823e+01   6.81490e-01   2.05965e-03  -5.54190e-07
+   2  Slope       -2.77265e+00   7.51244e-02   1.94370e-06   3.61519e-05
+   3  SgnInt       1.76220e+01   3.67088e-01  -1.72816e-03   6.19058e-06
+   4  Mean         1.86797e+00   2.47045e-04   2.47045e-04  -6.36516e-04
+   5  Sigma        9.91671e-03     fixed    
+   6  ReflOverS    1.90175e-01     fixed    
+                               ERR DEF= 0.5
+R/B:0.0604433 (R1+R2)/(B1+B2):0.0670897
+Processing bin: 3 4 GeV/c
+
+--- Reflection templates from simulation ---
+   ---> Reflection contribution using directly the histogram from simulation
+
+--- First fit with only background on the side bands - Exclusion region = 4.00 sigma ---
+ FCN=34.9008 FROM MINOS     STATUS=SUCCESSFUL     12 CALLS          81 TOTAL
+                     EDM=5.60607e-10    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  BkgInt       6.43786e+01   6.48542e-01  -7.08921e-04   1.62096e-06
+   2  Slope       -2.81478e+00   8.12045e-02   8.12045e-02  -3.00001e-06
+                               ERR DEF= 0.5
+
+--- Estimate signal counts in the peak region ---
+Compiled based function: funcbkg  based on a functor object.  Ndim = 1, Npar = 2
+   ---> IntegralUnderFitFunc=8177.000000  IntegralUnderHisto=3172.577781   EstimatedSignal=5004.422219
+   ---> Final fit includes reflections
+
+--- Final fit with signal+background on the full range ---
+ FCN=47.1468 FROM MINOS     STATUS=SUCCESSFUL     28 CALLS         227 TOTAL
+                     EDM=7.19546e-10    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  BkgInt       5.93060e+01   6.28179e-01   1.63028e-03  -3.60644e-07
+   2  Slope       -2.96947e+00   8.69884e-02   1.22965e-05   1.46756e-05
+   3  SgnInt       2.44368e+01   4.05762e-01  -1.31701e-03   5.84436e-06
+   4  Mean         1.86801e+00   2.07723e-04   2.07723e-04  -3.05650e-03
+   5  Sigma        1.07088e-02     fixed    
+   6  ReflOverS    2.27432e-01     fixed    
+                               ERR DEF= 0.5
+R/B:0.126903 (R1+R2)/(B1+B2):0.112268
+Processing bin: 4 5 GeV/c
+
+--- Reflection templates from simulation ---
+   ---> Reflection contribution using directly the histogram from simulation
+
+--- First fit with only background on the side bands - Exclusion region = 4.00 sigma ---
+ FCN=38.2335 FROM MINOS     STATUS=SUCCESSFUL     14 CALLS          80 TOTAL
+                     EDM=6.72351e-11    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  BkgInt       5.22038e+01   5.88648e-01  -7.80793e-04   1.65795e-06
+   2  Slope       -2.87815e+00   9.03441e-02   9.03441e-02  -1.86009e-06
+                               ERR DEF= 0.5
+
+--- Estimate signal counts in the peak region ---
+Compiled based function: funcbkg  based on a functor object.  Ndim = 1, Npar = 2
+   ---> IntegralUnderFitFunc=7644.000000  IntegralUnderHisto=2737.146584   EstimatedSignal=4906.853416
+   ---> Final fit includes reflections
+
+--- Final fit with signal+background on the full range ---
+ FCN=57.9395 FROM MINOS     STATUS=SUCCESSFUL     28 CALLS         221 TOTAL
+                     EDM=2.72122e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  BkgInt       4.79997e+01   5.71792e-01   1.42838e-03   4.26871e-07
+   2  Slope       -3.07281e+00   9.78294e-02   2.09324e-05   1.14537e-05
+   3  SgnInt       2.30659e+01   3.84559e-01  -1.04038e-03   3.06219e-06
+   4  Mean         1.86807e+00   2.26796e-04   2.26796e-04  -2.91799e-02
+   5  Sigma        1.13739e-02     fixed    
+   6  ReflOverS    2.50140e-01     fixed    
+                               ERR DEF= 0.5
+R/B:0.244912 (R1+R2)/(B1+B2):0.112201
+Processing bin: 5 6 GeV/c
+
+--- Reflection templates from simulation ---
+   ---> Reflection contribution using directly the histogram from simulation
+
+--- First fit with only background on the side bands - Exclusion region = 4.00 sigma ---
+ FCN=38.6933 FROM MINOS     STATUS=SUCCESSFUL     14 CALLS          80 TOTAL
+                     EDM=1.27779e-09    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  BkgInt       3.79042e+01   5.07080e-01  -8.51738e-04   2.81613e-06
+   2  Slope       -3.18186e+00   1.06886e-01   1.06886e-01  -6.90182e-07
+                               ERR DEF= 0.5
+
+--- Estimate signal counts in the peak region ---
+Compiled based function: funcbkg  based on a functor object.  Ndim = 1, Npar = 2
+   ---> IntegralUnderFitFunc=5892.000000  IntegralUnderHisto=2080.831716   EstimatedSignal=3811.168284
+   ---> Final fit includes reflections
+
+--- Final fit with signal+background on the full range ---
+ FCN=55.4591 FROM MINOS     STATUS=SUCCESSFUL     28 CALLS         221 TOTAL
+                     EDM=5.41711e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  BkgInt       3.46932e+01   4.91722e-01   1.43540e-03   7.09499e-07
+   2  Slope       -3.35075e+00   1.16251e-01   5.05733e-05   1.61427e-05
+   3  SgnInt       1.77808e+01   3.38671e-01  -1.07116e-03   3.23215e-06
+   4  Mean         1.86834e+00   2.74158e-04   2.74158e-04  -3.84686e-02
+   5  Sigma        1.20262e-02     fixed    
+   6  ReflOverS    2.51189e-01     fixed    
+                               ERR DEF= 0.5
+R/B:0.240155 (R1+R2)/(B1+B2):0.126173
+Processing bin: 6 7 GeV/c
+
+--- Reflection templates from simulation ---
+   ---> Reflection contribution using directly the histogram from simulation
+
+--- First fit with only background on the side bands - Exclusion region = 4.00 sigma ---
+ FCN=40.7975 FROM MINOS     STATUS=SUCCESSFUL     14 CALLS          96 TOTAL
+                     EDM=1.80362e-10    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  BkgInt       1.91026e+01   3.62818e-01  -8.90348e-04  -9.31965e-06
+   2  Slope       -4.04810e+00   1.54274e-01   1.54274e-01   2.65332e-08
+                               ERR DEF= 0.5
+
+--- Estimate signal counts in the peak region ---
+Compiled based function: funcbkg  based on a functor object.  Ndim = 1, Npar = 2
+   ---> IntegralUnderFitFunc=3612.000000  IntegralUnderHisto=1111.782158   EstimatedSignal=2500.217842
+   ---> Final fit includes reflections
+
+--- Final fit with signal+background on the full range ---
+ FCN=55.221 FROM MINOS     STATUS=SUCCESSFUL     28 CALLS         287 TOTAL
+                     EDM=5.43091e-09    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  BkgInt       1.68816e+01   3.54771e-01   1.29259e-03   1.71506e-06
+   2  Slope       -4.36837e+00   1.75969e-01   1.44608e-04   1.70716e-05
+   3  SgnInt       1.18015e+01   2.71396e-01  -1.02037e-03   1.07387e-05
+   4  Mean         1.86812e+00   3.41669e-04   3.41669e-04  -6.11795e-04
+   5  Sigma        1.26105e-02     fixed    
+   6  ReflOverS    2.50998e-01     fixed    
+                               ERR DEF= 0.5
+R/B:0.28877 (R1+R2)/(B1+B2):0.174352
+Processing bin: 7 8 GeV/c
+
+--- Reflection templates from simulation ---
+   ---> Reflection contribution using directly the histogram from simulation
+
+--- First fit with only background on the side bands - Exclusion region = 4.00 sigma ---
+ FCN=40.6126 FROM MINOS     STATUS=SUCCESSFUL     14 CALLS          93 TOTAL
+                     EDM=1.47361e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  BkgInt       1.01844e+01   2.68018e-01  -8.66466e-04  -9.63314e-06
+   2  Slope       -3.97442e+00   2.11096e-01   2.11096e-01   2.17594e-08
+                               ERR DEF= 0.5
+
+--- Estimate signal counts in the peak region ---
+Compiled based function: funcbkg  based on a functor object.  Ndim = 1, Npar = 2
+   ---> IntegralUnderFitFunc=2190.000000  IntegralUnderHisto=615.381199   EstimatedSignal=1574.618801
+   ---> Final fit includes reflections
+
+--- Final fit with signal+background on the full range ---
+ FCN=53.1875 FROM MINOS     STATUS=SUCCESSFUL     28 CALLS         317 TOTAL
+                     EDM=1.80553e-09    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  BkgInt       8.86554e+00   2.65019e-01   1.39487e-03   3.45990e-06
+   2  Slope       -4.41153e+00   2.46940e-01   3.30674e-04   2.81578e-05
+   3  SgnInt       7.27421e+00   2.14013e-01  -1.10773e-03   3.39692e-05
+   4  Mean         1.86791e+00   4.57264e-04   4.57264e-04  -2.79757e-03
+   5  Sigma        1.30671e-02     fixed    
+   6  ReflOverS    2.47506e-01     fixed    
+                               ERR DEF= 0.5
+R/B:0.292212 (R1+R2)/(B1+B2):0.206219
+Processing bin: 8 10 GeV/c
+
+--- Reflection templates from simulation ---
+   ---> Reflection contribution using directly the histogram from simulation
+
+--- First fit with only background on the side bands - Exclusion region = 4.00 sigma ---
+ FCN=36.6168 FROM MINOS     STATUS=SUCCESSFUL     14 CALLS          92 TOTAL
+                     EDM=2.84248e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  BkgInt       1.73023e+01   3.52160e-01  -1.19008e-03   3.64946e-06
+   2  Slope       -3.41722e+00   1.59784e-01   1.59784e-01  -7.05676e-09
+                               ERR DEF= 0.5
+
+--- Estimate signal counts in the peak region ---
+Compiled based function: funcbkg  based on a functor object.  Ndim = 1, Npar = 2
+   ---> IntegralUnderFitFunc=3190.000000  IntegralUnderHisto=1103.949643   EstimatedSignal=2086.050357
+   ---> Final fit includes reflections
+
+--- Final fit with signal+background on the full range ---
+ FCN=48.5139 FROM MINOS     STATUS=SUCCESSFUL     28 CALLS         289 TOTAL
+                     EDM=4.82801e-10    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  BkgInt       1.53514e+01   3.40805e-01   1.51685e-03  -1.24401e-06
+   2  Slope       -3.71228e+00   1.80346e-01   1.28109e-04   4.00392e-05
+   3  SgnInt       1.00186e+01   2.57934e-01  -1.22392e-03   1.14546e-05
+   4  Mean         1.86763e+00   4.12083e-04   4.12083e-04  -4.34112e-04
+   5  Sigma        1.37628e-02     fixed    
+   6  ReflOverS    2.33087e-01     fixed    
+                               ERR DEF= 0.5
+R/B:0.200209 (R1+R2)/(B1+B2):0.148649
+Processing bin: 10 12 GeV/c
+
+--- Reflection templates from simulation ---
+   ---> Reflection contribution using directly the histogram from simulation
+
+--- First fit with only background on the side bands - Exclusion region = 4.00 sigma ---
+ FCN=16.1017 FROM MINOS     STATUS=SUCCESSFUL     14 CALLS          93 TOTAL
+                     EDM=5.42955e-08    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  BkgInt       7.20387e+00   2.31911e-01  -1.10861e-03   2.50409e-05
+   2  Slope       -3.37357e+00   2.48369e-01   2.48369e-01  -4.76399e-08
+                               ERR DEF= 0.5
+
+--- Estimate signal counts in the peak region ---
+Compiled based function: funcbkg  based on a functor object.  Ndim = 1, Npar = 2
+   ---> IntegralUnderFitFunc=1525.000000  IntegralUnderHisto=500.072249   EstimatedSignal=1024.927751
+   ---> Final fit includes reflections
+
+--- Final fit with signal+background on the full range ---
+ FCN=29.7022 FROM MINOS     STATUS=SUCCESSFUL     28 CALLS         306 TOTAL
+                     EDM=2.50097e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  BkgInt       6.34815e+00   2.25190e-01   1.39597e-03   4.59563e-06
+   2  Slope       -3.82397e+00   2.87122e-01   4.20529e-04   6.01960e-05
+   3  SgnInt       4.87873e+00   1.79376e-01  -1.19174e-03   7.93607e-05
+   4  Mean         1.86627e+00   6.32704e-04   6.32704e-04  -6.49231e-03
+   5  Sigma        1.47703e-02     fixed    
+   6  ReflOverS    2.35369e-01     fixed    
+                               ERR DEF= 0.5
+R/B:0.226125 (R1+R2)/(B1+B2):0.16384
+Processing bin: 12 16 GeV/c
+
+--- Reflection templates from simulation ---
+   ---> Reflection contribution using directly the histogram from simulation
+
+--- First fit with only background on the side bands - Exclusion region = 4.00 sigma ---
+ FCN=33.9084 FROM MINOS     STATUS=SUCCESSFUL     14 CALLS          91 TOTAL
+                     EDM=7.34301e-08    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  BkgInt       9.73109e+00   2.73039e-01  -1.28308e-03   4.83164e-05
+   2  Slope       -3.29164e+00   2.13944e-01   2.13944e-01  -8.31585e-08
+                               ERR DEF= 0.5
+
+--- Estimate signal counts in the peak region ---
+Compiled based function: funcbkg  based on a functor object.  Ndim = 1, Npar = 2
+   ---> IntegralUnderFitFunc=1790.000000  IntegralUnderHisto=696.840425   EstimatedSignal=1093.159575
+   ---> Final fit includes reflections
+
+--- Final fit with signal+background on the full range ---
+ FCN=51.1894 FROM MINOS     STATUS=SUCCESSFUL     28 CALLS         278 TOTAL
+                     EDM=9.97867e-08    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  BkgInt       8.67833e+00   2.60903e-01   2.02203e-03   6.18310e-06
+   2  Slope       -3.63979e+00   2.40887e-01   2.95444e-04   9.99801e-05
+   3  SgnInt       5.26791e+00   1.93121e-01  -1.56210e-03   1.27153e-04
+   4  Mean         1.86700e+00   6.92619e-04   6.92619e-04  -2.21614e-03
+   5  Sigma        1.57511e-02     fixed    
+   6  ReflOverS    2.39903e-01     fixed    
+                               ERR DEF= 0.5
+R/B:0.191524 (R1+R2)/(B1+B2):0.123007
+Processing bin: 16 24 GeV/c
+
+--- Reflection templates from simulation ---
+   ---> Reflection contribution using directly the histogram from simulation
+
+--- First fit with only background on the side bands - Exclusion region = 4.00 sigma ---
+ FCN=28.1424 FROM MINOS     STATUS=SUCCESSFUL     14 CALLS          92 TOTAL
+                     EDM=1.34394e-08    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  BkgInt       4.61289e+00   1.93895e-01  -1.42926e-03   1.64775e-05
+   2  Slope       -3.71468e+00   3.16455e-01   3.16455e-01  -2.78043e-08
+                               ERR DEF= 0.5
+
+--- Estimate signal counts in the peak region ---
+Compiled based function: funcbkg  based on a functor object.  Ndim = 1, Npar = 2
+   ---> IntegralUnderFitFunc=901.000000  IntegralUnderHisto=382.667899   EstimatedSignal=518.332101
+   ---> Final fit includes reflections
+
+--- Final fit with signal+background on the full range ---
+ FCN=41.5834 FROM MINOS     STATUS=SUCCESSFUL     28 CALLS         307 TOTAL
+                     EDM=6.66757e-08    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  BkgInt       4.12528e+00   1.84572e-01   2.21502e-03  -6.45557e-05
+   2  Slope       -4.08096e+00   3.57489e-01   1.12101e-03   2.30249e-04
+   3  SgnInt       2.42269e+00   1.34390e-01  -1.72966e-03   6.40290e-04
+   4  Mean         1.86632e+00   1.19851e-03   1.19851e-03   1.48599e-03
+   5  Sigma        1.78557e-02     fixed    
+   6  ReflOverS    2.60898e-01     fixed    
+                               ERR DEF= 0.5
+R/B:0.202464 (R1+R2)/(B1+B2):0.117917
+Processing bin: 24 36 GeV/c
+
+--- Reflection templates from simulation ---
+   ---> Reflection contribution using directly the histogram from simulation
+
+--- First fit with only background on the side bands - Exclusion region = 4.00 sigma ---
+ FCN=28.312 FROM MINOS     STATUS=SUCCESSFUL     14 CALLS          98 TOTAL
+                     EDM=2.49082e-11    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  BkgInt       1.02341e+00   9.74817e-02  -1.76326e-03   6.00175e-03
+   2  Slope       -2.79724e+00   6.73848e-01   6.73848e-01  -5.53026e-06
+                               ERR DEF= 0.5
+
+--- Estimate signal counts in the peak region ---
+Compiled based function: funcbkg  based on a functor object.  Ndim = 1, Npar = 2
+   ---> IntegralUnderFitFunc=224.000000  IntegralUnderHisto=95.898220   EstimatedSignal=128.101780
+   ---> Final fit includes reflections
+
+--- Final fit with signal+background on the full range ---
+ FCN=40.4931 FROM MINOS     STATUS=SUCCESSFUL     28 CALLS         305 TOTAL
+                     EDM=7.46707e-09    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  BkgInt       1.02111e+00   9.60283e-02   2.80806e-03  -7.12563e-04
+   2  Slope       -2.86538e+00   6.82716e-01  -1.34027e-03   1.21757e-03
+   3  SgnInt       4.86582e-01   6.47218e-02  -2.12372e-03   1.22197e-03
+   4  Mean         1.85422e+00   3.45351e-03   3.45351e-03   8.88803e-03
+   5  Sigma        2.08333e-02     fixed    
+   6  ReflOverS    3.23303e-01     fixed    
+                               ERR DEF= 0.5
+R/B:0.193573 (R1+R2)/(B1+B2):0.13272
+Info in <TCanvas::Print>: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/signalExtraction/plots/invMass_pTD2.png has been created
+Info in <TCanvas::Print>: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/signalExtraction/plots/invMass_pTD2.pdf has been created
+Info in <TCanvas::Print>: SVG file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/signalExtraction/plots/invMass_pTD2.svg has been created
+Info in <TCanvas::Print>: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/signalExtraction/plots/jetRawSpectrum_pTD2.png has been created
+Info in <TCanvas::Print>: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/signalExtraction/plots/jetRawSpectrum_pTD2.pdf has been created
+Info in <TCanvas::Print>: SVG file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/signalExtraction/plots/jetRawSpectrum_pTD2.svg has been created
+Info in <TCanvas::Print>: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/signalExtraction/plots/gaussianParams_pTD2.png has been created
+Info in <TCanvas::Print>: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/signalExtraction/plots/gaussianParams_pTD2.pdf has been created
+Info in <TCanvas::Print>: SVG file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/signalExtraction/plots/gaussianParams_pTD2.svg has been created
+Info in <TCanvas::Print>: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/signalExtraction/plots/signalParams_pTD2.png has been created
+Info in <TCanvas::Print>: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/signalExtraction/plots/signalParams_pTD2.pdf has been created
+Info in <TCanvas::Print>: SVG file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/signalExtraction/plots/signalParams_pTD2.svg has been created
+Info in <TCanvas::Print>: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/signalExtraction/plots/RefOverS_pTD2.png has been created
+Info in <TCanvas::Print>: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/signalExtraction/plots/RefOverS_pTD2.pdf has been created
+Info in <TCanvas::Print>: SVG file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/signalExtraction/plots/RefOverS_pTD2.svg has been created
+Info in <TCanvas::Print>: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/signalExtraction/plots/jetPtSpectrum_SB_pTD2.png has been created
+Info in <TCanvas::Print>: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/signalExtraction/plots/jetPtSpectrum_SB_pTD2.pdf has been created
+Info in <TCanvas::Print>: SVG file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/signalExtraction/plots/jetPtSpectrum_SB_pTD2.svg has been created
+Info in <TCanvas::Print>: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/signalExtraction/plots/jetPtSpectrum_SB_Rebin_pTD2.png has been created
+Info in <TCanvas::Print>: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/signalExtraction/plots/jetPtSpectrum_SB_Rebin_pTD2.pdf has been created
+Info in <TCanvas::Print>: SVG file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/signalExtraction/plots/jetPtSpectrum_SB_Rebin_pTD2.svg has been created
+Info in <TCanvas::Print>: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/signalExtraction/plots/jetPtSpectrumUnc_SB_Rebin_pTD2.png has been created
+Info in <TCanvas::Print>: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/signalExtraction/plots/jetPtSpectrumUnc_SB_Rebin_pTD2.pdf has been created
+Info in <TCanvas::Print>: SVG file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/signalExtraction/plots/jetPtSpectrumUnc_SB_Rebin_pTD2.svg has been created
+
+Processing DetRM.C(1,"/mnt/hgfs/vmware/data_R04_050219/MC/AnalysisResults_Run2w18b.root","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix",0,"Cut",0,0,1,"/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt5.00_50.00.root")...
+W-TH2D::Sumw2: Sum of squares of weights structure already created
+W-TH1D::Sumw2: Sum of squares of weights structure already created
+ <message repeated 1 time>
+W-TFile::Append: Replacing existing TH1: ResponseMatrix_proj_6_1_2 (Potential memory leak).
+W-TH2D::Sumw2: Sum of squares of weights structure already created
+W-TH1D::Sumw2: Sum of squares of weights structure already created
+ <message repeated 1 time>
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix/plots/DetMatrix_prompt_Dpt2_36.png has been created
+
+Processing DetRM.C(0,"/mnt/hgfs/vmware/data_R04_050219/MC/AnalysisResults_Run2w18b.root","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix",1,"FD",0,0,1,"/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt5.00_50.00.root")...
+mkdir: cannot create directory ‘/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix’: File exists
+mkdir: cannot create directory ‘/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix/plots’: File exists
+W-TH2D::Sumw2: Sum of squares of weights structure already created
+W-TH1D::Sumw2: Sum of squares of weights structure already created
+ <message repeated 1 time>
+W-TFile::Append: Replacing existing TH1: ResponseMatrix_proj_6_1_2 (Potential memory leak).
+W-TH2D::Sumw2: Sum of squares of weights structure already created
+W-TH1D::Sumw2: Sum of squares of weights structure already created
+ <message repeated 1 time>
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix/plots/DetMatrix_nonPrompt_Dpt2_36.png has been created
+
+Processing getSimSpectra.C("/mnt/hgfs/vmware/DjetSim4Rprompt3R",0,1,1,1,1, "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt5.00_50.00.root","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_nonPrompt_jetpt5.00_50.00.root","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Simulations/BFeedDown/AnalysisResults_Run2w18b.root0",0,5,30,0)...
+A
+B
+BA
+BB
+BC
+BD
+BE
+BF
+BG
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+BH
+BI
+BJ
+C
+D
+
+Processing plotSimSpectra.C(1,1,1,1,"/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Simulations/BFeedDown/AnalysisResults_Run2w18b.root0","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Simulations/BFeedDown/AnalysisResults_Run2w18b.root0",1,5.00,50.00,0)...
+In file included from input_line_28:1:
+/home/kvapil/Desktop/alice_Djets/Djets/POWHEGSim/plotSimSpectra.C:21:74: warning: implicit conversion from 'double' to 'int' changes value from 1.3 to 1 [-Wliteral-conversion]
+void setHistoDetails(TH1 *hh, Color_t color, Style_t Mstyle, int Msize = 1.3, Width_t Lwidth = 2, Style_t Lstyle = 1);
+                                                                       ~ ^~~
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Simulations/BFeedDown/AnalysisResults_Run2w18b.root0/plots/Promptspectra_JetPt_Dpt2_36_effScaled_un.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Simulations/BFeedDown/AnalysisResults_Run2w18b.root0/plots/Promptspectra_JetPt_Dpt2_36_effScaled_un.pdf has been created
+I-TCanvas::Print: SVG file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Simulations/BFeedDown/AnalysisResults_Run2w18b.root0/plots/Promptspectra_JetPt_Dpt2_36_effScaled_un.svg has been created
+
+Processing combineRM.C(0,"/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix/DetMatrix_nonPrompt.root",0,"/ResponseMatrix/BkgRM03/0",1,1,0)...
+mkdir: cannot create directory ‘/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix’: File exists
+mkdir: cannot create directory ‘/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix/plots’: File exists
+I-LoadDetectorMatrix: mtx=hPtJet2d, ts=hPtJetGen, ms=hPtJetRec loaded.
+A
+C
+D
+E
+F
+G
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix/plots/ProdMatrixFD.png has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix/plots/ProdMatrixProbFD.png has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix/plots/ProdMatrixRebinFD.png has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix/plots/ProdMatrixPropRebinFD.png has been created
+/home/kvapil/ALICE_HeavyFlavour/RooUnfold-1.1.1/libRooUnfold /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/signalExtraction/JetPtSpectra_SB_eff.root /mnt/hgfs/vmware/data_R04_050219/data/AnalysisResults_Run2w18b.root /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Simulations/BFeedDown/AnalysisResults_Run2w18b.root0 /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix/combineMatrixFD.root /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction 0 0
+
+Processing subtractFD.C("/home/kvapil/ALICE_HeavyFlavour/RooUnfold-1.1.1/libRooUnfold","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/signalExtraction/JetPtSpectra_SB_eff.root","/mnt/hgfs/vmware/data_R04_050219/data/AnalysisResults_Run2w18b.root","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Simulations/BFeedDown/AnalysisResults_Run2w18b.root0","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix/combineMatrixFD.root","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction",0)...
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction/plots/JetPtSpectra_FDsub.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction/plots/JetPtSpectra_FDsub.pdf has been created
+I-TCanvas::Print: SVG file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction/plots/JetPtSpectra_FDsub.svg has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction/plots/JetPtSpectra_FDsubUnc.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction/plots/JetPtSpectra_FDsubUnc.pdf has been created
+I-TCanvas::Print: SVG file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction/plots/JetPtSpectra_FDsubUnc.svg has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction/plots/FDratio.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction/plots/FDratio.pdf has been created
+I-TCanvas::Print: SVG file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction/plots/FDratio.svg has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction/plots/FDUnc_beforeUnf.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction/plots/FDUnc_beforeUnf.pdf has been created
+I-TCanvas::Print: SVG file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction/plots/FDUnc_beforeUnf.svg has been created
+
+Processing combineRM.C(1,"/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix/DetMatrix_prompt.root",0,"/ResponseMatrix/BkgRM03/0",1,1,0)...
+mkdir: cannot create directory ‘/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix’: File exists
+mkdir: cannot create directory ‘/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix/plots’: File exists
+I-LoadDetectorMatrix: mtx=hPtJet2d, ts=hPtJetGen, ms=hPtJetRec loaded.
+A
+C
+D
+E
+F
+G
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix/plots/ProdMatrix.png has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix/plots/ProdMatrixProb.png has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix/plots/ProdMatrixRebin.png has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix/plots/ProdMatrixPropRebin.png has been created
+
+Processing unfold_Bayes.C("/home/kvapil/ALICE_HeavyFlavour/RooUnfold-1.1.1/libRooUnfold","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/FDsubtraction/JetPtSpectrum_FDsub.root","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/ResponseMatrix/DetMatrix_prompt.root","/ResponseMatrix/BkgRM03/0","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5",5,0,0,0,0,0,0)...
+I-LoadRawSpectrum: hData_binned_sub loaded.
+W-TH1D::Sumw2: Sum of squares of weights structure already created
+I-LoadDetectorMatrix: mtx=hPtJet2d, ts=hPtJetGen, ms=hPtJetRec loaded.
+==== weighting ==== 
+==== dividing ==== 
+Add truth bin for 2.14641e-10 fakes
+Add truth bin for 2.14641e-10 fakes
+Add truth bin for 2.14641e-10 fakes
+Add truth bin for 2.14641e-10 fakes
+Add truth bin for 2.14641e-10 fakes
+Add truth bin for 2.14641e-10 fakes
+Add truth bin for 2.14641e-10 fakes
+Add truth bin for 2.14641e-10 fakes
+Add truth bin for 2.14641e-10 fakes
+Add truth bin for 2.14641e-10 fakes
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/plots/unfoldedSpectrum_unfSpectra.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/plots/unfoldedSpectrum_unfSpectra.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/plots/unfoldedSpectrum_Pearson.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/plots/unfoldedSpectrum_Pearson.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/plots/unfoldedSpectrum_foldedRatio.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/plots/unfoldedSpectrum_foldedRatio.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/plots/unfoldedSpectrum_unfRatio.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/plots/unfoldedSpectrum_unfRatio.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/plots/unfoldedSpectrum_UnfSpectrum.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/plots/unfoldedSpectrum_UnfSpectrum.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/plots/unfoldedSpectrum_UnfSpectrum_unc.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/plots/unfoldedSpectrum_UnfSpectrum_unc.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/plots/unfoldedSpectrum_UnfMeasRatio.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/plots/unfoldedSpectrum_UnfMeasRatio.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/plots/unfoldedSpectrum_MatrixProd.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/plots/unfoldedSpectrum_MatrixProd.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/plots/unfoldedSpectrum_Matrix.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/plots/unfoldedSpectrum_Matrix.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/plots/unfoldedSpectrum_MatrixProdProjReb.pdf has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/plots/unfoldedSpectrum_MatrixProdProjReb.png has been created
+
+Processing getSimSpectra.C("/mnt/hgfs/vmware/DjetSim4Rprompt3R",0,0,1,1,0, "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt5.00_50.00.root","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_nonPrompt_jetpt5.00_50.00.root","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Simulations/Prompt/AnalysisResults_Run2w18b.root0",0,5,30,0)...
+A
+B
+BA
+BB
+BC
+BD
+BE
+BF
+BG
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+BH
+BI
+BJ
+C
+D
+
+Processing plotSimSpectra.C(0,1,1,0,"/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Simulations/Prompt/AnalysisResults_Run2w18b.root0","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Simulations/Prompt/AnalysisResults_Run2w18b.root0",0,5.00,50.00,0)...
+In file included from input_line_28:1:
+/home/kvapil/Desktop/alice_Djets/Djets/POWHEGSim/plotSimSpectra.C:21:74: warning: implicit conversion from 'double' to 'int' changes value from 1.3 to 1 [-Wliteral-conversion]
+void setHistoDetails(TH1 *hh, Color_t color, Style_t Mstyle, int Msize = 1.3, Width_t Lwidth = 2, Style_t Lstyle = 1);
+                                                                       ~ ^~~
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Simulations/Prompt/AnalysisResults_Run2w18b.root0/plots/Promptspectra_JetPt_Dpt2_36_un.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Simulations/Prompt/AnalysisResults_Run2w18b.root0/plots/Promptspectra_JetPt_Dpt2_36_un.pdf has been created
+I-TCanvas::Print: SVG file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Simulations/Prompt/AnalysisResults_Run2w18b.root0/plots/Promptspectra_JetPt_Dpt2_36_un.svg has been created
+
+Processing finalJetSpectraInv.C("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/unfoldedSpectrum_unfoldedJetSpectrum.root","/mnt/hgfs/vmware/data_R04_050219/data/AnalysisResults_Run2w18b.root","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Simulations/Prompt/AnalysisResults_Run2w18b.root0","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/finalSpectra","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/systematics",1,1,1,"Cut",0,0)...
+A
+B
+BA
+BB
+BC
+BD
+getting /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/unfoldedSpectrum_unfoldedJetSpectrum.root unfoldedSpectrum
+BE
+BF
+0 5.5 0.5 0.0354888 0.00124776
+1 7 1 0.0187935 0.000565923
+2 9 1 0.00791744 0.000344366
+3 11 1 0.00364427 0.000231849
+4 13 1 0.00186879 0.000167829
+5 17 3 0.000712139 4.79294e-05
+6 25 5 0.000116275 1.51501e-05
+7 40 10 1.4875e-05 3.39556e-06
+C
+D
+Styles are Set!
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/finalSpectra/plots/JetPtSpectra_final.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/finalSpectra/plots/JetPtSpectra_final.pdf has been created
+I-TCanvas::Print: eps file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/finalSpectra/plots/JetPtSpectra_final.eps has been created
+I-TCanvas::Print: SVG file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/finalSpectra/plots/JetPtSpectra_final.svg has been created
+E

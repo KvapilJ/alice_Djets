@@ -265,7 +265,7 @@ void compareSpectra(TH1D **hFD, const int nFiles, bool isjet, bool quark, TStrin
         else if(quark == 1) leg->AddEntry(hPt[i],fDescB[i].Data(),"p");
         leg->Draw("same");
     }
-
+std::cout<<"here"<<std::endl;
     SaveCanvas(cB,cName);
 
     TH1D *hCent = (TH1D*)hPt[0]->Clone("hCent");
@@ -306,11 +306,11 @@ void compareSpectra(TH1D **hFD, const int nFiles, bool isjet, bool quark, TStrin
         hJetPtRatio[i-1]->Draw("h same");
     }
 
-     for(int i=0;i<2;i++){
+ /*    for(int i=0;i<2;i++){
         if(quark == 0) leg2->AddEntry(hJetPtRatio[i],fDescC[i+1].Data(),"l");
         else if(quark == 1) leg2->AddEntry(hJetPtRatio[i],fDescB[i+1].Data(),"l");
     }
-
+*/
     for(int i=2;i<nFiles-1;i++) {
         if(quark == 0) leg3->AddEntry(hJetPtRatio[i],fDescC[i+1].Data(),"l");
         else if(quark == 1) leg3->AddEntry(hJetPtRatio[i],fDescB[i+1].Data(),"l");
@@ -323,10 +323,11 @@ void compareSpectra(TH1D **hFD, const int nFiles, bool isjet, bool quark, TStrin
     line->SetLineWidth(2);
     line->Draw("same");
 
-    leg2->Draw("same");
+  //  leg2->Draw("same");
     leg3->Draw("same");
-
+std::cout<<"here2"<<std::endl;
     SaveCanvas(cr,cName+"_ratio");
+ std::cout<<"here3"<<std::endl;
 }
 
 TH1* GetInputHist(TString inFile, TString histName,TH1 *hh){

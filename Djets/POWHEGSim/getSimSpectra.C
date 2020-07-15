@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include <fstream>
+#include "TBranchElement.h"
 //fDmesonSpecie = 1;
 //fRpar = 0.4;
 //Rpar = 4;
@@ -149,12 +150,16 @@ std::cout<<"BA"<<std::endl;
 
 std::cout<<"BB"<<std::endl;
     TProfile *hxsection;
+    TProfile *hxsection2;
     if(!isNPrompt)	hxsection = dynamic_cast<TProfile*>(dir->FindObject("fHistXsection"));
     else { 
           if(SimNr == 11)  hxsection = dynamic_cast<TProfile*>(dir->FindObject("fHistXsectionDistribution"));
           else hxsection = dynamic_cast<TProfile*>(dir->FindObject("fHistXsection"));
           //else hxsection = (TH1D*)dir->FindObject("fHistXsection");
     }
+    hxsection2 = dynamic_cast<TProfile*>(dir->FindObject("fHistXsectionNoSel"));
+    TH1F *trials1 = dynamic_cast<TH1F*>(dir->FindObject("fHistTrialsVsPtHard"));
+    TH1F *trials2 = dynamic_cast<TH1F*>(dir->FindObject("fHistTrialsVsPtHardNoSel"));
  std::cout<<"BC"<<std::endl;
     if(!hxsection) {
       std::cout << "Error in getting x-section hist! Exiting..." << std::endl;
@@ -162,7 +167,17 @@ std::cout<<"BB"<<std::endl;
     }
     Double_t xsection = hxsection->GetMean(2);
     Double_t events = hxsection->GetEntries();
-    Double_t scaling = xsection/events;
+    //Double_t scaling = xsection/events;
+
+    Double_t xsection2 = hxsection2->GetMean(2);
+    Double_t events2 = hxsection2->GetEntries();
+
+    Double_t trial1 = trials1->Integral();
+    Double_t trial2 = trials2->Integral();
+Double_t scaling = xsection/trial1;
+
+std::cout<<"x section: "<< xsection<<" events: "<<events<<" trials: "<<trial1<<" scaling: "<<scaling<<" "<<xsection/trial1<<std::endl;
+std::cout<<"x section nosel: "<< xsection2<<" events: "<<events2<<" trials: "<<trial2<<" scaling: "<<xsection2/events2<<" "<<xsection2/trial2<<std::endl;
 std::cout<<"BD"<<std::endl;
     TTree *tree;
     if(!fDmesonSpecie) tree = dynamic_cast<TTree*>(fileInput->Get("AliAnalysisTaskDmesonJets_D0_MCTruth"));
@@ -170,13 +185,66 @@ std::cout<<"BD"<<std::endl;
     AliAnalysisTaskDmesonJets::AliDmesonMCInfoSummary *brD = nullptr;
 
     AliAnalysisTaskDmesonJets::AliJetInfoSummary *brJet = nullptr;
-    tree->SetBranchAddress("DmesonJet",&brD);
-    tree->SetBranchAddress(Form("Jet_AKTChargedR0%d0_pt_scheme",Rpar),&brJet);
+
+    //AliAnalysisTaskDmesonJets::AliDmesonMCInfoSummary *Dmesons_[10];
+
+  //  std::vector<AliAnalysisTaskDmesonJets::AliDmesonMCInfoSummary> *Dmesons_;
+   // Double32_t *fPartonType;
+  //  TBranch *b_Dmesons;
+  //  TBranch
+
+    //normal
+    //if(false){
+        tree->SetBranchAddress("DmesonJet",&brD);
+        tree->SetBranchAddress(Form("Jet_AKTChargedR0%d0_pt_scheme",Rpar),&brJet);
+   // }
+  //  else{
+   //     TCanvas *test = new TCanvas("test","test",800,800);
+    //    tree->Draw("Jet_AKTChargedR040_pt_scheme.fPt>>h(100,0,100)","Dmesons.fPartonType == 4 && Jet_AKTChargedR040_pt_scheme.fEta < 0.5 && -0.5 < Jet_AKTChargedR040_pt_scheme.fEta &&Dmesons.fPt > 2 && Dmesons.fPt < 36");
+     //   test->SaveAs("dijettest.png");
+        //b_destep->SetAddress()
+        /*std::cout<<tree->GetListOfBranches()->At(0)->GetName()<<std::endl;
+        std::cout<<tree->GetListOfBranches()->At(1)->GetName()<<std::endl;
+        std::cout<<tree->GetListOfBranches()->At(2)->GetName()<<std::endl;
+        std::cout<<tree->GetListOfBranches()->At(3)->GetName()<<std::endl;
+        //b_Dmesons->
+        b_Dmesons = tree->GetBranch(tree->GetListOfBranches()->At(1)->GetName()); //Dmesons
+        b_Dmesons->Print();
+        std::cout<<b_Dmesons->GetListOfBranches()->At(0)->GetName()<<std::endl;
+        std::cout<<b_Dmesons->GetListOfBranches()->At(1)->GetName()<<std::endl;
+        std::cout<<b_Dmesons->GetListOfBranches()->At(2)->GetName()<<std::endl;
+        std::cout<<b_Dmesons->GetListOfBranches()->At(3)->GetName()<<std::endl;
+        //b_Dmesons->GetListOfBranches()->At(3)->G
+        //b_Dmesons->Print();
+        tree->SetBranchAddress("Dmesons.fPartonType",&fPartonType);*/
+     //   std::cout<<"here"<<std::endl;
+       // b_Dmesons->Set
+       // b_Dmesons->SetBranchAddress("Dmesons",&Dmesons_);
+       // std::cout<<"here"<<std::endl;
+        //tree->SetBranchAddress("Dmesons.fPartonType",&fPartonType);
+       // std::cout<<"here"<<std::endl;
+  //  }
+  //  for (Int_t k=0; k<tree->GetEntries(); k++) {
+  //  tree->GetEntry(k);
+   // std::cout<<"Dmesons: "<<Dmesons_->size()<<std::endl;
+       //for (Int_t e=0; e<Dmesons_; e++) {
+           // std::cout<<"parton: "<<e<<" val: "<<fPartonType[e]<<std::endl;
+        //}
+
+ //   if(k==20) break;
+  //  }
+
+
+
+
+   // tree->SetBranchAddress("Dmesons",&brD);
 std::cout<<"BE"<<std::endl;
     if(!tree || !brD || !brJet) {
       std::cout << "Error in setting the tree/branch names! Exiting..." << std::endl;
       return nullptr;
     }
+    //std::cout<<"x section: "<< xsection<<" events: "<<events<<" ttree ev: "<<tree->GetEntries()<<" scaling: "<<scaling<<std::endl;
+    //scaling = xsection/tree->GetEntries();
 std::cout<<"BF"<<std::endl;
     TH1D *hPromptEff = nullptr;
     if(isEff) hPromptEff = dynamic_cast<TH1D*>(GetInputHist(effFilePrompt,"hEff_reb",hPromptEff));
@@ -207,6 +275,7 @@ std::cout<<"BH"<<std::endl;
       if(brD->fPartonType != 5) continue;
     }
     else if(brD->fPartonType != 4) continue;
+    //if(k<50)std::cout<<brD->fAncestorPDG<<std::endl;
     if(brD->fAncestorPDG == 2212) continue; // check if not coming from proton
 //if(fObservable == Observable::kFragmentation)
 

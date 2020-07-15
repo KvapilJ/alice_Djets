@@ -172,9 +172,9 @@ systuncP[6]=0.199602264197;*/
     systuncP[2]=0.1345037174;
     systuncP[3]=0.1418705396;
     systuncP[4]=0.1602310831;
-    systuncP[5]=0.1768756625;
-    systuncP[6]=0.2544523531;
-    systuncP[7]=0.2759402109;
+  //  systuncP[5]=0.1768756625;
+ //   systuncP[6]=0.2544523531;
+  //  systuncP[7]=0.2759402109;
 /*
 if(fBin ==2){
         systuncP[0]=0.53;
@@ -413,6 +413,8 @@ std::cout<<"A"<<std::endl;
     if(fDmesonSpecie) dataScaling = 1. /(BRDstar * dataLum)/2.;
     else dataScaling = 1. /(BRDzero * dataLum)/2.;
 
+   std::cout<<"scalings "<<dy<<" "<<dataScaling<<" "<<BRDzero<<" "<<dataLum<<" "<<nEv<<" "<<sigma_in<<std::endl;
+
     //if(isSys) getSystematics(sysDir,outPlotDir);
 
     // ----------------- prompt simulation ---------------------
@@ -522,6 +524,7 @@ std::cout<<"BD"<<std::endl;
     Double_t data_int = hData_binned->Integral();
     //std::cout<<hData_binned->GetXaxis()->GetBinLowEdge(binMin)<<" to "<<hData_binned->GetXaxis()->GetBinUpEdge(binMax)<<std::endl;
 
+
 if(pdf){
   hData_binned->Scale(1./data_int);
   hData_binned->Scale(1,"width");
@@ -529,6 +532,10 @@ if(pdf){
     hData_binned->Scale(1,"width");
     hData_binned->Scale(dataScaling);
     hData_binned->Scale(1./dy);
+}
+
+for(Int_t tb = 1 ; tb <=hData_binned->GetNbinsX();tb++ ){
+    std::cout<<"data bin "<<tb<< " val "<<hData_binned->GetBinContent(tb)<<std::endl;
 }
     hData_binned->SetTitle("");
     //hData_binned->SetMinimum(1);

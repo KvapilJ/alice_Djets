@@ -16,7 +16,7 @@ void multitrialJetPtYieldsDBins(char *outDir = "JetPtComparison" )
 
     style();
 
-    int Rpar = 4;
+    int Rpar = 6;
 
     const int nTrials = 48;
     const int sigmameanvar = 6;

@@ -37,6 +37,8 @@ public:
     void SetTitle(TString filename){name_ = filename;}
     void SetDefaultLegend(TString filename){legendDefDesc_ = filename;}
     void SetMethod(Method meth){method_ = meth;}
+    void SetAxisTitle(TString titlex, TString titley){titleX_ = titlex; titleY_ = titley;}
+    void SetRatioRangesY(Double_t ratioMin, Double_t ratioMax){ratioMin_ = ratioMin; ratioMax_ = ratioMax; ratioRanges_ = true;}
     void GetRMS();
     void GetMean();
     void Write();
@@ -62,9 +64,9 @@ private:
     TString name_ = "";
     TString outPath_ = "";
     TString outFolder_ = "";
-    Color_t colors_[12] = {2,kViolet+5,kRed+1,kGreen+3,kMagenta+2,4,6,kCyan+1,8,kOrange-1,kGray+1,kYellow+2};
+    Color_t colors_[12] = {2,kViolet+5,kRed+1,kGreen+3,kMagenta+2,4,6,kCyan+1,8,kOrange-1,kGray+1,kRed+2};
     Style_t markers_[14] = {20,21,22,23,24,25,26,27,28,29,30,32,33,34};
-    Style_t linestyle_[15] = {1,2,3,4,5,6,7,8,9,10,2,3,13,14,15};
+    Style_t linestyle_[15] = {1,2,3,4,5,6,7,8,9,10,2,3,4,5,15};
     //default plot
     TFile *TFileDefault_{nullptr};
     TH1D *TH1DDefault_{nullptr};
@@ -95,6 +97,15 @@ private:
     Method method_{kStandart};
     TH1D *hstatUp_{nullptr};
     TH1D *hstatDown_{nullptr};
+
+    TString titleX_ = "";
+    TString titleY_ = "";
+
+    Double_t ratioMax_ = 0;
+    Double_t ratioMin_ = 0;
+
+    Bool_t ratioRanges_ = false;
+
 
 
 

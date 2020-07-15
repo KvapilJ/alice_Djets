@@ -58,7 +58,7 @@ bool isFDUpSpec = 0,
 bool isFDDownSpec = 0,
 bool fDoWeighting = 1,
 bool fdivide = 1,
-bool overflow = 1,  // if to use overflow in the unfolding
+bool overflow = 0,  // if to use overflow in the unfolding
 const int NTrials = 10,//10,  //number of total trials
 bool debug = 0
 )
@@ -142,7 +142,6 @@ else if(fObservable == Observable::kFragmentation)LoadDetectorMatrix(detRMfile.D
 
                     cPrior->SaveAs(Form("%s/plots%s/%s_prior.pdf",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
                     cPrior->SaveAs(Form("%s/plots%s/%s_prior.png",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
-                    cPrior->SaveAs(Form("%s/plots%s/%s_prior.svg",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
 				}
 
     TH1D* hNormY;
@@ -237,7 +236,6 @@ else if(fObservable == Observable::kFragmentation)LoadDetectorMatrix(detRMfile.D
 
     cUnfolded->SaveAs(Form("%s/plots%s/%s_unfSpectra.pdf",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
     cUnfolded->SaveAs(Form("%s/plots%s/%s_unfSpectra.png",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
-    cUnfolded->SaveAs(Form("%s/plots%s/%s_unfSpectra.svg",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
 
 	TCanvas *cPearson = new TCanvas("cPearson","cPearson",1800,1800);
 	cPearson->Divide(3,3);
@@ -252,7 +250,6 @@ else if(fObservable == Observable::kFragmentation)LoadDetectorMatrix(detRMfile.D
 
     cPearson->SaveAs(Form("%s/plots%s/%s_Pearson.pdf",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
     cPearson->SaveAs(Form("%s/plots%s/%s_Pearson.png",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
-    cPearson->SaveAs(Form("%s/plots%s/%s_Pearson.svg",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
 
     TCanvas *cRatio2 = new TCanvas("cRatio2","cRatio2",800,600);
     TLegend *legRatio2 =  new TLegend(0.4,0.15,0.6,0.5);//0.6,0.5,0.65,0.85
@@ -315,7 +312,6 @@ else if(fObservable == Observable::kFragmentation)LoadDetectorMatrix(detRMfile.D
     //cRatio2->SaveAs(Form("%s/%s_foldedRatio.png",outDir.Data(),outName.Data()));
     cRatio2->SaveAs(Form("%s/plots%s/%s_foldedRatio.pdf",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
         cRatio2->SaveAs(Form("%s/plots%s/%s_foldedRatio.png",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
-        cRatio2->SaveAs(Form("%s/plots%s/%s_foldedRatio.svg",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
 
 		// =============== Unfolded
 		THStack *hRatioUnfS = new THStack("hRatioUnfS",Form("Unfolded RegX/Reg%d",regBayes));
@@ -350,7 +346,6 @@ else if(fObservable == Observable::kFragmentation)LoadDetectorMatrix(detRMfile.D
 
         cRatio->SaveAs(Form("%s/plots%s/%s_unfRatio.pdf",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
         cRatio->SaveAs(Form("%s/plots%s/%s_unfRatio.png",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
-        cRatio->SaveAs(Form("%s/plots%s/%s_unfRatio.svg",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
 
     fRawRebin->SetLineColor(kBlue+1);
     fRawRebin->SetMarkerColor(kBlue+1);
@@ -485,7 +480,6 @@ else if(fObservable == Observable::kFragmentation)LoadDetectorMatrix(detRMfile.D
 
     cSpectra->SaveAs(Form("%s/plots%s/%s_UnfSpectrum.pdf",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
         cSpectra->SaveAs(Form("%s/plots%s/%s_UnfSpectrum.png",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
-        cSpectra->SaveAs(Form("%s/plots%s/%s_UnfSpectrum.svg",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
 
 		pv3 = new TPaveText(0.2,0.65,0.6,0.75,"brNDC");
 		pv3->SetFillStyle(0);
@@ -502,7 +496,6 @@ else if(fObservable == Observable::kFragmentation)LoadDetectorMatrix(detRMfile.D
 
         cSpectrumRebinUnc->SaveAs(Form("%s/plots%s/%s_UnfSpectrum_unc.pdf",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
         cSpectrumRebinUnc->SaveAs(Form("%s/plots%s/%s_UnfSpectrum_unc.png",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
-        cSpectrumRebinUnc->SaveAs(Form("%s/plots%s/%s_UnfSpectrum_unc.svg",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
 
     TH1D* hratio = nullptr;
     TH1D* fRawRebinClone = nullptr;
@@ -553,7 +546,6 @@ else if(fObservable == Observable::kFragmentation)LoadDetectorMatrix(detRMfile.D
 	line->Draw("same");
     cr->SaveAs(Form("%s/plots%s/%s_UnfMeasRatio.pdf",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
   cr->SaveAs(Form("%s/plots%s/%s_UnfMeasRatio.png",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
-  cr->SaveAs(Form("%s/plots%s/%s_UnfMeasRatio.dvg",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
 
     hProjXeff->GetXaxis()->SetRangeUser(plotmin,plotmax);
     hProjYeff->GetXaxis()->SetRangeUser(plotmin,plotmax);
@@ -563,14 +555,12 @@ else if(fObservable == Observable::kFragmentation)LoadDetectorMatrix(detRMfile.D
     fMatrixProd->Draw("colz");
         cProjMatrix->SaveAs(Form("%s/plots%s/%s_MatrixProd.pdf",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
     cProjMatrix->SaveAs(Form("%s/plots%s/%s_MatrixProd.png",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
-    cProjMatrix->SaveAs(Form("%s/plots%s/%s_MatrixProd.svg",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
 
     TCanvas* cMatrix= new TCanvas("cMatrix","cMatrix",800,600);
     cMatrix->SetLogz();
     Matrix->Draw("colz");
         cMatrix->SaveAs(Form("%s/plots%s/%s_Matrix.pdf",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
     cMatrix->SaveAs(Form("%s/plots%s/%s_Matrix.png",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
-    cMatrix->SaveAs(Form("%s/plots%s/%s_Matrix.svg",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
 
     TCanvas* cProjMReb= new TCanvas("cProjMReb","cProjMReb",800,600);
     cProjMReb->SetLogy();
@@ -584,7 +574,6 @@ else if(fObservable == Observable::kFragmentation)LoadDetectorMatrix(detRMfile.D
 
     cProjMReb->SaveAs(Form("%s/plots%s/%s_MatrixProdProjReb.pdf",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
         cProjMReb->SaveAs(Form("%s/plots%s/%s_MatrixProdProjReb.png",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
-        cProjMReb->SaveAs(Form("%s/plots%s/%s_MatrixProdProjReb.svg",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
 
 		if(fSystem) MtxPlots(outDir,outName);
 }
@@ -839,7 +828,6 @@ int MtxPlots(TString outDir, TString outName) {
 
     cMtx->SaveAs(Form("%s/plots%s/%s_probMtx.pdf",outDir.Data(),(fBin!=0)?Form("%d",fBin):"",outName.Data()));
     cMtx->SaveAs(Form("%s/plots%s/%s_probMtx.png",outDir.Data(),(fBin!=0)?Form("%d",fBin):"",outName.Data()));
-    cMtx->SaveAs(Form("%s/plots%s/%s_probMtx.svg",outDir.Data(),(fBin!=0)?Form("%d",fBin):"",outName.Data()));
 
 	TCanvas *cSlices=new TCanvas("ProbSlice", "Probability slices",1000,1000);
 	cSlices->Divide(3,2);
@@ -851,7 +839,6 @@ int MtxPlots(TString outDir, TString outName) {
 
     cSlices->SaveAs(Form("%s/plots%s/%s_probSlices.pdf",outDir.Data(),(fBin!=0)?Form("%d",fBin):"",outName.Data()));
     cSlices->SaveAs(Form("%s/plots%s/%s_probSlices.png",outDir.Data(),(fBin!=0)?Form("%d",fBin):"",outName.Data()));
-    cSlices->SaveAs(Form("%s/plots%s/%s_probSlices.svg",outDir.Data(),(fBin!=0)?Form("%d",fBin):"",outName.Data()));
 
 	return 0;
 }
@@ -1070,18 +1057,40 @@ TF1* getPriorFunction(int prior, TH1D* spect, int priorType, TH1D* rawspectrum) 
         else if(priorType == 1) { fPriorFunction->FixParameter(1,3);   fPriorFunction->FixParameter(2,4);}
         else if(priorType == 2) { fPriorFunction->FixParameter(1,4);   fPriorFunction->FixParameter(2,4);}
         else if(priorType == 3) { fPriorFunction->FixParameter(1,5);   fPriorFunction->FixParameter(2,4);}
-        else if(priorType == 4) { fPriorFunction->FixParameter(1,6);   fPriorFunction->FixParameter(2,4);}
+        else if(prior[Type == 4) { fPriorFunction->FixParameter(1,6);   fPriorFunction->FixParameter(2,4);}
         else if(priorType == 5) { fPriorFunction->FixParameter(1,7);   fPriorFunction->FixParameter(2,4);}
         else if(priorType == 6) { fPriorFunction->FixParameter(1,4.5); fPriorFunction->FixParameter(2,3);}
         else if(priorType == 7) { fPriorFunction->FixParameter(1,4.5); fPriorFunction->FixParameter(2,5);}*/
-        if(priorType == 0) 	{ fPriorFunction->FixParameter(1,4.4); fPriorFunction->FixParameter(2,4.4);}
-        else if(priorType == 1) { fPriorFunction->FixParameter(1,3);   fPriorFunction->FixParameter(2,4.4);}
-        else if(priorType == 2) { fPriorFunction->FixParameter(1,4);   fPriorFunction->FixParameter(2,4.4);}
-        else if(priorType == 3) { fPriorFunction->FixParameter(1,5);   fPriorFunction->FixParameter(2,4.4);}
-        else if(priorType == 4) { fPriorFunction->FixParameter(1,6);   fPriorFunction->FixParameter(2,4.4);}
-        else if(priorType == 5) { fPriorFunction->FixParameter(1,7);   fPriorFunction->FixParameter(2,4.4);}
-        else if(priorType == 6) { fPriorFunction->FixParameter(1,4.4); fPriorFunction->FixParameter(2,3);}
-        else if(priorType == 7) { fPriorFunction->FixParameter(1,4.4); fPriorFunction->FixParameter(2,5);}
+        if(Rpar == 2){
+            if(priorType == 0) 	{ fPriorFunction->FixParameter(1,4.5); fPriorFunction->FixParameter(2,3.96);}
+            else if(priorType == 1) { fPriorFunction->FixParameter(1,3);   fPriorFunction->FixParameter(2,3.96);}
+            else if(priorType == 2) { fPriorFunction->FixParameter(1,4);   fPriorFunction->FixParameter(2,3.96);}
+            else if(priorType == 3) { fPriorFunction->FixParameter(1,5);   fPriorFunction->FixParameter(2,3.96);}
+            else if(priorType == 4) { fPriorFunction->FixParameter(1,6);   fPriorFunction->FixParameter(2,3.96);}
+            else if(priorType == 5) { fPriorFunction->FixParameter(1,7);   fPriorFunction->FixParameter(2,3.96);}
+            else if(priorType == 6) { fPriorFunction->FixParameter(1,4.5); fPriorFunction->FixParameter(2,3);}
+            else if(priorType == 7) { fPriorFunction->FixParameter(1,4.5); fPriorFunction->FixParameter(2,5);}
+        }
+        if(Rpar == 4){
+            if(priorType == 0) 	{ fPriorFunction->FixParameter(1,4.4); fPriorFunction->FixParameter(2,4.4);}
+            else if(priorType == 1) { fPriorFunction->FixParameter(1,3);   fPriorFunction->FixParameter(2,4.4);}
+            else if(priorType == 2) { fPriorFunction->FixParameter(1,4);   fPriorFunction->FixParameter(2,4.4);}
+            else if(priorType == 3) { fPriorFunction->FixParameter(1,5);   fPriorFunction->FixParameter(2,4.4);}
+            else if(priorType == 4) { fPriorFunction->FixParameter(1,6);   fPriorFunction->FixParameter(2,4.4);}
+            else if(priorType == 5) { fPriorFunction->FixParameter(1,7);   fPriorFunction->FixParameter(2,4.4);}
+            else if(priorType == 6) { fPriorFunction->FixParameter(1,4.4); fPriorFunction->FixParameter(2,3);}
+            else if(priorType == 7) { fPriorFunction->FixParameter(1,4.4); fPriorFunction->FixParameter(2,5);}
+        }
+        if(Rpar == 6){
+            if(priorType == 0) 	{ fPriorFunction->FixParameter(1,4.3); fPriorFunction->FixParameter(2,5.0);}
+            else if(priorType == 1) { fPriorFunction->FixParameter(1,3);   fPriorFunction->FixParameter(2,5.0);}
+            else if(priorType == 2) { fPriorFunction->FixParameter(1,4);   fPriorFunction->FixParameter(2,5.0);}
+            else if(priorType == 3) { fPriorFunction->FixParameter(1,5);   fPriorFunction->FixParameter(2,5.0);}
+            else if(priorType == 4) { fPriorFunction->FixParameter(1,6);   fPriorFunction->FixParameter(2,5.0);}
+            else if(priorType == 5) { fPriorFunction->FixParameter(1,7);   fPriorFunction->FixParameter(2,5.0);}
+            else if(priorType == 6) { fPriorFunction->FixParameter(1,4.3); fPriorFunction->FixParameter(2,3);}
+            else if(priorType == 7) { fPriorFunction->FixParameter(1,4.3); fPriorFunction->FixParameter(2,4);}
+        }
         else if(priorType == 8) { fPriorFunction->SetParLimits(1,2,8); fPriorFunction->SetParLimits(2,2,8);
             if(fObservable == Observable::kXsection)fitlo = fptbinsJetMeasA[0];
             if(fObservable == Observable::kFragmentation)fitlo = fzbinsJetMeasA[fBin-1][0];

@@ -14,9 +14,13 @@ const int ptbinsDN = 11;
 double ptDbins[ptbinsDN+1] = {2,3,4,5,6,7,8,10,12,16,24,36};
 
 //double sigmaD[ptbinsDN] = {0.00991,0.01075,0.01141,0.01215,0.01275,0.01316,0.0139,0.01477,0.01584,0.01806,0.02198}; // set up sigma of the D signal from MC
-double sigmaD[ptbinsDN] = {0.00994,0.01076,0.01145,0.0122,0.01273,0.01324,0.01403,0.01483,0.0159,0.01812,0.02164}; // set up sigma of the D signal from MC
+//0.4
+//double sigmaD[ptbinsDN] = {0.00994,0.01076,0.01145,0.0122,0.01273,0.01324,0.01403,0.01483,0.0159,0.01812,0.02164}; // set up sigma of the D signal from MC
+//0.6
+double sigmaD[ptbinsDN] = {0.00999867,0.0108217,0.0115878,0.0123324,0.0128953,0.0133189,0.0139839,0.0149361,0.0160066,0.0178958,0.0211222};
 
-TString efffile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/efficiency/DjetEff_prompt_jetpt5_50.root";
+
+TString efffile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_finalX06/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt5.00_50.00.root";
 //TString sigmaFile = "";
 
 // forward declaration
@@ -45,8 +49,8 @@ void SetInputParametersDstar(AliDJetRawYieldUncertaintyLocal *interface);
 void ExtractDJetRawYieldUncertainty(){
   gROOT->LoadMacro("AliDJetRawYieldUncertaintyLocal.cxx+g");
 
-  //for(int i=0; i<ptbinsDN; i++)
-  //  EvaluateBinPerBinUncertainty(i);
+  for(int i=0; i<ptbinsDN; i++)
+    EvaluateBinPerBinUncertainty(i);
 
   ExtractDJetRawYieldUncertaintyFull();
 
@@ -219,7 +223,8 @@ void SetInputParametersDzero(AliDJetRawYieldUncertaintyLocal *interface){
                 1,1, 1};  // fixed mean, fixed sigma*/
 
 
-  interface->SetInputFilename("/home/kvapil/work/analysis/pp_run2/D0jet/data_250319/data/AnalysisResults_Run2.root");
+  //interface->SetInputFilename("/home/kvapil/work/analysis/pp_run2/D0jet/data_250319/data/AnalysisResults_Run2.root");
+  interface->SetInputFilename("/mnt/hgfs/vmware/data_R06_050219/data/AnalysisResults_Run2w18b.root");
   interface->SetInputDirname("DmesonsForJetCorrelations");
   interface->SetInputListname("histosD0MBN");
   interface->SetInputObjectname("hsDphiz");

@@ -16,7 +16,7 @@ void multitrialJetPtYieldsDBins(char *outDir = "JetPtComparison" )
 
     style();
 
-    int Rpar = 6;
+    int Rpar = 2;
 
     const int nTrials = 48;
     const int sigmameanvar = 6;
@@ -40,9 +40,9 @@ void multitrialJetPtYieldsDBins(char *outDir = "JetPtComparison" )
 /*
     const int ptbinsJetN = 6;
     int ptbinsmin[] = {5,6,7,8,10,12};
-    int ptbinsmax[] = {6,7,8,10,12,16};
+    int ptbinsmax[] = {6,7,8,10,12,15};
 */
-    /*
+/*
     const int ptbinsJetN = 4;
     int ptbinsmin[] = {10,12,16,24};
     int ptbinsmax[] = {12,16,24,36};
@@ -59,6 +59,12 @@ const int ptbinsJetN = 6;
 int ptbinsmin[] = {3,4,5,6,7,8};
 int ptbinsmax[] = {4,5,6,7,8,10};
 */
+/*
+    const int ptbinsJetN = 6;
+    int ptbinsmin[] = {5,6,7,8,10,12};
+    int ptbinsmax[] = {6,7,8,10,12,15};
+*/
+
 const int ptbinsJetN = 8;
 int ptbinsmin[] = {5,6,7,8,10,12,16,24};
 int ptbinsmax[] = {6,7,8,10,12,16,24,36};

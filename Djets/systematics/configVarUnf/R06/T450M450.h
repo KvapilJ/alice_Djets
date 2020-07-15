@@ -159,7 +159,7 @@ enum Observable {kXsection=0, kFragmentation=1};
       "AnalysisResults_FastSim_powheg+pythia6_beauty_1506803374"
     };
 */
-    TString fRunB[] = {
+      TString fRunB[] = {
 
         "AnalysisResults_FastSim_powheg+pythia6+evtgen_beauty_central",
         "AnalysisResults_FastSim_powheg+pythia6+evtgen_beauty_mb45",
@@ -177,20 +177,44 @@ enum Observable {kXsection=0, kFragmentation=1};
       "central",
       "m_{b}=4.5",
       "m_{b}=5",
-      "muF=0.5,muR=0.5",
-      "muF=0.5,muR=1" ,
-      "muF=1,muR=0.5",
-      "muF=1,muR=2",
-      "muF=2,muR=1",
-      "muF=2,muR=2",
+      "#mu_{F}=0.5, #mu_{R}=0.5",
+      "#mu_{F}=0.5, #mu_{R}=1" ,
+      "#mu_{F}=1, #mu_{R}=0.5",
+      "#mu_{F}=1, #mu_{R}=2",
+      "#mu_{F}=2, #mu_{R}=1",
+      "#mu_{F}=2, #mu_{R}=2",
       "noEvtGen"
     };
 
 
     TString fRunC[] = {
-      "AnalysisResults_FastSim_powheg+pythia6_charm_central"
-
-    };
+        "AnalysisResults_FastSim_powheg+pythia6_charm_central",
+        "AnalysisResults_FastSim_powheg+pythia6_charm_mc13",
+        "AnalysisResults_FastSim_powheg+pythia6_charm_mc17",
+        "AnalysisResults_FastSim_powheg+pythia6_charm_uF1uR05",
+        "AnalysisResults_FastSim_powheg+pythia6_charm_uF05uR1",
+        "AnalysisResults_FastSim_powheg+pythia6_charm_uF2uR1",
+        "AnalysisResults_FastSim_powheg+pythia6_charm_uF1uR2",
+        "AnalysisResults_FastSim_powheg+pythia6_charm_uF05uR05",
+        "AnalysisResults_FastSim_powheg+pythia6_charm_uF2uR2",
+        "AnalysisResults_FastSim_powheg+pythia6_charm_PDF212001",
+        "AnalysisResults_FastSim_powheg+pythia6_charm_PDF212002",
+        "AnalysisResults_FastSim_powheg+pythia6_charm_PDF212003",
+        "AnalysisResults_FastSim_powheg+pythia6_charm_PDF212004",
+        };
     TString fDescC[] = {
       "central",
+      "m_{c}=1.3",
+      "m_{c}=1.7",
+      "#mu_{F}=1, #mu_{R}=0.5",
+      "#mu_{F}=0.5, #mu_{R}=1" ,
+      "#mu_{F}=2, #mu_{R}=1",
+      "#mu_{F}=1, #mu_{R}=2",
+      "#mu_{F}=0.5, #mu_{R}=0.5",
+      "#mu_{F}=2, #mu_{R}=2",
+      "PDF=21200 1",
+      "PDF=21200 2",
+      "PDF=21200 3",
+      "PDF=21200 4",
     };
+
