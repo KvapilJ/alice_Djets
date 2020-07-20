@@ -60,314 +60,257 @@ TH1D* GetDownSys(TH1D **hh, Int_t nFiles = 0);
 TH1* GetInputHist(TString inFile, TString histName);
 void ScaleHist(TH1 *hh, int full);
 void drawFinal(TString outPlotDir);
+TH1D* GetRatio(TH1D *h1, TH1D *h2);
+TH1D* GetRatio(TH1D *h1, TH1D *h2, Double_t shift);
 
-static TString fPowhegPythia6[9] = {
-    "AnalysisResults_FastSim_powheg+pythia6_charm_central",
-    "AnalysisResults_FastSim_powheg+pythia6_charm_mc13",
-    "AnalysisResults_FastSim_powheg+pythia6_charm_mc17",
-    "AnalysisResults_FastSim_powheg+pythia6_charm_uF1uR05",
-    "AnalysisResults_FastSim_powheg+pythia6_charm_uF05uR1",
-    "AnalysisResults_FastSim_powheg+pythia6_charm_uF2uR1",
-    "AnalysisResults_FastSim_powheg+pythia6_charm_uF1uR2",
-    "AnalysisResults_FastSim_powheg+pythia6_charm_uF05uR05",
-    "AnalysisResults_FastSim_powheg+pythia6_charm_uF2uR2"
+/*
+static TString fFiles[9] = {
+    "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_X02/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/finalSpectraNEW/JetPtSpectrum_final.root",
+    "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_X04/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/finalSpectraNEW/JetPtSpectrum_final.root",
+    "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_X06/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/finalSpectraNEW/JetPtSpectrum_final.root",
     };
-static TString fPowhegPythia8[9] = {
-    "AnalysisResults_FastSim_powheg+pythia8_charm_central",
-    "AnalysisResults_FastSim_powheg+pythia8_charm_mc13",
-    "AnalysisResults_FastSim_powheg+pythia8_charm_mc17",
-    "AnalysisResults_FastSim_powheg+pythia8_charm_uF1uR05",
-    "AnalysisResults_FastSim_powheg+pythia8_charm_uF05uR1",
-    "AnalysisResults_FastSim_powheg+pythia8_charm_uF2uR1",
-    "AnalysisResults_FastSim_powheg+pythia8_charm_uF1uR2",
-    "AnalysisResults_FastSim_powheg+pythia8_charm_uF05uR05",
-    "AnalysisResults_FastSim_powheg+pythia8_charm_uF2uR2"
+*/
+static TString fFiles[9] = {
+    "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_Z02/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/finalSpectraNEW25/JetPtSpectrum_final.root",
+    "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_04zF/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/finalSpectraNEW25/JetPtSpectrum_final.root",
+    "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_Z06/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/finalSpectraNEW25/JetPtSpectrum_final.root",
     };
 
-
-static TString fPythia6[9] = {
-   "AnalysisResults_FastSim_pythia6_charm"
-   // "AnalysisResults_FastSim_pythia6_charmTREESCALING"
-};
-
-static TString fPythia8[9] = {
-   "AnalysisResults_FastSim_pythia8_charm"
-};
-
-static TString fPythia8SoftMode2[9] = {
-   "AnalysisResults_FastSim_pythia8_charm_Color2Soft50"
-};
-static TString fPowhegPythia6dijet[9] = {
-   "AnalysisResults_FastSim_powheg+pythia8_dijetHadi"
-};
-static TString fPowhegPythia8dijet[9] = {
-   "AnalysisResults_FastSim_powheg+pythia8_dijetSalvatore"
-};
 
 std::tuple<TGraphAsymmErrors*, TH1D*, TH1D*, TH1D*> GetSim(TString simname, Int_t type, Int_t nFiles, TString *names, TString simDir, Double_t simScaling, UInt_t nBins, Double_t *xBins);
 std::tuple<TGraphAsymmErrors*, TH1D*, TH1D*, TH1D*> GetDataSimRatio(TString simname, TH1D *data_cent, TH1D *sim_cent, TH1D *sim_up, TH1D *sim_down, UInt_t nBins, Double_t *xBins);
 std::tuple<TGraphAsymmErrors*, TH1D*,TGraphAsymmErrors*, TH1D*> GetData(TString dataFile, TString histBase, Double_t dataScaling, UInt_t nBins, Double_t *xBins, Double_t *systUncD_down, Double_t *systUncD_up);
-std::tuple<TCanvas*, TPad*, TPad*, TH1D*, TH1D*> PrepareCanvas(UInt_t xAxisBins, Double_t *xAxis);
+std::tuple<TCanvas*, TPad*, TPad*,  TPad*, TH1D*, TH1D*, TH1D*> PrepareCanvas(UInt_t xAxisBins, Double_t *xAxis);
 void PlaceOnPadData(TPad* pad,TGraphAsymmErrors* histo1, TH1D* histo2, Size_t markersize);
 void PlaceOnPadSim(TPad* pad, TGraphAsymmErrors* histo, Color_t ci, Style_t style, Style_t linestyle);
-void TerminateCanvas(TPad* pad1,TPad* pad2,TH1D* histo1,TH1D* histo2);
+void PlaceOnPadSim(TPad* pad, TH1D* histo, Color_t ci, Style_t style, Style_t linestyle);
+void TerminateCanvas(TPad* pad1,TPad* pad2,TPad* pad3,TH1D* histo1,TH1D* histo2,TH1D* histo3);
+
+std::tuple<TH1D*, TH1D*, TH1D*> GetRatio(TH1D *sim_cent, TH1D *sim_up, TH1D *sim_down,TH1D *sim2_cent, TH1D *sim2_up, TH1D *sim2_down);
 
 
-void finalJetSpectraInvUpdated(
-Int_t type = 0,
-Int_t radius = 4,
-Int_t z = 0,
-TString dataFile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/unfoldedSpectrum_unfoldedJetSpectrum.root",
-TString dataAnalysisFile = "/mnt/hgfs/vmware/data_R04_050219/data/AnalysisResults_Run2w18b.root",
-TString simDir = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Simulations/Prompt/AnalysisResults_Run2w18b.root0",
-TString outSpectraDir = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/finalSpectraNEW",
-TString histBase = "unfoldedSpectrum"
+void finalJetSpectraInvUpdatedRatio(
 )
-/*
-void finalJetSpectraInvUpdated(
-Int_t type = 0,
-Int_t radius = 4,
-Int_t z = 0,
-TString dataFile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_ztest/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/unfoldedSpectrum_unfoldedJetSpectrum.root",
-TString dataAnalysisFile = "/mnt/hgfs/vmware/data_R04_050219/data/AnalysisResults_Run2w18b.root",
-TString simDir = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_ztest/Simulations/Prompt/AnalysisResults_Run2w18b.root",
-TString outSpectraDir = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_ztest/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/finalSpectraNEW",
-TString histBase = "unfoldedSpectrumKineEff"
-)*/
+
 {
-    TString outPlotDir = outSpectraDir;
-    outPlotDir+="/plots";
- //   gSystem->Exec(Form("mkdir %s",outSpectraDir.Data()));
- //   gSystem->Exec(Form("mkdir %s",outPlotDir.Data()));
-
-    Double_t sigma_in = 0.0578;
-    const Double_t  BRDzero = 0.0389;
-
-    UInt_t xAxisBins = 10;
-    Double_t *xAxis =nullptr;// = new Double_t[xAxisBins];
-
-    Double_t *systUncD_up = nullptr;
-    Double_t *systUncD_down = nullptr;
-
-    zBin=z;
 
     // ----------------------------------------------------------------
     // ------------------- ENABLE SIMULATIONS HERE --------------------
     // ----------------------------------------------------------------
     Bool_t ePowhegPythia6 = false;
     Bool_t ePowhegPythia8 = true;
-    Bool_t ePythia6 = true;
-    Bool_t ePythia8 = true;
-    Bool_t ePythia8SoftMode2 = true;
+    Bool_t ePythia6 = false;
+    Bool_t ePythia8 = false;
+    Bool_t ePythia8SoftMode2 = false;
     Bool_t ePowhegPythia6dijet = false;
     Bool_t ePowhegPythia8dijet = false;
 
     // ----------------------------------------------------------------
-    // ---------------------- SET BINNING HERE ------------------------
-    // ----------------------------------------------------------------
-    if(type ==0){//x-section
-        xAxisBins = 8;
-        xAxis = new Double_t[xAxisBins+1]{5,6,8,10,12,14,20,30,50};
-    }
-    else if(type ==1 || type ==2){ //Z x-section or Z PDF
-        xAxisBins = 5;
-        xAxis = new Double_t[xAxisBins+1]{0.4,0.6,0.7,0.8,0.9,1.0};
-        jetpTbins = new Int_t[6]{2,5,7,10,15,50};
-        if(radius ==4 || radius ==6)DpTbins[0] = new Int_t[5]{2,2,3,5,5};
-        if(radius ==4 || radius ==6)DpTbins[1] = new Int_t[5]{5,7,10,15,36};
-        if(radius ==2)DpTbins[0] = new Int_t[5]{2,2,4,5,10};
-        if(radius ==2)DpTbins[1] = new Int_t[5]{5,7,10,15,36};
-        simDir+=Form("%d",zBin);
-        histBase+=Form("%d",zBin);
-        outSpectraDir+=Form("%d",zBin);
-        outPlotDir = outSpectraDir+"/plots";
-    }
 
-    if(type ==2){plotRanges[2]=0; plotRanges[3]=10;}
-
-   // std::cout<<DpTbins[0][2]<<" "<<DpTbins[1][4]<<std::endl;
-    gSystem->Exec(Form("mkdir %s",outSpectraDir.Data()));
-    gSystem->Exec(Form("mkdir %s",outPlotDir.Data()));
-
-   // gSystem->Exec(Form("mkdir %s",outSpectraDir.Data()));
-
-    // ----------------------------------------------------------------
-    // -------------------- SET SYSTEMATICS HERE ----------------------
-    // ----------------------------------------------------------------
-    if(type ==0){//x-section
-        pdf = false;
-        if(radius == 2){
-            dy = 2*(0.9 - 0.2);
-            plotRanges[0]=0; plotRanges[1]=2.1; plotRanges[2]=0.000005; plotRanges[3]=1;
-            systUncD_up = new Double_t[xAxisBins]{0.09, 0.08, 0.09, 0.10, 0.11, 0.13, 0.15, 0.19};
-            systUncD_down = new Double_t[xAxisBins]{0.10, 0.09,	0.11, 0.12,	0.14, 0.16,	0.23, 0.24};
-        }
-        else if(radius == 4){
-            dy = 2*(0.9 - 0.4);
-            plotRanges[0]=0; plotRanges[1]=2.1; plotRanges[2]=0.000005; plotRanges[3]=1;
-            systUncD_up = new Double_t[xAxisBins]{0.09, 0.08, 0.09, 0.10, 0.11, 0.13, 0.15, 0.19};
-            systUncD_down = new Double_t[xAxisBins]{0.10, 0.09,	0.11, 0.12,	0.14, 0.16,	0.23, 0.24};
-        }
-        else if(radius == 6){
-            dy = 2*(0.9 - 0.6);
-            plotRanges[0]=0; plotRanges[1]=2.7; plotRanges[2]=0.000005; plotRanges[3]=1;
-            systUncD_up = new Double_t[xAxisBins]{0.09, 0.08, 0.09, 0.10, 0.11, 0.13, 0.15, 0.19};
-            systUncD_down = new Double_t[xAxisBins]{0.10, 0.09,	0.11, 0.12,	0.14, 0.16,	0.23, 0.24};;
-        }
-    }
-    else if(type ==1){//Z x-section
-        pdf = false;
-        if(radius == 2){
-            dy = 2*(0.9 - 0.2);
-            if(zBin ==2){
-                systUncD_up = new Double_t[xAxisBins]{0,0,0,0,0};
-                systUncD_down = new Double_t[xAxisBins]{0,0,0,0,0};
-            }
-            else if(zBin ==3){
-                systUncD_up = new Double_t[xAxisBins]{0,0,0,0,0};
-                systUncD_down = new Double_t[xAxisBins]{0,0,0,0,0};
-            }
-            else if(zBin ==4){
-                systUncD_up = new Double_t[xAxisBins]{0,0,0,0,0};
-                systUncD_down = new Double_t[xAxisBins]{0,0,0,0,0};
-            }
-            else if(zBin ==5){
-                systUncD_up = new Double_t[xAxisBins]{0,0,0,0,0};
-                systUncD_down = new Double_t[xAxisBins]{0,0,0,0,0};
-            }
-        }
-        else if(radius == 4){
-            dy = 2*(0.9 - 0.4);
-            if(zBin ==2){
-                plotRanges[0]=0; plotRanges[1]=2.1; plotRanges[2]=0.001; plotRanges[3]=0.4;
-                systUncD_up = new Double_t[xAxisBins]{0.14, 0.08, 0.08,	0.09, 0.09};
-                systUncD_down = new Double_t[xAxisBins]{0.15, 0.09, 0.09, 0.10,	0.09};
-            }
-            else if(zBin ==3){
-                systUncD_up = new Double_t[xAxisBins]{0.14, 0.08, 0.08,	0.09, 0.09};
-                systUncD_down = new Double_t[xAxisBins]{0.15, 0.09, 0.09, 0.10,	0.09};
-            }
-            else if(zBin ==4){
-                systUncD_up = new Double_t[xAxisBins]{0.14, 0.08, 0.08,	0.09, 0.09};
-                systUncD_down = new Double_t[xAxisBins]{0.15, 0.09, 0.09, 0.10,	0.09};
-            }
-            else if(zBin ==5){
-                systUncD_up = new Double_t[xAxisBins]{0.14, 0.08, 0.08,	0.09, 0.09};
-                systUncD_down = new Double_t[xAxisBins]{0.15, 0.09, 0.09, 0.10,	0.09};
-            };
-        }
-        else if(radius == 6){
-            dy = 2*(0.9 - 0.6);
-            if(zBin ==2){
-                systUncD_up = new Double_t[xAxisBins]{0,0,0,0,0};
-                systUncD_down = new Double_t[xAxisBins]{0,0,0,0,0};
-            }
-            else if(zBin ==3){
-                systUncD_up = new Double_t[xAxisBins]{0,0,0,0,0};
-                systUncD_down = new Double_t[xAxisBins]{0,0,0,0,0};
-            }
-            else if(zBin ==4){
-                systUncD_up = new Double_t[xAxisBins]{0,0,0,0,0};
-                systUncD_down = new Double_t[xAxisBins]{0,0,0,0,0};
-            }
-            else if(zBin ==5){
-                systUncD_up = new Double_t[xAxisBins]{0,0,0,0,0};
-                systUncD_down = new Double_t[xAxisBins]{0,0,0,0,0};
-            }
-        }
-    }
-    else if(type ==2){//Z PDF
-        pdf = true;
-        if(radius == 2){
-            dy = 2*(0.9 - 0.2);
-            if(zBin ==2){
-                systUncD_up = new Double_t[xAxisBins]{0,0,0,0,0};
-                systUncD_down = new Double_t[xAxisBins]{0,0,0,0,0};
-            }
-            else if(zBin ==3){
-                systUncD_up = new Double_t[xAxisBins]{0,0,0,0,0};
-                systUncD_down = new Double_t[xAxisBins]{0,0,0,0,0};
-            }
-            else if(zBin ==4){
-                systUncD_up = new Double_t[xAxisBins]{0,0,0,0,0};
-                systUncD_down = new Double_t[xAxisBins]{0,0,0,0,0};
-            }
-            else if(zBin ==5){
-                systUncD_up = new Double_t[xAxisBins]{0,0,0,0,0};
-                systUncD_down = new Double_t[xAxisBins]{0,0,0,0,0};
-            }
-        }
-        else if(radius == 4){
-            dy = 2*(0.9 - 0.4);
-            if(zBin ==2){
-                systUncD_up = new Double_t[xAxisBins]{0.14, 0.08, 0.08,	0.09, 0.09};
-                systUncD_down = new Double_t[xAxisBins]{0.15, 0.09, 0.09, 0.10,	0.09};
-            }
-            else if(zBin ==3){
-                systUncD_up = new Double_t[xAxisBins]{0.14, 0.08, 0.08,	0.09, 0.09};
-                systUncD_down = new Double_t[xAxisBins]{0.15, 0.09, 0.09, 0.10,	0.09};
-            }
-            else if(zBin ==4){
-                systUncD_up = new Double_t[xAxisBins]{0.14, 0.08, 0.08,	0.09, 0.09};
-                systUncD_down = new Double_t[xAxisBins]{0.15, 0.09, 0.09, 0.10,	0.09};
-            }
-            else if(zBin ==5){
-                systUncD_up = new Double_t[xAxisBins]{0.14, 0.08, 0.08,	0.09, 0.09};
-                systUncD_down = new Double_t[xAxisBins]{0.15, 0.09, 0.09, 0.10,	0.09};
-            }
-        }
-        else if(radius == 6){
-            dy = 2*(0.9 - 0.6);
-            if(zBin ==2){
-                systUncD_up = new Double_t[xAxisBins]{0,0,0,0,0};
-                systUncD_down = new Double_t[xAxisBins]{0,0,0,0,0};
-            }
-            else if(zBin ==3){
-                systUncD_up = new Double_t[xAxisBins]{0,0,0,0,0};
-                systUncD_down = new Double_t[xAxisBins]{0,0,0,0,0};
-            }
-            else if(zBin ==4){
-                systUncD_up = new Double_t[xAxisBins]{0,0,0,0,0};
-                systUncD_down = new Double_t[xAxisBins]{0,0,0,0,0};
-            }
-            else if(zBin ==5){
-                systUncD_up = new Double_t[xAxisBins]{0,0,0,0,0};
-                systUncD_down = new Double_t[xAxisBins]{0,0,0,0,0};
-            }
-        }
-    }
-    // ----------------------------------------------------------------
-
-
-    //get Data n Events
-    std::cout<<"get Data n Events"<<std::endl;
-    TFile *File = new TFile(dataAnalysisFile,"read");
-    TDirectoryFile* dir = dynamic_cast<TDirectoryFile*>(File->Get("PWG3_D2H_DmesonsForJetCorrelationsMBN0"));
-    AliNormalizationCounter *c = dynamic_cast<AliNormalizationCounter*>(dir->Get("NormalizationCounter"));
-    double nEv = c->GetNEventsForNorm();
-    double dataLum = nEv/(sigma_in*1000) ;//Luminosity in mbar
-    double simScaling = 0.5; //pp 0.5
-    double dataScaling = 1. /(BRDzero * dataLum)/2.;
-//    std::cout<<"scalings "<<jetEta<<" "<<dy<<" "<<dataScaling<<" "<<BRDzero<<" "<<dataLum<<" "<<nEv<<" "<<sigma_in<<std::endl;
-    std::cout<<"scalings: "<<dy<<" "<<dataScaling<<" "<<BRDzero<<" "<<dataLum<<" "<<nEv<<" "<<sigma_in<<std::endl;
-
+  //  UInt_t xAxisBins = 8;
+//    Double_t *xAxis = new Double_t[xAxisBins+1]{5,6,8,10,12,14,20,30,50};
+    UInt_t xAxisBins = 5;
+    Double_t *xAxis = new Double_t[xAxisBins+1]{0.4,0.6,0.7,0.8,0.9,1.0};
+   // plotRanges[0]=0; plotRanges[1]=2.1; plotRanges[2]=0.1; plotRanges[3]=3.5;
+     plotRanges[0]=0.4; plotRanges[1]=1.6; plotRanges[2]=0.0; plotRanges[3]=5;
 
 
     // ----------------- Initiate Canvas ---------------------
     TCanvas *canvas;
-    TPad *upPad, *dowmPad;
-    TH1D *placeholder_up, *placeholder_down;
-    std::tie(canvas,upPad,dowmPad,placeholder_up,placeholder_down) = PrepareCanvas(xAxisBins,xAxis);
+    TPad *upPad, *dowmPad, *dowmPad2;
+    TH1D *placeholder_up, *placeholder_down, *placeholder_down2;
+    std::tie(canvas,upPad,dowmPad,dowmPad2,placeholder_up,placeholder_down,placeholder_down2) = PrepareCanvas(xAxisBins,xAxis);
 
     // ----------------- data ---------------------
-    TGraphAsymmErrors *hDataSys, *hDataSysRatio;
-    TH1D *hData_binned, *hData_binned_ratio;
-    std::tie(hDataSys, hData_binned, hDataSysRatio, hData_binned_ratio) = GetData(dataFile, histBase, dataScaling, xAxisBins, xAxis, systUncD_down, systUncD_up);
+  //  TGraphAsymmErrors *hDataSys, *hDataSysRatio;
+    TH1D *hData_binned2,*hData_binned4,*hData_binned6, *hData_binned_ratio;
+ //   std::tie(hDataSys, hData_binned, hDataSysRatio, hData_binned_ratio) = GetData(dataFile, histBase, dataScaling, xAxisBins, xAxis, systUncD_down, systUncD_up);
+   hData_binned2 = dynamic_cast<TH1D*>(GetInputHist(fFiles[0],"hData_binned"));
+   hData_binned4 = dynamic_cast<TH1D*>(GetInputHist(fFiles[1],"hData_binned"));
+   hData_binned6 = dynamic_cast<TH1D*>(GetInputHist(fFiles[2],"hData_binned"));
 
-    PlaceOnPadData(upPad,hDataSys,hData_binned,0.9);
-    PlaceOnPadData(dowmPad,hDataSysRatio,hData_binned_ratio,0);
+   TH1D *hDataR26 = dynamic_cast<TH1D*>(hData_binned2->Clone("hDataR26"));
+   hDataR26->Divide(hData_binned6);
+   hDataR26->SetLineColor(static_cast<Color_t>(TColor::GetColor("#990000")));
+   hDataR26->SetMarkerColor(static_cast<Color_t>(TColor::GetColor("#990000")));
+   TH1D *hDataR46 = dynamic_cast<TH1D*>(hData_binned4->Clone("hDataR46"));
+   hDataR46->Divide(hData_binned6);
+   hDataR46->SetLineColor(static_cast<Color_t>(TColor::GetColor("#999900")));
+   hDataR46->SetMarkerColor(static_cast<Color_t>(TColor::GetColor("#999900")));
+   hDataR46->SetMarkerStyle(22);
+
+   TH1D *hData_binned2R,*hData_binned4R,*hData_binned6R;
+//   std::tie(hDataSys, hData_binned, hDataSysRatio, hData_binned_ratio) = GetData(dataFile, histBase, dataScaling, xAxisBins, xAxis, systUncD_down, systUncD_up);
+  hData_binned2R = dynamic_cast<TH1D*>(GetInputHist(fFiles[0],"hData_binned_ratio"));
+  hData_binned4R = dynamic_cast<TH1D*>(GetInputHist(fFiles[1],"hData_binned_ratio"));
+  hData_binned6R = dynamic_cast<TH1D*>(GetInputHist(fFiles[2],"hData_binned_ratio"));
+
+  TH1D *hDataR26R = dynamic_cast<TH1D*>(hData_binned2R->Clone("hDataR26R"));
+  hDataR26R->Divide(hData_binned6R);
+  hDataR26R->SetLineColor(static_cast<Color_t>(TColor::GetColor("#990000")));
+  hDataR26R->SetMarkerColor(static_cast<Color_t>(TColor::GetColor("#990000")));
+  TH1D *hDataR46R = dynamic_cast<TH1D*>(hData_binned4R->Clone("hDataR46R"));
+  hDataR46R->Divide(hData_binned6R);
+  hDataR46R->SetLineColor(static_cast<Color_t>(TColor::GetColor("#999900")));
+  hDataR46R->SetMarkerColor(static_cast<Color_t>(TColor::GetColor("#999900")));
+  hDataR46R->SetMarkerStyle(22);
+
+   for(Int_t bin = 1; bin <= hDataR46->GetNbinsX();bin++){
+       hDataR46->SetBinContent(bin,hDataR46->GetBinContent(bin)+0.5);
+   }
 
 
+   hDataR26->SetMinimum(plotRanges[2]);
+   hDataR26->SetMaximum(plotRanges[3]);
+   hDataR26->GetYaxis()->SetRangeUser(plotRanges[2],plotRanges[3]);
+   hDataR46->SetMinimum(plotRanges[2]);
+   hDataR46->SetMaximum(plotRanges[3]);
+   hDataR46->GetYaxis()->SetRangeUser(plotRanges[2],plotRanges[3]);
+   hDataR26->SetMarkerStyle(20);
+   upPad->cd();
+    hDataR26->Draw("same p");
+    hDataR46->Draw("same p");
+
+/*
+   TH1D *simPowhegPythia6_cent26,*simPowhegPythia6_up26,*simPowhegPythia6_down26;
+  // TH1D *simPowhegPythia6_cent46,*simPowhegPythia6_up46,*simPowhegPythia6_down46;
+   TH1D *simPowhegPythia6_cent2,*simPowhegPythia6_up2,*simPowhegPythia6_down2;
+  // TH1D *simPowhegPythia6_cent4,*simPowhegPythia6_up4,*simPowhegPythia6_down4;
+   TH1D *simPowhegPythia6_cent6,*simPowhegPythia6_up6,*simPowhegPythia6_down6;
+   simPowhegPythia6_cent2 = dynamic_cast<TH1D*>(GetInputHist(fFiles[0],"hsimPowhegPythia8_central"));
+   if(!simPowhegPythia6_cent2) std::cout<<"no "<<std::endl;
+   simPowhegPythia6_up2 = dynamic_cast<TH1D*>(GetInputHist(fFiles[0],"hsimPowhegPythia8_up"));
+   if(!simPowhegPythia6_up2) std::cout<<"no2 "<<std::endl;
+   simPowhegPythia6_down2 = dynamic_cast<TH1D*>(GetInputHist(fFiles[0],"hsimPowhegPythia8_down"));
+   if(!simPowhegPythia6_down2) std::cout<<"no3 "<<std::endl;
+ //  simPowhegPythia6_cent4 = dynamic_cast<TH1D*>(GetInputHist(fFiles[1],"hsimPowhegPythia8_central"));
+ //  simPowhegPythia6_up4 = dynamic_cast<TH1D*>(GetInputHist(fFiles[1],"hsimPowhegPythia8_up"));
+ //  simPowhegPythia6_down4 = dynamic_cast<TH1D*>(GetInputHist(fFiles[1],"hsimPowhegPythia8_down"));
+   simPowhegPythia6_cent6 = dynamic_cast<TH1D*>(GetInputHist(fFiles[2],"hsimPowhegPythia8_central"));
+   simPowhegPythia6_up6 = dynamic_cast<TH1D*>(GetInputHist(fFiles[2],"hsimPowhegPythia8_up"));
+  simPowhegPythia6_down6 = dynamic_cast<TH1D*>(GetInputHist(fFiles[2],"hsimPowhegPythia8_down"));
+  if(!simPowhegPythia6_cent6) std::cout<<"no "<<std::endl;
+  if(!simPowhegPythia6_up6) std::cout<<"no "<<std::endl;
+  if(!simPowhegPythia6_down6) std::cout<<"no "<<std::endl;
+   std::cout<<"here"<<std::endl;
+   std::tie(simPowhegPythia6_cent26, simPowhegPythia6_up26, simPowhegPythia6_down26) = GetRatio(simPowhegPythia6_cent2,simPowhegPythia6_up2,simPowhegPythia6_down2,simPowhegPythia6_cent6,simPowhegPythia6_up6,simPowhegPythia6_down6);
+  // std::tie(simPowhegPythia6_cent46, simPowhegPythia6_up46, simPowhegPythia6_down46) = GetRatio(simPowhegPythia6_cent4,simPowhegPythia6_up4,simPowhegPythia6_down4,simPowhegPythia6_cent6,simPowhegPythia6_up6,simPowhegPythia6_down6);
+   upPad->cd();
+   simPowhegPythia6_up26->SetMarkerStyle(22);
+   simPowhegPythia6_up26->SetMarkerSize(2);
+   simPowhegPythia6_down26->SetMarkerStyle(23);
+    //simPowhegPythia6_cent26->Draw("same p");
+    simPowhegPythia6_up26->Draw("same P");
+    simPowhegPythia6_down26->Draw("same P");
+   // simPowhegPythia6_cent46->Draw("same p");
+   // simPowhegPythia6_up46->Draw("same l");
+   // simPowhegPythia6_down46->Draw("same l");
+    std::cout<<simPowhegPythia6_cent26->GetName()<<std::endl;
+    std::cout<<simPowhegPythia6_up26->GetName()<<std::endl;
+    std::cout<<simPowhegPythia6_down26->GetName()<<std::endl;
+    for(Int_t i = 1; i< simPowhegPythia6_up26->GetNbinsX();i++){
+        std::cout<<simPowhegPythia6_cent26->GetBinContent(i)<<" "<<simPowhegPythia6_up26->GetBinContent(i)<<" "<<simPowhegPythia6_down26->GetBinContent(i)<<std::endl;
+    }*/
+
+    TH1D *simPowhegPythia2,*simPowhegPythia4,*simPowhegPythia6;
+    TH1D *simPowhegPythia26,*simPowhegPythia46;
+    simPowhegPythia2 = dynamic_cast<TH1D*>(GetInputHist(fFiles[0],"hsimPowhegPythia8_central"));
+    simPowhegPythia4 = dynamic_cast<TH1D*>(GetInputHist(fFiles[1],"hsimPowhegPythia8_central"));
+    simPowhegPythia6 = dynamic_cast<TH1D*>(GetInputHist(fFiles[2],"hsimPowhegPythia8_central"));
+    simPowhegPythia26 = GetRatio(simPowhegPythia2,simPowhegPythia6);
+    simPowhegPythia46 = GetRatio(simPowhegPythia4,simPowhegPythia6,0.5);
+
+    TH1D *simPythia62,*simPythia64,*simPythia66;
+    TH1D *simPythia626,*simPythia646;
+    simPythia62 = dynamic_cast<TH1D*>(GetInputHist(fFiles[0],"hsimPythia6_central"));
+    simPythia64 = dynamic_cast<TH1D*>(GetInputHist(fFiles[1],"hsimPythia6_central"));
+    simPythia66 = dynamic_cast<TH1D*>(GetInputHist(fFiles[2],"hsimPythia6_central"));
+    simPythia626 = GetRatio(simPythia62,simPythia66);
+    simPythia646 = GetRatio(simPythia64,simPythia66,0.5);
+
+    TH1D *simPythia82,*simPythia84,*simPythia86;
+    TH1D *simPythia826,*simPythia846;
+    simPythia82 = dynamic_cast<TH1D*>(GetInputHist(fFiles[0],"hsimPythia8_central"));
+    simPythia84 = dynamic_cast<TH1D*>(GetInputHist(fFiles[1],"hsimPythia8_central"));
+    simPythia86 = dynamic_cast<TH1D*>(GetInputHist(fFiles[2],"hsimPythia8_central"));
+    simPythia826 = GetRatio(simPythia82,simPythia86);
+    simPythia846 = GetRatio(simPythia84,simPythia86,0.5);
+
+    TH1D *simPythia8Soft2,*simPythia8Soft4,*simPythia8Soft6;
+    TH1D *simPythia8Soft26,*simPythia8Soft46;
+    simPythia8Soft2 = dynamic_cast<TH1D*>(GetInputHist(fFiles[0],"hsimPythia8Soft2_central"));
+    simPythia8Soft4 = dynamic_cast<TH1D*>(GetInputHist(fFiles[1],"hsimPythia8Soft2_central"));
+    simPythia8Soft6 = dynamic_cast<TH1D*>(GetInputHist(fFiles[2],"hsimPythia8Soft2_central"));
+    simPythia8Soft26 = GetRatio(simPythia8Soft2,simPythia8Soft6);
+    simPythia8Soft46 = GetRatio(simPythia8Soft4,simPythia8Soft6,0.5);
+
+    PlaceOnPadSim(upPad,simPowhegPythia26,static_cast<Color_t>(TColor::GetColor("#990011")),25,1);
+    PlaceOnPadSim(upPad,simPythia626,static_cast<Color_t>(TColor::GetColor("#009933")),26,2);
+    PlaceOnPadSim(upPad,simPythia826,kViolet+2,27,3);
+    PlaceOnPadSim(upPad,simPythia8Soft26,kOrange+2,28,4);
+
+    PlaceOnPadSim(upPad,simPowhegPythia46,static_cast<Color_t>(TColor::GetColor("#990011")),25,1);
+    PlaceOnPadSim(upPad,simPythia646,static_cast<Color_t>(TColor::GetColor("#009933")),26,2);
+    PlaceOnPadSim(upPad,simPythia846,kViolet+2,27,3);
+    PlaceOnPadSim(upPad,simPythia8Soft46,kOrange+2,28,4);
+
+    TH1D *simPowhegPythia2R,*simPowhegPythia4R,*simPowhegPythia6R;
+    TH1D *simPowhegPythia26R,*simPowhegPythia46R;
+    simPowhegPythia2R = dynamic_cast<TH1D*>(GetInputHist(fFiles[0],"hsimPowhegPythia8_central_ratio"));
+    simPowhegPythia4R = dynamic_cast<TH1D*>(GetInputHist(fFiles[1],"hsimPowhegPythia8_central_ratio"));
+    simPowhegPythia6R = dynamic_cast<TH1D*>(GetInputHist(fFiles[2],"hsimPowhegPythia8_central_ratio"));
+    simPowhegPythia26R = GetRatio(simPowhegPythia2R,simPowhegPythia6R);
+    simPowhegPythia46R = GetRatio(simPowhegPythia4R,simPowhegPythia6R);
+
+    TH1D *simPythia62R,*simPythia64R,*simPythia66R;
+    TH1D *simPythia626R,*simPythia646R;
+    simPythia62R = dynamic_cast<TH1D*>(GetInputHist(fFiles[0],"hsimPythia6_central_ratio"));
+    simPythia64R = dynamic_cast<TH1D*>(GetInputHist(fFiles[1],"hsimPythia6_central_ratio"));
+    simPythia66R = dynamic_cast<TH1D*>(GetInputHist(fFiles[2],"hsimPythia6_central_ratio"));
+    simPythia626R = GetRatio(simPythia62R,simPythia66R);
+    simPythia646R = GetRatio(simPythia64R,simPythia66R);
+
+    TH1D *simPythia82R,*simPythia84R,*simPythia86R;
+    TH1D *simPythia826R,*simPythia846R;
+    simPythia82R = dynamic_cast<TH1D*>(GetInputHist(fFiles[0],"hsimPythia8_central_ratio"));
+    simPythia84R = dynamic_cast<TH1D*>(GetInputHist(fFiles[1],"hsimPythia8_central_ratio"));
+    simPythia86R = dynamic_cast<TH1D*>(GetInputHist(fFiles[2],"hsimPythia8_central_ratio"));
+    simPythia826R = GetRatio(simPythia82R,simPythia86R);
+    simPythia846R = GetRatio(simPythia84R,simPythia86R);
+
+    TH1D *simPythia8Soft2R,*simPythia8Soft4R,*simPythia8Soft6R;
+    TH1D *simPythia8Soft26R,*simPythia8Soft46R;
+    simPythia8Soft2R = dynamic_cast<TH1D*>(GetInputHist(fFiles[0],"hsimPythia8Soft2_central_ratio"));
+    simPythia8Soft4R = dynamic_cast<TH1D*>(GetInputHist(fFiles[1],"hsimPythia8Soft2_central_ratio"));
+    simPythia8Soft6R = dynamic_cast<TH1D*>(GetInputHist(fFiles[2],"hsimPythia8Soft2_central_ratio"));
+    simPythia8Soft26R = GetRatio(simPythia8Soft2R,simPythia8Soft6R);
+    simPythia8Soft46R = GetRatio(simPythia8Soft4R,simPythia8Soft6R);
+
+    PlaceOnPadSim(dowmPad2,simPowhegPythia26R,static_cast<Color_t>(TColor::GetColor("#990011")),25,1);
+    PlaceOnPadSim(dowmPad2,simPythia626R,static_cast<Color_t>(TColor::GetColor("#009933")),26,2);
+    PlaceOnPadSim(dowmPad2,simPythia826R,kViolet+2,27,3);
+    PlaceOnPadSim(dowmPad2,simPythia8Soft26R,kOrange+2,28,4);
+    dowmPad2->cd();
+    hDataR26R->Draw("same P e0 x0");
+
+    PlaceOnPadSim(dowmPad,simPowhegPythia46R,static_cast<Color_t>(TColor::GetColor("#990011")),25,1);
+    PlaceOnPadSim(dowmPad,simPythia646R,static_cast<Color_t>(TColor::GetColor("#009933")),26,2);
+    PlaceOnPadSim(dowmPad,simPythia846R,kViolet+2,27,3);
+    PlaceOnPadSim(dowmPad,simPythia8Soft46R,kOrange+2,28,4);
+    dowmPad->cd();
+    hDataR46R->Draw("same P e0 x0");
+
+   // simPowhegPythia26->Draw("same P");
+   // simPythia626->Draw("same P");
+  //  simPythia826->Draw("same P");
+  //  simPythia8Soft26->Draw("same P");
+
+   //PlaceOnPadSim(upPad,hData_binned2,static_cast<Color_t>(TColor::GetColor("#000099")),24,1);
+
+ //   PlaceOnPadData(upPad,hDataSys,hData_binned,0.9);
+  //  PlaceOnPadData(dowmPad,hDataSysRatio,hData_binned_ratio,0);
+
+/*
     // ----------------- prompt simulation ---------------------
     TGraphAsymmErrors *simPowhegPythia6 = nullptr;
     TH1D* simPowhegPythia6_cent = nullptr, *simPowhegPythia6_down = nullptr, *simPowhegPythia6_up = nullptr;
@@ -452,33 +395,31 @@ TString histBase = "unfoldedSpectrumKineEff"
         PlaceOnPadSim(upPad,simPowhegPythia8dijet,static_cast<Color_t>(TColor::GetColor("#009999")),24,1);
         PlaceOnPadSim(dowmPad,simPowhegPythia8dijet_R,static_cast<Color_t>(TColor::GetColor("#009999")),24,1);
     }
-
+*/
     // ----------------- Legend and text PAD---------------------
     TLegend *leg =nullptr;
     Double_t shift = 0.06*(ePowhegPythia6+ePowhegPythia8+ePythia6+ePythia8+ePythia8SoftMode2+ePowhegPythia6dijet);
-    if(type==0)leg = new TLegend(0.35,0.4,0.65,0.65,nullptr,"NB NDC");
-    if(type==1 || type ==2)leg = new TLegend(0.22,0.65-shift,0.5,0.65,nullptr,"NB NDC");
+    leg = new TLegend(0.225,0.4,0.525,0.7,nullptr,"NB NDC");
     leg->SetBorderSize(0);
     leg->SetTextFont(43);
-    leg->SetTextSize(21);
+    leg->SetTextSize(18);
     leg->SetLineColor(1);
     leg->SetLineStyle(1);
     leg->SetLineWidth(1);
     leg->SetFillColor(0);
     leg->SetFillStyle(0);
-    leg->AddEntry(hDataSys,"Data","fp");
+        leg->AddEntry(hDataR46,"Data #it{#sigma}(R=0.4)/#it{#sigma}(R=0.6) (+0.5)","fp");
+    leg->AddEntry(hDataR26,"Data #it{#sigma}(R=0.2)/#it{#sigma}(R=0.6)","fp");
 
-    if(ePowhegPythia6)leg->AddEntry(simPowhegPythia6,"POWHEG hvq + PYTHIA 6","pf");
-    if(ePowhegPythia8)leg->AddEntry(simPowhegPythia8,"POWHEG hvq + PYTHIA 8","pf");
-    if(ePythia6)leg->AddEntry(simPythia6,"PYTHIA 6 Perugia 2011","pf");
-    if(ePythia8)leg->AddEntry(simPythia8,"PYTHIA 8 Monash 2013","pf");
-    if(ePythia8SoftMode2)leg->AddEntry(simPythia8Soft2,"PYTHIA 8 Monash 2013 Soft mode 2","pf");
-    if(ePowhegPythia6dijet)leg->AddEntry(simPowhegPythia6dijet,"POWHEG dijet + PYTHIA 8 Hadi","pf");
+
+    leg->AddEntry(simPowhegPythia26,"POWHEG hvq + PYTHIA 8","pf");
+    leg->AddEntry(simPythia626,"PYTHIA 6 Perugia 2011","pf");
+    leg->AddEntry(simPythia826,"PYTHIA 8 Monash 2013","pf");
+    leg->AddEntry(simPythia8Soft26,"PYTHIA 8 Monash 2013 Soft mode 2","pf");
     //leg->AddEntry(simPowhegPythia6dijet,"POWHEG dijet + PYTHIA 8 Salvatore","pf");
     TPaveText *pt[2];
     pt[0] = new TPaveText(0.2,0.85,0.85,0.95,"NB NDC");
-    if(type==0)pt[1] = new TPaveText(0.2,0.7,0.85,0.85,"NB NDC");
-    if(type==1 ||type==2)pt[1] = new TPaveText(0.2,0.7,0.85,0.85,"NB NDC");
+    pt[1] = new TPaveText(0.2,0.75,0.85,0.85,"NB NDC");
     for(Int_t s = 0; s<2;s++){
         pt[s]->SetBorderSize(0);
         pt[s]->SetFillStyle(0);
@@ -488,21 +429,40 @@ TString histBase = "unfoldedSpectrumKineEff"
     }
     pt[0]->AddText("ALICE Preliminary"); //uncomment
     pt[0]->AddText("pp, #sqrt{#it{s}} = 13 TeV");
-    pt[1]->AddText(Form("charged jets, anti-#it{k}_{T}, #it{R} = 0.%d, |#it{#eta}_{lab}^{jet}| < 0.%d",4,radius));
-    if(type==0)pt[1]->AddText(Form ("with D^{0}, %d < #it{p}_{T,D^{0}} < %d GeV/#it{c}",static_cast<int>(2),static_cast<int>(36)));
+    pt[1]->AddText(Form("charged jets, anti-#it{k}_{T} with D^{0}, %d < #it{p}_{T,D^{0}} < %d GeV/#it{c}",static_cast<int>(2),static_cast<int>(36)));
+   // pt[1]->AddText(Form ("with D^{0}, %d < #it{p}_{T,D^{0}} < %d GeV/#it{c}",static_cast<int>(2),static_cast<int>(36)));
    // if(type==1 ||type==2)pt[1]->AddText(Form ("%d < #it{p}_{T,jet} < %d GeV/#it{c}",jetpTbins[zBin-1],jetpTbins[zBin]));
    // if(type==1 ||type==2)pt[1]->AddText(Form ("with D^{0}, %d < #it{p}_{T,D^{0}} < %d GeV/#it{c}",DpTbins[0][zBin-1],DpTbins[1][zBin-1]));
-    if(type==1 ||type==2)pt[1]->AddText(Form ("%d < #it{p}_{T,jet} < %d GeV/#it{c} with D^{0}, %d < #it{p}_{T,D^{0}} < %d GeV/#it{c}",jetpTbins[zBin-1],jetpTbins[zBin],DpTbins[0][zBin-1],DpTbins[1][zBin-1]));
+   // if(type==1 ||type==2)pt[1]->AddText(Form ("%d < #it{p}_{T,jet} < %d GeV/#it{c} with D^{0}, %d < #it{p}_{T,D^{0}} < %d GeV/#it{c}",jetpTbins[zBin-1],jetpTbins[zBin],DpTbins[0][zBin-1],DpTbins[1][zBin-1]));
     //if(type==1 ||type==2)pt[1]->AddText(Form ("",DpTbins[0][zBin-1],DpTbins[1][zBin-1]));
+
+    TPaveText *pt2[2];
+    pt2[0] = new TPaveText(0.65,0.79,0.95,0.95,"NB NDC");
+    pt2[1] = new TPaveText(0.65,0.8,0.95,0.95,"NB NDC");
+    for(Int_t s = 0; s<2;s++){
+        pt2[s]->SetBorderSize(0);
+        pt2[s]->SetFillStyle(0);
+        pt2[s]->SetTextAlign(13);
+        pt2[s]->SetTextFont(43);
+        pt2[s]->SetTextSize(19);
+    }
+
+    pt2[0]->AddText("#it{#sigma}(R=0.4)/#it{#sigma}(R=0.6)");
+    pt2[1]->AddText("#it{#sigma}(R=0.2)/#it{#sigma}(R=0.6)");
+
 
     upPad->cd();
     leg->Draw();
     pt[0]->Draw();
     pt[1]->Draw();
+    dowmPad->cd();
+    pt2[0]->Draw();
+    dowmPad2->cd();
+    pt2[1]->Draw();
 
     // ----------------- Terminate Canvas ---------------------
-    TerminateCanvas(upPad,dowmPad,placeholder_up,placeholder_down);
-    canvas->SaveAs(outPlotDir+"/finalSpectra.png");
+    TerminateCanvas(upPad,dowmPad,dowmPad2,placeholder_up,placeholder_down,placeholder_down2);
+ /*   canvas->SaveAs(outPlotDir+"/finalSpectra.png");
 
     TFile *ofile = new TFile(Form("%s/JetPtSpectrum_final.root",outSpectraDir.Data()),"RECREATE");
     hData_binned->Write();
@@ -575,16 +535,19 @@ TString histBase = "unfoldedSpectrumKineEff"
         simPowhegPythia6dijet_R->Write();
     }
 
-    ofile->Close();
+    ofile->Close();*/
     return;
 }
 
-void TerminateCanvas(TPad* pad1,TPad* pad2,TH1D* histo1,TH1D* histo2){
+void TerminateCanvas(TPad* pad1, TPad* pad2, TPad *pad3, TH1D* histo1, TH1D* histo2, TH1D *histo3){
     pad1->cd();
     histo1->Draw("sameaxis");
     pad2->cd();
     histo2->Draw("sameaxis");
     histo2->Draw("sameaxig");
+    pad3->cd();
+    histo3->Draw("sameaxis");
+    histo3->Draw("sameaxig");
 }
 
 void PlaceOnPadSim(TPad* pad,TGraphAsymmErrors* histo, Color_t ci, Style_t style, Style_t linestyle){
@@ -599,8 +562,25 @@ void PlaceOnPadSim(TPad* pad,TGraphAsymmErrors* histo, Color_t ci, Style_t style
    // histo->SetMarkerSize(markersize); //add up
     histo->SetLineWidth(2);
     TString odraaw = "";
-    if(linestyle ==1) odraaw = "2p";
-    else odraaw = "1p";
+    if(linestyle ==1) odraaw = "same 2p";
+    else odraaw = "same 1p";
+    histo->Draw(odraaw);
+}
+
+void PlaceOnPadSim(TPad* pad,TH1D* histo, Color_t ci, Style_t style, Style_t linestyle){
+    pad->cd();
+    histo->SetFillColor(1);
+    histo->SetFillStyle(0);
+    histo->SetLineColor(ci);
+    histo->SetMarkerColor(ci);
+    histo->SetMarkerStyle(style);
+    histo->SetLineStyle(linestyle);
+   // histo->SetFillStyle(3005);
+   // histo->SetMarkerSize(markersize); //add up
+    histo->SetLineWidth(2);
+    TString odraaw = "";
+    if(linestyle ==1) odraaw = "same 2p";
+    else odraaw = "same 1p";
     histo->Draw(odraaw);
 }
 
@@ -624,7 +604,7 @@ void PlaceOnPadData(TPad* pad,TGraphAsymmErrors* histo1, TH1D* histo2, Size_t ma
     histo2->Draw("same p  e0 x0");
 };
 
-std::tuple<TCanvas*, TPad*, TPad*, TH1D*, TH1D*> PrepareCanvas(UInt_t xAxisBins, Double_t *xAxis){
+std::tuple<TCanvas*, TPad*, TPad*,  TPad*, TH1D*, TH1D*, TH1D*> PrepareCanvas(UInt_t xAxisBins, Double_t *xAxis){
     style();
     //prepare main canvas
     TCanvas *FinalSpectrum = new TCanvas("FinalSpectrum", "FinalSpectrum",0,45,700,700);
@@ -638,14 +618,14 @@ std::tuple<TCanvas*, TPad*, TPad*, TH1D*, TH1D*> PrepareCanvas(UInt_t xAxisBins,
     FinalSpectrum->SetFrameBorderMode(0);
 
     //Set primitives in upper pad
-    TPad *pad_top = new TPad("pad_top", "pad_top",0,0.35,1,1);
+    TPad *pad_top = new TPad("pad_top", "pad_top",0,0.5,1,1);
     pad_top->Draw();
     pad_top->cd();
     pad_top->Range(-1.986821e-07,-4.69897,33.33333,0.3499945);
     pad_top->SetFillColor(0);
     pad_top->SetBorderMode(0);
     pad_top->SetBorderSize(2);
-    if(zBin==0)pad_top->SetLogy();
+//    if(zBin==0)pad_top->SetLogy();
     pad_top->SetTickx(1);
     pad_top->SetTicky(1);
     pad_top->SetLeftMargin(0.18f);
@@ -656,7 +636,7 @@ std::tuple<TCanvas*, TPad*, TPad*, TH1D*, TH1D*> PrepareCanvas(UInt_t xAxisBins,
     FinalSpectrum->cd();
 
     //Set primitives in bottom pad
-    TPad *pad_bottom = new TPad("pad_bottom", "pad_bottom",0,0,1,0.35);
+    TPad *pad_bottom = new TPad("pad_bottom", "pad_bottom",0,0.275,1,0.5);
     pad_bottom->Draw();
     pad_bottom->cd();
     pad_bottom->Range(-1.986821e-07,-0.9209589,33.33333,2.49);
@@ -668,9 +648,28 @@ std::tuple<TCanvas*, TPad*, TPad*, TH1D*, TH1D*> PrepareCanvas(UInt_t xAxisBins,
     pad_bottom->SetTicky(1);
     pad_bottom->SetLeftMargin(0.18f);
     pad_bottom->SetTopMargin(0);
-    pad_bottom->SetBottomMargin(0.27f);
+    pad_bottom->SetBottomMargin(0);
     pad_bottom->SetFrameBorderMode(0);
     pad_bottom->SetFrameBorderMode(0);
+
+    FinalSpectrum->cd();
+
+    //Set primitives in bottom pad
+    TPad *pad_bottom2 = new TPad("pad_bottom2", "pad_bottom2",0,0,1,0.275);
+    pad_bottom2->Draw();
+    pad_bottom2->cd();
+    pad_bottom2->Range(-1.986821e-07,-0.9209589,33.33333,2.49);
+    pad_bottom2->SetFillColor(0);
+    pad_bottom2->SetBorderMode(0);
+    pad_bottom2->SetBorderSize(2);
+    pad_bottom2->SetGridy();
+    pad_bottom2->SetTickx(1);
+    pad_bottom2->SetTicky(1);
+    pad_bottom2->SetLeftMargin(0.18f);
+    pad_bottom2->SetTopMargin(0);
+    pad_bottom2->SetBottomMargin(0.27f);
+    pad_bottom2->SetFrameBorderMode(0);
+    pad_bottom2->SetFrameBorderMode(0);
 
     pad_top->cd();
     TH1D *hEmpty_up = new TH1D("hEmpty_up","Central Values",static_cast<Int_t>(xAxisBins), xAxis);
@@ -681,11 +680,14 @@ std::tuple<TCanvas*, TPad*, TPad*, TH1D*, TH1D*> PrepareCanvas(UInt_t xAxisBins,
     hEmpty_up->GetXaxis()->SetLabelSize(0.035f);
     hEmpty_up->GetXaxis()->SetTitleSize(0.035f);
     hEmpty_up->GetXaxis()->SetTitleFont(42);
-    if(zBin ==2 && !pdf)hEmpty_up->GetYaxis()->SetTitle("#frac{d^{2}#it{#sigma}}{d#it{p}_{T}d#it{#eta}} (mb#upointGeV^{#minus1}#upoint#it{c})");
-    else if(!pdf)hEmpty_up->GetYaxis()->SetTitle("#frac{d^{2}#it{#sigma}}{d#it{z}_{#parallel}d#it{#eta}} (mb)");
-    else hEmpty_up->GetYaxis()->SetTitle("Probability density");
+    hEmpty_up->GetYaxis()->SetRangeUser(plotRanges[2],plotRanges[3]);
+  //  hEmpty_up->GetYaxis()->SetTitle("Ratio of cross-sections");
+    hEmpty_up->GetYaxis()->SetTitle("Ratio of probability densities");
+ //   if(zBin ==2 && !pdf)hEmpty_up->GetYaxis()->SetTitle("#frac{d^{2}#it{#sigma}}{d#it{p}_{T}d#it{#eta}} (mb#upointGeV^{#minus1}#upoint#it{c})");
+ //   else if(!pdf)hEmpty_up->GetYaxis()->SetTitle("#frac{d^{2}#it{#sigma}}{d#it{z}_{#parallel}d#it{#eta}} (mb)");
+ //   else hEmpty_up->GetYaxis()->SetTitle("Probability density");
     hEmpty_up->GetYaxis()->SetLabelFont(43);
-    hEmpty_up->GetYaxis()->SetLabelSize(22);
+    hEmpty_up->GetYaxis()->SetLabelSize(19);
     hEmpty_up->GetYaxis()->SetTitleSize(26);
     hEmpty_up->GetYaxis()->SetLabelOffset(0.015f);
     hEmpty_up->GetYaxis()->SetTitleOffset(2.f);
@@ -694,29 +696,53 @@ std::tuple<TCanvas*, TPad*, TPad*, TH1D*, TH1D*> PrepareCanvas(UInt_t xAxisBins,
     hEmpty_up->Draw("axis");
     pad_bottom->cd();
     TH1D *hEmpty_bottom = new TH1D("hEmpty_bottom","Central Values",static_cast<Int_t>(xAxisBins), xAxis);
-    hEmpty_bottom->SetMinimum(plotRanges[0]);
+    hEmpty_bottom->SetMinimum(0.4);
     hEmpty_bottom->SetMaximum(plotRanges[1]);
-    if(zBin ==0)hEmpty_bottom->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
-    else hEmpty_bottom->GetXaxis()->SetTitle("z_{#parallel}");
+   // if(zBin ==0)hEmpty_bottom->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
+   // else hEmpty_bottom->GetXaxis()->SetTitle("z_{#parallel}");
     hEmpty_bottom->GetXaxis()->SetLabelFont(43);
-    hEmpty_bottom->GetXaxis()->SetLabelSize(22);
+    hEmpty_bottom->GetXaxis()->SetLabelSize(19);
     hEmpty_bottom->GetXaxis()->SetTitleSize(26);
     hEmpty_bottom->GetXaxis()->SetTitleOffset(3.f);
     hEmpty_bottom->GetXaxis()->SetTitleFont(43);
-    hEmpty_bottom->GetYaxis()->SetTitle("theory / data");
+    hEmpty_bottom->GetYaxis()->SetTitle("MC/Data");
     hEmpty_bottom->GetYaxis()->SetNdivisions(509);
     hEmpty_bottom->GetYaxis()->CenterTitle();
     hEmpty_bottom->GetYaxis()->SetDecimals();
     hEmpty_bottom->GetYaxis()->SetLabelOffset(0.015f);
     hEmpty_bottom->GetXaxis()->SetLabelOffset(0.02f);
     hEmpty_bottom->GetYaxis()->SetLabelFont(43);
-    hEmpty_bottom->GetYaxis()->SetLabelSize(22);
+    hEmpty_bottom->GetYaxis()->SetLabelSize(19);
     hEmpty_bottom->GetYaxis()->SetTitleSize(26);
     hEmpty_bottom->GetYaxis()->SetTitleOffset(2.f);
     hEmpty_bottom->GetYaxis()->SetTitleFont(43);
     hEmpty_bottom->Draw("axis");
 
-    return std::make_tuple(FinalSpectrum,pad_top, pad_bottom, hEmpty_up,hEmpty_bottom);
+    pad_bottom2->cd();
+    TH1D *hEmpty_bottom2 = new TH1D("hEmpty_bottom2","Central Values",static_cast<Int_t>(xAxisBins), xAxis);
+    hEmpty_bottom2->SetMinimum(plotRanges[0]);
+    hEmpty_bottom2->SetMaximum(1.6);
+    hEmpty_bottom2->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
+    //else hEmpty_bottom->GetXaxis()->SetTitle("z_{#parallel}");
+    hEmpty_bottom2->GetXaxis()->SetLabelFont(43);
+    hEmpty_bottom2->GetXaxis()->SetLabelSize(19);
+    hEmpty_bottom2->GetXaxis()->SetTitleSize(26);
+    hEmpty_bottom2->GetXaxis()->SetTitleOffset(3.f);
+    hEmpty_bottom2->GetXaxis()->SetTitleFont(43);
+    hEmpty_bottom2->GetYaxis()->SetTitle("MC/Data");
+    hEmpty_bottom2->GetYaxis()->SetNdivisions(509);
+    hEmpty_bottom2->GetYaxis()->CenterTitle();
+    hEmpty_bottom2->GetYaxis()->SetDecimals();
+    hEmpty_bottom2->GetYaxis()->SetLabelOffset(0.015f);
+    hEmpty_bottom2->GetXaxis()->SetLabelOffset(0.02f);
+    hEmpty_bottom2->GetYaxis()->SetLabelFont(43);
+    hEmpty_bottom2->GetYaxis()->SetLabelSize(19);
+    hEmpty_bottom2->GetYaxis()->SetTitleSize(26);
+    hEmpty_bottom2->GetYaxis()->SetTitleOffset(2.f);
+    hEmpty_bottom2->GetYaxis()->SetTitleFont(43);
+    hEmpty_bottom2->Draw("axis");
+
+    return std::make_tuple(FinalSpectrum,pad_top, pad_bottom, pad_bottom2, hEmpty_up,hEmpty_bottom,hEmpty_bottom2);
 
 }
 
@@ -901,7 +927,48 @@ std::tuple<TGraphAsymmErrors*, TH1D*, TH1D*, TH1D*> GetDataSimRatio(TString simn
     grsystheoryratio->SetName(tmp+"_ratio");
     return std::make_tuple(grsystheoryratio, hPrompt_central_binned_ratio, hPrompt_up_ratio,hPrompt_down_ratio);
 }
+TH1D* GetRatio(TH1D *h1, TH1D *h2){
+    TString name1 = h1->GetName();
+    TString name2 = h1->GetName();
+    TH1D *hRatio = dynamic_cast<TH1D*>(h1->Clone(name1+"_"+name2+"_ratio"));
+    hRatio->Divide(h2);
+    return hRatio;
+}
 
+TH1D* GetRatio(TH1D *h1, TH1D *h2, Double_t shift){
+    TString name1 = h1->GetName();
+    TString name2 = h1->GetName();
+    TH1D *hRatio = dynamic_cast<TH1D*>(h1->Clone(name1+"_"+name2+"_ratio"));
+    hRatio->Divide(h2);
+    for(Int_t bin = 1; bin <= hRatio->GetNbinsX();bin++){
+        hRatio->SetBinContent(bin,hRatio->GetBinContent(bin)+shift);
+    }
+
+    return hRatio;
+}
+
+/*
+std::tuple<TH1D*, TH1D*, TH1D*> GetRatio(TH1D *sim_cent, TH1D *sim_up, TH1D *sim_down,TH1D *sim2_cent, TH1D *sim2_up, TH1D *sim2_down){
+    std::cout<<"A"<<std::endl;
+    TString name = sim_cent->GetName();
+    TString name_up = sim_up->GetName();
+    TString name_down = sim_down->GetName();
+    TString name2 = sim2_cent->GetName();
+    TString name2_up = sim2_up->GetName();
+    TString name2_down = sim2_down->GetName();
+    std::cout<<"A"<<std::endl;
+    TH1D *hPrompt_central_binned_ratio = dynamic_cast<TH1D*>(sim_cent->Clone(name+name2+"_ratio"));
+    TH1D *hPrompt_down_ratio = dynamic_cast<TH1D*>(sim_down->Clone(name_down+name2_down+"_ratio"));
+    TH1D *hPrompt_up_ratio = dynamic_cast<TH1D*>(sim_up->Clone(name_up+name2_up+"_ratio"));
+    std::cout<<"A"<<std::endl;
+    hPrompt_central_binned_ratio->Divide(sim2_cent);
+    hPrompt_down_ratio->Divide(sim2_down);
+    hPrompt_up_ratio->Divide(sim2_up);
+    std::cout<<"A"<<std::endl;
+    return std::make_tuple(hPrompt_central_binned_ratio,hPrompt_up_ratio,hPrompt_down_ratio);
+
+}
+*/
 TH1D* GetUpSys(TH1D **hh, Int_t nFiles){
     double max = 0, maxerr = 0;
     TString name = hh[0]->GetName();
