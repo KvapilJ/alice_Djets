@@ -875,6 +875,11 @@ std::tuple<TGraphAsymmErrors*, TH1D*, TH1D*, TH1D*, TH1D**> GetSim(TString simna
         hPrompt_down->Scale(simScaling);
         hPrompt_down->Scale(1,"width");
         hPrompt_down->Scale(1./dy);
+        for (int nr=0; nr<nFiles; nr++){
+            hPrompt_binned[nr]->Scale(simScaling);
+            hPrompt_binned[nr]->Scale(1,"width");
+            hPrompt_binned[nr]->Scale(1./dy);
+        }
     }
 
     Double_t *xval = new Double_t[nBins];
