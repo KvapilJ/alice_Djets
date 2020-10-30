@@ -32,6 +32,7 @@ public:
     void SetVarLegendDesc(TString *legendlist);
     void SetPath(TString path){path_ = path;}
     void SetHistoName(TString hname){histoName_ = hname;}
+    void SetDefHistoName(TString hname){histoDefName_ = hname;}
     void SetOutPath(TString filename){outPath_ = filename;}
     void SetOutFolder(TString filename){outFolder_ = filename;}
     void SetTitle(TString filename){name_ = filename;}
@@ -61,6 +62,7 @@ private:
     UInt_t nFiles_ = 0;
     TString path_ = "";
     TString histoName_= "";
+    TString histoDefName_ = "";
     TString name_ = "";
     TString outPath_ = "";
     TString outFolder_ = "";

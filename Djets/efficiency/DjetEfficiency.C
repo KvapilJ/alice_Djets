@@ -48,6 +48,20 @@ Double_t jetptmin = 2, Double_t jetptmax = 50, Bool_t recoPt = 0, Bool_t postfix
     TH1D *hMCpt = nullptr;
     TH1D *hMCpt_reco = nullptr;
 
+    Int_t NDMC = 0;
+    if(postfix){
+        if(listName == "L3" && (Rpar ==2 || Rpar ==6)){
+            NDMC = 1;
+        }
+        else{
+            NDMC = 2;
+        }
+    }
+    else{
+        NDMC = 2;
+    }
+    std::cout<<"FD sim: "<<NDMC<<std::endl;
+
     TH1D *hMC[NDMC];
     TH1D * hreco[NDMC];
     TList *histList[NDMC];

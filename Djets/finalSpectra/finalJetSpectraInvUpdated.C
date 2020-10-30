@@ -98,10 +98,10 @@ static TString fPythia8SoftMode2[9] = {
    "AnalysisResults_FastSim_pythia8_charm_Color2Soft50"
 };
 static TString fPowhegPythia6dijet[9] = {
-   "AnalysisResults_FastSim_powheg+pythia8_dijetHadi"
+   "AnalysisResults_FastSim_powheg+pythia8_dijet_Hadi"
 };
 static TString fPowhegPythia8dijet[9] = {
-   "AnalysisResults_FastSim_powheg+pythia8_dijetSalvatore"
+   "AnalysisResults_FastSim_powheg+pythia8_dijet_Salvatore"
 };
 
 std::tuple<TGraphAsymmErrors*, TH1D*, TH1D*, TH1D*, TH1D**> GetSim(TString simname, Int_t type, Int_t nFiles, TString *names, TString simDir, Double_t simScaling, UInt_t nBins, Double_t *xBins);
@@ -114,9 +114,9 @@ void TerminateCanvas(TPad* pad1,TPad* pad2,TH1D* histo1,TH1D* histo2);
 
 
 void finalJetSpectraInvUpdated(
-Int_t type = 1, //0 - pt x-section, 1 - z x-section, 2 - z PDF
+Int_t type = 0, //0 - pt x-section, 1 - z x-section, 2 - z PDF
 Int_t radius = 4, // 2, 4 or 6
-Int_t z = 2, //which z jet pT bin 1,2,3,4,5
+Int_t z = 0, //which z jet pT bin 1,2,3,4,5
 Int_t sysGlobal = 0, //0 - (defualt )add LumiUnc, BRUnc and Tracking Unc.; 1 - (R comparison) no global Unc; 2 - (energy comparison) add LumiUnc and Tracking Unc
 TString dataFile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/unfoldedSpectrum_unfoldedJetSpectrum.root",
 TString dataAnalysisFile = "/mnt/hgfs/vmware/data_R04_050219/data/AnalysisResults_Run2w18b.root",
@@ -161,7 +161,7 @@ TString histBase = "unfoldedSpectrumKineEff"
     // ----------------------------------------------------------------
     Bool_t ePowhegPythia6 = false;
     Bool_t ePowhegPythia8 = true;
-    Bool_t ePythia6 = true;
+    Bool_t ePythia6 = false;
     Bool_t ePythia8 = true;
     Bool_t ePythia8SoftMode2 = true;
     Bool_t ePowhegPythia6dijet = false;
@@ -198,12 +198,12 @@ TString histBase = "unfoldedSpectrumKineEff"
             addDtrackingUnc = true;
             addLumiUnc = true;
         }
-        else if(sysGlobal ==0){
+        else if(sysGlobal ==1){
             addBRDzeroUnc = false;
             addDtrackingUnc = false;
             addLumiUnc = false;
         }
-        else if(sysGlobal ==0){
+        else if(sysGlobal ==2){
             addBRDzeroUnc = false;
             addDtrackingUnc = true;
             addLumiUnc = true;
@@ -230,82 +230,107 @@ TString histBase = "unfoldedSpectrumKineEff"
         pdf = false;
         if(radius == 2){
             dy = 2*(0.9 - 0.2);
-            plotRanges[0]=0; plotRanges[1]=2.1; plotRanges[2]=0.000005; plotRanges[3]=1;
-            systUncD_up = new Double_t[xAxisBins]{0.09, 0.08, 0.09, 0.10, 0.11, 0.13, 0.15, 0.19};
-            systUncD_down = new Double_t[xAxisBins]{0.10, 0.09,	0.11, 0.12,	0.14, 0.16,	0.23, 0.24};
+            plotRanges[0]=0; plotRanges[1]=2.1; plotRanges[2]=0.000004; plotRanges[3]=2.5;
+            systUncD_up = new Double_t[xAxisBins]{0.0891, 0.0912, 0.0721, 0.0989, 0.078, 0.0827, 0.1145, 0.2137};
+            systUncD_down = new Double_t[xAxisBins]{0.1009, 0.1034,	0.0907, 0.1161,	0.098, 0.1144,	0.1386, 0.2486};
         }
         else if(radius == 4){
             dy = 2*(0.9 - 0.4);
-            plotRanges[0]=0; plotRanges[1]=2.1; plotRanges[2]=0.000005; plotRanges[3]=1;
-            systUncD_up = new Double_t[xAxisBins]{0.09, 0.08, 0.09, 0.10, 0.11, 0.13, 0.15, 0.19};
-            systUncD_down = new Double_t[xAxisBins]{0.10, 0.09,	0.11, 0.12,	0.14, 0.16,	0.23, 0.24};
+            plotRanges[0]=0; plotRanges[1]=2.1; plotRanges[2]=0.000004; plotRanges[3]=2.5;
+           // plotRanges[0]=0; plotRanges[1]=2.6; plotRanges[2]=0.000005; plotRanges[3]=1;
+            systUncD_up = new Double_t[xAxisBins]{0.0762, 0.0704, 0.0781, 0.0972, 0.1156, 0.1195, 0.1531, 0.2121};
+            systUncD_down = new Double_t[xAxisBins]{0.0883, 0.0853,	0.0989, 0.1224,	0.1425, 0.1582,	0.2135, 0.2780};
         }
         else if(radius == 6){
             dy = 2*(0.9 - 0.6);
-            plotRanges[0]=0; plotRanges[1]=2.7; plotRanges[2]=0.000005; plotRanges[3]=1;
-            systUncD_up = new Double_t[xAxisBins]{0.09, 0.08, 0.09, 0.10, 0.11, 0.13, 0.15, 0.19};
-            systUncD_down = new Double_t[xAxisBins]{0.10, 0.09,	0.11, 0.12,	0.14, 0.16,	0.23, 0.24};;
+            plotRanges[0]=0; plotRanges[1]=2.7; plotRanges[2]=0.000004; plotRanges[3]=2.5;
+            systUncD_up = new Double_t[xAxisBins]{0.097, 0.073, 0.09, 0.103, 0.119, 0.136, 0.189, 0.358};
+            systUncD_down = new Double_t[xAxisBins]{0.103, 0.085,	0.104, 0.119,	0.142, 0.165,	0.221, 0.43};;
         }
     }
     else if(type ==1 || type ==2){//Z x-section
-        pdf = false;
+        if(type ==2) pdf = true;
         if(radius == 2){
             dy = 2*(0.9 - 0.2);
             if(zBin ==2){
-                systUncD_up = new Double_t[xAxisBins]{0,0,0,0,0};
-                systUncD_down = new Double_t[xAxisBins]{0,0,0,0,0};
+                std::cout<<"settting type "<<type<<std::endl;
+                plotRanges[0]=0.01; plotRanges[1]=1.55; plotRanges[2]=0.0006; plotRanges[3]=4;
+                if(type ==2){ plotRanges[0]=0.3; plotRanges[1]=1.45; plotRanges[2]=0.001; plotRanges[3]=10;}
+                //if(type == 2)
+                systUncD_up = new Double_t[xAxisBins]{0.17,0.12,0.084,0.07,0.057};
+                systUncD_down = new Double_t[xAxisBins]{0.188,0.142,0.098,0.079,0.065};
             }
             else if(zBin ==3){
-                systUncD_up = new Double_t[xAxisBins]{0,0,0,0,0};
-                systUncD_down = new Double_t[xAxisBins]{0,0,0,0,0};
+                plotRanges[0]=0.01; plotRanges[1]=2.15; plotRanges[2]=0.0006; plotRanges[3]=4;
+                if(type ==2){ plotRanges[0]=0.55; plotRanges[1]=1.9; plotRanges[2]=0.001; plotRanges[3]=9;}
+                systUncD_up = new Double_t[xAxisBins]{0.272,0.09,0.078,0.075,0.041};
+                systUncD_down = new Double_t[xAxisBins]{0.324,0.108,0.091,0.083,0.05};
             }
             else if(zBin ==4){
-                systUncD_up = new Double_t[xAxisBins]{0,0,0,0,0};
-                systUncD_down = new Double_t[xAxisBins]{0,0,0,0,0};
+                plotRanges[0]=0.01; plotRanges[1]=2.15; plotRanges[2]=0.0006; plotRanges[3]=4;
+                if(type ==2){ plotRanges[0]=0.55; plotRanges[1]=1.8; plotRanges[2]=0.001; plotRanges[3]=7;}
+                systUncD_up = new Double_t[xAxisBins]{0.29,0.094,0.082,0.061,0.042};
+                systUncD_down = new Double_t[xAxisBins]{0.358,0.117,0.09,0.069,0.051};
             }
             else if(zBin ==5){
-                systUncD_up = new Double_t[xAxisBins]{0,0,0,0,0};
-                systUncD_down = new Double_t[xAxisBins]{0,0,0,0,0};
+                plotRanges[0]=0.01; plotRanges[1]=1.75; plotRanges[2]=0.0002; plotRanges[3]=1;
+                if(type ==2){ plotRanges[0]=0.55; plotRanges[1]=1.5; plotRanges[2]=0.001; plotRanges[3]=6;}
+                systUncD_up = new Double_t[xAxisBins]{0.325,0.104,0.065,0.058,0.092};
+                systUncD_down = new Double_t[xAxisBins]{0.349,0.115,0.069,0.065,0.096};
             }
         }
         else if(radius == 4){
             dy = 2*(0.9 - 0.4);
             if(zBin ==2){
-                plotRanges[0]=0; plotRanges[1]=2.1; plotRanges[2]=0.001; plotRanges[3]=0.4;
-                if(type == 2)plotRanges[0]=0; plotRanges[1]=2.1; plotRanges[2]=0.001; plotRanges[3]=10;
-                systUncD_up = new Double_t[xAxisBins]{0.14, 0.08, 0.08,	0.09, 0.09};
-                systUncD_down = new Double_t[xAxisBins]{0.15, 0.09, 0.09, 0.10,	0.09};
+                plotRanges[0]=0; plotRanges[1]=1.68; plotRanges[2]=0.003; plotRanges[3]=5;
+                if(type == 2){plotRanges[0]=0.25; plotRanges[1]=1.89; plotRanges[2]=0.2; plotRanges[3]=5;}
+                systUncD_up = new Double_t[xAxisBins]{0.14, 0.068, 0.069,	0.084, 0.073};
+                systUncD_down = new Double_t[xAxisBins]{0.15, 0.075, 0.075, 0.088,	0.078};
             }
             else if(zBin ==3){
-                systUncD_up = new Double_t[xAxisBins]{0.14, 0.08, 0.08,	0.09, 0.09};
-                systUncD_down = new Double_t[xAxisBins]{0.15, 0.09, 0.09, 0.10,	0.09};
+                plotRanges[0]=0.05; plotRanges[1]=1.68; plotRanges[2]=0.003; plotRanges[3]=3;
+                if(type ==2){ plotRanges[0]=0.55; plotRanges[1]=1.45; plotRanges[2]=0.7; plotRanges[3]=3.5;}
+                systUncD_up = new Double_t[xAxisBins]{0.126, 0.084, 0.059,	0.05, 0.062};
+                systUncD_down = new Double_t[xAxisBins]{0.153, 0.091, 0.065, 0.055,	0.067};
             }
             else if(zBin ==4){
-                systUncD_up = new Double_t[xAxisBins]{0.14, 0.08, 0.08,	0.09, 0.09};
-                systUncD_down = new Double_t[xAxisBins]{0.15, 0.09, 0.09, 0.10,	0.09};
+                plotRanges[0]=0.05; plotRanges[1]=1.68; plotRanges[2]=0.002; plotRanges[3]=1;
+                if(type ==2){ plotRanges[0]=0.65; plotRanges[1]=1.35; plotRanges[2]=0.8; plotRanges[3]=3.5;}
+                systUncD_up = new Double_t[xAxisBins]{0.139, 0.07, 0.056,	0.036, 0.072};
+                systUncD_down = new Double_t[xAxisBins]{0.162, 0.078, 0.061, 0.048,	0.076};
             }
             else if(zBin ==5){
-                systUncD_up = new Double_t[xAxisBins]{0.14, 0.08, 0.08,	0.09, 0.09};
-                systUncD_down = new Double_t[xAxisBins]{0.15, 0.09, 0.09, 0.10,	0.09};
+                plotRanges[0]=0.21; plotRanges[1]=1.75; plotRanges[2]=0.0008; plotRanges[3]=0.2;
+                if(type ==2){ plotRanges[0]=0.72; plotRanges[1]=1.35; plotRanges[2]=0.8; plotRanges[3]=4.5;}
+                systUncD_up = new Double_t[xAxisBins]{0.148, 0.075, 0.08,	0.057, 0.096};
+                systUncD_down = new Double_t[xAxisBins]{0.214, 0.079, 0.083, 0.062,	0.097};
             };
         }
         else if(radius == 6){
             dy = 2*(0.9 - 0.6);
             if(zBin ==2){
-                systUncD_up = new Double_t[xAxisBins]{0,0,0,0,0};
-                systUncD_down = new Double_t[xAxisBins]{0,0,0,0,0};
+                plotRanges[0]=0.01; plotRanges[1]=1.45; plotRanges[2]=0.007; plotRanges[3]=7;
+                if(type == 2){plotRanges[0]=0.35; plotRanges[1]=2.1; plotRanges[2]=0.2; plotRanges[3]=5;}
+                systUncD_up = new Double_t[xAxisBins]{0.132,0.085,0.064,0.088,0.095};
+                systUncD_down = new Double_t[xAxisBins]{0.137,0.09,0.067,0.09,0.097};
             }
             else if(zBin ==3){
-                systUncD_up = new Double_t[xAxisBins]{0,0,0,0,0};
-                systUncD_down = new Double_t[xAxisBins]{0,0,0,0,0};
+                plotRanges[0]=0.01; plotRanges[1]=1.68; plotRanges[2]=0.004; plotRanges[3]=3;
+                if(type ==2){ plotRanges[0]=0.55; plotRanges[1]=2.1; plotRanges[2]=0.2; plotRanges[3]=5;}
+                systUncD_up = new Double_t[xAxisBins]{0.091,0.072,0.059,0.062,0.106};
+                systUncD_down = new Double_t[xAxisBins]{0.102,0.075,0.063,0.068,0.108};
             }
             else if(zBin ==4){
-                systUncD_up = new Double_t[xAxisBins]{0,0,0,0,0};
-                systUncD_down = new Double_t[xAxisBins]{0,0,0,0,0};
+                plotRanges[0]=0.05; plotRanges[1]=1.68; plotRanges[2]=0.002; plotRanges[3]=1;
+                if(type ==2){ plotRanges[0]=0.65; plotRanges[1]=1.35; plotRanges[2]=0.2; plotRanges[3]=5;}
+                systUncD_up = new Double_t[xAxisBins]{0.114,0.05,0.086,0.053,0.114};
+                systUncD_down = new Double_t[xAxisBins]{0.125,0.055,0.09,0.06,0.115};
             }
             else if(zBin ==5){
-                systUncD_up = new Double_t[xAxisBins]{0,0,0,0,0};
-                systUncD_down = new Double_t[xAxisBins]{0,0,0,0,0};
+                plotRanges[0]=0.21; plotRanges[1]=1.79; plotRanges[2]=0.0008; plotRanges[3]=0.8;
+                if(type ==2){ plotRanges[0]=0.55; plotRanges[1]=1.35; plotRanges[2]=0.2; plotRanges[3]=5;}
+                systUncD_up = new Double_t[xAxisBins]{0.112,0.068,0.066,0.088,0.107};
+                systUncD_down = new Double_t[xAxisBins]{0.145,0.071,0.069,0.089,0.107};
             }
         }
     }
@@ -317,10 +342,11 @@ TString histBase = "unfoldedSpectrumKineEff"
         if(addBRDzeroUnc) globalUnc += BRDzeroUnc*BRDzeroUnc;
         if(addDtrackingUnc) globalUnc += DtrackingUnc*DtrackingUnc;
         if(addLumiUnc) globalUnc += LumiUnc*LumiUnc;
-        systUncD_up[bin] = TMath::Sqrt(systUncD_up[bin]*systUncD_up[bin]+globalUnc*globalUnc);
-        systUncD_down[bin] = TMath::Sqrt(systUncD_down[bin]*systUncD_down[bin]+globalUnc*globalUnc);
+        systUncD_up[bin] = TMath::Sqrt(systUncD_up[bin]*systUncD_up[bin]+globalUnc);
+        systUncD_down[bin] = TMath::Sqrt(systUncD_down[bin]*systUncD_down[bin]+globalUnc);
+        std::cout<<systUncD_up[bin]<<" ";
     }
-
+    std::cout<<std::endl;
 
     //get Data n Events
     std::cout<<"get Data n Events"<<std::endl;
@@ -435,7 +461,7 @@ TString histBase = "unfoldedSpectrumKineEff"
     TH1D* simPowhegPythia8dijet_cent = nullptr, *simPowhegPythia8dijet_down = nullptr, *simPowhegPythia8dijet_up = nullptr;
     TH1D* simPowhegPythia8dijet_cent_R = nullptr, *simPowhegPythia8dijet_down_R = nullptr, *simPowhegPythia8dijet_up_R = nullptr;
     if(ePowhegPythia8dijet){
-        std::cout<<"get POWHWG+PYTHIA6 dijet"<<std::endl;
+        std::cout<<"get POWHWG+PYTHIA8 dijet"<<std::endl;
         std::tie(simPowhegPythia8dijet, simPowhegPythia8dijet_cent, simPowhegPythia8dijet_up, simPowhegPythia8dijet_down,simPowhegPythia8dijetvar) = GetSim("simPowhegPythia8dijet",type, 1, fPowhegPythia8dijet, simDir, simScaling, xAxisBins, xAxis);
         std::tie(simPowhegPythia8dijet_R, simPowhegPythia8dijet_cent_R, simPowhegPythia8dijet_up_R, simPowhegPythia8dijet_down_R) = GetDataSimRatio("simPowhegPythia8dijet",hData_binned,simPowhegPythia8dijet_cent, simPowhegPythia8dijet_up, simPowhegPythia8dijet_down, xAxisBins, xAxis);
         PlaceOnPadSim(upPad,simPowhegPythia8dijet,static_cast<Color_t>(TColor::GetColor("#009999")),28,1);
@@ -461,9 +487,9 @@ TString histBase = "unfoldedSpectrumKineEff"
     if(ePowhegPythia8)leg->AddEntry(simPowhegPythia8,"POWHEG hvq + PYTHIA 8","pf");
     if(ePythia6)leg->AddEntry(simPythia6,"PYTHIA 6 Perugia 2011","l");
     if(ePythia8)leg->AddEntry(simPythia8,"PYTHIA 8 Monash 2013","l");
-    if(ePythia8SoftMode2)leg->AddEntry(simPythia8Soft2,"PYTHIA 8 Monash 2013 Soft mode 2","l");
-    if(ePowhegPythia6dijet)leg->AddEntry(simPowhegPythia6dijet,"POWHEG dijet + PYTHIA 6","pf");
-    if(ePowhegPythia8dijet)leg->AddEntry(simPowhegPythia8dijet,"POWHEG dijet + PYTHIA 8","pf");
+    if(ePythia8SoftMode2)leg->AddEntry(simPythia8Soft2,"PYTHIA 8 Monash 2013 mode 2","l");
+    if(ePowhegPythia6dijet)leg->AddEntry(simPowhegPythia6dijet,"POWHEG dijet + PYTHIA 8 hadi","pf");
+    if(ePowhegPythia8dijet)leg->AddEntry(simPowhegPythia8dijet,"POWHEG dijet + PYTHIA 8","l");
     TPaveText *pt[2];
     pt[0] = new TPaveText(0.2,0.9,0.85,0.95,"NB NDC");
     if(type==0)pt[1] = new TPaveText(0.2,0.75,0.85,0.9,"NB NDC");
@@ -488,15 +514,17 @@ TString histBase = "unfoldedSpectrumKineEff"
     leg->Draw();
     pt[0]->Draw();
     pt[1]->Draw();
-
+std::cout<<"a"<<std::endl;
     // ----------------- Terminate Canvas ---------------------
     TerminateCanvas(upPad,dowmPad,placeholder_up,placeholder_down);
-    canvas->SaveAs(outPlotDir+"/finalSpectra.png");
+    //canvas->SaveAs(outPlotDir+"/finalSpectra.png");
     TString sysmode = "";
     if((type ==0 || type ==1) && sysGlobal==0) sysmode = "_fullGlobal";
     if((type ==0 || type ==1) && sysGlobal==1) sysmode = "_noneGlobal";
     if((type ==0 || type ==1) && sysGlobal==2) sysmode = "_noBRUnc";
-    if(type ==2) sysmode = "_noneGlobal";
+    if(type ==2) sysmode = "_PDF_noneGlobal";
+
+    canvas->SaveAs(outPlotDir+Form("/finalSpectra_%s.png",sysmode.Data()));
 
     TFile *ofile = new TFile(Form("%s/JetPtSpectrum_final%s.root",outSpectraDir.Data(),sysmode.Data()),"RECREATE");
     hData_binned->Write();
@@ -577,21 +605,21 @@ TString histBase = "unfoldedSpectrumKineEff"
             simPowhegPythia6dijetvar[ivar]->Write();
         }
     }
-
+std::cout<<"a"<<std::endl;
     if(ePowhegPythia8dijet){
         simPowhegPythia8dijet_cent->Write();
-        simPowhegPythia8dijet_up->Write();
-        simPowhegPythia8dijet_down->Write();
+      //  simPowhegPythia8dijet_up->Write();
+      //  simPowhegPythia8dijet_down->Write();
         simPowhegPythia8dijet->Write();
         simPowhegPythia8dijet_cent_R->Write();
-        simPowhegPythia8dijet_up_R->Write();
-        simPowhegPythia8dijet_down_R->Write();
+     //   simPowhegPythia8dijet_up_R->Write();
+     //   simPowhegPythia8dijet_down_R->Write();
         simPowhegPythia8dijet_R->Write();
-        for(Int_t ivar = 1; ivar < 9; ivar++){
-            simPowhegPythia8dijetvar[ivar]->Write();
-        }
+     //   for(Int_t ivar = 1; ivar < 9; ivar++){
+    //        simPowhegPythia8dijetvar[ivar]->Write();
+     //   }
     }
-
+std::cout<<"a"<<std::endl;
     ofile->Close();
     return;
 }
@@ -668,7 +696,7 @@ std::tuple<TCanvas*, TPad*, TPad*, TH1D*, TH1D*> PrepareCanvas(UInt_t xAxisBins,
     pad_top->SetFillColor(0);
     pad_top->SetBorderMode(0);
     pad_top->SetBorderSize(2);
-    if(zBin==0)pad_top->SetLogy();
+    if(zBin==0 || !pdf)pad_top->SetLogy();
     pad_top->SetTickx(1);
     pad_top->SetTicky(1);
     pad_top->SetLeftMargin(0.18f);

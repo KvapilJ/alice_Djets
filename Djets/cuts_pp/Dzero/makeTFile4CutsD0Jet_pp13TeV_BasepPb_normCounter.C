@@ -155,8 +155,8 @@ void makeInputAliAnalysisTaskSED0Correlations_pPb(Bool_t isOnData = kTRUE){
   RDHFD0toKpi->PrintAll();
 
   TFile* fout;
-  if(isOnData) fout=new TFile("D0toKpiCuts_pp13TeV_pPbBase_newNorm.root","recreate");   //set this!!
-  else fout=new TFile("D0toKpiCuts_pp13TeV_pPbBase_newNorm.root","recreate");   //set this!!
+  if(isOnData) fout=new TFile("D0toKpiCuts_pp13TeV_pPbBase_newNormtest.root","recreate");   //set this!!
+  else fout=new TFile("D0toKpiCuts_pp13TeV_pPbBase_newNormtest.root","recreate");   //set this!!
 
   fout->cd();
   RDHFD0toKpi->Write();

@@ -42,6 +42,11 @@ bool postfix = 0, TString listName = "FD", bool isprefix=0, Int_t zBin=0, Bool_t
     pv2->SetBorderSize(0);
     pv2->AddText(Form("R=0.%d",Rpar));
 
+  //  Int_t NDMC = 0;
+  //  if(isPrompt) NDMC = 2;
+  //  else NDMC = 1;
+  //  std::cout<<"FD sim: "<<NDMC<<std::endl;
+
     TH1F *hMCpt;
       TH1F *hMCpt_reco;
     TH2F *hPtJet[NDMC];
@@ -319,7 +324,7 @@ std::cout<<"herec"<<std::endl;
 
         }
         //get the scaling for prompt, 0.1 for non-prompt is used
-        Double_t RMscaling = 0.1;
+        Double_t RMscaling = 0.9;
         if(isPrompt)RMscaling = 1-(datajets/ttreejets);
         std::cout<<"Data jets: "<<datajets<<", MC jets: "<<ttreejets<<", MC division data:RM "<<RMscaling<<std::endl;
 

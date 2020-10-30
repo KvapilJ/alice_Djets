@@ -12,15 +12,17 @@ double sigmajet[] = {0,0};
 
 const int ptbinsDN = 11;
 double ptDbins[ptbinsDN+1] = {2,3,4,5,6,7,8,10,12,16,24,36};
-
-//double sigmaD[ptbinsDN] = {0.00991,0.01075,0.01141,0.01215,0.01275,0.01316,0.0139,0.01477,0.01584,0.01806,0.02198}; // set up sigma of the D signal from MC
+//0.2
+double sigmaD[ptbinsDN] = {0.00987288,0.0106562,0.0113289,0.0119166,0.0124746,0.0129507,0.0135935,0.014633,0.0157013,0.0177687,0.0206198}; // set up sigma of the D signal from MC
+TString efffile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_X02/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt5.00_50.00.root";
 //0.4
-//double sigmaD[ptbinsDN] = {0.00994,0.01076,0.01145,0.0122,0.01273,0.01324,0.01403,0.01483,0.0159,0.01812,0.02164}; // set up sigma of the D signal from MC
+//double sigmaD[ptbinsDN] = {0.00991671,0.0107088,0.0113739,0.0120262,0.0126105,0.0130671,0.0137628,0.0147703,0.0157511,0.0178557,0.0208333}; // set up sigma of the D signal from MC
+//TString efffile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_X04/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt5.00_50.00.root";
+
 //0.6
-double sigmaD[ptbinsDN] = {0.00999867,0.0108217,0.0115878,0.0123324,0.0128953,0.0133189,0.0139839,0.0149361,0.0160066,0.0178958,0.0211222};
+//double sigmaD[ptbinsDN] = {0.00999867,0.0108217,0.0115878,0.0123324,0.0128953,0.0133189,0.0139839,0.0149361,0.0160066,0.0178958,0.0211222};
+//TString efffile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_X06/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt5.00_50.00.root";
 
-
-TString efffile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_finalX06/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt5.00_50.00.root";
 //TString sigmaFile = "";
 
 // forward declaration

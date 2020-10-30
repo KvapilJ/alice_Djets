@@ -994,7 +994,7 @@ std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MC
               //display++;
        //   }
               //with a random seed divide MC between RM and spectra
-              Double_t RMw = 0;
+           /*   Double_t RMw = 0;
               Double_t SPw = 0;
               for(Int_t iw = 0; iw < bincontent; iw++){
                   if(random->Uniform(1) <= RMfraction) RMw++;
@@ -1002,7 +1002,7 @@ std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MC
               }
 
 
-              if(RMw+SPw != bincontent) std::cout<<"WARNING CLOSURE WEIGHT VIOLATION!!! "<<RMw+SPw<<"!="<<bincontent<<std::endl;
+              if(RMw+SPw != bincontent) std::cout<<"WARNING CLOSURE WEIGHT VIOLATION!!! "<<RMw+SPw<<"!="<<bincontent<<std::endl;*/
               //fill response matrix and reco+true plots for closure test
             //responseClosure->Fill (jmatch[0],jmatch[1],zShiftTrue,jmatch[6],/*RMw*priorWeight*/bincontent/peff);
               //std::cout<<i<<" "<<jmatch[1]<<" "<<jmatch[2]<<" "<<jmatch[0]<<" "<<jmatch[6]<<" "<<jmatch[7]<<" "<<jmatch[5]<<std::endl;
@@ -1049,7 +1049,7 @@ std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MC
               if(jmatch[5]>1.0) zShiftTrue = jmatch[5] - 0.02;
               else zShiftTrue = jmatch[5];
 
-              if(2 <= jmatch[6] && jmatch[6] < 50 && 0.2 <= zShiftTrue){
+              if(2 <= jmatch[6] && jmatch[6] < 50 && 0.4 <= zShiftTrue){
                   //std::cout<<fzptJetMeasA[0]<<" "<<jmatch[1]<<" "<<fzptJetMeasA[fzptJetMeasN]<<" "<<zShiftTrue<<" "<<jmatch[6]<<std::endl;
                   fMeasSpectrumKineNum->Fill(jmatch[0],jmatch[1]);
               }
@@ -1078,15 +1078,21 @@ std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MC
       for(Int_t z = 0;z < fzptJetMeasN;z++){
           if(fzptJetMeasA[z] <= jmatch[6] && jmatch[6] <= fzptJetMeasA[z+1]){ //jet mc
               if(fzptbinsDA[z][0] <= jmatch[7] && jmatch[7] <= fzptbinsDA[z][fzptbinsDN[z]]){ //D mc
-                  if(-(0.9-fRpar) <= jmatch[9] && jmatch[9] <= 0.9-fRpar)okok = true;
+                  if(-(0.9-fRpar) <= jmatch[9] && jmatch[9] <= 0.9-fRpar){ //eta mc
+                      okok = true;
+                  }
               }
           }
       }
       Bool_t okokrec = false;
       for(Int_t z = 0;z < fzptJetMeasN;z++){
           if(fzptJetMeasA[z] <= jmatch[1] && jmatch[1] <= fzptJetMeasA[z+1]){ //jet det
+              if(2 <= jmatch[6] && jmatch[6] <= 50){ //jet mc
               if(fzptbinsDA[z][0] <= jmatch[2] && jmatch[2] <= fzptbinsDA[z][fzptbinsDN[z]]){ //D det
+                  if(fzptbinsDA[z][0] <= jmatch[7] && jmatch[7] <= fzptbinsDA[z][fzptbinsDN[z]]){ //D mc
                          okokrec = true;
+                  }
+              }
                  }
               }
           }
@@ -1125,7 +1131,7 @@ std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MC
             peff = eff[effBin]->GetBinContent(eff[effBin]->FindBin(jmatch[2]));
           }
           hTrainClosure->Fill (jmatch[0],jmatch[1],SPw/peff);
-          responseClosure->Fill (jmatch[0],jmatch[1],zShiftTruel,jmatch[6],RMw);
+          responseClosure->Fill (jmatch[0],jmatch[1],zShiftTruel,jmatch[6],RMw/peff);
       }
           okok=false;
           okokrec=false;

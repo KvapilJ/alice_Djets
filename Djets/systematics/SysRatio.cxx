@@ -139,12 +139,21 @@ void SysRatio::Load(){
     leg_->SetBorderSize(0);
     legRatio_->SetFillStyle(0);
     legRatio_->SetBorderSize(0);
-    std::cout<<"loading DEF hist: "<<histoName_<<" in "<<TFileDefault_->GetPath()<<std::endl;
-    TH1DDefault_=dynamic_cast<TH1D*>(TFileDefault_->Get(histoName_));
+    if(histoDefName_ !=""){
+        std::cout<<"loading DEF hist: "<<histoDefName_<<" in "<<TFileDefault_->GetPath()<<std::endl;
+        TH1DDefault_=dynamic_cast<TH1D*>(TFileDefault_->Get(histoDefName_));
+    }else{
+        std::cout<<"loading DEF hist: "<<histoName_<<" in "<<TFileDefault_->GetPath()<<std::endl;
+        TH1DDefault_=dynamic_cast<TH1D*>(TFileDefault_->Get(histoName_));
+    }
+
     TH1DDefault_->SetLineColor(kBlack);
     TH1DDefault_->SetMarkerColor(kBlack);
     hStackMain_->Add(TH1DDefault_,"nostack");
     leg_->AddEntry(TH1DDefault_,legendDefDesc_);
+    for(Int_t i=1;i<=TH1DDefault_->GetNbinsX();i++){
+        std::cout<<"def: "<<TH1DDefault_->GetBinContent(i)<<std::endl;
+    }
 
     for(UInt_t f = 0; f < nFiles_; f++){
         std::cout<<"loading VAR hist: "<<histoName_<<" in "<<TFile_[f]->GetPath()<<std::endl;
@@ -155,6 +164,11 @@ void SysRatio::Load(){
         TH1D_[f]->SetLineColor(colors_[f%12]);
         TH1D_[f]->SetMarkerColor(colors_[f%12]);
         TH1D_[f]->SetMarkerStyle(markers_[f%14]);
+
+        for(Int_t i=1;i<=TH1D_[f]->GetNbinsX();i++){
+            std::cout<<"var: "<<TH1D_[f]->GetBinContent(i)<<std::endl;
+        }
+
         leg_->AddEntry(TH1D_[f],legendVarDesc_[f]);
         hStackMain_->Add(TH1D_[f],"nostack");
         //ratios
@@ -175,6 +189,8 @@ void SysRatio::Load(){
         hRatio_[f]->SetMaximum(2);
    //     hRatio_[f]->Draw();
     //    ctmp->SaveAs(outPath_+"/"+outFolder_+Form("/ratio%d.png",f));
+
+
     }
 }
 

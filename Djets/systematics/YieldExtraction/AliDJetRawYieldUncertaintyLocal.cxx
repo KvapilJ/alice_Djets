@@ -197,7 +197,7 @@ Bool_t AliDJetRawYieldUncertaintyLocal::ExtractInputMassPlotDzeroSideband() {
 
     std::cout << "Extracting input mass plot: " << fpTmin << " to " << fpTmax << std::endl;
 
-    double jetmin = 15, jetmax = 50;
+    double jetmin = 5, jetmax = 7;
     const int ND = 4;
     TDirectoryFile* dir=(TDirectoryFile*)fFileInput->Get(fDirName.Data());
     TList *histList;
@@ -434,6 +434,8 @@ printf("sigmaBC=%d\n",fnSigmaBC);
   else return kFALSE;
 
   CombineMultiTrialOutcomes();
+
+  cOut->SaveAs("out/AllTrials.png");
 
   return isOK;
 
@@ -842,7 +844,7 @@ Bool_t AliDJetRawYieldUncertaintyLocal::EvaluateUncertaintyDzeroSideband() {
 		std::cout << "File " << fFileInput << " cannot be opened! check your file path!" << std::endl; return kFALSE;
 	}
 
-  double jetmin = 15, jetmax = 50;
+  double jetmin = 5, jetmax = 7;
   double fzmin = -2, fzmax = 2;
   const int ND = 4;
   TDirectoryFile* dir=(TDirectoryFile*)fFileInput->Get(fDirName.Data());
@@ -1027,6 +1029,12 @@ Bool_t AliDJetRawYieldUncertaintyLocal::EvaluateUncertaintyDzeroSideband() {
 			hjetpt_s->Reset();
 
 		} //end loop on trials for sideband approach
+
+        std::cout<<"end of D:"<<iDbin<<" total-1: "<<fnDbins-1<<std::endl;
+            if(iDbin == fnDbins-1){
+                std::cout<<"saving all canvas:"<<std::endl;
+                c->SaveAs("out/call.png");
+            }
 
 	} //end loop on pT(D) bins
 
@@ -1263,7 +1271,11 @@ Bool_t AliDJetRawYieldUncertaintyLocal::EvaluateUncertaintyDzeroSideband_Coheren
 	hjetpt_s->Reset();
 
     } //end loop on trials for sideband approach
-
+std::cout<<"end of D:"<<iDbin<<" total-1: "<<fnDbins-1<<std::endl;
+    if(iDbin == fnDbins-1){
+        std::cout<<"saving all canvas:"<<std::endl;
+        c->SaveAs("out/call.png");
+    }
   } //end loop on pT(D) bins
 
   //Now evaluate central value + rms in each pT(jet) bin to build the uncertainty
@@ -1312,6 +1324,7 @@ Bool_t AliDJetRawYieldUncertaintyLocal::EvaluateUncertaintyDzeroSideband_Coheren
   fJetYieldCentral->SetStats(kFALSE);
   fJetYieldCentral->Draw();
   fJetYieldCentral->SaveAs(Form("FinalRawYieldCentralPlusSystUncertainty_%s.root",fDmesonLabel.Data()));
+
 
   if (fDebug) {
 	  //ADVANCED - save distribution of final jet yields (summing all pT(D) bins) in a single plot
@@ -1377,6 +1390,8 @@ Bool_t AliDJetRawYieldUncertaintyLocal::EvaluateUncertaintyDzeroSideband_Coheren
 	  cDistr2->SaveAs(Form("AverageOfFinalYields_SBApproach_%s_AllDBins.root", fDmesonLabel.Data()));
 
   } //end of advanced plots
+
+
 
   return kTRUE;
 

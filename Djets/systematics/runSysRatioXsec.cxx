@@ -9,7 +9,35 @@ void runSysRatioXsec(){
     TString defaulfileUnf = "Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/unfoldedSpectrum_unfoldedJetSpectrum.root";
     TString defaulfileSignal = "Default_AnalysisResults_Run2w18b.root/signalExtraction/JetPtSpectra_SB_eff.root";
     TString path = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/";
+/*
+    SysRatio *TPC = new SysRatio(4,"TPC");
+    TPC->SetPath(path);
+    TPC->SetOutPath(path+"systematics");
 
+    TString TPCfilelist[4] = {"Cuts_L2/Default/unfolding_Bayes_5/unfoldedSpectrum_unfoldedJetSpectrum.root",
+                               "Cuts_L3/Default/unfolding_Bayes_5/unfoldedSpectrum_unfoldedJetSpectrum.root",
+                               "Cuts_T2/Default/unfolding_Bayes_5/unfoldedSpectrum_unfoldedJetSpectrum.root",
+                               "Cuts_T3/Default/unfolding_Bayes_5/unfoldedSpectrum_unfoldedJetSpectrum.root",
+                              };
+    TString TPClegendlist[4] ={"Rows > 70, Rows/Clusters > 0.8",
+                                "Rows > 120, Rows/Clusters > 0.8",
+                                "Clusters > 56",
+                                "Clusters > 70",
+
+                               };
+
+    TPC->SetDefaultFile("Cuts_Def/Default_AnalysisResults_18.root/unfolding_Bayes_5/unfoldedSpectrum_unfoldedJetSpectrum.root");
+    TPC->SetVarFilelist(TPCfilelist);
+    TPC->SetVarLegendDesc(TPClegendlist);
+    TPC->SetAxisTitle("p_{T, ch. jet}","dN/dp_{T, ch. jet}");
+    TPC->SetRatioRangesY(0.8,1.2);
+    //TPC->SetMethod(SysRatio::Method::kError);
+
+    TPC->SetOutFolder("CUTS");
+    TPC->SetHistoName("unfoldedSpectrum");
+    TPC->Run();
+return;
+*/
 
     SysRatio *UNFClosure = new SysRatio(1,"Unfolding Bayes Closure");
     UNFClosure->SetPath(path);
@@ -228,7 +256,7 @@ void runSysRatioXsec(){
         CUTSEFF->Run();
     }
 
-
+/*
 //Unfolding Iterations
     SysRatio *UNFITER = new SysRatio(11,"Unfolding Bayes iterations and ranges");
     UNFITER->SetPath(path);
@@ -348,7 +376,7 @@ void runSysRatioXsec(){
     UNFSVD->SetRatioRangesY(0.4,1.6);
     UNFSVD->Run();
 
-
+*/
 /*
     SysRatio *T3SB = new SysRatio(6,"Signal and Background range variation");
     T3SB->SetPath("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_06cutSB/Cuts_L3/");

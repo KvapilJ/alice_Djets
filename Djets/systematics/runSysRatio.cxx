@@ -9,8 +9,34 @@ void runSysRatio(){
                        ": 15 < p_{T,jet} < 50 GeV/#it{c} (p_{T,D} > 3 GeV/#it{c})"};
 
     TString defaulfile = "Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/unfoldedSpectrum_unfoldedJetSpectrum.root";
-    TString path = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_04z/";
+    TString path = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_z02F/";
+/*
+    //B Feed-Down systematics
+        SysRatio *UNFClosure = new SysRatio(1,"Unfolding Bayes Closure");
+        UNFClosure->SetPath(path);
+        UNFClosure->SetOutPath(path+"systematics");
 
+        TString UNFClosurelegendlist[1] ={"True projection"};
+        TString UNFClosurefilelist[1] = {"Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/unfoldedSpectrum_unfoldedJetSpectrum.root"
+                                 };
+
+        UNFClosure->SetDefaultFile("Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/unfoldedSpectrum_unfoldedJetSpectrum.root");
+        UNFClosure->SetVarFilelist(UNFClosurefilelist);
+        UNFClosure->SetVarLegendDesc(UNFClosurelegendlist);
+        UNFClosure->SetMethod(SysRatio::Method::kMax);
+
+        for(Int_t z = 1; z <= 5; z++){
+            UNFClosure->SetOutFolder(Form("UNFClosure%d",z));
+            UNFClosure->SetTitle("BFD variation up"+zbin[z-1]);
+            UNFClosure->SetDefHistoName(Form("unfoldedSpectrumClosure%d",z));
+            UNFClosure->SetHistoName(Form("TrueSpectrumClosure%d",z));
+            UNFClosure->SetAxisTitle("z_{#parallel}","Yield");
+            UNFClosure->SetRatioRangesY(0.8,1.2);
+            UNFClosure->Run();
+        }
+
+        return;
+*/
 //B Feed-Down systematics
     SysRatio *BFDu = new SysRatio(1,"B meson Feed-Down up");
     BFDu->SetPath(path);
@@ -110,9 +136,9 @@ void runSysRatio(){
         SBRANGE->Run();
     }
 
-
+/*
     //JES
-  /*  SysRatio *JES = new SysRatio(1,"JES");
+    SysRatio *JES = new SysRatio(1,"JES");
     JES->SetPath(path);
     JES->SetOutPath(path+"systematics");
 
@@ -182,7 +208,7 @@ void runSysRatio(){
         CUTS->SetHistoName(Form("unfoldedSpectrumKineEff%d",z));
         CUTS->Run();
     }
-
+/*
     //Unfolding Iterations
     SysRatio *UNFITER = new SysRatio(2,"Unfolding iterations");
     UNFITER->SetPath(path);
@@ -204,7 +230,8 @@ void runSysRatio(){
         UNFITER->SetHistoName(Form("unfoldedSpectrumKineEff%d",z));
         UNFITER->Run();
     }
-
+*/
+    /*
  //Prior Variation
     SysRatio *PRIOR = new SysRatio(8,"Prior variation");
     PRIOR->SetPath(path);
@@ -256,7 +283,7 @@ void runSysRatio(){
        PRIORSHAPE->SetHistoName(Form("Prior%d",z));
        PRIORSHAPE->Run();
    }
-
+*/
 /*
     SysRatio *CUTS = new SysRatio(3,"CUTS");
     CUTS->SetPath("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/");

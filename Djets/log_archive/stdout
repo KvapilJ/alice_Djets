@@ -1,0 +1,237 @@
+Test: ClusterMonitor is at grid01.tier2-kol.res.in:8084
+Execution machine:  wn164.internal.tier2-kol.res.in
+------------------ job starts ---------------------
+2020-07-16 01:57:32.796615
+Root: /cvmfs/alice.cern.ch/x86_64-2.6-gnu-4.1.2/Packages/ROOT/v5-34-30-alice10-21/bin/root
+AliRoot: /cvmfs/alice.cern.ch/x86_64-2.6-gnu-4.1.2/Packages/AliRoot/v5-09-40-1/bin/aliroot
+Running dijet MC production on: Linux wn164.internal.tier2-kol.res.in 2.6.32-754.29.2.el6.x86_64 #1 SMP Wed May 13 03:22:58 CDT 2020 x86_64 x86_64
+Powheg found in '/cvmfs/alice.cern.ch/x86_64-2.6-gnu-4.1.2/Packages/POWHEG/r3178-alice1-1/bin/pwhg_main_dijet'
+Running POWHEG simulation!
+!numevts 50000        ! number of events to be generated
+ih1  1               ! hadron 1 (1 for protons, -1 for antiprotons)
+ih2  1               ! hadron 2 (1 for protons, -1 for antiprotons)
+!ebeam1 3500          ! energy of beam 1
+!ebeam2 3500          ! energy of beam 2
+
+!bornktmin 10         ! (default 0d0) Generation cut: minimum kt in underlying Born
+#bornsuppfact 100    ! (default 0d0) Mass parameter for Born suppression factor.
+                     ! If < 0 suppfact = 1.
+withnegweights 0     ! (default 0). If 1 use negative weights.
+#bornonly 1          ! (default 0). If 1 compute underlying Born using LO
+                     ! cross section only.
+
+! To be set only if using internal (mlm) pdfs
+! 131 cteq6m
+! ndns1 131            ! pdf set for hadron 1 (mlm numbering)
+! ndns2 131            ! pdf set for hadron 2 (mlm numbering)
+
+! To be set only if using LHA pdfs
+! 10050 cteq6m
+!lhans1  11000         ! pdf set for hadron 1 (LHA numbering)
+!lhans2  11000         ! pdf set for hadron 2 (LHA numbering)	
+
+! To be set only if using different pdf sets for the two incoming hadrons
+#QCDLambda5  0.25    ! for not equal pdf sets 
+
+#renscfact  1d0      ! (default 1d0) ren scale factor: muren  = muref * renscfact 
+#facscfact  1d0      ! (default 1d0) fac scale factor: mufact = muref * facscfact 
+
+! Parameters to allow or not the use of stored data
+use-old-grid    1    ! If 1 use old grid if file pwggrids.dat is present (<> 1 regenerate)
+use-old-ubound  1    ! If 1 use norm of upper bounding function stored
+                     ! in pwgubound.dat, if present; <> 1 regenerate
+
+! A typical call uses 1/1400 seconds (1400 calls per second)
+!ncall1 20000         ! No. calls for the construction of the importance sampling grid
+!itmx1 5              ! No. iterations for grid: total 100000 calls ~ 70 seconds
+!ncall2 20000         ! No. calls for the computation of the upper bounding
+                     ! envelope for the generation of radiation
+!itmx2 5              ! No. iterations for the above
+
+! Notice: the total number of calls is ncall2*itmx2*foldcsi*foldy*foldphi
+! these folding numbers yield a negative fraction of 0.5% with bornktmin=10 GeV.
+! With these settings: ncall2*itmx2*foldcsi*foldy*foldphi=5M, 60 minutes
+foldcsi 5            ! No. folds on csi integration
+foldy   5            ! No. folds on  y  integration
+foldphi 2            ! No. folds on phi integration
+
+nubound 500000       ! No. calls to set up the upper bounding norms for radiation.
+                     ! This is performed using only the Born cross section (fast)
+
+! OPTIONAL PARAMETERS
+
+#ptsqmin    0.8      ! (default 0.8 GeV) minimum pt for generation of radiation
+#charmthr   1.5      ! (default 1.5 GeV) charm treshold for gluon splitting 
+#bottomthr  5.0      ! (default 5.0 GeV) bottom treshold for gluon splitting
+#testplots  1        ! (default 0, do not) do NLO and PWHG distributions
+#charmthrpdf  1.5    ! (default 1.5 GeV) pdf charm treshold
+#bottomthrpdf 5.0    ! (default 5.0 GeV) pdf bottom treshold
+
+#xupbound 2d0        ! increase upper bound for radiation generation
+
+#iseed    5421       ! Start the random number generator with seed iseed
+#rand1     0         ! skipping  rand2*100000000+rand1 numbers (see RM48
+#rand2     0         ! short writeup in CERNLIB).              
+#manyseeds 1         ! Used to perform multiple runs with different random
+                     ! seeds in the same directory.
+                     ! If set to 1, the program asks for an integer j;
+                     ! The file pwgseeds.dat attar -xf HepMC.tar
+rootcint -f OnTheFlySimulationGenerator_Dict.cxx -c -I`root-config --incdir` -I$ALICE_ROOT/include -I./ OnTheFlySimulationGenerator.h
+`root-config --cxx` -c -g -fPIC `root-config --cflags` -I`root-config --incdir` -I./ -I$ALICE_ROOT/include -I$ALICE_PHYSICS/include -I$FASTJET/include OnTheFlySimulationGenerator_Dict.cxx OnTheFlySimulationGenerator.cxx
+rootcint -f AliGenEvtGen_dev_Dict.cxx -c -I`root-config --incdir` -I$ALICE_ROOT/include -I./ AliGenEvtGen_dev.h
+`root-config --cxx` -c -g -fPIC `root-config --cflags` -I`root-config --incdir` -I./ -I$ALICE_ROOT/include -I$ALICE_PHYSICS/include -I$FASTJET/include AliGenEvtGen_dev_Dict.cxx AliGenEvtGen_dev.cxx
+rootcint -f AliGenPythia_dev_Dict.cxx -c -I`root-config --incdir` -I$ALICE_ROOT/include -I./ AliGenPythia_dev.h
+`root-config --cxx` -c -g -fPIC `root-config --cflags` -I`root-config --incdir` -I./ -I$ALICE_ROOT/include -I$ALICE_PHYSICS/include -I$FASTJET/include AliGenPythia_dev_Dict.cxx AliGenPythia_dev.cxx
+rootcint -f AliPythiaBase_dev_Dict.cxx -c -I`root-config --incdir` -I$ALICE_ROOT/include -I./ AliPythiaBase_dev.h
+`root-config --cxx` -c -g -fPIC `root-config --cflags` -I`root-config --incdir` -I./ -I$ALICE_ROOT/include -I$ALICE_PHYSICS/include -I$FASTJET/include AliPythiaBase_dev_Dict.cxx AliPythiaBase_dev.cxx
+rootcint -f AliPythia6_dev_Dict.cxx -c -I`root-config --incdir` -I$ALICE_ROOT/include -I./ AliPythia6_dev.h
+`root-config --cxx` -c -g -fPIC `root-config --cflags` -I`root-config --incdir` -I./ -I$ALICE_ROOT/include -I$ALICE_PHYSICS/include -I$FASTJET/include AliPythia6_dev_Dict.cxx AliPythia6_dev.cxx
+rootcint -f AliPythia8_dev_Dict.cxx -c -I`root-config --incdir` -I$ALICE_ROOT/include -I./ AliPythia8_dev.h
+`root-config --cxx` -c -g -fPIC `root-config --cflags` -I`root-config --incdir` -I./ -I$ALICE_ROOT/include -I$ALICE_PHYSICS/include -I$FASTJET/include AliPythia8_dev_Dict.cxx AliPythia8_dev.cxx
+rootcint -f AliGenExtFile_dev_Dict.cxx -c -I`root-config --incdir` -I$ALICE_ROOT/include -I./ AliGenExtFile_dev.h
+`root-config --cxx` -c -g -fPIC `root-config --cflags` -I`root-config --incdir` -I./ -I$ALICE_ROOT/include -I$ALICE_PHYSICS/include -I$FASTJET/include AliGenExtFile_dev_Dict.cxx AliGenExtFile_dev.cxx
+rootcint -f AliGenReaderHepMC_dev_Dict.cxx -c -I`root-config --incdir` -I$ALICE_ROOT/include -I./ AliGenReaderHepMC_dev.h
+`root-config --cxx` -c -g -fPIC `root-config --cflags` -I`root-config --incdir` -I./ -I$ALICE_ROOT/include -I$ALICE_PHYSICS/include -I$FASTJET/include AliGenReaderHepMC_dev_Dict.cxx AliGenReaderHepMC_dev.cxx
+rootcint -f THepMCParser_dev_Dict.cxx -c -I`root-config --incdir` -I$ALICE_ROOT/include -I./ THepMCParser_dev.h
+`root-config --cxx` -c -g -fPIC `root-config --cflags` -I`root-config --incdir` -I./ -I$ALICE_ROOT/include -I$ALICE_PHYSICS/include -I$FASTJET/include THepMCParser_dev_Dict.cxx THepMCParser_dev.cxx
+`root-config --cxx` `root-config --glibs` -shared -L$ALICE_ROOT/lib -L$ALICE_PHYSICS/lib -lTHepMCParser -lHepMC -lEG -lEGPythia6 -llhapdfbase -lpythia6_4_28 -lpythia8210dev -lAliPythia6 -lAliPythia8 -lTEvtGen -lEvtGen -lSTEERBase -lSTEER -lEVGEN -lESD -lAOD -lANALYSIS -lPWGJEEMCALJetTasks -lPWGEMCALbase -lPWGEMCALtasks -lPWGJETFW -lPWGJEFlavourJetTasks OnTheFlySimulationGenerator.o AliGenEvtGen_dev.o AliGenPythia_dev.o AliPythiaBase_dev.o AliPythia6_dev.o AliPythia8_dev.o AliGenExtFile_dev.o AliGenReaderHepMC_dev.o THepMCParser_dev.o OnTheFlySimulationGenerator_Dict.o AliGenEvtGen_dev_Dict.o AliGenPythia_dev_Dict.o AliPythiaBase_dev_Dict.o AliPythia6_dev_Dict.o AliPythia8_dev_Dict.o AliGenExtFile_dev_Dict.o AliGenReaderHepMC_dev_Dict.o THepMCParser_dev_Dict.o -o AnalysisCode.so
+total 77068
+-rw-r----- 1 sgmali02 alicesgm     9045 Jul 16 01:56 AliGenEvtGen_dev.cxx
+-rw-r----- 1 sgmali02 alicesgm     2215 Jul 16 01:56 AliGenEvtGen_dev.h
+-rw-r----- 1 sgmali02 alicesgm   223096 Jul 16 14:04 AliGenEvtGen_dev.o
+-rw-r----- 1 sgmali02 alicesgm    45024 Jul 16 14:04 AliGenEvtGen_dev_Dict.cxx
+-rw-r----- 1 sgmali02 alicesgm     4471 Jul 16 14:04 AliGenEvtGen_dev_Dict.h
+-rw-r----- 1 sgmali02 alicesgm   243840 Jul 16 14:04 AliGenEvtGen_dev_Dict.o
+-rw-r----- 1 sgmali02 alicesgm    15551 Jul 16 01:56 AliGenExtFile_dev.cxx
+-rw-r----- 1 sgmali02 alicesgm     1340 Jul 16 01:56 AliGenExtFile_dev.h
+-rw-r----- 1 sgmali02 alicesgm   521512 Jul 16 14:04 AliGenExtFile_dev.o
+-rw-r----- 1 sgmali02 alicesgm    44817 Jul 16 14:04 AliGenExtFile_dev_Dict.cxx
+-rw-r----- 1 sgmali02 alicesgm     4449 Jul 16 14:04 AliGenExtFile_dev_Dict.h
+-rw-r----- 1 sgmali02 alicesgm   238048 Jul 16 14:04 AliGenExtFile_dev_Dict.o
+-rw-r----- 1 sgmali02 alicesgm    12203 Jul 16 01:56 AliGenPythia_dev.cxx
+-rw-r----- 1 sgmali02 alicesgm     7823 Jul 16 01:56 AliGenPythia_dev.h
+-rw-r----- 1 sgmali02 alicesgm   494888 Jul 16 14:04 AliGenPythia_dev.o
+-rw-r----- 1 sgmali02 alicesgm    71827 Jul 16 14:04 AliGenPythia_dev_Dict.cxx
+-rw-r----- 1 sgmali02 alicesgm     5063 Jul 16 14:04 AliGenPythia_dev_Dict.h
+-rw-r----- 1 sgmali02 alicesgm   467184 Jul 16 14:04 AliGenPythia_dev_Dict.o
+-rw-r----- 1 sgmali02 alicesgm     4600 Jul 16 01:56 AliGenReaderHepMC_dev.cxx
+-rw-r----- 1 sgmali02 alicesgm     1672 Jul 16 01:56 AliGenReaderHepMC_dev.h
+-rw-r----- 1 sgmali02 alicesgm   469440 Jul 16 14:04 AliGenReaderHepMC_dev.o
+-rw-r----- 1 sgmali02 alicesgm    35703 Jul 16 14:04 AliGenReaderHepMC_dev_Dict.cxx
+-rw-r----- 1 sgmali02 alicesgm     2988 Jul 16 14:04 AliGenReaderHepMC_dev_Dict.h
+-rw-r----- 1 sgmali02 alicesgm   213800 Jul 16 14:04 AliGenReaderHepMC_dev_Dict.o
+-rw-r----- 1 sgmali02 alicesgm    10330 Jul 16 01:56 AliPythia6_dev.cxx
+-rw-r----- 1 sgmali02 alicesgm     2825 Jul 16 01:56 AliPythia6_dev.h
+-rw-r----- 1 sgmali02 alicesgm   202504 Jul 16 14:04 AliPythia6_dev.o
+-rw-r----- 1 sgmali02 alicesgm    38535 Jul 16 14:04 AliPythia6_dev_Dict.cxx
+-rw-r----- 1 sgmali02 alicesgm     2929 Jul 16 14:04 AliPythia6_dev_Dict.h
+-rw-r----- 1 sgmali02 alicesgm   220696 Jul 16 14:04 AliPythia6_dev_Dict.o
+-rw-r----- 1 sgmali02 alicesgm     6499 Jul 16 01:56 AliPythia8_dev.cxx
+-rw-r----- 1 sgmali02 alicesgm     2585 Jul 16 01:56 AliPythia8_dev.h
+-rw-r----- 1 sgmali02 alicesgm  2496048 Jul 16 14:04 AliPythia8_dev.o
+-rw-r----- 1 sgmali02 alicesgm   197870 Jul 16 14:04 AliPythia8_dev_Dict.cxx
+-rw-r----- 1 sgmali02 alicesgm    23855 Jul 16 14:04 AliPythia8_dev_Dict.h
+-rw-r----- 1 sgmali02 alicesgm  1595440 Jul 16 14:04 AliPythia8_dev_Dict.o
+-rw-r----- 1 sgmali02 alicesgm     1527 Jul 16 01:56 AliPythiaBase_dev.cxx
+-rw-r----- 1 sgmali02 alicesgm     2190 Jul 16 01:56 AliPythiaBase_dev.h
+-rw-r----- 1 sgmali02 alicesgm    70488 Jul 16 14:04 AliPythiaBase_dev.o
+-rw-r----- 1 sgmali02 alicesgm    39049 Jul 16 14:04 AliPythiaBase_dev_Dict.cxx
+-rw-r----- 1 sgmali02 alicesgm     2487 Jul 16 14:04 AliPythiaBase_dev_Dict.h
+-rw-r----- 1 sgmali02 alicesgm   220504 Jul 16 14:04 AliPythiaBase_dev_Dict.o
+-rwxr-x--- 1 sgmali02 alicesgm  4540312 Jul 16 14:04 AnalysisCode.so
+-rw-r----- 1 sgmali02 alicesgm  1114038 Jul 16 14:36 AnalysisResults_FastSim_powheg+pythia8_dijet.root
+-rw-r----- 1 sgmali02 alicesgm  5022928 Jul 16 14:36 AnalysisResults_FastSim_powheg+pythia8_dijet_jets.root
+-rw-r----- 1 sgmali02 alicesgm    53748 Jul 16 14:05 FastSim_powheg+pythia8_dijet.root
+-rw-r----- 1 sgmali02 alicesgm     1912 Jul 16 01:55 FastSim_validation.sh
+-rw-r----- 1 sgmali02 alicesgm   225141 Jul 16 01:57 FlavRegList
+drwxr-x--- 2 sgmali02 alicesgm     4096 Jun 15  2018 HepMC
+-rw-r----- 1 sgmali02 alicesgm   245760 Jul 16 01:57 HepMC.tar
+-rw-r----- 1 sgmali02 alicesgm     1119 Jul 16 01:57 Makefile
+-rw-r----- 1 sgmali02 alicesgm    24705 Jul 16 01:57 OnTheFlySimulationGenerator.cxx
+-rw-r----- 1 sgmali02 alicesgm     6670 Jul 16 01:57 OnTheFlySimulationGenerator.h
+-rw-r----- 1 sgmali02 alicesgm   547872 Jul 16 14:04 OnTheFlySimulationGenerator.o
+-rw-r----- 1 sgmali02 alicesgm    77681 Jul 16 14:04 OnTheFlySimulationGenerator_Dict.cxx
+-rw-r----- 1 sgmali02 alicesgm     5820 Jul 16 14:04 OnTheFlySimulationGenerator_Dict.h
+-rw-r----- 1 sgmali02 alicesgm   316976 Jul 16 14:04 OnTheFlySimulationGenerator_Dict.o
+-rw-r----- 1 sgmali02 alicesgm      357 Jul 16 01:57 POWHEG_PYTHIA8_DIJET_13TeV_central.yaml
+-rw-r----- 1 sgmali02 alicesgm    34944 Jul 16 01:56 THepMCParser_dev.cxx
+-rw-r----- 1 sgmali02 alicesgm     6019 Jul 16 01:56 THepMCParser_dev.h
+-rw-r----- 1 sgmali02 alicesgm   839816 Jul 16 14:04 THepMCParser_dev.o
+-rw-r----- 1 sgmali02 alicesgm    48699 Jul 16 14:04 THepMCParser_dev_Dict.cxx
+-rw-r----- 1 sgmali02 alicesgm     4837 Jul 16 14:04 THepMCParser_dev_Dict.h
+-rw-r----- 1 sgmali02 alicesgm   208176 Jul 16 14:04 THepMCParser_dev_Dict.o
+-rw-r----- 1 sgmali02 alicesgm     8655 Jul 16 01:57 bornequiv
+-rwxr-x--- 1 sgmali02 alicesgm    20732 Jul 16 01:55 command
+-rw-r----- 1 sgmali02 alicesgm        0 Jul 16 01:55 develTrace_1926598955
+-rw-r----- 1 sgmali02 alicesgm     6718 Jul 16 14:36 galice.root
+-rw-r----- 1 sgmali02 alicesgm      371 Jul 16 01:57 lhapdf_utils.py
+-rw-r----- 1 sgmali02 alicesgm      631 Jul 16 01:57 lhapdf_utils.pyc
+-rw-r----- 1 sgmali02 alicesgm        0 Jul 16 14:36 outputs_valid
+-rw-r----- 1 sgmali02 alicesgm     4599 Jul 16 01:57 powheg.input
+-rw-r----- 1 sgmali02 alicesgm    12813 Jul 16 14:04 powheg.log
+-rw-r----- 1 sgmali02 alicesgm     3579 Jul 16 01:56 powheg_pythia8_conf.cmnd
+-rw-r----- 1 sgmali02 alicesgm   337470 Jul 16 02:04 pwg-btlgrid.top
+-rw-r----- 1 sgmali02 alicesgm      428 Jul 16 06:14 pwg-stat.dat
+-rw-r----- 1 sgmali02 alicesgm        0 Jul 16 06:14 pwgborngrid.top
+-rw-r----- 1 sgmali02 alicesgm     7480 Jul 16 14:01 pwgboundviolations.dat
+-rw-r----- 1 sgmali02 alicesgm      800 Jul 16 14:04 pwgcounters.dat
+-rw-r----- 1 sgmali02 alicesgm 25223399 Jul 16 14:04 pwgevents.lhe
+-rw-r----- 1 sgmali02 alicesgm 25223339 Jul 16 14:04 pwgevents.lhe.bak
+-rw-r----- 1 sgmali02 alicesgm    14788 Jul 16 06:14 pwggrid.dat
+-rw-r----- 1 sgmali02 alicesgm  4267208 Jul 16 06:21 pwghistnorms.top
+-rw-r----- 1 sgmali02 alicesgm    26448 Jul 16 06:21 pwgubound.dat
+-rw-r----- 1 sgmali02 alicesgm     4960 Jul 16 02:04 pwgxgrid.dat
+-rw-r----- 1 sgmali02 alicesgm   687310 Jul 16 01:57 pwhg_checklimits
+-rw-r----- 1 sgmali02 alicesgm    18671 Jul 16 01:57 realequiv
+-rw-r----- 1 sgmali02 alicesgm    93997 Jul 16 01:57 realequivregions
+-rw-r----- 1 sgmali02 alicesgm    12529 Jul 16 01:57 runJetSimulation.C
+-rw-r----- 1 sgmali02 alicesgm     9282 Jul 16 14:05 runJetSimulation_C.d
+-rwxr-x--- 1 sgmali02 alicesgm   235760 Jul 16 14:05 runJetSimulation_C.so
+-rw-r----- 1 sgmali02 alicesgm    68960 Jul 16 14:35 sim_powheg+pythia8_dijet.log
+-rw-r----- 1 sgmali02 alicesgm     2243 Jul 16 01:57 start_simulation.C
+-rw-r----- 1 sgmali02 alicesgm   801263 Jul 16 14:04 stderr
+-rw-r----- 1 sgmali02 alicesgm     7857 Jul 16 14:04 stdout
+-rw-r----- 1 sgmali02 alicesgm     8523 Jul 16 01:57 virtequiv
+76M	.
+ line j is read, and the
+                     ! integer at line j is used to initialize the random
+                     ! sequence for the generation of the event.
+                     ! The event file is called pwgevents-'j'.lhe
+
+doublefsr 1          ! Default 0; if 1 use new mechanism to generate regions
+                     ! such that the emitted harder than the
+                     ! emitter in FSR is suppressed. If doublefsr=0 this is
+                     ! only the case for emitted gluons (old behaviour). If
+                     ! 1 it is also applied to emitted quarks.
+                     ! If set, it strongly reduces spikes on showered output.
+
+
+
+#par_diexp 4         ! default is 2. With 4 there is a stronger separation
+#par_dijexp 4        ! of regions, it may help to reduce spikes when generating
+#par_2gsupp 4        ! weighted events.
+numevts 27501
+ncall1 20000
+itmx1 5
+ncall2 20000
+itmx2 5
+facscfact 1
+renscfact 1
+bornktmin 1
+bornsuppfact 60
+storemintupb 0
+lhans1 11000
+lhans2 11000
+ebeam1 6500
+ebeam2 6500
+iseed 242656569
+Running POWHEG...
+POWHEG generated 27501 events, stored in pwgevents.lhe
+Setting seed to 371137530
+Compiling analysis code...
+Running simulation...
+Done
+...see results in the log files
+############### SCRATCH SIZE ####################
+------------------ job ends ----------------------
+2020-07-16 14:36:20.412966

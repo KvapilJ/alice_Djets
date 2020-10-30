@@ -762,7 +762,16 @@ RooUnfoldResponse* LoadDetectorMatrix(TString MCfile, TString out, Bool_t isPost
         TString tmp(MCfile);
         TString treepost = "";
         treepost += "TTree";
-        if(isPostix) treepost+=postfix;
+
+        if(isPostix){
+            if(postfix == "L3" && (Rpar ==2 || Rpar ==6)){
+                treepost+=postfix;
+                treepost+="_1";
+            }
+            else{
+                treepost+=postfix;
+            }
+        }
         treepost += "FD.root";
         tmp.Remove(MCfile.Length()-5,5).Append(treepost);
         std::cout<<"MC file do not contain TTree, trying to open TTree sparse in default path!"<<std::endl;
@@ -1033,6 +1042,19 @@ void SparseToTree(TString MCfile, Bool_t isPostfix, TString postfix)
     TString histName;
     if(fDmesonSpecie) histName = "histosDStarMBN";
                     else histName = "histosD0MBN";
+    Int_t NDMC = 0;
+    if(isPostfix){
+        if(postfix == "L3" && (Rpar ==2 || Rpar ==6)){
+            NDMC = 1;
+        }
+        else{
+            NDMC = 2;
+        }
+    }
+    else{
+        NDMC = 2;
+    }
+
     TList *histList[NDMC];
     THnSparseF *sparseMC[NDMC];
     THnSparseF *h = nullptr;
@@ -1051,7 +1073,16 @@ void SparseToTree(TString MCfile, Bool_t isPostfix, TString postfix)
     TString outName(MCfile);
     outName.Remove(outName.Length()-5,5);
     outName+="TTree";
-    if(isPostfix)outName+=postfix;
+    if(isPostfix){
+        if(postfix == "L3"){
+            outName+=postfix;
+            outName+="_1";
+        }
+        else{
+            outName+=postfix;
+        }
+    }
+   // if(isPostfix)outName+=postfix;
     outName+="FD.root";
     std::cout<<"Converting THnSparse: "<<MCfile<<std::endl;
     std::cout<<"Into TTree: "<<outName<<std::endl;

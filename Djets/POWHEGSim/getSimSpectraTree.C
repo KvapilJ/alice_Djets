@@ -230,7 +230,7 @@ ctest->Divide(4,3);
           cuts+=Form("Jet_AKTChargedR040_pt_scheme.fEta <= 0.%d && -0.%d <= Jet_AKTChargedR040_pt_scheme.fEta",9-Rpar,9-Rpar);
           cuts+="&&";
           cuts+=Form("Dmesons.fPt < %.0f && %.0f <= Dmesons.fPt",fptbinsDA[j+1],fptbinsDA[j]);
-          cuts+="&&Event.fWeight >=0)*Event.fWeight";
+          cuts+="&&Event.fWeight >=0)*Event.fWeight/1000000000";
         //if ((brD->fPt < fptbinsDA[j] || brD->fPt >= fptbinsDA[j+1])&&(fObservable == Observable::kXsection)) continue;
         //if ((brD->fPt < fzptbinsDA[fzBin-1][j] || brD->fPt >= fzptbinsDA[fzBin-1][j+1])&&(fObservable == Observable::kFragmentation)) continue;
         //hjetpt[j]->Fill(brJet->fPt);

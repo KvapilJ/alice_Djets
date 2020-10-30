@@ -1,0 +1,297 @@
+0 5 0 0 0 0 1 0 0 0 0 0 0 0 0 0
+mkdir: cannot create directory ‘/mnt/hgfs/vmware/data_R02_050219/MC/reflections/’: File exists
+
+Processing DsignalExtraction/signalExtraction_refl.C("/mnt/hgfs/vmware/data_R02_050219/MC/AnalysisResults_Run2w18b.root","/mnt/hgfs/vmware/data_R02_050219/MC/reflections/AnalysisResults_Run2w18b.root",0,"Cut",0,"kl",0)...
+mkdir: cannot create directory ‘/mnt/hgfs/vmware/data_R02_050219/MC/reflections/AnalysisResults_Run2w18b.root’: File exists
+mkdir: cannot create directory ‘/mnt/hgfs/vmware/data_R02_050219/MC/reflections/AnalysisResults_Run2w18b.root/plots’: File exists
+W-TFile::Append: Replacing existing TH1: hsDphiz_proj_6_2 (Potential memory leak).
+W-TFile::Append: Replacing existing TH1: hsDphiz_proj_7_2 (Potential memory leak).
+ FCN=3157.88 FROM MIGRAD    STATUS=CONVERGED      92 CALLS          93 TOTAL
+                     EDM=1.0808e-13    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralSgn   5.34961e+02   1.63548e+00   4.48830e-02  -8.34863e-08
+   2  Mean         1.86532e+00   3.05048e-05   8.89456e-07  -2.58189e-04
+   3  Sigma        9.87288e-03   2.73773e-05   7.51311e-07   1.62288e-02
+ FCN=89.7223 FROM HESSE     STATUS=OK             40 CALLS         758 TOTAL
+                     EDM=2.05048e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralRefl   5.15591e+01   1.70080e+00   7.32164e-04  -1.93954e-04
+   2  p1           1.94559e+00   1.27743e-03   6.24398e-07  -1.19638e-01
+   3  p2           4.00010e-02   6.88909e-04   4.63609e-07  -4.03562e-01
+   4  p3           5.29317e+01   1.70968e+00   7.40520e-04  -1.30826e-05
+   5  p4           1.82733e+00   2.51927e-03   9.54354e-07  -4.39687e-01
+   6  p5           5.96458e-02   1.33916e-03   7.24166e-07   6.63091e-01
+                               ERR DEF= 0.5
+ FCN=3.88433 FROM HESSE     STATUS=OK              5 CALLS          41 TOTAL
+                     EDM=7.24518e-20    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           8.12268e-01   3.88232e-01   8.37904e-05   9.80500e-10
+ FCN=4905.61 FROM MIGRAD    STATUS=CONVERGED      91 CALLS          92 TOTAL
+                     EDM=2.09233e-10    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralSgn   7.44787e+02   1.92975e+00   6.60027e-02   5.13795e-06
+   2  Mean         1.86594e+00   2.78680e-05   9.52973e-07   6.39915e-01
+   3  Sigma        1.06562e-02   2.53535e-05   8.66989e-07   4.57769e-02
+ FCN=412.063 FROM HESSE     STATUS=NOT POSDEF     44 CALLS        1198 TOTAL
+                     EDM=4.1391    STRATEGY= 1      ERR MATRIX NOT POS-DEF
+  EXT PARAMETER                APPROXIMATE        STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralRefl   1.65466e+02   6.33651e+01   8.90248e-02   3.23934e-02
+   2  p1           1.23042e+00   9.74209e-02   1.02845e-04  -1.05790e-03
+   3  p2           3.02758e-01   2.63980e-02   9.21154e-05   9.83748e-03
+   4  p3           1.65498e+02   1.93016e+00   1.32922e-02  -3.24064e-02
+   5  p4           1.89358e+00   8.93260e-04   8.38874e-06  -8.90180e-02
+   6  p5           9.38907e-02   8.36701e-04   7.27565e-06   2.25569e-01
+                               ERR DEF= 0.5
+ FCN=0.0834141 FROM HESSE     STATUS=OK              5 CALLS          25 TOTAL
+                     EDM=2.33e-25    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           6.49596e-01   1.34332e+00   1.36545e-04  -5.08177e-13
+ FCN=6201.21 FROM MIGRAD    STATUS=CONVERGED      86 CALLS          87 TOTAL
+                     EDM=2.72017e-11    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralSgn   7.60194e+02   1.94961e+00   7.49705e-02  -3.72372e-06
+   2  Mean         1.86620e+00   2.93114e-05   1.12630e-06  -1.49526e-02
+   3  Sigma        1.13289e-02   2.72760e-05   1.04809e-06  -4.44187e-02
+ FCN=80.4636 FROM HESSE     STATUS=OK             40 CALLS         793 TOTAL
+                     EDM=9.51877e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralRefl   1.59191e+02   1.51938e+00   1.29096e-03  -1.72034e-05
+   2  p1           1.88900e+00   1.11967e-03   1.21868e-06  -6.42074e-01
+   3  p2           1.32025e-01   1.74800e-03   1.36632e-06   2.96361e-01
+   4  p3           5.02482e+01   1.62238e+00   9.24433e-04  -6.50737e-04
+   5  p4           1.86002e+00   6.79156e-04   7.81828e-07  -5.72544e-01
+   6  p5           3.38249e-02   7.90350e-04   6.48071e-07   1.13841e+00
+                               ERR DEF= 0.5
+ FCN=0.00593064 FROM HESSE     STATUS=OK              5 CALLS          25 TOTAL
+                     EDM=9.80263e-26    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           9.88230e-01   1.77764e+00   1.74111e-04  -2.49083e-13
+ FCN=5697.62 FROM MIGRAD    STATUS=CONVERGED      86 CALLS          87 TOTAL
+                     EDM=2.89426e-11    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralSgn   6.35742e+02   1.78289e+00   6.57174e-02   1.90850e-06
+   2  Mean         1.86648e+00   3.37918e-05   1.24084e-06  -3.83976e-02
+   3  Sigma        1.19166e-02   3.14192e-05   1.15373e-06  -2.09030e-01
+ FCN=294.398 FROM HESSE     STATUS=OK             40 CALLS        1302 TOTAL
+                     EDM=8.50939e-09    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralRefl   1.56334e+02   1.04283e+00   2.13565e-03   2.38841e-05
+   2  p1           1.86127e+00   7.14786e-04   1.28486e-06   1.76290e-02
+   3  p2           8.61539e-02   6.32885e-04   1.09527e-06   1.61746e-01
+   4  p3          -1.28133e+01   8.16415e-01   8.64550e-04  -2.03314e-04
+   5  p4           2.06582e+00   2.49976e-03   4.62504e-06  -1.41694e-02
+   6  p5          -4.04269e-02   2.57786e-03   6.21814e-07   3.05481e-02
+                               ERR DEF= 0.5
+ FCN=0.052674 FROM HESSE     STATUS=OK              5 CALLS          25 TOTAL
+                     EDM=7.25407e-24    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           1.12377e+00   1.62170e+00   1.62487e-04  -2.34874e-12
+ FCN=4148.67 FROM MIGRAD    STATUS=CONVERGED      87 CALLS          88 TOTAL
+                     EDM=3.09882e-08    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralSgn   4.30102e+02   1.46646e+00   4.61262e-02  -8.01163e-05
+   2  Mean         1.86674e+00   4.30370e-05   1.34677e-06  -3.75470e+00
+   3  Sigma        1.24746e-02   3.96407e-05   1.24046e-06  -3.35837e+00
+W-Fit: Abnormal termination of minimization.
+ FCN=82.3471 FROM MIGRAD    STATUS=CALL LIMIT   1783 CALLS        1784 TOTAL
+                     EDM=0.00248872    STRATEGY= 1  ERROR MATRIX UNCERTAINTY  66.0 per cent
+  EXT PARAMETER                APPROXIMATE        STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralRefl   8.46011e+01   1.69237e+00   9.75712e-03  -3.17973e-02
+   2  p1           1.85945e+00   9.98988e-04   9.41748e-06  -3.77511e+00
+   3  p2           8.05212e-02   1.23884e-03   1.29814e-05  -5.72659e+00
+   4  p3           1.43343e+03   1.31668e+03   5.51481e+01  -1.19741e-03
+   5  p4           4.30458e+00   9.38180e-01   3.88076e-02   2.65217e+00
+   6  p5           1.19301e+00   2.69822e-01   9.86486e-03  -3.72994e+00
+                               ERR DEF= 0.5
+ FCN=0.00877859 FROM HESSE     STATUS=OK              5 CALLS          25 TOTAL
+                     EDM=6.10934e-25    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           9.89613e-01   1.35114e+00   1.32525e-04   8.18110e-13
+ FCN=2959.52 FROM MIGRAD    STATUS=CONVERGED      81 CALLS          82 TOTAL
+                     EDM=5.27469e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralSgn   2.87858e+02   1.19970e+00   3.18733e-02   7.77559e-04
+   2  Mean         1.86672e+00   5.46517e-05   1.44299e-06   1.97423e+00
+   3  Sigma        1.29507e-02   5.05426e-05   1.33446e-06   7.99935e+00
+ FCN=70.5081 FROM MIGRAD    STATUS=CALL LIMIT   1791 CALLS        1792 TOTAL
+                     EDM=0.000579704    STRATEGY= 1  ERROR MATRIX UNCERTAINTY  33.9 per cent
+  EXT PARAMETER                APPROXIMATE        STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralRefl   7.03069e+01   2.87880e+00  -7.68531e-04  -1.80338e-02
+   2  p1           1.86696e+00   1.87296e-03   1.66093e-06  -1.48948e+00
+   3  p2           1.04791e-01   2.74031e-03  -5.82967e-07   1.41221e+01
+   4  p3           4.89343e+02   6.06133e+02  -2.06252e+00  -8.87931e-05
+   5  p4           4.63699e+00   1.76676e+00  -4.70251e-03   4.60463e-02
+   6  p5           1.31150e+00   7.97544e-01  -6.59276e-04  -7.47574e-02
+                               ERR DEF= 0.5
+ FCN=0.0136617 FROM HESSE     STATUS=OK              5 CALLS          25 TOTAL
+                     EDM=6.22583e-28    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           9.83122e-01   1.15118e+00   1.13185e-04   3.06529e-14
+ FCN=4266.73 FROM MIGRAD    STATUS=CONVERGED      82 CALLS          83 TOTAL
+                     EDM=1.12113e-06    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralSgn   4.09901e+02   1.43161e+00   4.56660e-02  -5.68132e-04
+   2  Mean         1.86678e+00   4.81996e-05   1.52285e-06  -4.65414e+00
+   3  Sigma        1.35935e-02   4.39618e-05   1.38901e-06  -2.74513e+01
+ FCN=57.5681 FROM MIGRAD    STATUS=FAILED       1793 CALLS        1794 TOTAL
+                     EDM=0.0188826    STRATEGY= 1      ERR MATRIX APPROXIMATE
+  EXT PARAMETER                APPROXIMATE        STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralRefl   1.21471e+02   6.15215e+00   4.18070e-03  -1.58674e-04
+   2  p1           1.87932e+00   2.93842e-03   5.80220e-06   1.47988e-01
+   3  p2           1.36473e-01   3.20156e-03   5.99285e-06  -7.21623e-03
+   4  p3          -2.66552e+02   3.75720e+02   9.90358e-02  -3.66375e-04
+   5  p4           2.94774e+00   4.34025e-01   7.75253e-05  -1.77539e-03
+   6  p5           4.35182e-01   1.78176e-01   4.70105e-05   6.02626e-03
+                               ERR DEF= 0.5
+ FCN=0.00481581 FROM HESSE     STATUS=OK              5 CALLS          25 TOTAL
+                     EDM=2.45338e-28    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           9.97835e-01   1.43318e+00   1.40296e-04   1.54559e-14
+ FCN=2128.68 FROM MIGRAD    STATUS=CONVERGED      80 CALLS          81 TOTAL
+                     EDM=2.02755e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralSgn   2.09632e+02   1.02380e+00   2.30696e-02   2.30647e-04
+   2  Mean         1.86683e+00   7.23317e-05   1.61835e-06  -3.27516e+00
+   3  Sigma        1.46330e-02   6.55100e-05   1.46610e-06  -7.84932e+00
+ FCN=55.8542 FROM HESSE     STATUS=OK             40 CALLS        2479 TOTAL
+                     EDM=0.858224    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralRefl   3.12929e+01   1.99864e+01   2.72515e-03  -2.47113e-02
+   2  p1           1.91096e+00   1.77549e-02   1.21823e-05   1.52813e-01
+   3  p2           1.11151e-01   1.52779e-02   1.13653e-05   1.92362e-01
+   4  p3           3.14120e+01   1.73156e+01   3.38241e-03   2.52824e-02
+   5  p4           1.80046e+00   9.64842e-02   3.11622e-05   1.02595e-02
+   6  p5           1.81153e-01   4.99382e-02   2.44779e-05   6.04749e-02
+                               ERR DEF= 0.5
+  FUNCTION VALUE DOES NOT SEEM TO DEPEND ON ANY OF THE 1 VARIABLE PARAMETERS.
+          VERIFY THAT STEP SIZES ARE BIG ENOUGH AND CHECK FCN LOGIC.
+ *******************************************************************************
+ *******************************************************************************
+ FCN=0.0119281 FROM HESSE     STATUS=OK              5 CALLS          51 TOTAL
+                     EDM=8.77007e-27    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           9.83272e-01   1.05872e+00   1.04006e-04  -1.25094e-13
+ FCN=2134.78 FROM MIGRAD    STATUS=CONVERGED      87 CALLS          88 TOTAL
+                     EDM=2.13092e-09    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralSgn   2.19081e+02   1.04662e+00   2.36176e-02   1.98855e-05
+   2  Mean         1.86689e+00   7.59334e-05   1.69978e-06   7.97609e-01
+   3  Sigma        1.57013e-02   6.80944e-05   1.52434e-06  -3.29670e-01
+ FCN=44.7172 FROM HESSE     STATUS=OK             40 CALLS        1303 TOTAL
+                     EDM=1.4502e-09    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralRefl   6.07980e+00   1.92521e+00   1.88698e-03  -5.04597e-05
+   2  p1           1.85698e+00   5.36598e-03   2.16291e-05  -9.01780e-04
+   3  p2           5.24105e-02   8.30416e-03   1.76917e-05   6.92308e-03
+   4  p3           6.24415e+01   1.24773e+00   3.03133e-03   5.85558e-06
+   5  p4           1.88061e+00   3.36945e-03   1.18084e-05   1.31150e-03
+   6  p5           1.70801e-01   8.91940e-03   1.19229e-05   7.31364e-03
+                               ERR DEF= 0.5
+ FCN=0.00868461 FROM HESSE     STATUS=OK              5 CALLS          25 TOTAL
+                     EDM=3.91034e-29    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           9.89255e-01   1.11153e+00   1.09018e-04   7.95614e-15
+ FCN=1139.53 FROM MIGRAD    STATUS=CONVERGED      86 CALLS          87 TOTAL
+                     EDM=1.27098e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralSgn   1.12617e+02   7.50391e-01   1.23740e-02   2.68223e-04
+   2  Mean         1.86674e+00   1.19408e-04   1.95854e-06   3.40312e+00
+   3  Sigma        1.77687e-02   1.08242e-04   1.77538e-06  -2.45417e+00
+ FCN=41.9231 FROM HESSE     STATUS=OK             40 CALLS        3058 TOTAL
+                     EDM=6.37658e-07    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralRefl   7.07482e+00   6.40400e+00   1.59048e-03  -6.00663e-04
+   2  p1           1.87393e+00   6.55659e-03   2.01775e-05   4.85149e-02
+   3  p2           6.98806e-02   2.16280e-02   1.69655e-05   6.18483e-02
+   4  p3           3.12858e+01   4.15710e+00   2.21038e-03  -1.26574e-04
+   5  p4           1.87626e+00   5.79671e-03   1.68704e-05   1.20913e-01
+   6  p5           1.71957e-01   3.85227e-02   1.78677e-05   3.17559e-02
+                               ERR DEF= 0.5
+ FCN=0.0241678 FROM HESSE     STATUS=OK              5 CALLS          44 TOTAL
+                     EDM=3.85123e-27    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           9.83259e-01   8.18941e-01   8.09354e-05   1.07167e-13
+ FCN=312.421 FROM MIGRAD    STATUS=CONVERGED      69 CALLS          70 TOTAL
+                     EDM=1.45259e-08    STRATEGY= 1  ERROR MATRIX UNCERTAINTY   2.9 per cent
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralSgn   2.70829e+01   3.63023e-01  -3.80203e-04  -1.30074e-04
+   2  Mean         1.86717e+00   2.75723e-04  -3.50105e-07   8.30861e-01
+   3  Sigma        2.06198e-02   2.55225e-04   1.97410e-07   2.04150e-02
+ FCN=38.5864 FROM HESSE     STATUS=OK             40 CALLS        2299 TOTAL
+                     EDM=0.000851304    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  IntegralRefl   6.34647e+00   5.16385e+00   1.25456e-03   4.89983e-03
+   2  p1           1.90911e+00   1.18048e-01   5.98901e-05  -7.14908e-03
+   3  p2           1.99093e-01   1.83843e-01   5.60739e-05  -1.51188e-01
+   4  p3           5.23768e+00   7.00209e+00   9.47791e-04   4.03051e-03
+   5  p4           1.86114e+00   1.43183e-02   2.13672e-05   1.30250e-01
+   6  p5           9.72004e-02   3.33995e-02   1.89333e-05  -1.90618e-01
+                               ERR DEF= 0.5
+ FCN=0.236963 FROM HESSE     STATUS=OK              5 CALLS          39 TOTAL
+                     EDM=5.10192e-24    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           9.52304e-01   4.35968e-01   4.73515e-05  -7.32701e-12
+z
+zptjetbin 0
+jes sys 0
+foldtype 0
+foldtype  0
+cut var je:  0
+
+Processing DjetEfficiency.C(1,"/mnt/hgfs/vmware/data_R02_050219/MC/AnalysisResults_Run2w18b.root","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency",5.00,50.00,0,0,"Cut",0,0)...
+jet pT: 5 50 eta 0.7
+jet pT: 5 50 eta 0.7
+W-TH1D::Sumw2: Sum of squares of weights structure already created
+ <message repeated 1 time>
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEffRaw_prompt_jetpt5.00_50.00.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEffRaw_prompt_jetpt5.00_50.00.pdf has been created
+I-TCanvas::Print: SVG file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEffRaw_prompt_jetpt5.00_50.00.svg has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt5.00_50.00.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt5.00_50.00.pdf has been created
+I-TCanvas::Print: SVG file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt5.00_50.00.svg has been created
+
+Processing DjetEfficiency.C(0,"/mnt/hgfs/vmware/data_R02_050219/MC/AnalysisResults_Run2w18b.root","/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency",5.00,50.00,0,1,"FD",0,0)...
+mkdir: cannot create directory ‘/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency’: File exists
+jet pT: 5 50 eta 0.7
+jet pT: 5 50 eta 0.7
+W-TH1D::Sumw2: Sum of squares of weights structure already created
+ <message repeated 1 time>
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEffRaw_nonPrompt_jetpt5.00_50.00.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEffRaw_nonPrompt_jetpt5.00_50.00.pdf has been created
+I-TCanvas::Print: SVG file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEffRaw_nonPrompt_jetpt5.00_50.00.svg has been created
+I-TCanvas::Print: png file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_nonPrompt_jetpt5.00_50.00.png has been created
+I-TCanvas::Print: pdf file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_nonPrompt_jetpt5.00_50.00.pdf has been created
+I-TCanvas::Print: SVG file /home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_nonPrompt_jetpt5.00_50.00.svg has been created

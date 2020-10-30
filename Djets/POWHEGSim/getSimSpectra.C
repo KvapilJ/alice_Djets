@@ -276,7 +276,7 @@ std::cout<<"BH"<<std::endl;
     }
     else if(brD->fPartonType != 4) continue;
     //if(k<50)std::cout<<brD->fAncestorPDG<<std::endl;
-    if(brD->fAncestorPDG == 2212) continue; // check if not coming from proton
+ //   if(brD->fAncestorPDG == 2212) continue; // check if not coming from proton
 //if(fObservable == Observable::kFragmentation)
 
     if(isDptcut){

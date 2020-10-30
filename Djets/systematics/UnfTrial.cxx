@@ -13,7 +13,7 @@ void UnfTrial(){
     TH1D* hRMS[1];
 
     for(Int_t j = 0; j< 10;j++){
-        rfile[0][j] = new TFile(Form("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_X04/systematics/UNFClosure%d/SystematicsOut.root",j+1),"READ");
+        rfile[0][j] = new TFile(Form("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/systematics/UNFClosure%d/SystematicsOut.root",j+1),"READ");
       //  rfile[1][j] = new TFile(Form("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/systematics/9010/UNFClosure%d/SystematicsOut.root",j+1),"READ");
     }
 
@@ -88,7 +88,7 @@ void UnfTrial(){
       //  c->cd(4);
       //  j==0?hRMS[1]->Draw("P"):hRMS[1]->Draw("sameP");
     }
-    c->SaveAs("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_X04/systematics/UnfTrials.png");
+    c->SaveAs("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_X06/systematics/UnfTrials.png");
 
 
 

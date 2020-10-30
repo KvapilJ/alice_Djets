@@ -25,11 +25,11 @@ void multitrialJetPtYieldsDBins(char *outDir = "JetPtComparison" )
     double plotmin = 100;
     if (!ilog) plotmin = 50;
 
-    const int ptbinsJetN = 6;
-    //double ptbinsJet[ptbinsJetN+1] = { 0,2,4,6,8,10,12,15,30,50 };
-    double ptbinsJet[ptbinsJetN+1] = { 4,6,8,10,12,16,24 };
+    const int ptbinsJetN = 8;
+    double ptbinsJet[ptbinsJetN+1] = { 5,6,8,10,12,14,20,30,50 };
+    //double ptbinsJet[ptbinsJetN+1] = { 4,6,8,10,12,16,24 };
 
-    TFile *file = TFile::Open("out/DistributionOfFinalYields_SBApproach_Dzero_AfterDbinSum.root","read");
+    TFile *file = TFile::Open("DistributionOfFinalYields_SBApproach_Dzero_AfterDbinSum.root","read");
     TCanvas *cAll = (TCanvas*)file->Get("cDistr");
     cAll->Draw();
     cAll->SaveAs("out/JetPtTrialsDBinsAll.pdf");
@@ -39,7 +39,7 @@ void multitrialJetPtYieldsDBins(char *outDir = "JetPtComparison" )
     cAll->SaveAs("out/JetPtTrialsDBinsAll_log.pdf");
     cAll->SaveAs("out/JetPtTrialsDBinsAll_log.png");
 
-    TFile *fileAv = TFile::Open("out/AverageOfFinalYields_SBApproach_Dzero_AllDBins.root","read");
+    TFile *fileAv = TFile::Open("AverageOfFinalYields_SBApproach_Dzero_AllDBins.root","read");
     TCanvas *cAv = (TCanvas*)fileAv->Get("cDistrAllAvgs");
 
    /*
@@ -80,7 +80,7 @@ void multitrialJetPtYieldsDBins(char *outDir = "JetPtComparison" )
       pv1->SetBorderSize(0);
       pv1->AddText(Form("%d < p_{T}^{D0} < %d",ptbinsmin[i],ptbinsmax[i]));
 
-      TFile *fileBin = TFile::Open(Form("out/DistributionOfFinalYields_SBApproach_Dzero_Bin%d.root",i),"read");
+      TFile *fileBin = TFile::Open(Form("DistributionOfFinalYields_SBApproach_Dzero_Bin%d.root",i),"read");
        TCanvas *cc = (TCanvas*)fileBin->Get(Form("cDistr%d",i));
        cc->Draw();
        //TH1D *h = (TH1D*)cc->DrawFrame(0.,0.,1.,1.);
