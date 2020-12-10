@@ -116,8 +116,8 @@ void finalJetSpectraInvUpdatedRatio(
     Bool_t ePowhegPythia6 = false;
     Bool_t ePowhegPythia8 = true;
     Bool_t ePythia6 = false;
-    Bool_t ePythia8 = false;
-    Bool_t ePythia8SoftMode2 = false;
+    Bool_t ePythia8 = true;
+    Bool_t ePythia8SoftMode2 = true;
     Bool_t ePowhegPythia6dijet = false;
     Bool_t ePowhegPythia8dijet = false;
 

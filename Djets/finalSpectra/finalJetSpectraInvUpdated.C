@@ -120,7 +120,6 @@ Int_t z = 0, //which z jet pT bin 1,2,3,4,5
 Int_t sysGlobal = 0, //0 - (defualt )add LumiUnc, BRUnc and Tracking Unc. + add cut var and JES;  for x-section
                      //1 - (R comparison) no global Unc; cut var separate and no JES - available only for pT x-section (type 0)
                      //2 - (energy comparison) add LumiUnc and Tracking Unc cut var and JES
-                     //3 - (PDF) no global Unc; cut var and JES included
 TString dataFile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/unfoldedSpectrum_unfoldedJetSpectrum.root",
 TString dataAnalysisFile = "/mnt/hgfs/vmware/data_R04_050219/data/AnalysisResults_Run2w18b.root",
 TString simDir = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Simulations/Prompt/AnalysisResults_Run2w18b.root",
@@ -154,6 +153,7 @@ TString histBase = "unfoldedSpectrumKineEff"
 
     UInt_t xAxisBins = 10;
     Double_t *xAxis =nullptr;// = new Double_t[xAxisBins];
+    Double_t *xAxisC =nullptr;
 
     Double_t *systUncD_up = nullptr;
     Double_t *systUncD_down = nullptr;
@@ -185,6 +185,7 @@ TString histBase = "unfoldedSpectrumKineEff"
     if(type ==0){//x-section
         xAxisBins = 8;
         xAxis = new Double_t[xAxisBins+1]{5,6,8,10,12,14,20,30,50};
+        xAxisC = new Double_t[xAxisBins]{5.5,7,9,11,13,17,25,40};
     }
     else if(type ==1 || type ==2){ //Z x-section or Z PDF
         xAxisBins = 5;
@@ -250,10 +251,10 @@ TString histBase = "unfoldedSpectrumKineEff"
             //systUncD_up = new Double_t[xAxisBins]{0.0891, 0.0912, 0.0721, 0.0989, 0.078, 0.0827, 0.1145, 0.2137};
             //systUncD_down = new Double_t[xAxisBins]{0.1009, 0.1034,	0.0907, 0.1161,	0.098, 0.1144,	0.1386, 0.2486};
             //JES and CUTS not in systUncD_up and systUncD_down
-            systUncD_up = new Double_t[xAxisBins]{0.0891, 0.0912, 0.0721, 0.0989, 0.078, 0.0827, 0.1145, 0.2137};
-            systUncD_down = new Double_t[xAxisBins]{0.1009, 0.1034,	0.0907, 0.1161,	0.098, 0.1144,	0.1386, 0.2486};
-            systUncD_JES = new Double_t[xAxisBins]{0., 0.,	0., 0.,	0., 0.,	0., 0.};
-            systUncD_CUTS = new Double_t[xAxisBins]{0.1, 0.2,	0.3, 0.2,	0.5, 0.1,	0.2, 0.3};
+            systUncD_up = new Double_t[xAxisBins]{0.0883, 0.0891, 0.0690, 0.0893, 0.0699, 0.0727, 0.0921, 0.1790};
+            systUncD_down = new Double_t[xAxisBins]{0.1002, 0.1015,	0.0883, 0.1080,	0.0917, 0.1074,	0.1208, 0.2195};
+            systUncD_JES = new Double_t[xAxisBins]{0.005, 0.009, 0.013, 0.014, 0.017, 0.022, 0.03, 0.066};
+            systUncD_CUTS = new Double_t[xAxisBins]{0.011, 0.018, 0.017, 0.04, 0.03, 0.032,	0.061, 0.096};
         }
         else if(radius == 4){
             dy = 2*(0.9 - 0.4);
@@ -262,10 +263,10 @@ TString histBase = "unfoldedSpectrumKineEff"
             //systUncD_up = new Double_t[xAxisBins]{0.0762, 0.0704, 0.0781, 0.0972, 0.1156, 0.1195, 0.1531, 0.2121};
             //systUncD_down = new Double_t[xAxisBins]{0.0883, 0.0853,	0.0989, 0.1224,	0.1425, 0.1582,	0.2135, 0.2780};
             //JES and CUTS not in systUncD_up and systUncD_down
-            systUncD_up = new Double_t[xAxisBins]{0.0762, 0.0704, 0.0781, 0.0972, 0.1156, 0.1195, 0.1531, 0.2121};
-            systUncD_down = new Double_t[xAxisBins]{0.0883, 0.0853,	0.0989, 0.1224,	0.1425, 0.1582,	0.2135, 0.2780};
-            systUncD_JES = new Double_t[xAxisBins]{0., 0.,	0., 0.,	0., 0.,	0., 0.};
-            systUncD_CUTS = new Double_t[xAxisBins]{0., 0.,	0., 0.,	0., 0.,	0., 0.};
+            systUncD_up = new Double_t[xAxisBins]{0.0668, 0.0669, 0.0695, 0.0881, 0.1049, 0.1002, 0.1279, 0.1664};
+            systUncD_down = new Double_t[xAxisBins]{0.0803, 0.0824,	0.0922, 0.1153,	0.1339, 0.1442,	0.1962, 0.2450};
+            systUncD_JES = new Double_t[xAxisBins]{0.008, 0.019, 0.021, 0.035, 0.039, 0.042, 0.064, 0.097};
+            systUncD_CUTS = new Double_t[xAxisBins]{0.036, 0.012, 0.029, 0.021,	0.030, 0.050, 0.054, 0.088};
         }
         else if(radius == 6){
             dy = 2*(0.9 - 0.6);
@@ -274,10 +275,10 @@ TString histBase = "unfoldedSpectrumKineEff"
             //systUncD_up = new Double_t[xAxisBins]{0.097, 0.073, 0.09, 0.103, 0.119, 0.136, 0.189, 0.358};
             //systUncD_down = new Double_t[xAxisBins]{0.103, 0.085,	0.104, 0.119,	0.142, 0.165,	0.221, 0.43};
             //JES and CUTS not in systUncD_up and systUncD_down
-            systUncD_up = new Double_t[xAxisBins]{0.097, 0.073, 0.09, 0.103, 0.119, 0.136, 0.189, 0.358};
-            systUncD_down = new Double_t[xAxisBins]{0.103, 0.085,	0.104, 0.119,	0.142, 0.165,	0.221, 0.43};
-            systUncD_JES = new Double_t[xAxisBins]{0., 0.,	0., 0.,	0., 0.,	0., 0.};
-            systUncD_CUTS = new Double_t[xAxisBins]{0., 0.,	0., 0.,	0., 0.,	0., 0.};
+            systUncD_up = new Double_t[xAxisBins]{0.074, 0.068, 0.071, 0.087, 0.100, 0.108, 0.126, 0.202};
+            systUncD_down = new Double_t[xAxisBins]{0.082, 0.081, 0.088, 0.106,	0.126, 0.142, 0.170, 0.313};
+            systUncD_JES = new Double_t[xAxisBins]{0.001, 0.006, 0.029, 0.038, 0.052, 0.064, 0.075, 0.151};
+            systUncD_CUTS = new Double_t[xAxisBins]{0.063, 0.026, 0.048, 0.040,	0.040, 0.053, 0.119, 0.254};
         }
     }
     else if(type ==1 || type ==2){//Z x-section
@@ -390,6 +391,10 @@ TString histBase = "unfoldedSpectrumKineEff"
         std::cout<<systUncD_up[bin]<<" ";
     }
     std::cout<<std::endl;
+    // in case of separate Cut sys create separate plot
+    // JES is not added only for ratios plots wjich must be calculated outside manually anyway, thus is not added
+    TGraph *gDataCutSys = nullptr;
+    if(separateCUTUnc && systUncD_CUTS) gDataCutSys = new TGraph(xAxisBins, xAxisC, systUncD_CUTS);
 
     //get Data n Events
     std::cout<<"get Data n Events"<<std::endl;
@@ -562,22 +567,19 @@ std::cout<<"a"<<std::endl;
     TerminateCanvas(upPad,dowmPad,placeholder_up,placeholder_down);
     //canvas->SaveAs(outPlotDir+"/finalSpectra.png");
     TString sysmode = "";
-    if((type ==0 || type ==1) && sysGlobal==0) sysmode = "_fullGlobal_addedCUTandJES";
-    if((type ==0 || type ==1) && sysGlobal==1) sysmode = "_noneGlobal_separateCUTnoneJES";
-    if((type ==0 || type ==1) && sysGlobal==2) sysmode = "_noBRUnc_addedCUTandJES";
+    if((type ==0 || type ==1) && sysGlobal==0) sysmode = "_fullGlobal_addedCUTandJES";     //default
+    if((type ==0 || type ==1) && sysGlobal==1) sysmode = "_noneGlobal_separateCUTnoneJES"; //for R ratio
+    if((type ==0 || type ==1) && sysGlobal==2) sysmode = "_noBRUnc_addedCUTandJES";        //for E ratio
     if(type ==2) sysmode = "_PDF_noneGlobal_addedCUTandJES";
 
     canvas->SaveAs(outPlotDir+Form("/finalSpectra_%s.png",sysmode.Data()));
 
-    TGraph *CutVarSys = nullptr;
-    if(systUncD_CUTS)CutVarSys = new TGraph(static_cast<Int_t>(xAxisBins),xAxis,systUncD_CUTS);
-
     TFile *ofile = new TFile(Form("%s/JetPtSpectrum_final%s.root",outSpectraDir.Data(),sysmode.Data()),"RECREATE");
     hData_binned->Write();
     hDataSys->Write();
+    if(separateCUTUnc && gDataCutSys) gDataCutSys->Write("gDataCutSys");
     hData_binned_ratio->Write();
     hDataSysRatio->Write();
-    if(systUncD_CUTS)CutVarSys->Write("CutVarSys");
     if(ePowhegPythia6){
         simPowhegPythia6_cent->Write();
         simPowhegPythia6_up->Write();
