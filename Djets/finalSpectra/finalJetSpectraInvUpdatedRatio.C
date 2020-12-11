@@ -66,9 +66,9 @@ TH1D* GetRatio(TH1D *h1, TH1D *h2, Double_t shift);
 
 
 static TString fFiles[9] = {
-    "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_X02/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/finalSpectraNEW/JetPtSpectrum_final_fullGlobal.root",
-    "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_X04/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/finalSpectraNEW/JetPtSpectrum_final_fullGlobal.root",
-    "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_X06/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/finalSpectraNEW/JetPtSpectrum_final_fullGlobal.root",
+    "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_X02/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/finalSpectraNEW/JetPtSpectrum_final_fullGlobal_addedCUTandJES.root",
+    "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_X04/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/finalSpectraNEW/JetPtSpectrum_final_fullGlobal_addedCUTandJES.root",
+    "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_X06/Default_AnalysisResults_Run2w18b.root/unfolding_Bayes_5/finalSpectraNEW/JetPtSpectrum_final_fullGlobal_addedCUTandJES.root",
     };
 
 static TString fFiles2[9] = {
@@ -113,18 +113,15 @@ void finalJetSpectraInvUpdatedRatio(
     // ----------------------------------------------------------------
     // ------------------- ENABLE SIMULATIONS HERE --------------------
     // ----------------------------------------------------------------
-    Bool_t ePowhegPythia6 = false;
     Bool_t ePowhegPythia8 = true;
-    Bool_t ePythia6 = false;
     Bool_t ePythia8 = true;
     Bool_t ePythia8SoftMode2 = true;
-    Bool_t ePowhegPythia6dijet = false;
-    Bool_t ePowhegPythia8dijet = false;
+
 
     // ----------------------------------------------------------------
 
     UInt_t xAxisBins = 8;
-     Double_t *xAxis = new Double_t[xAxisBins+1]{5,6,8,10,12,14,20,30,50};
+    Double_t *xAxis = new Double_t[xAxisBins+1]{5,6,8,10,12,14,20,30,50};
     Double_t *xAxisl = new Double_t[xAxisBins+1]{5,6,8,10,12,14,20,30,49.99};
     Double_t *xAxisr = new Double_t[xAxisBins+1]{5,6,8,10,12,14,20,30,50};
   //  UInt_t xAxisBins = 5;
@@ -134,10 +131,6 @@ void finalJetSpectraInvUpdatedRatio(
 
 
     // ----------------- Initiate Canvas ---------------------
-   /* TCanvas *canvas;
-    TPad *upPad, *dowmPad, *dowmPad2;
-    TH1D *placeholder_up, *placeholder_down, *placeholder_down2;
-    std::tie(canvas,upPad,dowmPad,dowmPad2,placeholder_up,placeholder_down,placeholder_down2) = PrepareCanvas(xAxisBins,xAxis);*/
 
     TCanvas *canvas;
     TPad **Pad;
@@ -145,26 +138,9 @@ void finalJetSpectraInvUpdatedRatio(
     std::tie(canvas,Pad,placeholder) = PrepareCanvas8Pad(xAxisBins,xAxisl, xAxisr);
 
     // ----------------- data ---------------------
-  //  TGraphAsymmErrors *hDataSys, *hDataSysRatio;
- //   TH1D *hData_binned2,*hData_binned4,*hData_binned6;
- //   std::tie(hDataSys, hData_binned, hDataSysRatio, hData_binned_ratio) = GetData(dataFile, histBase, dataScaling, xAxisBins, xAxis, systUncD_down, systUncD_up);
- /*  hData_binned2 = dynamic_cast<TH1D*>(GetInputHist(fFiles[0],"hData_binned"));
-   hData_binned4 = dynamic_cast<TH1D*>(GetInputHist(fFiles[1],"hData_binned"));
-   hData_binned6 = dynamic_cast<TH1D*>(GetInputHist(fFiles[2],"hData_binned"));
 
-   TH1D *hDataR26 = dynamic_cast<TH1D*>(hData_binned2->Clone("hDataR26"));
-   hDataR26->Divide(hData_binned6);
-   hDataR26->SetLineColor(static_cast<Color_t>(TColor::GetColor("#990000")));
-   hDataR26->SetMarkerColor(static_cast<Color_t>(TColor::GetColor("#990000")));
-   TH1D *hDataR24 = dynamic_cast<TH1D*>(hData_binned2->Clone("hDataR24"));
-   hDataR24->Divide(hData_binned4);
-   hDataR24->SetLineColor(static_cast<Color_t>(TColor::GetColor("#999900")));
-   hDataR24->SetMarkerColor(static_cast<Color_t>(TColor::GetColor("#999900")));
-   hDataR24->SetMarkerStyle(22);*/
-
-//   TH1D *hData_binned2R,*hData_binned4R,*hData_binned6R;
     Int_t markers[3]{20,21,47};
-    Double_t plotScale[3]{0.05,-1,20};
+    Double_t plotScale[3]{0.1,-1,10};
 
    TH1D *s13_hData_binned[3],*s13_hData_binned_ratio[3];
    TGraphAsymmErrors *s13_hData_binned_syst[3],*s13_hData_binned_ratio_syst[3];
@@ -186,60 +162,148 @@ void finalJetSpectraInvUpdatedRatio(
 
 
 
-   TGraphAsymmErrors *s13_PowhegPythia8[3],*s13_PowhegPythia8_ratio[3];
-   TH1D **s13_PowhegPythia8_var[3];
-   for(Int_t iradius = 0; iradius < 3;iradius++){
-       std::tie(s13_PowhegPythia8[iradius], s13_PowhegPythia8_ratio[iradius], s13_PowhegPythia8_var[iradius])
-               =GetSim(fFiles[iradius],"PowhegPythia8",8);
-       PlaceOnPad(Pad[0],s13_PowhegPythia8[iradius],-1,-1,-1,"same2p",plotScale[iradius]);
-       PlaceOnPad(Pad[2*(iradius+1)],s13_PowhegPythia8_ratio[iradius],-1,-1,-1,"same2p",-1);
-   }
+    TGraphAsymmErrors *s13_PowhegPythia8[3],*s13_PowhegPythia8_ratio[3];
+    TH1D **s13_PowhegPythia8_var[3];
+    TGraphAsymmErrors *s5_PowhegPythia8[3],*s5_PowhegPythia8_ratio[3];
+    TH1D **s5_PowhegPythia8_var[3];
 
-   TGraphAsymmErrors *s5_PowhegPythia8[3],*s5_PowhegPythia8_ratio[3];
-   TH1D **s5_PowhegPythia8_var[3];
-   for(Int_t iradius = 0; iradius < 3;iradius++){
-       std::tie(s5_PowhegPythia8[iradius], s5_PowhegPythia8_ratio[iradius], s5_PowhegPythia8_var[iradius])
-               =GetSim(fFiles2[iradius],"PowhegPythia8",8);
-       PlaceOnPad(Pad[1],s5_PowhegPythia8[iradius],-1,-1,-1,"same2p",plotScale[iradius]);
-       PlaceOnPad(Pad[2*(iradius+1)+1],s5_PowhegPythia8_ratio[iradius],-1,-1,-1,"same2p",-1);
-   }
+    if(ePowhegPythia8){
+       for(Int_t iradius = 0; iradius < 3;iradius++){
+           std::tie(s13_PowhegPythia8[iradius], s13_PowhegPythia8_ratio[iradius], s13_PowhegPythia8_var[iradius])
+                   =GetSim(fFiles[iradius],"PowhegPythia8",8);
+           PlaceOnPad(Pad[0],s13_PowhegPythia8[iradius],-1,-1,-1,"same2p",plotScale[iradius]);
+           PlaceOnPad(Pad[2*(iradius+1)],s13_PowhegPythia8_ratio[iradius],-1,-1,-1,"same2p",-1);
+       }
+       for(Int_t iradius = 0; iradius < 3;iradius++){
+           std::tie(s5_PowhegPythia8[iradius], s5_PowhegPythia8_ratio[iradius], s5_PowhegPythia8_var[iradius])
+                   =GetSim(fFiles2[iradius],"PowhegPythia8",8);
+           PlaceOnPad(Pad[1],s5_PowhegPythia8[iradius],-1,-1,-1,"same2p",plotScale[iradius]);
+           PlaceOnPad(Pad[2*(iradius+1)+1],s5_PowhegPythia8_ratio[iradius],-1,-1,-1,"same2p",-1);
+       }
+    }
 
-   TGraphAsymmErrors *s13_Pythia8[3],*s13_Pythia8_ratio[3];
-   TH1D **s13_Pythia8_var[3];
-   for(Int_t iradius = 0; iradius < 3;iradius++){
-       std::tie(s13_Pythia8[iradius], s13_Pythia8_ratio[iradius], s13_Pythia8_var[iradius])
-               =GetSim(fFiles[iradius],"Pythia8",1);
-       PlaceOnPad(Pad[0],s13_Pythia8[iradius],kViolet+2,-1,-1,"same1",plotScale[iradius]);
-       PlaceOnPad(Pad[2*(iradius+1)],s13_Pythia8_ratio[iradius],kViolet+2,-1,-1,"same1",-1);
-   }
 
-   TGraphAsymmErrors *s5_Pythia8[3],*s5_Pythia8_ratio[3];
-   TH1D **s5_Pythia8_var[3];
-   for(Int_t iradius = 0; iradius < 3;iradius++){
-       std::tie(s5_Pythia8[iradius], s5_Pythia8_ratio[iradius], s5_Pythia8_var[iradius])
-               =GetSim(fFiles2[iradius],"Pythia8",1);
-       PlaceOnPad(Pad[1],s5_Pythia8[iradius],kViolet+2,-1,-1,"same1",plotScale[iradius]);
-       PlaceOnPad(Pad[2*(iradius+1)+1],s5_Pythia8_ratio[iradius],kViolet+2,-1,-1,"same1",-1);
-   }
+    TGraphAsymmErrors *s13_Pythia8[3],*s13_Pythia8_ratio[3];
+    TH1D **s13_Pythia8_var[3];
+    TGraphAsymmErrors *s5_Pythia8[3],*s5_Pythia8_ratio[3];
+    TH1D **s5_Pythia8_var[3];
+    if(ePythia8){
+        for(Int_t iradius = 0; iradius < 3;iradius++){
+           std::tie(s13_Pythia8[iradius], s13_Pythia8_ratio[iradius], s13_Pythia8_var[iradius])
+                   =GetSim(fFiles[iradius],"Pythia8",1);
+           PlaceOnPad(Pad[0],s13_Pythia8[iradius],kViolet+2,-1,-1,"same1",plotScale[iradius]);
+           PlaceOnPad(Pad[2*(iradius+1)],s13_Pythia8_ratio[iradius],kViolet+2,-1,-1,"same1",-1);
+        }
+        for(Int_t iradius = 0; iradius < 3;iradius++){
+           std::tie(s5_Pythia8[iradius], s5_Pythia8_ratio[iradius], s5_Pythia8_var[iradius])
+                   =GetSim(fFiles2[iradius],"Pythia8",1);
+           PlaceOnPad(Pad[1],s5_Pythia8[iradius],kViolet+2,-1,-1,"same1",plotScale[iradius]);
+           PlaceOnPad(Pad[2*(iradius+1)+1],s5_Pythia8_ratio[iradius],kViolet+2,-1,-1,"same1",-1);
+        }
+    }
+
+
+    TGraphAsymmErrors *s13_Pythia8SoftMode2[3],*s13_Pythia8SoftMode2_ratio[3];
+    TH1D **s13_Pythia8SoftMode2_var[3];
+    TGraphAsymmErrors *s5_Pythia8SoftMode2[3],*s5_Pythia8SoftMode2_ratio[3];
+    TH1D **s5_Pythia8SoftMode2_var[3];
+    if(ePythia8SoftMode2){
+        for(Int_t iradius = 0; iradius < 3;iradius++){
+           std::tie(s13_Pythia8SoftMode2[iradius], s13_Pythia8SoftMode2_ratio[iradius], s13_Pythia8SoftMode2_var[iradius])
+                   =GetSim(fFiles[iradius],"Pythia8Soft2",1);
+           PlaceOnPad(Pad[0],s13_Pythia8SoftMode2[iradius],-1,-1,-1,"same1",plotScale[iradius]);
+           PlaceOnPad(Pad[2*(iradius+1)],s13_Pythia8SoftMode2_ratio[iradius],-1,-1,-1,"same1",-1);
+        }
+        for(Int_t iradius = 0; iradius < 3;iradius++){
+           std::tie(s5_Pythia8SoftMode2[iradius], s5_Pythia8SoftMode2_ratio[iradius], s5_Pythia8SoftMode2_var[iradius])
+                   =GetSim(fFiles2[iradius],"Pythia8Soft2",1);
+           PlaceOnPad(Pad[1],s5_Pythia8SoftMode2[iradius],-1,-1,-1,"same1",plotScale[iradius]);
+           PlaceOnPad(Pad[2*(iradius+1)+1],s5_Pythia8SoftMode2_ratio[iradius],-1,-1,-1,"same1",-1);
+        }
+    }
+
+    TLegend *leg =nullptr;
+    //Double_t shift = 0.06*(2+ePowhegPythia6+ePowhegPythia8+ePythia6+ePythia8+ePythia8SoftMode2+ePowhegPythia6dijet);
+    Double_t shift = 0.06*(2+3);
+    leg = new TLegend(0.35,0.85-shift,0.85,0.85,nullptr,"NB NDC");
+    leg->SetBorderSize(0);
+    leg->SetTextFont(43);
+    leg->SetTextSize(18);
+    leg->SetLineColor(1);
+    leg->SetLineStyle(1);
+    leg->SetLineWidth(1);
+    leg->SetFillColor(0);
+    leg->SetFillStyle(0);
+  //      leg->AddEntry(hDataR24,"Data #it{#sigma}(R=0.4)/#it{#sigma}(R=0.6) (+0.5)","fp");
+ //   leg->AddEntry(hDataR26,"Data #it{#sigma}(R=0.2)/#it{#sigma}(R=0.6)","fp");
+leg->AddEntry(s13_hData_binned_syst[2],"Data R=0.6 (x20)","fp");
+
+    leg->AddEntry(s13_hData_binned_syst[1],"Data R=0.4","fp");
+       leg->AddEntry(s13_hData_binned_syst[0],"Data R=0.2 (x0.05)","fp");
+    leg->AddEntry(s13_PowhegPythia8[0],"POWHEG hvq + PYTHIA 8","pf");
+    leg->AddEntry(s13_Pythia8SoftMode2[0],"PYTHIA 8 Monash 2013 Soft mode 2","l");
+    leg->AddEntry(s13_Pythia8[0],"PYTHIA 8 Monash 2013","l");
+   // leg->AddEntry(simPythia8Soft26,"PYTHIA 8 Monash 2013 Soft mode 2","pf");
+    //leg->AddEntry(simPowhegPythia6dijet,"POWHEG dijet + PYTHIA 8 Salvatore","pf");
+
+    TPaveText *pt[4];
+    pt[0] = new TPaveText(0.2,0.9,0.85,0.95,"NB NDC");
+    pt[2] = new TPaveText(0.05,0.9,0.85,0.95,"NB NDC");
+    pt[1] = new TPaveText(0.2,0.75,0.85,0.9,"NB NDC");
+    pt[3] = new TPaveText(0.2,0.9,0.85,0.95,"NB NDC");
+    for(Int_t s = 0; s<4;s++){
+        pt[s]->SetBorderSize(0);
+        pt[s]->SetFillStyle(0);
+        pt[s]->SetTextAlign(13);
+        pt[s]->SetTextFont(43);
+
+    }
+    pt[0]->SetTextSize(22);
+    pt[1]->SetTextSize(18);
+    pt[2]->SetTextSize(22);
+    pt[3]->SetTextSize(22);
+    //pt[0]->AddText("ALICE Preliminary"); //uncomment
+    pt[0]->AddText("pp, #sqrt{#it{s}} = 13 TeV");
+    pt[2]->AddText("pp, #sqrt{#it{s}} = 5.02 TeV");
+    pt[3]->AddText("pp, #sqrt{#it{s}} = 13/5.02 TeV");
+    pt[1]->AddText(Form("charged jets, anti-#it{k}_{T} with D^{0}, %d < #it{p}_{T,D^{0}} < %d GeV/#it{c}",static_cast<int>(2),static_cast<int>(36)));
+   // pt[1]->AddText(Form ("with D^{0}, %d < #it{p}_{T,D^{0}} < %d GeV/#it{c}",static_cast<int>(2),static_cast<int>(36)));
+   // if(type==1 ||type==2)pt[1]->AddText(Form ("%d < #it{p}_{T,jet} < %d GeV/#it{c}",jetpTbins[zBin-1],jetpTbins[zBin]));
+   // if(type==1 ||type==2)pt[1]->AddText(Form ("with D^{0}, %d < #it{p}_{T,D^{0}} < %d GeV/#it{c}",DpTbins[0][zBin-1],DpTbins[1][zBin-1]));
+   // if(type==1 ||type==2)pt[1]->AddText(Form ("%d < #it{p}_{T,jet} < %d GeV/#it{c} with D^{0}, %d < #it{p}_{T,D^{0}} < %d GeV/#it{c}",jetpTbins[zBin-1],jetpTbins[zBin],DpTbins[0][zBin-1],DpTbins[1][zBin-1]));
+    //if(type==1 ||type==2)pt[1]->AddText(Form ("",DpTbins[0][zBin-1],DpTbins[1][zBin-1]));
+
+    TPaveText *pt3[3];
+    pt3[0] = new TPaveText(0.17,0.88,0.95,0.95,"NB NDC");
+    pt3[1] = new TPaveText(0.17,0.91,0.95,0.95,"NB NDC");
+    pt3[2] = new TPaveText(0.17,0.92,0.95,0.95,"NB NDC");
+    for(Int_t s = 0; s<3;s++){
+        pt3[s]->SetBorderSize(0);
+        pt3[s]->SetFillStyle(0);
+        pt3[s]->SetTextAlign(13);
+        pt3[s]->SetTextFont(43);
+        pt3[s]->SetTextSize(19);
+    }
+
+    pt3[0]->AddText("R=0.2");
+    pt3[1]->AddText("R=0.4");
+    pt3[2]->AddText("R=0.6");
+
+    Pad[0]->cd();
+    pt[0]->Draw();
+    pt[1]->Draw();
+    Pad[1]->cd();
+    pt[2]->Draw();
+    leg->Draw();
+    Pad[2]->cd();
+    pt3[0]->Draw();
+    Pad[4]->cd();
+    pt3[1]->Draw();
+    Pad[6]->cd();
+    pt3[2]->Draw();
 std::cout<<"b"<<std::endl;
-   TGraphAsymmErrors *s13_Pythia6[3],*s13_Pythia6_ratio[3];
-   TH1D **s13_Pythia6_var[3];
-   for(Int_t iradius = 0; iradius < 3;iradius++){
-       std::tie(s13_Pythia6[iradius], s13_Pythia6_ratio[iradius], s13_Pythia6_var[iradius])
-               =GetSim(fFiles[iradius],"Pythia8Soft2",1);
-       PlaceOnPad(Pad[0],s13_Pythia6[iradius],-1,-1,-1,"same1",plotScale[iradius]);
-       PlaceOnPad(Pad[2*(iradius+1)],s13_Pythia6_ratio[iradius],-1,-1,-1,"same1",-1);
-   }
 
-   TGraphAsymmErrors *s5_Pythia6[3],*s5_Pythia6_ratio[3];
-   TH1D **s5_Pythia6_var[3];
-   for(Int_t iradius = 0; iradius < 3;iradius++){
-       std::tie(s5_Pythia6[iradius], s5_Pythia6_ratio[iradius], s5_Pythia6_var[iradius])
-               =GetSim(fFiles2[iradius],"Pythia8Soft2",1);
-       PlaceOnPad(Pad[1],s5_Pythia6[iradius],-1,-1,-1,"same1",plotScale[iradius]);
-       PlaceOnPad(Pad[2*(iradius+1)+1],s5_Pythia6_ratio[iradius],-1,-1,-1,"same1",-1);
-   }
-std::cout<<"b"<<std::endl;
+return;
    //*************************************************************************************************
    //******************************************DATA***************************************************
    //*************************************************************************************************
@@ -344,9 +408,9 @@ std::cout<<"b"<<std::endl;
     TGraphAsymmErrors *s13_Pythia624,*s13_Pythia626;
     TGraphAsymmErrors *s13_Pythia624_ratio,*s13_Pythia626_ratio;
 
-    s13_Pythia624 = CalculateSimRRatio(s13_Pythia6[0], nullptr,s13_Pythia6[1],nullptr, 0);
+    s13_Pythia624 = CalculateSimRRatio(s13_Pythia8SoftMode2[0], nullptr,s13_Pythia8SoftMode2[1],nullptr, 0);
     s13_Pythia624_ratio = Divide(s13_Pythia624,s13_hData_binned24);
-    s13_Pythia626 = CalculateSimRRatio(s13_Pythia6[0], nullptr,s13_Pythia6[2],nullptr, 0);
+    s13_Pythia626 = CalculateSimRRatio(s13_Pythia8SoftMode2[0], nullptr,s13_Pythia8SoftMode2[2],nullptr, 0);
     s13_Pythia626_ratio = Divide(s13_Pythia626,s13_hData_binned26);
 
     PlaceOnPad(Pad2[0],s13_Pythia624,kOrange+2,-1,2,"same1",0.3);
@@ -357,9 +421,9 @@ std::cout<<"b"<<std::endl;
     TGraphAsymmErrors *s5_Pythia624,*s5_Pythia626;
     TGraphAsymmErrors *s5_Pythia624_ratio,*s5_Pythia626_ratio;
 
-    s5_Pythia624 = CalculateSimRRatio(s5_Pythia6[0], nullptr,s5_Pythia6[1],nullptr, 0);
+    s5_Pythia624 = CalculateSimRRatio(s5_Pythia8SoftMode2[0], nullptr,s5_Pythia8SoftMode2[1],nullptr, 0);
     s5_Pythia624_ratio = Divide(s5_Pythia624,s5_hData_binned24);
-    s5_Pythia626 = CalculateSimRRatio(s5_Pythia6[0], nullptr,s5_Pythia6[2],nullptr, 0);
+    s5_Pythia626 = CalculateSimRRatio(s5_Pythia8SoftMode2[0], nullptr,s5_Pythia8SoftMode2[2],nullptr, 0);
     s5_Pythia626_ratio = Divide(s5_Pythia626,s5_hData_binned26);
 
     PlaceOnPad(Pad2[1],s5_Pythia624,kOrange+2,-1,2,"same1",0.3);
@@ -405,7 +469,7 @@ Double_t scale2[3]{0.5,-1,2};
      TGraphAsymmErrors *s13s5_Pythia6[3];
       TGraphAsymmErrors *s13s5_Pythia6_ratio[3];
       for(Int_t iEn = 0;iEn<3;iEn++){
-      s13s5_Pythia6[iEn] = CalculateSimRRatio(s13_Pythia6[iEn],nullptr,s5_Pythia6[iEn],nullptr, 0);
+      s13s5_Pythia6[iEn] = CalculateSimRRatio(s13_Pythia8SoftMode2[iEn],nullptr,s5_Pythia8SoftMode2[iEn],nullptr, 0);
       s13s5_Pythia6_ratio[iEn] = Divide(s13s5_Pythia6[iEn],s13s5_hData_binned[iEn]);
       PlaceOnPad(Pad3[0],s13s5_Pythia6[iEn],kGreen+1,-1,2,"same1",scale2[iEn]);
       PlaceOnPad(Pad3[iEn+1],s13s5_Pythia6_ratio[iEn],kGreen+1,-1,2,"same1",-1);
@@ -419,29 +483,7 @@ Double_t scale2[3]{0.5,-1,2};
 
 
     // ----------------- Legend and text PAD---------------------
-    TLegend *leg =nullptr;
-    //Double_t shift = 0.06*(2+ePowhegPythia6+ePowhegPythia8+ePythia6+ePythia8+ePythia8SoftMode2+ePowhegPythia6dijet);
-    Double_t shift = 0.06*(2+3);
-    leg = new TLegend(0.35,0.85-shift,0.85,0.85,nullptr,"NB NDC");
-    leg->SetBorderSize(0);
-    leg->SetTextFont(43);
-    leg->SetTextSize(18);
-    leg->SetLineColor(1);
-    leg->SetLineStyle(1);
-    leg->SetLineWidth(1);
-    leg->SetFillColor(0);
-    leg->SetFillStyle(0);
-  //      leg->AddEntry(hDataR24,"Data #it{#sigma}(R=0.4)/#it{#sigma}(R=0.6) (+0.5)","fp");
- //   leg->AddEntry(hDataR26,"Data #it{#sigma}(R=0.2)/#it{#sigma}(R=0.6)","fp");
-leg->AddEntry(s13_hData_binned_syst[2],"Data R=0.6 (x20)","fp");
 
-    leg->AddEntry(s13_hData_binned_syst[1],"Data R=0.4","fp");
-       leg->AddEntry(s13_hData_binned_syst[0],"Data R=0.2 (x0.05)","fp");
-    leg->AddEntry(s13_PowhegPythia8[0],"POWHEG hvq + PYTHIA 8","pf");
-    leg->AddEntry(s13_Pythia6[0],"PYTHIA 8 Monash 2013 Soft mode 2","l");
-    leg->AddEntry(s13_Pythia8[0],"PYTHIA 8 Monash 2013","l");
-   // leg->AddEntry(simPythia8Soft26,"PYTHIA 8 Monash 2013 Soft mode 2","pf");
-    //leg->AddEntry(simPowhegPythia6dijet,"POWHEG dijet + PYTHIA 8 Salvatore","pf");
 
     TLegend *leg2=nullptr;
     //Double_t shift = 0.06*(2+ePowhegPythia6+ePowhegPythia8+ePythia6+ePythia8+ePythia8SoftMode2+ePowhegPythia6dijet);
@@ -497,32 +539,7 @@ leg3->AddEntry(s13s5_hData_binned_syst[2],"Data R=0.6 (x2)","fp");
     leg4->AddEntry(s13_Pythia8[0],"PYTHIA 8 Monash 2013","l");
 
 
-    TPaveText *pt[4];
-    pt[0] = new TPaveText(0.2,0.9,0.85,0.95,"NB NDC");
-    pt[2] = new TPaveText(0.05,0.9,0.85,0.95,"NB NDC");
-    pt[1] = new TPaveText(0.2,0.75,0.85,0.9,"NB NDC");
-    pt[3] = new TPaveText(0.2,0.9,0.85,0.95,"NB NDC");
-    for(Int_t s = 0; s<4;s++){
-        pt[s]->SetBorderSize(0);
-        pt[s]->SetFillStyle(0);
-        pt[s]->SetTextAlign(13);
-        pt[s]->SetTextFont(43);
 
-    }
-    pt[0]->SetTextSize(22);
-    pt[1]->SetTextSize(18);
-    pt[2]->SetTextSize(22);
-    pt[3]->SetTextSize(22);
-    //pt[0]->AddText("ALICE Preliminary"); //uncomment
-    pt[0]->AddText("pp, #sqrt{#it{s}} = 13 TeV");
-    pt[2]->AddText("pp, #sqrt{#it{s}} = 5.02 TeV");
-    pt[3]->AddText("pp, #sqrt{#it{s}} = 13/5.02 TeV");
-    pt[1]->AddText(Form("charged jets, anti-#it{k}_{T} with D^{0}, %d < #it{p}_{T,D^{0}} < %d GeV/#it{c}",static_cast<int>(2),static_cast<int>(36)));
-   // pt[1]->AddText(Form ("with D^{0}, %d < #it{p}_{T,D^{0}} < %d GeV/#it{c}",static_cast<int>(2),static_cast<int>(36)));
-   // if(type==1 ||type==2)pt[1]->AddText(Form ("%d < #it{p}_{T,jet} < %d GeV/#it{c}",jetpTbins[zBin-1],jetpTbins[zBin]));
-   // if(type==1 ||type==2)pt[1]->AddText(Form ("with D^{0}, %d < #it{p}_{T,D^{0}} < %d GeV/#it{c}",DpTbins[0][zBin-1],DpTbins[1][zBin-1]));
-   // if(type==1 ||type==2)pt[1]->AddText(Form ("%d < #it{p}_{T,jet} < %d GeV/#it{c} with D^{0}, %d < #it{p}_{T,D^{0}} < %d GeV/#it{c}",jetpTbins[zBin-1],jetpTbins[zBin],DpTbins[0][zBin-1],DpTbins[1][zBin-1]));
-    //if(type==1 ||type==2)pt[1]->AddText(Form ("",DpTbins[0][zBin-1],DpTbins[1][zBin-1]));
 
     TPaveText *pt2[2];
     pt2[0] = new TPaveText(0.65,0.85,0.95,0.95,"NB NDC");
@@ -538,21 +555,7 @@ leg3->AddEntry(s13s5_hData_binned_syst[2],"Data R=0.6 (x2)","fp");
     pt2[0]->AddText("#it{#sigma}(R=0.2)/#it{#sigma}(R=0.4)");
     pt2[1]->AddText("#it{#sigma}(R=0.2)/#it{#sigma}(R=0.6)");
 
-    TPaveText *pt3[3];
-    pt3[0] = new TPaveText(0.17,0.88,0.95,0.95,"NB NDC");
-    pt3[1] = new TPaveText(0.17,0.91,0.95,0.95,"NB NDC");
-    pt3[2] = new TPaveText(0.17,0.92,0.95,0.95,"NB NDC");
-    for(Int_t s = 0; s<3;s++){
-        pt3[s]->SetBorderSize(0);
-        pt3[s]->SetFillStyle(0);
-        pt3[s]->SetTextAlign(13);
-        pt3[s]->SetTextFont(43);
-        pt3[s]->SetTextSize(19);
-    }
 
-    pt3[0]->AddText("R=0.2");
-    pt3[1]->AddText("R=0.4");
-    pt3[2]->AddText("R=0.6");
 
     Pad3[0]->cd();
     pt[3]->Draw();
@@ -560,22 +563,7 @@ leg3->AddEntry(s13s5_hData_binned_syst[2],"Data R=0.6 (x2)","fp");
     leg3->Draw();
 leg4->Draw();
 
-    Pad[0]->cd();
-    pt[0]->Draw();
-    pt[1]->Draw();
-    Pad[1]->cd();
-    pt[2]->Draw();
-    leg->Draw();
-    /*dowmPad->cd();
-    pt2[0]->Draw();
-    dowmPad2->cd();
-    pt2[1]->Draw();*/
-    Pad[2]->cd();
-    pt3[0]->Draw();
-    Pad[4]->cd();
-    pt3[1]->Draw();
-    Pad[6]->cd();
-    pt3[2]->Draw();
+
 
     Pad3[1]->cd();
     pt3[0]->Draw();
@@ -868,9 +856,9 @@ void PlaceOnPad(TPad* pad,TGraphAsymmErrors* histo, Color_t ci, Style_t style, S
     if(scale>-1){
         TString tmp = "";
         TGraphAsymmErrors* histo_tmp = dynamic_cast<TGraphAsymmErrors*>(histo->Clone(tmp+histo->GetName()+"_plotCp"));
-        for (int i=0;i<histo_tmp->GetN();i++) histo_tmp->GetY()[i] += scale;
-        //for (int i=0;i<histo_tmp->GetN();i++) histo_tmp->GetEYhigh()[i] *= scale;
-        //for (int i=0;i<histo_tmp->GetN();i++) histo_tmp->GetEYlow()[i] *= scale;
+        for (int i=0;i<histo_tmp->GetN();i++) histo_tmp->GetY()[i] *= scale;
+        for (int i=0;i<histo_tmp->GetN();i++) histo_tmp->GetEYhigh()[i] *= scale;
+        for (int i=0;i<histo_tmp->GetN();i++) histo_tmp->GetEYlow()[i] *= scale;
         if(opt !="") histo_tmp->Draw(opt);
         else histo_tmp->Draw("psame");
     }
@@ -889,7 +877,7 @@ void PlaceOnPad(TPad* pad,TH1D* histo, Color_t ci, Style_t style, Style_t linest
    // histo->SetFillStyle(3005);
    // histo->SetMarkerSize(markersize); //add up
     histo->SetLineWidth(2);
-    if(scale>-1){
+    if(scale>100){
         TString tmp = "";
         TH1D* histo_tmp = dynamic_cast<TH1D*>(histo->Clone(tmp+histo->GetName()+"_plotCp"));
         histo_tmp->Scale(scale);
@@ -914,24 +902,21 @@ void PlaceOnPadData(TPad* pad,TGraphAsymmErrors* histo1, TH1D* histo2, Size_t ma
     if(scale>-1){
         TString tmp = "";
         TGraphAsymmErrors* histo_tmp = dynamic_cast<TGraphAsymmErrors*>(histo1->Clone(tmp+histo1->GetName()+"_plotCp"));
-        for (int i=0;i<histo_tmp->GetN();i++) histo_tmp->GetY()[i] += scale;
-  //      for (int i=0;i<histo_tmp->GetN();i++) histo_tmp->GetEYhigh()[i] += scale;
-  //      for (int i=0;i<histo_tmp->GetN();i++) histo_tmp->GetEYlow()[i] += scale;
+        for (int i=0;i<histo_tmp->GetN();i++) histo_tmp->GetY()[i] *= scale;
+        for (int i=0;i<histo_tmp->GetN();i++) histo_tmp->GetEYhigh()[i] *= scale;
+        for (int i=0;i<histo_tmp->GetN();i++) histo_tmp->GetEYlow()[i] *= scale;
         histo_tmp->Draw("2p same");
     }    else histo1->Draw("2p same");
     //data central w stat. unc.
-    //ci = static_cast<Color_t>(TColor::GetColor("#990000"));
-   // histo2->SetLineColor(ci);
-   // histo2->SetMarkerColor(ci);
     histo2->SetMarkerStyle(markerstyle);
     histo2->SetMarkerSize(markersize);
     if(scale>-1){
         TString tmp = "";
         TH1D* histo_tmp = dynamic_cast<TH1D*>(histo2->Clone(tmp+histo2->GetName()+"_plotCp"));
-        //histo_tmp->Scale(scale);
-        for(Int_t i = 1 ; i<= histo_tmp->GetNbinsX();i++){
-            histo_tmp->SetBinContent(i,histo_tmp->GetBinContent(i)+scale);
-        }
+        histo_tmp->Scale(scale);
+        //for(Int_t i = 1 ; i<= histo_tmp->GetNbinsX();i++){
+        //    histo_tmp->SetBinContent(i,histo_tmp->GetBinContent(i)*scale);
+        //}
         histo_tmp->Draw("same p  e0 x0");
     }    else histo2->Draw("same p  e0 x0");
 };
@@ -984,17 +969,36 @@ std::tuple<TCanvas*, TPad**, TH1D**> PrepareCanvas8Pad(UInt_t xAxisBins, Double_
         FinalSpectrum->cd();
     }
     */
+
+    Double_t marginLeft=0.07;
+    Double_t marginRight=0.02;
+    Double_t innerPadWidth=(1-marginLeft-marginRight)/2.;
+  Double_t marginLeftForXAxis=0.02;
+
+
     for(Int_t ipad = 0;ipad <8;ipad++){
         Double_t shift = 0.002;
+
+        if(ipad ==0) pad[ipad] = new TPad("pad0", "pad0",0,     0.5  ,innerPadWidth+marginLeft ,1);
+        if(ipad ==1) pad[ipad] = new TPad("pad1", "pad1",innerPadWidth+marginLeft-marginLeftForXAxis ,0.5  ,1     ,1);
+        if(ipad ==2) pad[ipad] = new TPad("pad2", "pad2",0,     0.36 ,innerPadWidth+marginLeft ,0.5);
+        if(ipad ==3) pad[ipad] = new TPad("pad3", "pad3",innerPadWidth+marginLeft-marginLeftForXAxis ,0.36 ,1     ,0.5);
+        if(ipad ==4) pad[ipad] = new TPad("pad4", "pad4",0,     0.22  ,innerPadWidth+marginLeft ,0.36);
+        if(ipad ==5) pad[ipad] = new TPad("pad5", "pad5",innerPadWidth+marginLeft-marginLeftForXAxis ,0.22  ,1     ,0.36);
+        if(ipad ==6) pad[ipad] = new TPad("pad6", "pad6",0,     0.0    ,innerPadWidth+marginLeft ,0.2201);
+        if(ipad ==7) pad[ipad] = new TPad("pad7", "pad7",innerPadWidth+marginLeft-marginLeftForXAxis ,0.0    ,1     ,0.2201);
+
         std::cout<<"padID: "<<ipad<<std::endl;
-        if(ipad ==0) pad[ipad] = new TPad("pad0", "pad0",0,     0.5  ,0.545-shift ,1);
+
+
+   /*     if(ipad ==0) pad[ipad] = new TPad("pad0", "pad0",0,     0.5  ,0.545-shift ,1);
         if(ipad ==1) pad[ipad] = new TPad("pad1", "pad1",0.545+shift ,0.5  ,1     ,1);
         if(ipad ==2) pad[ipad] = new TPad("pad2", "pad2",0,     0.36 ,0.545-shift ,0.5);
         if(ipad ==3) pad[ipad] = new TPad("pad3", "pad3",0.545+shift ,0.36 ,1     ,0.5);
         if(ipad ==4) pad[ipad] = new TPad("pad4", "pad4",0,     0.22  ,0.545-shift ,0.36);
         if(ipad ==5) pad[ipad] = new TPad("pad5", "pad5",0.545+shift ,0.22  ,1     ,0.36);
         if(ipad ==6) pad[ipad] = new TPad("pad6", "pad6",0,     0.0    ,0.545-shift ,0.2201);
-        if(ipad ==7) pad[ipad] = new TPad("pad7", "pad7",0.545+shift ,0.0    ,1     ,0.2201);
+        if(ipad ==7) pad[ipad] = new TPad("pad7", "pad7",0.545+shift ,0.0    ,1     ,0.2201);*/
        // if(ipad ==8) pad[ipad] = new TPad("pad8", "pad8",0,     0.05    ,0.545 ,0.2001);
        // if(ipad ==9) pad[ipad] = new TPad("pad9", "pad9",0.545 ,0.05    ,1     ,0.2001);
         pad[ipad]->Draw();
@@ -1002,19 +1006,32 @@ std::tuple<TCanvas*, TPad**, TH1D**> PrepareCanvas8Pad(UInt_t xAxisBins, Double_
         if(ipad <2)pad[ipad]->Range(-1.986821e-07,-4.69897,33.33333,0.3499945);
         else pad[ipad]->Range(-1.986821e-07,-0.9209589,33.33333,2.49);
         pad[ipad]->SetFillColor(0);
-        pad[ipad]->SetBorderMode(0);
-        pad[ipad]->SetBorderSize(2);
+       // pad[ipad]->SetBorderMode(0);
+      //  pad[ipad]->SetBorderSize(2);
         if(ipad>1)pad[ipad]->SetGridy();
         if(ipad<2)pad[ipad]->SetLogy();
         pad[ipad]->SetTickx(1);
         pad[ipad]->SetTicky(1);
-        if(ipad%2==0)pad[ipad]->SetLeftMargin(0.2f);
-        else pad[ipad]->SetLeftMargin(0+shift+shift+shift+shift);
+
+
+
+        if(ipad%2==0){
+            pad[ipad]->SetLeftMargin(marginLeft/(marginLeft+innerPadWidth));
+            pad[ipad]->SetRightMargin(0);
+        }
+        else{
+            pad[ipad]->SetLeftMargin(marginLeftForXAxis/(innerPadWidth+marginLeftForXAxis+marginRight));
+            pad[ipad]->SetRightMargin(marginRight/(innerPadWidth+marginRight));
+        }
+
+
         if(ipad < 6)pad[ipad]->SetBottomMargin(0);
         else pad[ipad]->SetBottomMargin(0.35f);
         if(ipad > 1)pad[ipad]->SetTopMargin(0);
-        if(ipad%2==0)pad[ipad]->SetRightMargin(0+shift);
-        pad[ipad]->SetFrameBorderMode(0);
+
+    //    pad[ipad]->SetFrameBorderMode(0);
+
+
         //pad[ipad]->SetFrameBorderSize(2);
         //pad[ipad]->SetFrameLineWidth(2);
         FinalSpectrum->cd();
@@ -1117,6 +1134,7 @@ std::tuple<TCanvas*, TPad**, TH1D**> PrepareCanvas8Pad(UInt_t xAxisBins, Double_
         if(ipad<2)placeholder[ipad]->GetYaxis()->SetTitle("#frac{d^{2}#it{#sigma}}{d#it{p}_{T}d#it{#eta}} [mb (GeV/#it{c})^{#minus1}]");
         //if(ipad<2)placeholder[ipad]->GetYaxis()->SetTitle("Ratio of probability densities");
         else if(ipad==4)placeholder[ipad]->GetYaxis()->SetTitle("MC/Data");
+        if(ipad%2==0){
         placeholder[ipad]->GetYaxis()->SetLabelFont(43);
         placeholder[ipad]->GetYaxis()->SetLabelSize(19);
         placeholder[ipad]->GetYaxis()->SetTitleSize(23);
@@ -1124,6 +1142,7 @@ std::tuple<TCanvas*, TPad**, TH1D**> PrepareCanvas8Pad(UInt_t xAxisBins, Double_
         placeholder[ipad]->GetYaxis()->SetTitleOffset(2.5f);
         placeholder[ipad]->GetYaxis()->SetTitleFont(43);
         placeholder[ipad]->GetYaxis()->SetDecimals();
+        }
         if(ipad>1)placeholder[ipad]->GetYaxis()->SetNdivisions(5, 5, 0, kTRUE);
         //std::cout<<placeholder[ipad]->GetYaxis()->GetTickLength()<<std::endl;
         if(ipad==6 || ipad==7) placeholder[ipad]->GetYaxis()->SetTickLength(0.04);
