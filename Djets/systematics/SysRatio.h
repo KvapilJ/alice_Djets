@@ -23,6 +23,7 @@ public:
     enum Method{
         kStandart,
         kMax,
+        kTrial,
         kError
     };
     SysRatio(UInt_t nFiles, TString name);

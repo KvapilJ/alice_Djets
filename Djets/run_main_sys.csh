@@ -7,13 +7,13 @@
 ############### FULL with sys
 ################################################
 
-unfType=0     # unfolding type, 0: bayes. 1: SVD
-foldType=0     # unfolding type, 0: 1D. 1: 2D
+unfType=2     # unfolding type, 0: bayes. 1: SVD
+foldType=1     # unfolding type, 0: 1D. 1: 2D
 regPar=5      # regularization parameter for unfolding
 isPrior=0     # if 0 deafult prior (MC true) is used, otherwise a prior defined in the macro
 priorType=0   # if isPrior != 0, define which prior function you want to use, you can define new ones in the unfolding macro
 bkgRMtype=0   # 0: default, if you use external bkg. fluctuation matrix define which one should be used, based on this name of a root file with a corresponding bkg. fluctuation matrix is set in the run_analysis.csh script (you can change this so it corresponds to your file)
-zbin=0
+zbin=5
 
 #systematics -- these are additional settings - in order to use them you need to configure your run_analysis_*.csh script
 doBkg=0            #not Used

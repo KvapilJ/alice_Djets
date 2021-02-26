@@ -124,8 +124,14 @@ if(isFDUpSpec) LoadRawSpectrum(datafile.Data(),"hData_binned_sub_up");
 else if(isFDDownSpec) LoadRawSpectrum(datafile.Data(),"hData_binned_sub_down");
 else LoadRawSpectrum(datafile.Data(),"hData_binned_sub");
 //RooUnfoldResponse *response = new RooUnfoldResponse();
+    Double_t fraction = 0.8;
+    //if(Rpar == 2) fraction = 1 - 0.036;
+   // if(Rpar == 4) fraction = 1 - 0.0368;
+   // if(Rpar == 6) fraction = 1 - 0.0438;
+//fraction = 1 - 0.119; //auro
+
     RooUnfoldResponse *response, *responseClosure;
-    std::tie(response, responseClosure) = LoadDetectorMatrix(MCfile,outDir+"/plots",0.48,nullptr,isPostfix,postfix);
+    std::tie(response, responseClosure) = LoadDetectorMatrix(MCfile,outDir+"/plots",fraction,nullptr,isPostfix,postfix);
 
 
     if (!fRawSpectrum)  { Error("Unfold", "No raw spectrum!"); return;	}
@@ -218,7 +224,7 @@ else LoadRawSpectrum(datafile.Data(),"hData_binned_sub");
         cprior->cd();
         prior->Draw("colz text");
         cprior->SaveAs(outDir+"/plots/priorweight.png");
-        std::tie(response, responseClosure) = LoadDetectorMatrix(MCfile,outDir+"/plots",0.48,prior,isPostfix,postfix);
+        std::tie(response, responseClosure) = LoadDetectorMatrix(MCfile,outDir+"/plots",fraction,prior,isPostfix,postfix);
     }
 
 /*
@@ -455,6 +461,7 @@ else LoadRawSpectrum(datafile.Data(),"hData_binned_sub");
     TH1D *RefoldProjection[NTrials][fzptJetMeasN];
     TH1D *hUnfolded_Unc[NTrials][fzptJetMeasN];
     TH1D *TrueProjectionClosure[fzptJetMeasN];
+    TH1D *MeasProjectionClosure[fzptJetMeasN];
     TH1D *UnfProjectionClosure[NTrials][fzptJetMeasN];
     TH1D *PriorProj[fzptJetTrueN];
 
@@ -562,13 +569,14 @@ std::cout<<"here"<<std::endl;
             //if(TMath::Abs(binRaw-binTrue) > 1e-10 && i!=1) continue;
             //std::cout<<"raw "<<i<<" "<<binRaw<<" true "<<j<<" "<<binTrue<<" "<<TMath::Abs(binRaw-binTrue)<<std::endl;
             if(ivar == 0)RawProjection[i-1] = fRawSpectrum->ProjectionX(Form("Rawproj%d",i),i,i);
-
+//fMeasSpectrumClosure
             UnfProjection[ivar][i-1] = fUnfoldedBayes[ivar]->ProjectionX(Form("Unfproj%d%d",ivar,i),j,j);
            // UnfProjection[ivar][i-1]->Divide(hKineRatioProj[i-1]);
             RefoldProjection[ivar][i-1] = refolded[ivar]->ProjectionX(Form("Refoldedproj%d%d",ivar,i),i,i);
             UnfProjectionClosure[ivar][i-1] = fUnfoldedBayesClosure[ivar]->ProjectionX(Form("UnfprojClosure%d%d",ivar,i),j,j);
             UnfProjectionClosure[ivar][i-1]->Divide(hKineRatioProj[i-1]);
             if(ivar == 0)TrueProjectionClosure[i-1] = fTrueSpectrumClosure->ProjectionX(Form("TrueprojCloseure%d",i),j,j);
+            if(ivar == 0)MeasProjectionClosure[i-1] = fMeasSpectrumClosure->ProjectionX(Form("MeasprojCloseure%d",i),j,j);
       //  }//add
             }
 
@@ -755,7 +763,7 @@ hUnfProjRatioDef[i-1]->SetH2DrawOpt("E");
         AnaInfoPt[i-1]->Draw("same");
 
         if(i==1)lsClosure->AddEntry(UnfProjectionClosure[regBayes-1][0],"Unfolded","lp");
-        if(i==1)lsClosure->AddEntry(TrueProjectionClosure[0],"True","lp");
+ /*       if(i==1)lsClosure->AddEntry(TrueProjectionClosure[0],"True","lp");
 
         cUnfProjClosure->cd(i);
         cUnfProjClosure->SetTicks(0, 1);
@@ -769,6 +777,34 @@ hUnfProjRatioDef[i-1]->SetH2DrawOpt("E");
         TrueProjectionClosure[i-1]->SetMarkerStyle(22);
         UnfProjectionClosure[regBayes-1][i-1]->SetMarkerStyle(21);
         hClosureRatio[i-1] = new TRatioPlot(UnfProjectionClosure[regBayes-1][i-1],TrueProjectionClosure[i-1],"divsym");
+        hClosureRatio[i-1]->SetH1DrawOpt("E");
+        hClosureRatio[i-1]->SetH2DrawOpt("E");
+        hClosureRatio[i-1]->Draw();
+        hClosureRatio[i-1]->GetLowerRefGraph()->GetYaxis()->SetRangeUser(0.7,1.3);
+        hClosureRatio[i-1]->GetLowerRefGraph()->GetYaxis()->SetTitle("unfolded/true");
+        hClosureRatio[i-1]->GetUpperPad()->cd();
+        if(i==1)AnaInfoRatio->Draw("same");
+        AnaInfoPtRatio[i-1]->Draw("same");
+        if(i==2)lsClosure->Draw("same");
+        //UnfProjectionClosure[i-1]->Draw();
+        //TrueProjectionClosure[i-1]->Draw("same");*/
+
+
+        if(i==1)lsClosure->AddEntry(RawProjection[0],"data","lp");
+        if(i==1)lsClosure->AddEntry(MeasProjectionClosure[0],"reco closure","lp");
+
+        cUnfProjClosure->cd(i);
+        cUnfProjClosure->SetTicks(0, 1);
+        RawProjection[i-1]->SetLineColor(kRed+1);
+        RawProjection[i-1]->GetXaxis()->SetTitle("z_{#parallel}");
+        RawProjection[i-1]->GetYaxis()->SetTitle("dN/dz_{#parallel}");
+        RawProjection[i-1]->SetTitle(Form("Closure test, Bayes reg=%d",regBayes));
+        RawProjection[i-1]->SetMarkerColor(kRed+1);
+        MeasProjectionClosure[i-1]->SetLineColor(kGreen+1);
+        MeasProjectionClosure[i-1]->SetMarkerColor(kGreen+1);
+        MeasProjectionClosure[i-1]->SetMarkerStyle(22);
+        RawProjection[i-1]->SetMarkerStyle(21);
+        hClosureRatio[i-1] = new TRatioPlot(MeasProjectionClosure[i-1],RawProjection[i-1],"divsym");
         hClosureRatio[i-1]->SetH1DrawOpt("E");
         hClosureRatio[i-1]->SetH2DrawOpt("E");
         hClosureRatio[i-1]->Draw();
@@ -826,6 +862,7 @@ std::cout<<"SS"<<std::endl;
         hKineRatioProjMC[i-1]->Write(Form("KinematicsEffMC%d",i));
         UnfProjectionClosure[regBayes-1][i-1]->Write(Form("unfoldedSpectrumClosure%d",i));
         TrueProjectionClosure[i-1]->Write(Form("TrueSpectrumClosure%d",i));
+        MeasProjectionClosure[i-1]->Write(Form("MeasSpectrumClosure%d",i));
 
     }
 std::cout<<"SSS"<<std::endl;
@@ -1118,7 +1155,7 @@ std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MC
         //    hTrainTrueClosure->Fill (zShiftTruel,jmatch[6],SPw);
         //  }
         //  else
-              hTrainTrueClosure->Fill (zShiftTruel,jmatch[6],SPw);
+             if(zShiftTruel >= 0.4) hTrainTrueClosure->Fill (zShiftTruel,jmatch[6],SPw);
       }
 
 
@@ -1130,8 +1167,8 @@ std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MC
             if(effBin <0 )std::cout<<"eff error "<<jmatch[6]<<" "<<jmatch[7]<<std::endl;
             peff = eff[effBin]->GetBinContent(eff[effBin]->FindBin(jmatch[2]));
           }
-          hTrainClosure->Fill (jmatch[0],jmatch[1],SPw/peff);
-          responseClosure->Fill (jmatch[0],jmatch[1],zShiftTruel,jmatch[6],RMw/peff);
+          if(jmatch[0] >= 0.4)hTrainClosure->Fill (jmatch[0],jmatch[1],SPw/peff);
+          if(jmatch[0] >= 0.4 && zShiftTruel >= 0.4)responseClosure->Fill (jmatch[0],jmatch[1],zShiftTruel,jmatch[6],RMw/peff);
       }
           okok=false;
           okokrec=false;

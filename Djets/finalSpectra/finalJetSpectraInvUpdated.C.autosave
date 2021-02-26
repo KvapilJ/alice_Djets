@@ -178,8 +178,8 @@ TString histBase = "unfoldedSpectrumKineEff"
     // --------------- SET PARAMETERS + BINNING HERE ------------------
     // ----------------------------------------------------------------
     Double_t sigma_in = 0.0578;
-    const Double_t  BRDzero = 0.0389;
-    Double_t BRDzeroUnc = 0.0004;
+    const Double_t  BRDzero = 0.0395;
+    Double_t BRDzeroUnc = 0.008;
     Double_t DtrackingUnc = 0.05;
     Double_t LumiUnc = 0.05;
     if(type ==0){//x-section

@@ -9,8 +9,8 @@ void runSysRatio(){
                        ": 15 < p_{T,jet} < 50 GeV/#it{c} (p_{T,D} > 3 GeV/#it{c})"};
 
     TString defaulfile = "Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/unfoldedSpectrum_unfoldedJetSpectrum.root";
-    TString path = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_z02F/";
-/*
+    TString path = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/";
+
     //B Feed-Down systematics
         SysRatio *UNFClosure = new SysRatio(1,"Unfolding Bayes Closure");
         UNFClosure->SetPath(path);
@@ -36,7 +36,7 @@ void runSysRatio(){
         }
 
         return;
-*/
+
 //B Feed-Down systematics
     SysRatio *BFDu = new SysRatio(1,"B meson Feed-Down up");
     BFDu->SetPath(path);

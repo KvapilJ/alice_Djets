@@ -56,14 +56,14 @@ void JESratioSys(){
     hR24_96_h24_D->Divide(hR24_D);
 
     for(Int_t b = 1; b <= hR24_96_h24_D->GetNbinsX() ;b++){
-        std::cout<<hR24_96_h24_D->GetBinCenter(b)<<" "<<100*TMath::Abs(1-hR24_96_h24_D->GetBinContent(b))<<std::endl;
+        std::cout<<hR24_96_h24_D->GetBinCenter(b)<<" "<<TMath::Abs(1-hR24_96_h24_D->GetBinContent(b))<<std::endl;
     }
 
     TH1D *hR26_96_h26_D = (TH1D*)hR26_96->Clone("hR26_96_h26_D");
     hR26_96_h26_D->Divide(hR26_D);
 
     for(Int_t b = 1; b <= hR26_96_h26_D->GetNbinsX() ;b++){
-        std::cout<<hR26_96_h26_D->GetBinCenter(b)<<" "<<100*TMath::Abs(1-hR26_96_h26_D->GetBinContent(b))<<std::endl;
+        std::cout<<hR26_96_h26_D->GetBinCenter(b)<<" "<<TMath::Abs(1-hR26_96_h26_D->GetBinContent(b))<<std::endl;
     }
 
     TCanvas *c = new TCanvas("c","c",1600,800);

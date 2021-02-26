@@ -19,7 +19,7 @@ void UnfTrial(){
 
 
     for(Int_t j = 0; j< 10;j++){
-        h[0][j] = dynamic_cast<TH1D*>(rfile[0][j]->Get("hMaxVAR"));
+        h[0][j] = dynamic_cast<TH1D*>(rfile[0][j]->Get("hMean"));
        // h[1][j] = dynamic_cast<TH1D*>(rfile[1][j]->Get("hMaxVAR"));
         if(!h[0][j]) std::cout<<"Cannot open histo: "<<"0 "<<j<<std::endl;
        // if(!h[1][j]) std::cout<<"Cannot open histo: "<<"1 "<<j<<std::endl;
@@ -29,7 +29,7 @@ void UnfTrial(){
        // h[1][j]->SetTitle("division 90% RM, 10% data, nTrials = 10 ");
         h[0][j]->GetXaxis()->SetRangeUser(5,50);
        // h[1][j]->GetXaxis()->SetRangeUser(5,50);
-        h[0][j]->GetYaxis()->SetRangeUser(0,20);
+        h[0][j]->GetYaxis()->SetRangeUser(0.85,1.15);
        // h[1][j]->GetYaxis()->SetRangeUser(0,20);
     }
 
@@ -39,14 +39,14 @@ void UnfTrial(){
     //hRMS[1]->SetMarkerStyle(20);
     hRMS[0]->GetXaxis()->SetRangeUser(5,50);
    // hRMS[1]->GetXaxis()->SetRangeUser(5,50);
-    hRMS[0]->GetYaxis()->SetRangeUser(0,20);
+    hRMS[0]->GetYaxis()->SetRangeUser(0,5);
    // hRMS[1]->GetYaxis()->SetRangeUser(0,20);
-    hRMS[0]->GetYaxis()->SetTitle("RMS [%]");
+    hRMS[0]->GetYaxis()->SetTitle("mean [%]");
    // hRMS[1]->GetYaxis()->SetTitle("RMS [%]");
 
     std::cout<<"A"<<std::endl;
 
-    for(int bin=1; bin<=h[0][0]->GetNbinsX(); bin++){
+   /* for(int bin=1; bin<=h[0][0]->GetNbinsX(); bin++){
        // std::cout<<bin<<std::endl;
             Double_t rms_bin = 0;
             for (UInt_t file=0; file<10; file++){
@@ -60,7 +60,24 @@ void UnfTrial(){
             hRMS[0]->SetBinContent(bin,rms_bin);
             hRMS[0]->SetBinError(bin,0);
             std::cout<<bin<<" "<<rms_bin<<std::endl;
+    }*/
+
+    for(int bin=1; bin<=h[0][0]->GetNbinsX(); bin++){
+       // std::cout<<bin<<std::endl;
+            Double_t mean_bin = 0;
+            for (UInt_t file=0; file<10; file++){
+                //std::cout<<file<<" "<<bin<<std::endl;
+                mean_bin = mean_bin + h[0][file]->GetBinContent(bin);
+            }
+           // std::cout<<rms_bin<<std::endl;
+            mean_bin = mean_bin/10;
+          //  std::cout<<rms_bin<<std::endl;
+
+            hRMS[0]->SetBinContent(bin,100*TMath::Abs(1-mean_bin));
+            hRMS[0]->SetBinError(bin,0);
+            std::cout<<bin<<" "<<mean_bin<<std::endl;
     }
+
 /*
     for(int bin=1; bin<=h[1][0]->GetNbinsX(); bin++){
             Double_t rms_bin = 0;
@@ -79,7 +96,7 @@ void UnfTrial(){
 
 
     for(Int_t j = 0; j< 10;j++){
-        c->cd();
+        c->cd(1);
         j==0?h[0][j]->Draw("P"):h[0][j]->Draw("sameP");
        // c->cd(2);
        // j==0?h[1][j]->Draw("P"):h[1][j]->Draw("sameP");
@@ -88,7 +105,7 @@ void UnfTrial(){
       //  c->cd(4);
       //  j==0?hRMS[1]->Draw("P"):hRMS[1]->Draw("sameP");
     }
-    c->SaveAs("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_X06/systematics/UnfTrials.png");
+    c->SaveAs("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/systematics/UnfTrials.png");
 
 
 

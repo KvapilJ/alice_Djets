@@ -324,8 +324,8 @@ std::cout<<"herec"<<std::endl;
 
         }
         //get the scaling for prompt, 0.1 for non-prompt is used
-        Double_t RMscaling = 0.9;
-        if(isPrompt)RMscaling = 1-(datajets/ttreejets);
+        Double_t RMscaling = 0.8;
+        //if(isPrompt)RMscaling = 1-(datajets/ttreejets);
         std::cout<<"Data jets: "<<datajets<<", MC jets: "<<ttreejets<<", MC division data:RM "<<RMscaling<<std::endl;
 
 

@@ -30,6 +30,10 @@ Project {
 
 
         files: [pDcuts+"makeTFile4CutsD0Jet_pp13TeV_BasepPb_normCounter.C",
+            pDcuts+"makeTFile4CutsD0Jet_pp13TeV_BasepPb_normCounterTPC.C",
+             pDcuts+"makeTFile4CutsD0Jet_pp13TeV_BasepPb_normCounterTPC2.C",
+             pDcuts+"makeTFile4CutsD0Jet_pp13TeV_BasepPb_normCounterCLU.C",
+             pDcuts+"makeTFile4CutsD0Jet_pp13TeV_BasepPb_normCounterCLU2.C",
                 pDcuts+"var/makeTFile4CutsD0Jet_pp5TeV_root6LL1.C",
                 pDcuts+"var/makeTFile4CutsD0Jet_pp5TeV_root6LL2.C",
                 pDcuts+"var/makeTFile4CutsD0Jet_pp5TeV_root6LL3.C",
@@ -45,6 +49,8 @@ Project {
                 "Djets/run_main.csh",
                 "Djets/run_analysis.csh",
                 "Djets/run_main_sys.csh",
+            "/home/kvapil/Downloads/aodrows.C",
+             "/home/kvapil/Downloads/aodrows.h",
             "/home/kvapil/Desktop/alice-fast-simulation/submit_lbnl3.py",
             "/home/kvapil/Desktop/alice-fast-simulation/GeneratePowhegInput.py",
             "Djets/verification.cxx",
@@ -107,6 +113,8 @@ Project {
                 pDfinal+"finalJetSpectra.C",
                 pDfinal+"finalJetSpectraInv.C",
             pDfinal+"finalJetSpectraInvUpdated.C",
+             pDfinal+"finalJetSpectraInvUpdatedRatio.C",
+            pDfinal+"finalJetSpectraInvUpdatedRatioZ.C",
 
                 pDsys+"rawYield_reflections.C",
                 pDsys+"BkgSRangesComparison.C",
@@ -129,6 +137,9 @@ Project {
                 pDsys+"cutsSystematics.C",
                 pDsys+"JetSpectrumSys.C",
             pDsys+"doPlotForFinalSystMEoverD.C",
+             pDsys+"UnfTrial.cxx",
+             pDsys+"UnfTrialZ.cxx",
+            pDsys+"JESratioSys.cxx",
 
                 pDsys+"SysRatio.cxx",
                 pDsys+"SysRatio.h",
