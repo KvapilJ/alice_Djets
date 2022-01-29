@@ -456,6 +456,10 @@ Bool_t rawJetSpectra(TString outdir, TString prod){
 
         std::cout<<"R/B:"<<ref/bkg<<" (R1+R2)/(B1+B2):"<<(ref1+ref2)/(sb1+sb2)<<std::endl;
 
+        std::cout<<"sb1: "<<bkgfit[i]->Integral(min_sb1,max_sb1)<<" "<<static_cast<Double_t>(hmass[i]->GetBinWidth(1))<<" "<<sb1<<std::endl;
+        std::cout<<"sb2: "<<bkgfit[i]->Integral(min_sb2,max_sb2)<<" "<<static_cast<Double_t>(hmass[i]->GetBinWidth(1))<<" "<<sb2<<std::endl;
+        std::cout<<"bkg: "<<bkg<<std::endl;
+
         Double_t signf=0,signferr=0,sob=0,soberr=0;
         fitterp->Significance(static_cast<Double_t>(fsigmaSignal),signf,signferr);
         if(static_cast<Bool_t>(s)) srelerr = serr/s;

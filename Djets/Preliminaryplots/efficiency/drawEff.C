@@ -43,11 +43,11 @@ void drawEff( int Rpar = 4 )
    //TFile *inFilePrompt = new TFile("out_806Preliminary/DjetEff_prompt_jetpt2_50.root","read");
    //TFile *inFileFD = new TFile("out_806Base_FD/DjetEff_nonPrompt_jetpt2_50.root","read");
 
-  // TFile *inFilePrompt = new TFile("/home/jackbauer/Work/alice/analysis/pp5TeV/D0jet/results_cutTight/DzeroR03_def_437_old0/Default/efficiency/DjetEff_prompt_jetpt5_50.root","read");
-  // TFile *inFileFD = new TFile("/home/jackbauer/Work/alice/analysis/pp5TeV/D0jet/results_cutTight/DzeroR03_def_437_old0/Default/efficiency/DjetEff_nonPrompt_jetpt5_50.root","read");
+  // TFile *inFilePrompt = new TFile("/home/jackbauer/Work/alice/analysis/pp5TeV/D0jet/results_cutTight/DzeroR03_def_437_old0/Default/efficiency/DjetEff_prompt_jetpt5.00_50.00.root","read");
+  // TFile *inFileFD = new TFile("/home/jackbauer/Work/alice/analysis/pp5TeV/D0jet/results_cutTight/DzeroR03_def_437_old0/Default/efficiency/DjetEff_nonPrompt_jetpt5.00_50.00.root","read");
 
-   TFile *inFilePrompt = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/efficiency/DjetEff_prompt_jetpt5_50.root","read");
-   TFile *inFileFD = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/efficiency/DjetEff_nonPrompt_jetpt5_50.root","read");
+   TFile *inFilePrompt = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_X04/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt5.00_50.00.root","read");
+   TFile *inFileFD = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_X04/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_nonPrompt_jetpt5.00_50.00.root","read");
 
 
     TH1F *hEffPrompt = (TH1F*)inFilePrompt->Get("hEff_reb");
@@ -100,7 +100,7 @@ void drawEff( int Rpar = 4 )
     pvALICE->SetTextFont(42);
     pvALICE->SetTextSize(0.045);
     pvALICE->SetTextAlign(11);
-    pvALICE->AddText("ALICE Preliminary");
+    pvALICE->AddText("This Thesis");
 
     TPaveText *pvEn= new TPaveText(0.15,0.80,0.8,0.85,"brNDC");
     pvEn->SetFillStyle(0);
@@ -157,9 +157,9 @@ void drawEff( int Rpar = 4 )
     leg->Draw("same");
 
 
-    cEff->SaveAs("DjetEff_Sim_2.png");
-    cEff->SaveAs("DjetEff_Sim_2.pdf");
-    cEff->SaveAs("DjetEff_Sim_2.eps");
+  //  cEff->SaveAs("DjetEff_Sim_2.png");
+    cEff->SaveAs("DjetEff_thesis_2.pdf");
+  //  cEff->SaveAs("DjetEff_Sim_2.eps");
    // cEff->Print("DjetEff_Sim_log.pdf");
    // cEff->Print("DjetEff_Sim_log.eps");
    // cEff->Print("DjetEff_Sim_log.png");
@@ -185,7 +185,7 @@ void setHistoDetails(TH1 *h, Color_t color, Style_t Mstyle, Size_t size = 0.9, W
 
 void SaveCanvas(TCanvas *c, TString name = "tmp"){
 
-    c->SaveAs(name+".png");
+  //  c->SaveAs(name+".png");
     c->SaveAs(name+".pdf");
 
 }

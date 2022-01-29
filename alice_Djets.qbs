@@ -114,6 +114,7 @@ Project {
                 pDfinal+"finalJetSpectraInv.C",
             pDfinal+"finalJetSpectraInvUpdated.C",
              pDfinal+"finalJetSpectraInvUpdatedRatio.C",
+            pDfinal+"finalJetSpectraInvUpdatedRatioThesis.C",
             pDfinal+"finalJetSpectraInvUpdatedRatioZ.C",
 
                 pDsys+"rawYield_reflections.C",
@@ -141,6 +142,7 @@ Project {
              pDsys+"UnfTrialZ.cxx",
             pDsys+"JESratioSys.cxx",
 
+
                 pDsys+"SysRatio.cxx",
                 pDsys+"SysRatio.h",
                 pDsys+"runSysRatio.cxx",
@@ -156,16 +158,47 @@ Project {
                 pDQA+"OCanvas.h",
 
                 pDprelim+"Performance/D0jet/drawSB.C",
+            pDprelim+"Performance/D0jet/drawSB2.C",
                 pDprelim+"Performance/D0jet/drawSB_jet.C",
+            pDprelim+"Performance/D0jet/drawSB_jet2.C",
                 pDprelim+"efficiency/drawEff.C",
                 pDprelim+"FD/drawFD.C",
                 pDprelim+"Res/drawRes.C",
+                pDprelim+"Res/drawResZ.C",
+            pDprelim+"FD/drawFD2.C",
+
+            pDprelim+"FDsig/drawFD.C",
+            pDprelim+"FDsig/drawFDZ.C",
+
+             pDprelim+"efficiency/drawEffZ2.C",
+
+            pDprelim+"sys/drawSys.C",
+            pDprelim+"sys/drawSysFONLL.C",
+            pDprelim+"sys/drawSysMulti.C",
+            pDprelim+"sys/drawSysMulti2.C",
+            pDprelim+"sys/drawSysUnfTrial.C",
+            pDprelim+"sys/drawSysPOWHEG.C",
+            pDprelim+"sys/drawSysME.C",
+            pDprelim+"sys/drawSysEff.C",
+            pDprelim+"sys/drawUnfZ.C",
+
+            pDprelim+"Unf/drawUnf.C",
+            pDprelim+"Unf/drawClos.C",
+
+            pDprelim+"RS/drawRS.C",
+            pDprelim+"RS/drawRSZ.C",
+            pDprelim+"RS/drawRSsim.C",
+
+            pDprelim+"RM/drawRM.C",
+            pDprelim+"RM/drawPear.C",
+            pDprelim+"RM/drawRMZ.C",
 
             pDprelim+"efficiency/drawEffZ.C",
             pDprelim+"FD/drawFDZ.C",
             pDprelim+"FD/drawFDZ2.C",
             pDprelim+"Performance/D0jet/drawSBZ.C",
             pDprelim+"Performance/D0jet/drawSB_jetZ.C",
+            pDprelim+"Performance/D0jet/drawJetSum.C",
 
 
                 pPWGHF+"jetsHF/AliAnalysisTaskDJetCorrelations.cxx",

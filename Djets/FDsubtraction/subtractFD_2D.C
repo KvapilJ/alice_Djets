@@ -995,6 +995,11 @@ RooUnfoldResponse* LoadDetectorMatrix(TString MCfile, TString out, Bool_t isPost
     cc->SaveAs(out+"/Folding2D_ResponseMatrix.png");
     cc->SaveAs(out+"/Folding2D_ResponseMatrix.pdf");
 
+    TFile *filres = new TFile(out+"/Response.root","recreate");
+    filres->cd();
+    res->Write("RM");
+    filres->Close();
+
     for(Int_t recoID = 0;recoID < res->GetNbinsX();recoID++){
         std::cout<<recoID+1<<" reco under "<<res->GetBinContent(recoID+1,0)<<" over "<<res->GetBinContent(recoID+1,res->GetNbinsY()+1)<<std::endl;
         for(Int_t trueID = 0;trueID < res->GetNbinsY();trueID++){

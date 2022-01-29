@@ -13,11 +13,11 @@ double sigmajet[] = {0,0};
 const int ptbinsDN = 11;
 double ptDbins[ptbinsDN+1] = {2,3,4,5,6,7,8,10,12,16,24,36};
 //0.2
-double sigmaD[ptbinsDN] = {0.00987288,0.0106562,0.0113289,0.0119166,0.0124746,0.0129507,0.0135935,0.014633,0.0157013,0.0177687,0.0206198}; // set up sigma of the D signal from MC
-TString efffile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_X02/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt5.00_50.00.root";
+//double sigmaD[ptbinsDN] = {0.00987288,0.0106562,0.0113289,0.0119166,0.0124746,0.0129507,0.0135935,0.014633,0.0157013,0.0177687,0.0206198}; // set up sigma of the D signal from MC
+//TString efffile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_X02/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt5.00_50.00.root";
 //0.4
-//double sigmaD[ptbinsDN] = {0.00991671,0.0107088,0.0113739,0.0120262,0.0126105,0.0130671,0.0137628,0.0147703,0.0157511,0.0178557,0.0208333}; // set up sigma of the D signal from MC
-//TString efffile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_X04/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt5.00_50.00.root";
+double sigmaD[ptbinsDN] = {0.00991671,0.0107088,0.0113739,0.0120262,0.0126105,0.0130671,0.0137628,0.0147703,0.0157511,0.0178557,0.0208333}; // set up sigma of the D signal from MC
+TString efffile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_X04/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt5.00_50.00.root";
 
 //0.6
 //double sigmaD[ptbinsDN] = {0.00999867,0.0108217,0.0115878,0.0123324,0.0128953,0.0133189,0.0139839,0.0149361,0.0160066,0.0178958,0.0211222};
@@ -51,10 +51,11 @@ void SetInputParametersDstar(AliDJetRawYieldUncertaintyLocal *interface);
 void ExtractDJetRawYieldUncertainty(){
   gROOT->LoadMacro("AliDJetRawYieldUncertaintyLocal.cxx+g");
 
-  for(int i=0; i<ptbinsDN; i++)
+//  for(int i=0; i<ptbinsDN; i++)
+  for(int i=3; i<4; i++)
     EvaluateBinPerBinUncertainty(i);
 
-  ExtractDJetRawYieldUncertaintyFull();
+ // ExtractDJetRawYieldUncertaintyFull();
 
 return;
 
@@ -94,7 +95,7 @@ void EvaluateBinPerBinUncertainty(Int_t bin,AliDJetRawYieldUncertaintyLocal::DMe
   else if(specie==1) SetInputParametersDstar(interface);  // check the names and the values in the method!!
   else  {printf("Error in setting the D-meson specie! Exiting...\n"); return;}
 
-  interface->SetDebugLevel(2); //0 = just do the job; 1 = additional printout; 2 = print individual fits
+  interface->SetDebugLevel(1); //0 = just do the job; 1 = additional printout; 2 = print individual fits
 
   Bool_t extract = interface->ExtractInputMassPlot();
   if(!extract) {
@@ -226,7 +227,7 @@ void SetInputParametersDzero(AliDJetRawYieldUncertaintyLocal *interface){
 
 
   //interface->SetInputFilename("/home/kvapil/work/analysis/pp_run2/D0jet/data_250319/data/AnalysisResults_Run2.root");
-  interface->SetInputFilename("/mnt/hgfs/vmware/data_R06_050219/data/AnalysisResults_Run2w18b.root");
+  interface->SetInputFilename("/mnt/hgfs/vmware/data_R04_050219/data/AnalysisResults_Run2w18b.root");
   interface->SetInputDirname("DmesonsForJetCorrelations");
   interface->SetInputListname("histosD0MBN");
   interface->SetInputObjectname("hsDphiz");
@@ -246,9 +247,9 @@ void SetInputParametersDzero(AliDJetRawYieldUncertaintyLocal *interface){
   interface->SetChi2Cut(chi2cut);
   interface->SetMeanSigmaVariations(meansigmaVar);
   interface->SetBkgVariations(bkgVar);
-  interface->SetRebinSteps(nRebinSteps,rebinStep);
-  interface->SetMinMassSteps(nMinMassSteps,minMassStep);
-  interface->SetMaxMassSteps(nMaxMassSteps,maxMassStep);
+  interface->SetRebinSteps(nRebinSteps,rebinStep);          //lim
+  interface->SetMinMassSteps(nMinMassSteps,minMassStep);    //lim
+  interface->SetMaxMassSteps(nMaxMassSteps,maxMassStep);    //lim
   interface->SetSigmaBinCounting(nStepsBC,nSigmasBC);
   interface->SetMaskOfVariations(nmask,mask);
 

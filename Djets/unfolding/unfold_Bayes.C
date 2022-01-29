@@ -188,6 +188,10 @@ else if(fObservable == Observable::kFragmentation)LoadDetectorMatrix(detRMfile.D
     RooUnfold::ErrorTreatment errorTreatment = RooUnfold::kCovariance;
     RooUnfoldResponse response(hProjXeffRebin,hProjYeffRebin, Matrix, "response","response");
     response.UseOverflow(overflow);
+    TFile *filres = new TFile(outDir+"/Response.root","recreate");
+    filres->cd();
+    response.Hresponse()->Write("RM");
+    filres->Close();
 
     TH1D* fUnfoldedBayes[NTrials];
     TH1D* folded[NTrials];
@@ -212,6 +216,7 @@ else if(fObservable == Observable::kFragmentation)LoadDetectorMatrix(detRMfile.D
         folded[ivar] = dynamic_cast<TH1D*>(response.ApplyToTruth(fUnfoldedBayes[ivar]));
 
 		// ------------ Get Person coefficient ------------
+        std::cout<<"regul: "<<ivar+1<<std::endl;
 		fPearsonCoeffs[ivar] = getPearsonCoeffs( unfold.Ereco(RooUnfold::kCovariance) );
 		fPearsonCoeffs[ivar]->SetName(Form("PearsonCoeffs%d",ivar));
 
@@ -236,6 +241,8 @@ else if(fObservable == Observable::kFragmentation)LoadDetectorMatrix(detRMfile.D
 
     cUnfolded->SaveAs(Form("%s/plots%s/%s_unfSpectra.pdf",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
     cUnfolded->SaveAs(Form("%s/plots%s/%s_unfSpectra.png",outDir.Data(),(zBin!=0)?Form("%d",zBin):"",outName.Data()));
+
+
 
 	TCanvas *cPearson = new TCanvas("cPearson","cPearson",1800,1800);
 	cPearson->Divide(3,3);
@@ -333,6 +340,16 @@ else if(fObservable == Observable::kFragmentation)LoadDetectorMatrix(detRMfile.D
         if((ivar == 0)  || (ivar == regBayes-1)) continue;
         hRatioUnfS->Add(hRatioSpectrum[ivar]);
 
+        TFile *outFileM2 = new TFile("outUnfTest.root","recreate");
+        outFileM2->cd();
+        for(Int_t ivar=0; ivar<NTrials; ivar++)
+        {
+            fPearsonCoeffs[ivar]->Write(Form("Pearson,k=%d",ivar+1));
+            hRatio[ivar]->Write(Form("foldmeas%d",ivar+1));
+        }
+        outFileM2->Close();
+        delete outFileM2;
+
         //if(ivar==1) { hRatioSpectrum[ivar]->GetYaxis()->SetRangeUser(0.8,1.3); hRatioSpectrum[ivar]->Draw("hist"); }
         //else hRatioSpectrum[ivar]->Draw("samehist");
 
@@ -362,12 +379,21 @@ else if(fObservable == Observable::kFragmentation)LoadDetectorMatrix(detRMfile.D
     folded[regBayes-1]->SetName("foldedSpectrum");
     fRawRebin->SetName("fRawRebin");
 
+    for (Int_t k = 0; k < NTrials;k++){
+        std::cout<<"iter: "<<k+1<<std::endl;
+        Double_t chi2 = 0;
+        for (Int_t i = 0; i < folded[0]->GetNbinsX();i++){
+            chi2 += (folded[k]->GetBinContent(i+1)-fRawRebin->GetBinContent(i+1))*(folded[k]->GetBinContent(i+1)-fRawRebin->GetBinContent(i+1))/fRawRebin->GetBinContent(i+1);
+        }
+        std::cout<<"chi2: "<<chi2<<std::endl;
+    }
+
         TH1D *hUnfolded_Unc = dynamic_cast<TH1D*>(fUnfoldedBayes[regBayes-1]->Clone("hUnfolded_Unc"));
 		hUnfolded_Unc->GetYaxis()->SetTitle("Rel. unc.");
 		hUnfolded_Unc->SetLineColor(kGreen+1);
 		hUnfolded_Unc->SetMarkerColor(kGreen+1);
 
-		for(int j=1; j<=fUnfoldedBayes[regBayes-1]->GetNbinsX();j++){
+        for(int j=1; j<=fUnfoldedBayes[regBayes-1]->GetNbinsX();j++){
 								double err;
 								if(fUnfoldedBayes[regBayes-1]->GetBinContent(j)) err = fUnfoldedBayes[regBayes-1]->GetBinError(j)/fUnfoldedBayes[regBayes-1]->GetBinContent(j);
 								else err = 0;
@@ -1139,7 +1165,8 @@ TH2D * getPearsonCoeffs(const TMatrixD &covMatrix) {
 	Int_t nrows = covMatrix.GetNrows();
 	Int_t ncols = covMatrix.GetNcols();
 
-	TH2D* PearsonCoeffs = new TH2D("PearsonCoeffs","Pearson Coefficients", nrows, 0, nrows, ncols, 0, ncols);
+//	TH2D* PearsonCoeffs = new TH2D("PearsonCoeffs","Pearson Coefficients", nrows, 0, nrows, ncols, 0, ncols);
+    TH2D* PearsonCoeffs = new TH2D("PearsonCoeffs","Pearson Coefficients", nrows, fptbinsJetTrueA, ncols, fptbinsJetTrueA);
 	for(Int_t row = 0; row<nrows; row++) {
 		for(Int_t col = 0; col<ncols; col++) {
 			Double_t pearson = 0.;
@@ -1148,6 +1175,18 @@ TH2D * getPearsonCoeffs(const TMatrixD &covMatrix) {
 			PearsonCoeffs->SetBinContent(row+1,col+1, pearson);
 		}
 	}
+
+    TMatrixD invcov(covMatrix);
+    invcov.Invert();
+    Double_t globrho[nrows+1];
+    Double_t aver = 0;
+    for(Int_t row = 0; row<nrows; row++) {
+           globrho[row] = TMath::Sqrt( 1 - 1./(covMatrix(row,row)*invcov(row,row)));
+           aver += globrho[row];
+       }
+    aver = aver/(nrows-1);
+    std::cout<<aver<<std::endl;
+
 
 	return PearsonCoeffs;
 }

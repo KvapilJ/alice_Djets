@@ -1176,6 +1176,8 @@ std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MC
 
     }
 
+
+
     TCanvas *c = new TCanvas("c","Unfolding2D_measured_true",1600,800);
     c->Divide(2,1);
     c->cd(1);
@@ -1251,6 +1253,11 @@ std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MC
     res->Draw("colz");
     cc->SaveAs(out+"/Unfolding2D_ResponseMatrix.png");
     cc->SaveAs(out+"/Unfolding2D_ResponseMatrix.pdf");
+
+    TFile *filres = new TFile(out+"/Response.root","recreate");
+    filres->cd();
+    res->Write("RM");
+    filres->Close();
 
     for(Int_t recoID = 0;recoID < res->GetNbinsX();recoID++){
         std::cout<<recoID+1<<" reco under "<<res->GetBinContent(recoID+1,0)<<" over "<<res->GetBinContent(recoID+1,res->GetNbinsY()+1)<<std::endl;

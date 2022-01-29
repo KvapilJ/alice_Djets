@@ -696,6 +696,11 @@ TH1* foldB(TString matrixFile, TH1D *hFD, TH1D *folded ){
     RooUnfoldResponse* RooUResp_reb = new RooUnfoldResponse();
     RooUResp_reb->Setup(nullptr,nullptr,combMatrix0);
 
+    TFile *filres = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/ResponseFD.root","recreate");
+    filres->cd();
+    RooUResp_reb->Hresponse()->Write("RM");
+    filres->Close();
+
     folded  = dynamic_cast<TH1D*>(RooUResp_reb->ApplyToTruth(hFD));
 
     folded->SetLineColor(2);

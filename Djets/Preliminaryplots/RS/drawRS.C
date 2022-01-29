@@ -21,13 +21,13 @@ void setHistoDetails(TH1 *h, Color_t color, Style_t Mstyle, Width_t width);
 
 
     const int ptbinsJetN = 11;
-    float ptJetbins[ptbinsJetN+1] = {2,3,4,5,6,8,10,12,14,20,30,50};
+    float ptJetbins[ptbinsJetN+1] = {2,3,4,5,6,7,8,10,12,16,24,36};
 
-    int promptColor = kRed+1;
+    int promptColor = kGreen+1;
     int nonpromptColor = kBlue+1;
 
 
-void drawFD()
+void drawRS()
 {
 
     style();
@@ -48,12 +48,14 @@ void drawFD()
   // TFile *inFileFD = new TFile("/home/jackbauer/Work/alice/analysis/pp5TeV/D0jet/results_cutTight/DzeroR03_def_437_old0/Default/efficiency/DjetEff_nonPrompt_jetpt5_50.root","read");
 
 
-   TFile *inFileFD = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_X06/Default_AnalysisResults_Run2w18b.root/FDsubtraction/JetPtSpectrum_FDsub.root","read");
+   TFile *inFileFD1 = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_X04/Default_AnalysisResults_Run2w18b.root/signalExtraction/JetPtSpectra_SB_eff.root","read");
+   TFile *inFileFD2 = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_X04/ReflSys15_AnalysisResults_Run2w18b.root/signalExtraction/JetPtSpectra_SB_eff.root","read");
+   TFile *inFileFD3 = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_X04/ReflSys05_AnalysisResults_Run2w18b.root/signalExtraction/JetPtSpectra_SB_eff.root","read");
 
 
-    TH1D *hFD_ratio = (TH1D*)inFileFD->Get("hFD_ratio");
-    TH1D *hFD_ratio_up = (TH1D*)inFileFD->Get("hFD_ratio_up");
-    TH1D *hFD_ratio_down = (TH1D*)inFileFD->Get("hFD_ratio_down");
+    TH1D *hFD_ratio = (TH1D*)inFileFD1->Get("hReflRS");
+    TH1D *hFD_ratio_up = (TH1D*)inFileFD2->Get("hReflRS");
+    TH1D *hFD_ratio_down = (TH1D*)inFileFD3->Get("hReflRS");
 
     //TGraphAsymmErrors *hFD_ratio_err = new TGraphAsymmErrors(hFD_ratio);
    /* for(Int_t i = 1; i <= ptbinsJetN;i++){
@@ -88,8 +90,8 @@ std::cout<<ptvaltheory[j]<<" "<<ptvalunctheory[j]<<" "<<valuetheoryerrup[j]<<" "
             hFD_ratio->SetLineColor(promptColor);
             hFD_ratio->SetMarkerStyle(20);
             hFD_ratio->SetMarkerSize(1.2);
-            hFD_ratio->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
-            hFD_ratio->GetYaxis()->SetTitle("B Feed-Down Fraction");
+            hFD_ratio->GetXaxis()->SetTitle("#it{p}_{T}^{D} (GeV/#it{c})");
+            hFD_ratio->GetYaxis()->SetTitle("Reflection/Signal Fraction");
             hFD_ratio->GetXaxis()->SetLabelSize(0.04);
             hFD_ratio->GetXaxis()->SetTitleSize(0.05);
             hFD_ratio->GetXaxis()->SetTitleOffset(1.);
@@ -107,8 +109,8 @@ std::cout<<ptvaltheory[j]<<" "<<ptvalunctheory[j]<<" "<<valuetheoryerrup[j]<<" "
             //hFD_ratio_err->SetFillColorAlpha(kGreen,0.9);
             hFD_ratio_err->SetMarkerStyle(20);
             hFD_ratio_err->SetMarkerSize(1.2);
-            hFD_ratio_err->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
-            hFD_ratio_err->GetYaxis()->SetTitle("B Feed-Down Fraction");
+            hFD_ratio_err->GetXaxis()->SetTitle("#it{p}_{T}^{D} (GeV/#it{c})");
+            hFD_ratio_err->GetYaxis()->SetTitle("Reflection/Signal Fraction");
             hFD_ratio_err->GetXaxis()->SetLabelSize(0.04);
             hFD_ratio_err->GetXaxis()->SetTitleSize(0.05);
             hFD_ratio_err->GetXaxis()->SetTitleOffset(1.);
@@ -206,7 +208,7 @@ std::cout<<ptvaltheory[j]<<" "<<ptvalunctheory[j]<<" "<<valuetheoryerrup[j]<<" "
     pvEta->AddText("|#it{#eta}_{lab}^{jet}| < 0.5");
     //pvEta->AddText("|#it{#eta}_{jet}| < 0.6");*/
 
-    TPaveText *pt = new TPaveText(0.15,0.75,0.8,0.95,"NB NDC");
+    TPaveText *pt = new TPaveText(0.15,0.67,0.8,0.95,"NB NDC");
     pt->SetBorderSize(0);
     pt->SetFillStyle(0);
     pt->SetTextAlign(13);
@@ -216,8 +218,9 @@ std::cout<<ptvaltheory[j]<<" "<<ptvalunctheory[j]<<" "<<valuetheoryerrup[j]<<" "
     TText *text = new TText;
     text = pt->AddText("This Thesis"); //uncomment
     text = pt->AddText("pp, #sqrt{#it{s}} = 13 TeV");
-    text = pt->AddText(Form("charged jets, anti-#it{k}_{T}, #it{R} = 0.%d, |#it{#eta}_{lab}^{jet}| < 0.%d",4,5));
-    text = pt->AddText(Form ("with D^{0}, %d < #it{p}_{T,D^{0}} < %d GeV/#it{c}",2,36));
+    text = pt->AddText("PYTHIA6+GEANT3");
+    text = pt->AddText(Form("charged jets with D^{0}, anti-#it{k}_{T}, #it{R} = 0.%d, |#it{#eta}_{lab}^{jet}| < 0.%d",4,5));
+    text = pt->AddText(Form ("%d < #it{p}_{T,ch jet} < %d GeV/#it{c}",2,50));
 
     TCanvas *cEff = new TCanvas("cEff","cEff",1000,800);
     //cEff->SetBatch();
@@ -228,7 +231,8 @@ std::cout<<ptvaltheory[j]<<" "<<ptvalunctheory[j]<<" "<<valuetheoryerrup[j]<<" "
   //  hFD_ratio_up->Draw("same");
   //  hFD_ratio_down->Draw("same");
     //hFD_ratio->Draw();
-    //hFD_ratio_err->GetXaxis()->SetRangeUser(0,50);
+    hFD_ratio->GetYaxis()->SetRangeUser(0,0.8);
+    hFD_ratio->GetXaxis()->SetRangeUser(2,36);
     hFD_ratio->Draw("axis");
     hFD_ratio_err->Draw("5e");
     hFD_ratio->Draw("same p  e0 x0");
@@ -242,11 +246,11 @@ std::cout<<ptvaltheory[j]<<" "<<ptvalunctheory[j]<<" "<<valuetheoryerrup[j]<<" "
   //  pvJet->Draw("same");
   //  pvD->Draw("same");
   //  pvEta->Draw("same");
-    leg->Draw("same");
+  //  leg->Draw("same");
 
 
   //  cEff->SaveAs("DjetFD_2.png");
-    cEff->SaveAs("DjetFD_thesis_2.pdf");
+    cEff->SaveAs("DjetRS_thesis.pdf");
    // cEff->SaveAs("DjetFD_2.eps");
    // cEff->Print("DjetEff_Sim_log.pdf");
    // cEff->Print("DjetEff_Sim_log.eps");

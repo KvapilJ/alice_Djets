@@ -630,6 +630,15 @@ Bool_t AliDJetRawYieldUncertaintyLocal::CombineMultiTrialOutcomes(){
   hSigmaAll->SetMinimum(0.);
   //if(hSigmaAll->GetMaximum()<0.018) hSigmaAll->SetMaximum(0.018);
 
+  TFile *ff = new TFile("multi.root","recreate");
+  ff->cd();
+  hSigmaAll->Write("hSigmaAll");
+  hMeanAll->Write("hMeanAll");
+  hChi2All->Write("hChi2All");
+  hBkgAll->Write("hBkgAll");
+  hRawYieldAll->Write("hRawYieldAll");
+  ff->Close();
+
   TCanvas* call=new TCanvas("call","All",1400,800);
   call->Divide(4,2);
   call->cd(1);
@@ -1046,11 +1055,12 @@ Bool_t AliDJetRawYieldUncertaintyLocal::EvaluateUncertaintyDzeroSideband() {
 
 	for (Int_t iJetbin = 0; iJetbin<nJetBins; iJetbin++) { //loop on jet spectrum pT bins
 
-		fJetPtBinYieldDistribution[iJetbin] = new TH1F(Form("fJetPtBinYieldDistribution_Bin%d", iJetbin), "  ; Yield distribution", 50000, 0., 50000.);
+    //	fJetPtBinYieldDistribution[iJetbin] = new TH1F(Form("fJetPtBinYieldDistribution_Bin%d", iJetbin), "  ; Yield distribution", 50000, 0., 50000.);
+        fJetPtBinYieldDistribution[iJetbin] = new TH1F(Form("fJetPtBinYieldDistribution_Bin%d", iJetbin), "  ; Yield distribution", 40, 0., 41);
 
 		for (Int_t iTrial = 0; iTrial<fnMaxTrials; iTrial++) { //loop on trials and build array of variations for a given pT(jet) bin
 			arrYld[iJetbin][iTrial] = fJetSpectrSBVars[iTrial]->GetBinContent(iJetbin + 1);
-			fJetPtBinYieldDistribution[iJetbin]->Fill(arrYld[iJetbin][iTrial]);
+            fJetPtBinYieldDistribution[iJetbin]->Fill(iTrial+1,arrYld[iJetbin][iTrial]);
 		}
 
 		Double_t mean = TMath::Mean(fnMaxTrials, arrYld[iJetbin]);

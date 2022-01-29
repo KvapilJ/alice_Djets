@@ -178,8 +178,8 @@ TString histBase = "unfoldedSpectrumKineEff"
     // --------------- SET PARAMETERS + BINNING HERE ------------------
     // ----------------------------------------------------------------
     Double_t sigma_in = 0.0578;
-    const Double_t  BRDzero = 0.0389;
-    Double_t BRDzeroUnc = 0.0004;
+    const Double_t  BRDzero = 0.0395;
+    Double_t BRDzeroUnc = 0.008;
     Double_t DtrackingUnc = 0.05;
     Double_t LumiUnc = 0.05;
     if(type ==0){//x-section
@@ -251,8 +251,8 @@ TString histBase = "unfoldedSpectrumKineEff"
             //systUncD_up = new Double_t[xAxisBins]{0.0891, 0.0912, 0.0721, 0.0989, 0.078, 0.0827, 0.1145, 0.2137};
             //systUncD_down = new Double_t[xAxisBins]{0.1009, 0.1034,	0.0907, 0.1161,	0.098, 0.1144,	0.1386, 0.2486};
             //JES and CUTS not in systUncD_up and systUncD_down
-            systUncD_up = new Double_t[xAxisBins]{0.0883, 0.0891, 0.0690, 0.0893, 0.0699, 0.0727, 0.0921, 0.1790};
-            systUncD_down = new Double_t[xAxisBins]{0.1002, 0.1015,	0.0883, 0.1080,	0.0917, 0.1074,	0.1208, 0.2195};
+            systUncD_up = new Double_t[xAxisBins]{0.0545, 0.0560, 0.0517, 0.0599, 0.0546, 0.0629, 0.0753, 0.1360};
+            systUncD_down = new Double_t[xAxisBins]{0.0721, 0.0742,	0.0755, 0.0854,	0.0807, 0.1010,	0.1084, 0.1861};
             systUncD_JES = new Double_t[xAxisBins]{0.005, 0.009, 0.013, 0.014, 0.017, 0.022, 0.03, 0.066};
             systUncD_CUTS = new Double_t[xAxisBins]{0.011, 0.018, 0.017, 0.04, 0.03, 0.032,	0.061, 0.096};
         }
@@ -263,8 +263,8 @@ TString histBase = "unfoldedSpectrumKineEff"
             //systUncD_up = new Double_t[xAxisBins]{0.0762, 0.0704, 0.0781, 0.0972, 0.1156, 0.1195, 0.1531, 0.2121};
             //systUncD_down = new Double_t[xAxisBins]{0.0883, 0.0853,	0.0989, 0.1224,	0.1425, 0.1582,	0.2135, 0.2780};
             //JES and CUTS not in systUncD_up and systUncD_down
-            systUncD_up = new Double_t[xAxisBins]{0.0668, 0.0669, 0.0695, 0.0881, 0.1049, 0.1002, 0.1279, 0.1664};
-            systUncD_down = new Double_t[xAxisBins]{0.0803, 0.0824,	0.0922, 0.1153,	0.1339, 0.1442,	0.1962, 0.2450};
+            systUncD_up = new Double_t[xAxisBins]{0.0634, 0.0645, 0.0650, 0.0830, 0.0839, 0.0919, 0.1218, 0.1495};
+            systUncD_down = new Double_t[xAxisBins]{0.0775, 0.0805,	0.0889, 0.1114,	0.1182, 0.1386,	0.1923, 0.2338};
             systUncD_JES = new Double_t[xAxisBins]{0.008, 0.019, 0.021, 0.035, 0.039, 0.042, 0.064, 0.097};
             systUncD_CUTS = new Double_t[xAxisBins]{0.036, 0.012, 0.029, 0.021,	0.030, 0.050, 0.054, 0.088};
         }
@@ -275,8 +275,8 @@ TString histBase = "unfoldedSpectrumKineEff"
             //systUncD_up = new Double_t[xAxisBins]{0.097, 0.073, 0.09, 0.103, 0.119, 0.136, 0.189, 0.358};
             //systUncD_down = new Double_t[xAxisBins]{0.103, 0.085,	0.104, 0.119,	0.142, 0.165,	0.221, 0.43};
             //JES and CUTS not in systUncD_up and systUncD_down
-            systUncD_up = new Double_t[xAxisBins]{0.074, 0.068, 0.071, 0.087, 0.100, 0.108, 0.126, 0.202};
-            systUncD_down = new Double_t[xAxisBins]{0.082, 0.081, 0.088, 0.106,	0.126, 0.142, 0.170, 0.313};
+            systUncD_up = new Double_t[xAxisBins]{0.076, 0.064, 0.064, 0.067, 0.081, 0.097, 0.098, 0.183};
+            systUncD_down = new Double_t[xAxisBins]{0.084, 0.078, 0.083, 0.090,	0.112, 0.134, 0.150, 0.301};
             systUncD_JES = new Double_t[xAxisBins]{0.001, 0.006, 0.029, 0.038, 0.052, 0.064, 0.075, 0.151};
             systUncD_CUTS = new Double_t[xAxisBins]{0.063, 0.026, 0.048, 0.040,	0.040, 0.053, 0.119, 0.254};
         }
@@ -291,26 +291,26 @@ TString histBase = "unfoldedSpectrumKineEff"
                 plotRanges[0]=0.01; plotRanges[1]=1.55; plotRanges[2]=0.0006; plotRanges[3]=4;
                 if(type ==2){ plotRanges[0]=0.3; plotRanges[1]=1.45; plotRanges[2]=0.001; plotRanges[3]=10;}
                 //if(type == 2)
-                systUncD_up = new Double_t[xAxisBins]{0.17,0.12,0.084,0.07,0.057};
-                systUncD_down = new Double_t[xAxisBins]{0.188,0.142,0.098,0.079,0.065};
+                systUncD_up = new Double_t[xAxisBins]{0.168,0.12,0.081,0.071,0.058};
+                systUncD_down = new Double_t[xAxisBins]{0.187,0.142,0.095,0.08,0.066};
             }
             else if(zBin ==3){
                 plotRanges[0]=0.01; plotRanges[1]=2.15; plotRanges[2]=0.0006; plotRanges[3]=4;
                 if(type ==2){ plotRanges[0]=0.55; plotRanges[1]=1.9; plotRanges[2]=0.001; plotRanges[3]=9;}
-                systUncD_up = new Double_t[xAxisBins]{0.272,0.09,0.078,0.075,0.041};
-                systUncD_down = new Double_t[xAxisBins]{0.324,0.108,0.091,0.083,0.05};
+                systUncD_up = new Double_t[xAxisBins]{0.281,0.091,0.078,0.082,0.040};
+                systUncD_down = new Double_t[xAxisBins]{0.332,0.108,0.091,0.089,0.049};
             }
             else if(zBin ==4){
                 plotRanges[0]=0.01; plotRanges[1]=2.15; plotRanges[2]=0.0006; plotRanges[3]=4;
                 if(type ==2){ plotRanges[0]=0.55; plotRanges[1]=1.8; plotRanges[2]=0.001; plotRanges[3]=7;}
-                systUncD_up = new Double_t[xAxisBins]{0.29,0.094,0.082,0.061,0.042};
-                systUncD_down = new Double_t[xAxisBins]{0.358,0.117,0.09,0.069,0.051};
+                systUncD_up = new Double_t[xAxisBins]{0.289,0.09,0.082,0.060,0.042};
+                systUncD_down = new Double_t[xAxisBins]{0.357,0.113,0.089,0.068,0.051};
             }
             else if(zBin ==5){
                 plotRanges[0]=0.01; plotRanges[1]=1.75; plotRanges[2]=0.0002; plotRanges[3]=1;
                 if(type ==2){ plotRanges[0]=0.55; plotRanges[1]=1.5; plotRanges[2]=0.001; plotRanges[3]=6;}
-                systUncD_up = new Double_t[xAxisBins]{0.325,0.104,0.065,0.058,0.092};
-                systUncD_down = new Double_t[xAxisBins]{0.349,0.115,0.069,0.065,0.096};
+                systUncD_up = new Double_t[xAxisBins]{0.309,0.111,0.064,0.061,0.090};
+                systUncD_down = new Double_t[xAxisBins]{0.335,0.121,0.069,0.068,0.095};
             }
         }
         else if(radius == 4){
@@ -318,26 +318,26 @@ TString histBase = "unfoldedSpectrumKineEff"
             if(zBin ==2){
                 plotRanges[0]=0; plotRanges[1]=1.68; plotRanges[2]=0.003; plotRanges[3]=5;
                 if(type == 2){plotRanges[0]=0.25; plotRanges[1]=1.89; plotRanges[2]=0.2; plotRanges[3]=5;}
-                systUncD_up = new Double_t[xAxisBins]{0.14, 0.068, 0.069,	0.084, 0.073};
-                systUncD_down = new Double_t[xAxisBins]{0.15, 0.075, 0.075, 0.088,	0.078};
+                systUncD_up = new Double_t[xAxisBins]{0.138, 0.066, 0.067,	0.083, 0.073};
+                systUncD_down = new Double_t[xAxisBins]{0.148, 0.074, 0.073, 0.087,	0.078};
             }
             else if(zBin ==3){
                 plotRanges[0]=0.05; plotRanges[1]=1.68; plotRanges[2]=0.003; plotRanges[3]=3;
                 if(type ==2){ plotRanges[0]=0.55; plotRanges[1]=1.45; plotRanges[2]=0.7; plotRanges[3]=3.5;}
-                systUncD_up = new Double_t[xAxisBins]{0.126, 0.084, 0.059,	0.05, 0.062};
-                systUncD_down = new Double_t[xAxisBins]{0.153, 0.091, 0.065, 0.055,	0.067};
+                systUncD_up = new Double_t[xAxisBins]{0.125, 0.084, 0.058,	0.049, 0.061};
+                systUncD_down = new Double_t[xAxisBins]{0.153, 0.091, 0.063, 0.054,	0.066};
             }
             else if(zBin ==4){
                 plotRanges[0]=0.05; plotRanges[1]=1.68; plotRanges[2]=0.002; plotRanges[3]=1;
                 if(type ==2){ plotRanges[0]=0.65; plotRanges[1]=1.35; plotRanges[2]=0.8; plotRanges[3]=3.5;}
-                systUncD_up = new Double_t[xAxisBins]{0.139, 0.07, 0.056,	0.036, 0.072};
-                systUncD_down = new Double_t[xAxisBins]{0.162, 0.078, 0.061, 0.048,	0.076};
+                systUncD_up = new Double_t[xAxisBins]{0.136, 0.07, 0.055,	0.035, 0.071};
+                systUncD_down = new Double_t[xAxisBins]{0.159, 0.077, 0.060, 0.048,	0.075};
             }
             else if(zBin ==5){
                 plotRanges[0]=0.21; plotRanges[1]=1.75; plotRanges[2]=0.0008; plotRanges[3]=0.2;
                 if(type ==2){ plotRanges[0]=0.72; plotRanges[1]=1.35; plotRanges[2]=0.8; plotRanges[3]=4.5;}
-                systUncD_up = new Double_t[xAxisBins]{0.148, 0.075, 0.08,	0.057, 0.096};
-                systUncD_down = new Double_t[xAxisBins]{0.214, 0.079, 0.083, 0.062,	0.097};
+                systUncD_up = new Double_t[xAxisBins]{0.148, 0.073, 0.077,	0.051, 0.094};
+                systUncD_down = new Double_t[xAxisBins]{0.214, 0.078, 0.081, 0.056,	0.095};
             };
         }
         else if(radius == 6){
@@ -345,26 +345,26 @@ TString histBase = "unfoldedSpectrumKineEff"
             if(zBin ==2){
                 plotRanges[0]=0.01; plotRanges[1]=1.45; plotRanges[2]=0.007; plotRanges[3]=7;
                 if(type == 2){plotRanges[0]=0.35; plotRanges[1]=2.1; plotRanges[2]=0.2; plotRanges[3]=5;}
-                systUncD_up = new Double_t[xAxisBins]{0.132,0.085,0.064,0.088,0.095};
-                systUncD_down = new Double_t[xAxisBins]{0.137,0.09,0.067,0.09,0.097};
+                systUncD_up = new Double_t[xAxisBins]{0.128,0.083,0.060,0.087,0.095};
+                systUncD_down = new Double_t[xAxisBins]{0.133,0.088,0.064,0.089,0.097};
             }
             else if(zBin ==3){
                 plotRanges[0]=0.01; plotRanges[1]=1.68; plotRanges[2]=0.004; plotRanges[3]=3;
                 if(type ==2){ plotRanges[0]=0.55; plotRanges[1]=2.1; plotRanges[2]=0.2; plotRanges[3]=5;}
-                systUncD_up = new Double_t[xAxisBins]{0.091,0.072,0.059,0.062,0.106};
-                systUncD_down = new Double_t[xAxisBins]{0.102,0.075,0.063,0.068,0.108};
+                systUncD_up = new Double_t[xAxisBins]{0.093,0.070,0.056,0.069,0.106};
+                systUncD_down = new Double_t[xAxisBins]{0.105,0.074,0.060,0.075,0.108};
             }
             else if(zBin ==4){
                 plotRanges[0]=0.05; plotRanges[1]=1.68; plotRanges[2]=0.002; plotRanges[3]=1;
                 if(type ==2){ plotRanges[0]=0.65; plotRanges[1]=1.35; plotRanges[2]=0.2; plotRanges[3]=5;}
-                systUncD_up = new Double_t[xAxisBins]{0.114,0.05,0.086,0.053,0.114};
-                systUncD_down = new Double_t[xAxisBins]{0.125,0.055,0.09,0.06,0.115};
+                systUncD_up = new Double_t[xAxisBins]{0.112,0.048,0.08,0.055,0.115};
+                systUncD_down = new Double_t[xAxisBins]{0.123,0.053,0.084,0.061,0.116};
             }
             else if(zBin ==5){
                 plotRanges[0]=0.21; plotRanges[1]=1.79; plotRanges[2]=0.0008; plotRanges[3]=0.8;
                 if(type ==2){ plotRanges[0]=0.55; plotRanges[1]=1.35; plotRanges[2]=0.2; plotRanges[3]=5;}
-                systUncD_up = new Double_t[xAxisBins]{0.112,0.068,0.066,0.088,0.107};
-                systUncD_down = new Double_t[xAxisBins]{0.145,0.071,0.069,0.089,0.107};
+                systUncD_up = new Double_t[xAxisBins]{0.113,0.066,0.060,0.086,0.108};
+                systUncD_down = new Double_t[xAxisBins]{0.146,0.070,0.064,0.088,0.108};
             }
         }
     }

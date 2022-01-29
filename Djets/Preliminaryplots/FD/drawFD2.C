@@ -20,17 +20,17 @@ void setHistoDetails(TH1 *h, Color_t color, Style_t Mstyle, Width_t width);
 
 
 
-    const int ptbinsJetN1 = 5;
-    float ptJetbins1[ptbinsJetN1+1] = {0.4,0.6,0.7,0.8,0.9,1.02};
-    const int ptbinsJetN2 = 5;
-    float ptJetbins2[ptbinsJetN2+1] = {0.4,0.6,0.7,0.8,0.9,1.02};
-     double plotmin = 0.4, plotmax = 1.02;
+    const int ptbinsJetN1 = 11;
+    float ptJetbins1[ptbinsJetN1+1] = {2,3,4,5,6,8,10,12,14,20,30,50};
+    const int ptbinsJetN2 = 11;
+    float ptJetbins2[ptbinsJetN2+1] = {2,3,4,5,6,8,10,12,14,20,30,50};
+     double plotmin = 0.2, plotmax = 1;
 
     int promptColor = kRed+1;
     int nonpromptColor = kBlue+1;
 
 
-void drawFDZ2()
+void drawFD2()
 {
 
     style();
@@ -53,8 +53,8 @@ void drawFDZ2()
   // TFile *inFileFD = new TFile("/home/jackbauer/Work/alice/analysis/pp5TeV/D0jet/results_cutTight/DzeroR03_def_437_old0/Default/efficiency/DjetEff_nonPrompt_jetpt5_50.root","read");
 
 
-   TFile *inFileFD1 = new TFile(Form("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_z04F/Default_AnalysisResults_Run2w18b.root/FDsubtraction2D/JetPtSpectrum_FDsub%d.root",z1),"read");
-   TFile *inFileFD2 = new TFile(Form("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_z04F/Default_AnalysisResults_Run2w18b.root/FDsubtraction2D/JetPtSpectrum_FDsub%d.root",z2),"read");
+   TFile *inFileFD1 = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_X06/Default_AnalysisResults_Run2w18b.root/FDsubtraction/JetPtSpectrum_FDsub.root","read");
+   TFile *inFileFD2 = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_X04/Default_AnalysisResults_Run2w18b.root/FDsubtraction/JetPtSpectrum_FDsub.root","read");
 
 
     TH1D *hFD_ratio1 = (TH1D*)inFileFD1->Get("hFD_ratio");
@@ -99,7 +99,7 @@ std::cout<<"A"<<std::endl;
             hFD_ratio1->SetLineColor(kRed+1);
             hFD_ratio1->SetMarkerStyle(20);
             hFD_ratio1->SetMarkerSize(1.2);
-            hFD_ratio1->GetXaxis()->SetTitle("#it{z}^{ch}_{||}");
+            hFD_ratio1->GetXaxis()->SetTitle("#it{z}^{ch. jet}_{#parallel}");
             hFD_ratio1->GetYaxis()->SetTitle("B Feed-Down Fraction");
             hFD_ratio1->GetXaxis()->SetLabelSize(0.04);
             hFD_ratio1->GetXaxis()->SetTitleSize(0.05);
@@ -118,7 +118,7 @@ std::cout<<"A"<<std::endl;
             //hFD_ratio_err->SetFillColorAlpha(kGreen,0.9);
             hFD_ratio_err1->SetMarkerStyle(20);
             hFD_ratio_err1->SetMarkerSize(1.2);
-            hFD_ratio_err1->GetXaxis()->SetTitle("#it{z}^{ch}_{||}");
+            hFD_ratio_err1->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
             hFD_ratio_err1->GetYaxis()->SetTitle("B Feed-Down Fraction");
             hFD_ratio_err1->GetXaxis()->SetLabelSize(0.04);
             hFD_ratio_err1->GetXaxis()->SetTitleSize(0.05);
@@ -144,7 +144,7 @@ std::cout<<"A"<<std::endl;
                     valuetheory2[j] = hFD_ratio2->GetBinContent(hFD_ratio2->GetXaxis()->FindBin(ptvaltheory2[j]));
                     valuetheoryerrup2[j] = hFD_ratio_up2->GetBinContent(hFD_ratio_up2->GetXaxis()->FindBin(ptvaltheory2[j])) - valuetheory2[j];
                     valuetheoryerrdown2[j] = valuetheory2[j] - hFD_ratio_down2->GetBinContent(hFD_ratio_down2->GetXaxis()->FindBin(ptvaltheory2[j]));
-        std::cout<<ptvaltheory2[j]<<" "<<ptvalunctheory2[j]<<" "<<valuetheoryerrup2[j]<<" "<<valuetheory2[j]<<" "<<valuetheoryerrdown2[j]<<std::endl;
+        //std::cout<<ptvaltheory[j]<<" "<<ptvalunctheory[j]<<" "<<valuetheoryerrup[j]<<" "<<valuetheory[j]<<" "<<valuetheoryerrdown2[j]<<std::endl;
 
             }
             std::cout<<"A"<<std::endl;
@@ -157,7 +157,7 @@ std::cout<<"A"<<std::endl;
                     hFD_ratio2->SetLineColor(kBlue+1);
                     hFD_ratio2->SetMarkerStyle(22);
                     hFD_ratio2->SetMarkerSize(1.2);
-                    hFD_ratio2->GetXaxis()->SetTitle("#it{z}^{ch}_{||}");
+                    hFD_ratio2->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
                     hFD_ratio2->GetYaxis()->SetTitle("B Feed-Down Fraction");
                     hFD_ratio2->GetXaxis()->SetLabelSize(0.04);
                     hFD_ratio2->GetXaxis()->SetTitleSize(0.05);
@@ -166,8 +166,7 @@ std::cout<<"A"<<std::endl;
                     hFD_ratio2->GetYaxis()->SetLabelSize(0.045);
                     hFD_ratio2->GetYaxis()->SetTitleSize(0.05);
                     hFD_ratio2->GetXaxis()->SetRangeUser(plotmin,plotmax);
-                 //   hFD_ratio2->SetMaximum(hFD_ratio2->GetMaximum()*3);
-
+                    hFD_ratio2->SetMaximum(hFD_ratio2->GetMaximum()*3);
 
                     hFD_ratio_err2->SetTitle("");
                     hFD_ratio_err2->SetMarkerColor(kBlue+1);
@@ -177,7 +176,7 @@ std::cout<<"A"<<std::endl;
                     //hFD_ratio_err->SetFillColorAlpha(kGreen,0.9);
                     hFD_ratio_err2->SetMarkerStyle(22);
                     hFD_ratio_err2->SetMarkerSize(1.2);
-                    hFD_ratio_err2->GetXaxis()->SetTitle("#it{z}^{ch}_{||}");
+                    hFD_ratio_err2->GetXaxis()->SetTitle("#it{p}_{T,ch jet} (GeV/#it{c})");
                     hFD_ratio_err2->GetYaxis()->SetTitle("B Feed-Down Fraction");
                     hFD_ratio_err2->GetXaxis()->SetLabelSize(0.04);
                     hFD_ratio_err2->GetXaxis()->SetTitleSize(0.05);
@@ -217,7 +216,7 @@ leg3->SetTextFont(42);
 leg3->SetTextSize(0.04);
 
 leg->AddEntry(hFD_ratio1,Form("#splitline{%d < #it{p}_{T,D^{0}} < %d GeV/#it{c}}{%d < #it{p}_{T,jet} < %d GeV/#it{c}}",2,7,5,7),"p");
-leg2->AddEntry(hFD_ratio2,Form("#splitline{%d < #it{p}_{T,D^{0}} < %d GeV/#it{c}}{%d < #it{p}_{T,jet} < %d GeV/#it{c}}",5,36,15,50),"p");
+leg2->AddEntry(hFD_ratio2,Form("#splitline{%d < #it{p}_{T,D^{0}} < %d GeV/#it{c}}{%d < #it{p}_{T,jet} < %d GeV/#it{c}}",3,36,15,50),"p");
 
 leg3->AddEntry(hFD_ratio_err3,"Systematic Uncertainties","F");
 hFD_ratio1->SetMarkerSize(1.5);
@@ -278,12 +277,12 @@ std::cout<<"A"<<std::endl;
     pt->SetTextSize(0.04);
     //TText *text = pt->AddText("ALICE Preliminary");
     TText *text = new TText;
-    text = pt->AddText("ALICE Preliminary"); //uncomment  anti-#it{k}_{T}
+    text = pt->AddText("ALICE Preliminary"); //uncomment
     text = pt->AddText("pp, #sqrt{#it{s}} = 13 TeV");
     //text = pt->AddText(Form("charged jets, anti-#it{k}_{T}, #it{R} = 0.%d, |#it{#eta}_{lab}^{jet}| < 0.%d",4,5));
-    text = pt->AddText("charged jets with D^{0}");
-    text = pt->AddText(Form("anti-#it{k}_{T}, #it{R} = 0.%d",4));
-    text = pt->AddText(Form("|#it{#eta}_{lab}^{jet}| < 0.%d",5));
+    text = pt->AddText("charged jets, anti-#it{k}_{T}");
+    text = pt->AddText(Form("#it{R} = 0.%d, |#it{#eta}_{lab}^{jet}| < 0.%d",4,5));
+    text = pt->AddText("with D^{0}");
     //if(z==2)text = pt->AddText(Form ("with D^{0}, %d < #it{p}_{T,D^{0}} < %d GeV/#it{c}, %d < #it{p}_{T,jet} < %d GeV/#it{c}",2,7,5,7));
     //if(z==3)text = pt->AddText(Form ("with D^{0}, %d < #it{p}_{T,D^{0}} < %d GeV/#it{c}, %d < #it{p}_{T,jet} < %d GeV/#it{c}",2,10,7,10));
     //if(z==4)text = pt->AddText(Form ("with D^{0}, %d < #it{p}_{T,D^{0}} < %d GeV/#it{c}, %d < #it{p}_{T,jet} < %d GeV/#it{c}",2,15,10,15));
@@ -300,7 +299,7 @@ std::cout<<"A"<<std::endl;
     //hFD_ratio->Draw();
     //hFD_ratio_err->GetXaxis()->SetRangeUser(0,50);
  //   hFD_ratio2->SetBinContent(1,100);
-    hFD_ratio2->GetYaxis()->SetRangeUser(0,0.7);
+    hFD_ratio2->GetYaxis()->SetRangeUser(0,1);
     hFD_ratio2->Draw("axis");
 
     hFD_ratio_err2->SetFillColor(1);
@@ -332,7 +331,6 @@ std::cout<<"A"<<std::endl;
     hFD_ratio2->Draw("same p  e0 x0");
     hFD_ratio2->Draw("sameaxis");
     hFD_ratio2->Draw("sameaxig");
-    pt->Draw("same");
 
 std::cout<<"A"<<std::endl;
  //   pvALICE->Draw("same");
@@ -346,11 +344,12 @@ std::cout<<"A"<<std::endl;
 
 
  //   cEff->SaveAs(Form("DjetFD_sum.png"));
-    cEff->SaveAs(Form("DjetFD_sum_thesis.pdf"));
- //   cEff->SaveAs(Form("DjetFD_sum.eps"));
+    cEff->SaveAs(Form("DjetFD_thesis.pdf"));
+  //  cEff->SaveAs(Form("DjetFD_sum.eps"));
    // cEff->Print("DjetEff_Sim_log.pdf");
    // cEff->Print("DjetEff_Sim_log.eps");
    // cEff->Print("DjetEff_Sim_log.png");
+
 
 
 }
@@ -372,7 +371,7 @@ void setHistoDetails(TH1 *h, Color_t color, Style_t Mstyle, Size_t size = 0.9, W
 
 void SaveCanvas(TCanvas *c, TString name = "tmp"){
 
-    c->SaveAs(name+".png");
+    //c->SaveAs(name+".png");
     c->SaveAs(name+".pdf");
 
 }

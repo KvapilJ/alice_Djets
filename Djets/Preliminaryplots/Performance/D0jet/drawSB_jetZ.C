@@ -24,8 +24,8 @@ void SaveCanvas(TCanvas *c, TString name = "tmp");
     int ptbinsDN = 11;
     float ptDbins[11];// = {2,3,4,5,6,7,8,10,12,16,24,36};
 
-    const int ptbinsJetN = 7;
-    double ptJetbins[ptbinsJetN+1] = {0.2,0.4,0.5,0.6,0.7,0.8,0.9,1.02};
+    const int ptbinsJetN = 5;
+    double ptJetbins[ptbinsJetN+1] = {0.4,0.6,0.7,0.8,0.9,1.02};
 
     int massColor = kBlack;
     int signalColor = kRed+1;
@@ -62,7 +62,7 @@ void drawSB_jetZ( int Rpar = 4 , int z = 0)
 //"/home/basia/Work/alice/analysis/pPb_run2/DzeroR03_RefDPt3PythiaEff_BaseCuts/Default_jetMeas3_50_jetTrue3_50_ppbinning/signalExtraction/JetPtSpectra_SB_eff.root"
 //"/home/jackbauer/Work/alice/analysis/pp5TeV/D0jet/results_cutTight/DzeroR03_def_437_old0/Default/signalExtraction/JetPtSpectra_SB_eff.root","read");
 
-    TFile *inFile = new TFile(Form("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z),"read");
+    TFile *inFile = new TFile(Form("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_z04F/Default_AnalysisResults_Run2w18b.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z),"read");
 
     int bin1 , bin2 , bin3;
     Int_t jetpt[5] = {5,7,10,15,50};
@@ -78,38 +78,8 @@ void drawSB_jetZ( int Rpar = 4 , int z = 0)
         bin1=1 ; bin2=2 ; bin3=3;
     }
     else if(z==3){
-        ptbinsDN=7;
+        ptbinsDN=6;
         //ptJetbins[6]={2,3,4,5,6,7};
-        ptDbins[0]=2;
-        ptDbins[1]=3;
-        ptDbins[2]=4;
-        ptDbins[3]=5;
-        ptDbins[4]=6;
-        ptDbins[5]=7;
-        ptDbins[6]=8;
-        ptDbins[7]=10;
-        bin1=1 ; bin2=4 ; bin3=6;
-
-    }
-    else if(z==4){
-        ptbinsDN=9;
-        //ptJetbins[4]={2,3,4,5,6,7,8,10,12,15};
-        ptDbins[0]=2;
-        ptDbins[1]=3;
-        ptDbins[2]=4;
-        ptDbins[3]=5;
-        ptDbins[4]=6;
-        ptDbins[5]=7;
-        ptDbins[6]=8;
-        ptDbins[7]=10;
-        ptDbins[8]=12;
-        ptDbins[9]=15;
-        bin1=3 ; bin2=5 ; bin3=8;
-
-    }
-    else if(z==5){
-        ptbinsDN=10;
-        //ptJetbins[4]={3,4,5,6,7,8,10,12,16,24,36};
         ptDbins[0]=3;
         ptDbins[1]=4;
         ptDbins[2]=5;
@@ -117,11 +87,35 @@ void drawSB_jetZ( int Rpar = 4 , int z = 0)
         ptDbins[4]=7;
         ptDbins[5]=8;
         ptDbins[6]=10;
-        ptDbins[7]=12;
-        ptDbins[8]=16;
-        ptDbins[9]=24;
-        ptDbins[10]=36;
-        bin1=4 ; bin2=6 ; bin3=8;
+        bin1=1 ; bin2=3 ; bin3=5;
+
+    }
+    else if(z==4){
+        ptbinsDN=6;
+        //ptJetbins[4]={2,3,4,5,6,7,8,10,12,15};
+        ptDbins[0]=5;
+        ptDbins[1]=6;
+        ptDbins[2]=7;
+        ptDbins[3]=8;
+        ptDbins[4]=10;
+        ptDbins[5]=12;
+        ptDbins[6]=15;
+        bin1=0 ; bin2=2 ; bin3=4;
+
+    }
+    else if(z==5){
+        ptbinsDN=8;
+        //ptJetbins[4]={3,4,5,6,7,8,10,12,16,24,36};
+        ptDbins[0]=5;
+        ptDbins[1]=6;
+        ptDbins[2]=7;
+        ptDbins[3]=8;
+        ptDbins[4]=10;
+        ptDbins[5]=12;
+        ptDbins[6]=16;
+        ptDbins[7]=24;
+        ptDbins[8]=36;
+        bin1=4 ; bin2=6 ; bin3=7;
 
     }
 
@@ -153,7 +147,7 @@ void drawSB_jetZ( int Rpar = 4 , int z = 0)
             hjetpt[i]->SetMarkerStyle(markerstyle[0]);
             hjetpt[i]->SetMarkerSize(markersize);
 
-            hjetpt[i]->GetXaxis()->SetTitle("#it{z}^{ch. jet}_{#parallel}");
+            hjetpt[i]->GetXaxis()->SetTitle("#it{z}^{ch}_{||}");
             hjetpt[i]->GetYaxis()->SetTitle("Entries");
             hjetpt[i]->GetXaxis()->SetLabelSize(0.045);
             hjetpt[i]->GetXaxis()->SetTitleSize(0.055);
@@ -202,6 +196,10 @@ std::cout<<"A"<<std::endl;
    // hjetpt[bin1]->SetMaximum(1600);
 
      if(islog) hjetpt[bin3]->SetMaximum(hjetpt[bin3]->GetMaximum()*1000);
+     if(z==2) hjetpt[bin3]->SetMaximum(hjetpt[bin3]->GetMaximum()*1.2);
+    // hjetpt[bin1]->SetMaximum(hjetpt[bin3]->GetMaximum()*0.8);
+    // hjetpt[bin2]->SetMaximum(hjetpt[bin3]->GetMaximum()*0.8);
+    // hjetpt[bin3]->SetMaximum(hjetpt[bin3]->GetMaximum()*0.8);
 
      TH1F *hh = (TH1F*)hjetpt[0]->Clone("hh");
      hh->SetMarkerSize(0);
@@ -226,7 +224,7 @@ std::cout<<"A"<<std::endl;
     //legBands22->AddEntry(hh,"|4<(#it{M}(K#pi))<9#sigma|","p");
   //  legBands22->SetTextAlign(13);
 
-    TLegend *legBands23 = new TLegend(0.28,0.63,0.6,0.65);
+    TLegend *legBands23 = new TLegend(0.19,0.63,0.6,0.65);
     legBands23->SetTextSize(ltextsize);
     legBands23->SetFillStyle(0);
     legBands23->SetTextAlign(11);
@@ -241,15 +239,15 @@ std::cout<<"B"<<std::endl;
     //TPaveText *pvALICE = new TPaveText(0.25,0.88,0.6,0.92,"brNDC");
     //TPaveText *pvALICE = new TPaveText(0.247,0.88,0.6,0.92,"brNDC");
     //TPaveText *pvALICE = new TPaveText(0.187,0.88,0.6,0.92,"brNDC");
-    TPaveText *pvALICE = new TPaveText(0.187,0.88,0.6,0.92,"brNDC");
+    TPaveText *pvALICE = new TPaveText(0.185,0.88,0.6,0.92,"brNDC");
     pvALICE->SetFillStyle(0);
     pvALICE->SetBorderSize(0);
     pvALICE->SetTextFont(42);
     pvALICE->SetTextSize(0.055);
     pvALICE->SetTextAlign(11);
-    pvALICE->AddText("ALICE Preliminary");
+    pvALICE->AddText("This Thesis");
 
-    TPaveText *pvEn = new TPaveText(0.25,0.88,0.8,0.92,"brNDC");
+    TPaveText *pvEn = new TPaveText(0.55,0.88,0.8,0.92,"brNDC");
     pvEn->SetFillStyle(0);
     pvEn->SetBorderSize(0);
     pvEn->SetTextFont(42);
@@ -289,14 +287,14 @@ std::cout<<"C"<<std::endl;
     pvEta->AddText("|#it{#eta}_{lab}^{jet}| < 0.5");
     //pvEta->AddText("|#it{#eta}_{jet}| < 0.6");
 
-    TPaveText *pvpt1 = new TPaveText(0.58,0.66,0.85,0.71,"brNDC");
+    TPaveText *pvpt1 = new TPaveText(0.58,0.67,0.85,0.72,"brNDC");
     pvpt1->SetFillStyle(0);
     pvpt1->SetBorderSize(0);
     pvpt1->SetTextFont(42);
     pvpt1->SetTextSize(0.053);
     pvpt1->AddText(Form("%.0f < #it{p}_{T,D^{0}} < %.0f GeV/#it{c}",ptDbins[bin1],ptDbins[bin1+1]));
 
-    TPaveText *pvpt2 = new TPaveText(0.58,0.66,0.85,0.71,"brNDC");
+    TPaveText *pvpt2 = new TPaveText(0.31,0.88,0.65,0.92,"brNDC");
     //TPaveText *pvpt2 = new TPaveText(0.2,0.88,0.65,0.92,"brNDC");
     pvpt2->SetFillStyle(0);
     pvpt2->SetBorderSize(0);
@@ -356,6 +354,7 @@ std::cout<<"D"<<std::endl;
     pvEta->Draw("same");
     //pvsig1->Draw("same");
     //legBands->Draw("same");
+    pvEn->Draw("same");
 std::cout<<"E"<<std::endl;
     cMass->cd(2);
     gPad->SetLogy(islog);
@@ -367,7 +366,7 @@ std::cout<<"E"<<std::endl;
     hjetptsub[bin2]->Draw("same");
 
     pvpt2->Draw("same");
-    pvEn->Draw("same");
+
 
     //legBands->Draw("same");
 
@@ -398,7 +397,7 @@ std::cout<<"E"<<std::endl;
     */
 std::cout<<"F"<<std::endl;
     if(islog) SaveCanvas(cMass,"RawJetPt_Perf_log_2");
-    else SaveCanvas(cMass,Form("RawJetPt_Perf_2_%d",z));
+    else SaveCanvas(cMass,Form("RawJetPt_thesis_2_%d",z));
 std::cout<<"G"<<std::endl;
 }
 
@@ -419,12 +418,12 @@ void setHistoDetails(TH1 *h, Color_t color, Style_t Mstyle, Size_t size = 0.9, W
 
 void SaveCanvas(TCanvas *c, TString name){
 std::cout<<"F1"<<std::endl;
-    c->SaveAs(name+".png");
+ //   c->SaveAs(name+".png");
     std::cout<<"F2"<<std::endl;
     c->SaveAs(name+".pdf");
-    c->SaveAs(name+".eps");
-    c->SaveAs(name+".root");
-    c->SaveAs(name+".C");
+ //   c->SaveAs(name+".eps");
+ //   c->SaveAs(name+".root");
+  //  c->SaveAs(name+".C");
 
 
 }

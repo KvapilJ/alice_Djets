@@ -38,58 +38,23 @@ void drawEffZ( int Rpar = 4 , int z = 0)
     if(z==2){
         plotmin=2;
         plotmax=7;
-        ptbinsJetN=3;
+        ptbinsJetN=5;
         ptJetbins[0]=2;//={2,3,4,5};
         ptJetbins[1]=3;
         ptJetbins[2]=4;
         ptJetbins[3]=5;
         ptJetbins[4]=6;
         ptJetbins[5]=7;
-        inFilePrompt = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/efficiency/DjetEff_prompt_jetpt5.00_7.00.root","read");
-        inFileFD = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/efficiency/DjetEff_nonPrompt_jetpt5.00_7.00.root","read");
+        inFilePrompt = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_z04F/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt5.00_7.00.root","read");
+        inFileFD = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_z04F/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_nonPrompt_jetpt5.00_7.00.root","read");
 
     }
     else if(z==3){
-        plotmin=2;
-        plotmax=10;
-        ptbinsJetN=7;
-        //ptJetbins[6]={2,3,4,5,6,7};{2,3,4,5,6,7,8,10}
-        ptJetbins[0]=2;
-        ptJetbins[1]=3;
-        ptJetbins[2]=4;
-        ptJetbins[3]=5;
-        ptJetbins[4]=6;
-        ptJetbins[5]=7;
-        ptJetbins[6]=8;
-        ptJetbins[7]=10;
-        inFilePrompt = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/efficiency/DjetEff_prompt_jetpt7.00_10.00.root","read");
-        inFileFD = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/efficiency/DjetEff_nonPrompt_jetpt7.00_10.00.root","read");
-
-    }
-    else if(z==4){
-        plotmin=2;
-        plotmax=15;
-        ptbinsJetN=9;
-        //ptJetbins[4]={2,3,4,5,6,7,8,10,12,15};
-        ptJetbins[0]=2;
-        ptJetbins[1]=3;
-        ptJetbins[2]=4;
-        ptJetbins[3]=5;
-        ptJetbins[4]=6;
-        ptJetbins[5]=7;
-        ptJetbins[6]=8;
-        ptJetbins[7]=10;
-        ptJetbins[8]=12;
-        ptJetbins[9]=15;
-        inFilePrompt = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/efficiency/DjetEff_prompt_jetpt10.00_15.00.root","read");
-        inFileFD = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/efficiency/DjetEff_nonPrompt_jetpt10.00_15.00.root","read");
-
-    }
-    else if(z==5){
         plotmin=3;
-        plotmax=36;
-        ptbinsJetN=10;
-        //ptJetbins[4]={3,4,5,6,7,8,10,12,16,24,36};
+        plotmax=10;
+        ptbinsJetN=6;
+        //ptJetbins[6]={2,3,4,5,6,7};{2,3,4,5,6,7,8,10}
+       // ptJetbins[0]=2;
         ptJetbins[0]=3;
         ptJetbins[1]=4;
         ptJetbins[2]=5;
@@ -97,12 +62,47 @@ void drawEffZ( int Rpar = 4 , int z = 0)
         ptJetbins[4]=7;
         ptJetbins[5]=8;
         ptJetbins[6]=10;
-        ptJetbins[7]=12;
-        ptJetbins[8]=16;
-        ptJetbins[9]=24;
-        ptJetbins[10]=36;
-        inFilePrompt = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/efficiency/DjetEff_prompt_jetpt15.00_50.00.root","read");
-        inFileFD = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/efficiency/DjetEff_nonPrompt_jetpt15.00_50.00.root","read");
+        inFilePrompt = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_z04F/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt7.00_10.00.root","read");
+        inFileFD = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_z04F/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_nonPrompt_jetpt7.00_10.00.root","read");
+
+    }
+    else if(z==4){
+        plotmin=5;
+        plotmax=15;
+        ptbinsJetN=6;
+        //ptJetbins[4]={2,3,4,5,6,7,8,10,12,15};
+      //  ptJetbins[0]=2;
+       // ptJetbins[1]=3;
+       // ptJetbins[2]=4;
+        ptJetbins[0]=5;
+        ptJetbins[1]=6;
+        ptJetbins[2]=7;
+        ptJetbins[3]=8;
+        ptJetbins[4]=10;
+        ptJetbins[5]=12;
+        ptJetbins[6]=15;
+        inFilePrompt = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_z04F/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt10.00_15.00.root","read");
+        inFileFD = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_z04F/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_nonPrompt_jetpt10.00_15.00.root","read");
+
+    }
+    else if(z==5){
+        plotmin=5;
+        plotmax=36;
+        ptbinsJetN=8;
+        //ptJetbins[4]={3,4,5,6,7,8,10,12,16,24,36};
+    //    ptJetbins[0]=3;
+    //    ptJetbins[1]=4;
+        ptJetbins[0]=5;
+        ptJetbins[1]=6;
+        ptJetbins[2]=7;
+        ptJetbins[3]=8;
+        ptJetbins[4]=10;
+        ptJetbins[5]=12;
+        ptJetbins[6]=16;
+        ptJetbins[7]=24;
+        ptJetbins[8]=36;
+        inFilePrompt = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_z04F/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_prompt_jetpt15.00_50.00.root","read");
+        inFileFD = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_z04F/Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_nonPrompt_jetpt15.00_50.00.root","read");
 
     }
     Int_t jetpt[5] = {5,7,10,15,50};
@@ -159,7 +159,7 @@ void drawEffZ( int Rpar = 4 , int z = 0)
             hEffPrompt->GetYaxis()->SetLabelSize(0.045);
             hEffPrompt->GetYaxis()->SetTitleSize(0.05);
             hEffPrompt->GetXaxis()->SetRangeUser(plotmin,plotmax);
-            hEffPrompt->SetMaximum(hEffPrompt->GetMaximum()*3.5);
+            hEffPrompt->SetMaximum(hEffPrompt->GetMaximum()*4.5);
 
 
    hEffNonPrompt->SetTitle("");
@@ -176,7 +176,7 @@ void drawEffZ( int Rpar = 4 , int z = 0)
             hEffNonPrompt->GetYaxis()->SetLabelSize(0.045);
             hEffNonPrompt->GetYaxis()->SetTitleSize(0.05);
             hEffNonPrompt->GetXaxis()->SetRangeUser(plotmin,plotmax);
-            hEffNonPrompt->SetMaximum(hEffNonPrompt->GetMaximum()*2);
+            hEffNonPrompt->SetMaximum(hEffNonPrompt->GetMaximum()*2.5);
 
 
     TLegend *leg = nullptr;
@@ -192,7 +192,7 @@ void drawEffZ( int Rpar = 4 , int z = 0)
     pvALICE->SetTextFont(42);
     pvALICE->SetTextSize(0.038);
     pvALICE->SetTextAlign(11);
-    pvALICE->AddText("ALICE Preliminary");
+    pvALICE->AddText("This Thesis");
 
     TPaveText *pvEn= new TPaveText(0.15,0.80,0.8,0.85,"brNDC");
     pvEn->SetFillStyle(0);
@@ -237,7 +237,7 @@ void drawEffZ( int Rpar = 4 , int z = 0)
     pvEta->SetTextAlign(11);
     pvEta->AddText("|#it{#eta}_{lab}^{jet}| < 0.5");
     //pvEta->AddText("|#it{#eta}_{jet}| < 0.6");
-    hEffPrompt->GetYaxis()->SetRangeUser(1E-2,1);
+    hEffPrompt->GetYaxis()->SetRangeUser(6E-2,2.0);
 
     TCanvas *cEff = new TCanvas("cEff","cEff",1000,800);
     //cEff->SetBatch();
@@ -255,9 +255,9 @@ void drawEffZ( int Rpar = 4 , int z = 0)
     leg->Draw("same");
 
 
-    cEff->SaveAs(Form("DjetEff_Sim_2_%d.png",z));
-    cEff->SaveAs(Form("DjetEff_Sim_2_%d.pdf",z));
-    cEff->SaveAs(Form("DjetEff_Sim_2_%d.eps",z));
+ //   cEff->SaveAs(Form("DjetEff_Sim_2_%d.png",z));
+    cEff->SaveAs(Form("DjetEff_thesis_2_%d.pdf",z));
+  //  cEff->SaveAs(Form("DjetEff_Sim_2_%d.eps",z));
    // cEff->Print("DjetEff_Sim_log.pdf");
    // cEff->Print("DjetEff_Sim_log.eps");
    // cEff->Print("DjetEff_Sim_log.png");

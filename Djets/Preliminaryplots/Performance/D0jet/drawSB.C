@@ -50,7 +50,7 @@ void drawSB()
   // TFile *inFile = new TFile("/home/jackbauer/Work/alice/analysis/pp5TeV/D0jet/results_cutTight/DzeroR03_def_437_old0/Default/signalExtraction/JetPtSpectra_SB_eff.root"
 // "/home/basia/Work/alice/analysis/pPb_run2/DzeroR03_RefDPt3PythiaEff_BaseCuts/Default_jetMeas3_50_jetTrue3_50_ppbinning/signalExtraction/JetPtSpectra_SB_eff.root"
 //,"read");
-    TFile *inFile = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2.root/signalExtraction/JetPtSpectra_SB_eff.root","read");
+    TFile *inFile = new TFile("/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_X04/Default_AnalysisResults_Run2w18b.root/signalExtraction/JetPtSpectra_SB_eff.root","read");
 
 
      int bin1 = 0, bin2 = 4, bin3 = 8;
@@ -158,13 +158,13 @@ void drawSB()
 
     //TPaveText *pvALICE = new TPaveText(0.1995,0.90,0.6,0.94,"brNDC");
     //TPaveText *pvALICE = new TPaveText(0.18,0.90,0.6,0.94,"brNDC");
-    TPaveText *pvALICE = new TPaveText(0.18,0.890,0.6,0.93,"brNDC");
+    TPaveText *pvALICE = new TPaveText(0.175,0.890,0.6,0.93,"brNDC");
     pvALICE->SetFillStyle(0);
     pvALICE->SetBorderSize(0);
     pvALICE->SetTextFont(42);
     pvALICE->SetTextSize(0.048);
     pvALICE->SetTextAlign(11);
-    pvALICE->AddText("ALICE Preliminary");
+    pvALICE->AddText("This Thesis");
 
     //TPaveText *pvEn = new TPaveText(0.2,0.90,0.8,0.94,"brNDC");
     //TPaveText *pvEn = new TPaveText(0.168,0.90,0.8,0.94,"brNDC");
@@ -221,7 +221,7 @@ void drawSB()
     pvpt1->AddText(Form("%.0f < #it{p}_{T,D^{0}} < %.0f GeV/#it{c}",ptDbins[bin1],ptDbins[bin1+1]));
 
     //TPaveText *pvpt2 = new TPaveText(0.62,0.84,0.85,0.88,"brNDC");
-    TPaveText *pvpt2 = new TPaveText(0.62,0.86,0.85,0.86,"brNDC");
+    TPaveText *pvpt2 = new TPaveText(0.62,0.88,0.85,0.88,"brNDC");
     pvpt2->SetFillStyle(0);
     pvpt2->SetBorderSize(0);
     pvpt2->SetTextFont(42);
@@ -419,11 +419,11 @@ void drawSB()
     //cMass->SaveAs("DjetInMass_DPt_Perf.pdf");
     //cMass->SaveAs("DjetInMass_DPt_Perf.eps");
     //cMass->Print("DjetInMass_DPt_Perf_v2.pdf");
-    cMass->Print("DjetInMass_DPt_Perf_2.eps");
-    cMass->Print("DjetInMass_DPt_Perf_2.pdf");
-    cMass->Print("DjetInMass_DPt_Perf_2.png");
-    cMass->Print("DjetInMass_DPt_Perf_2.root");
-    cMass->Print("DjetInMass_DPt_Perf_2.C");
+//    cMass->Print("DjetInMass_DPt_Perf_2.eps");
+    cMass->Print("DjetInMass_DPt_thesis.pdf");
+//    cMass->Print("DjetInMass_DPt_Perf_2.png");
+//    cMass->Print("DjetInMass_DPt_Perf_2.root");
+ //   cMass->Print("DjetInMass_DPt_Perf_2.C");
 
 }
 

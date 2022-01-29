@@ -72,9 +72,9 @@ static TString fFiles[9] = {
     };
 
 static TString fFiles2[9] = {
-    "/home/kvapil/Desktop/auro/5TeV_forJakub_15Dec_v0/JetPtSpectrum_final_fullGlobal_addedCUTandJES_5TeVR02.root",
-    "/home/kvapil/Desktop/auro/5TeV_forJakub_15Dec_v0/JetPtSpectrum_final_fullGlobal_addedCUTandJES_5TeVR04.root",
-    "/home/kvapil/Desktop/auro/5TeV_forJakub_15Dec_v0/JetPtSpectrum_final_fullGlobal_addedCUTandJES_5TeVR06.root",
+    "/home/kvapil/Desktop/auro/Jakub_23_Feb_2021_jetpt/JetPtSpectrum_final_fullGlobal_addedCUTandJES_R02.root",
+    "/home/kvapil/Desktop/auro/Jakub_23_Feb_2021_jetpt/JetPtSpectrum_final_fullGlobal_addedCUTandJES_R04.root",
+    "/home/kvapil/Desktop/auro/Jakub_23_Feb_2021_jetpt/JetPtSpectrum_final_fullGlobal_addedCUTandJES_R06.root",
     };
 
 static TString fFiles13TeVforR[9] = {
@@ -84,9 +84,9 @@ static TString fFiles13TeVforR[9] = {
     };
 
 static TString fFiles5TeVforR[9] = {
-    "/home/kvapil/Desktop/auro/5TeV_forJakub_15Dec_sysGlobal_1/JetPtSpectrum_final_noneGlobal_separateCUTnoneJES_sysGlo1_R02_5TeV.root",
-    "/home/kvapil/Desktop/auro/5TeV_forJakub_15Dec_sysGlobal_1/JetPtSpectrum_final_noneGlobal_separateCUTnoneJES_sysGlo1_R04_5TeV.root",
-    "/home/kvapil/Desktop/auro/5TeV_forJakub_15Dec_sysGlobal_1/JetPtSpectrum_final_noneGlobal_separateCUTnoneJES_sysGlo1_R06_5TeV.root"
+    "/home/kvapil/Desktop/auro/Jakub_23_Feb_2021_jetpt/JetPtSpectrum_final_noneGlobal_separateCUTnoneJES_R02.root",
+    "/home/kvapil/Desktop/auro/Jakub_23_Feb_2021_jetpt/JetPtSpectrum_final_noneGlobal_separateCUTnoneJES_R04.root",
+    "/home/kvapil/Desktop/auro/Jakub_23_Feb_2021_jetpt/JetPtSpectrum_final_noneGlobal_separateCUTnoneJES_R06.root"
 };
 
 static TString fFiles13TeVforE[9] = {
@@ -96,9 +96,9 @@ static TString fFiles13TeVforE[9] = {
     };
 
 static TString fFiles5TeVforE[9] = {
-    "/home/kvapil/Desktop/auro/5_TeV_forJakub_15Dec_sysGlobal_2/JetPtSpectrum_final_noBRUnc_addedCUTandJES_R02.root",
-    "/home/kvapil/Desktop/auro/5_TeV_forJakub_15Dec_sysGlobal_2/JetPtSpectrum_final_noBRUnc_addedCUTandJES_R04.root",
-    "/home/kvapil/Desktop/auro/5_TeV_forJakub_15Dec_sysGlobal_2/JetPtSpectrum_final_noBRUnc_addedCUTandJES_R06.root"
+    "/home/kvapil/Desktop/auro/Jakub_23_Feb_2021_jetpt/JetPtSpectrum_final_noBRUnc_addedCUTandJES_R02.root",
+    "/home/kvapil/Desktop/auro/Jakub_23_Feb_2021_jetpt/JetPtSpectrum_final_noBRUnc_addedCUTandJES_R04.root",
+    "/home/kvapil/Desktop/auro/Jakub_23_Feb_2021_jetpt/JetPtSpectrum_final_noBRUnc_addedCUTandJES_R06.root"
 };
 
 
@@ -153,14 +153,14 @@ void finalJetSpectraInvUpdatedRatio(
 
     // ----------------------------------------------------------------
 
-    UInt_t xAxisBins = 8;
+    UInt_t xAxisBins = 10;
     UInt_t xAxisBins_rebin = 7;
-    Double_t *xAxis = new Double_t[xAxisBins+1]{5,6,8,10,12,14,20,30,50};
+    Double_t *xAxis = new Double_t[xAxisBins+1]{3,5,6,8,10,12,14,20,30,50,52};
     Double_t *xAxis_rebin = new Double_t[xAxisBins+1]{5,6,8,10,14,20,30,50};
-    Double_t *xAxisl = new Double_t[xAxisBins+1]{5,6,8,10,12,14,20,30,49.99};
-    Double_t *xAxisr = new Double_t[xAxisBins+1]{5,6,8,10,12,14,20,30,50};
-    Double_t *xAxis_rebinl = new Double_t[xAxisBins+1]{5,6,8,10,14,20,30,49.99};
-    Double_t *xAxis_rebinr = new Double_t[xAxisBins+1]{5,6,8,10,14,20,30,50};
+    Double_t *xAxisl = new Double_t[xAxisBins+1]{3,5,6,8,10,12,14,20,30,50,52};
+    Double_t *xAxisr = new Double_t[xAxisBins+1]{3,5,6,8,10,12,14,20,30,50,52};
+    Double_t *xAxis_rebinl = new Double_t[xAxisBins+1]{3,5,6,8,10,14,20,30,50,52};
+    Double_t *xAxis_rebinr = new Double_t[xAxisBins+1]{3,5,6,8,10,14,20,30,50,52};
   //  UInt_t xAxisBins = 5;
    // Double_t *xAxis = new Double_t[xAxisBins+1]{0.4,0.6,0.7,0.8,0.9,1.0};
    // plotRanges[0]=0; plotRanges[1]=2.1; plotRanges[2]=0.1; plotRanges[3]=3.5;
@@ -178,25 +178,25 @@ void finalJetSpectraInvUpdatedRatio(
 
     Int_t markers[3]{20,21,47};
     Double_t plotScale[3]{0.1,-999,10};
+    Double_t markersize = 1.5;
 
-   TH1D *s13_hData_binned[3],*s13_hData_binned_ratio[3];
-   TGraphAsymmErrors *s13_hData_binned_syst[3],*s13_hData_binned_ratio_syst[3];
-   for(Int_t iradius = 0; iradius < 3;iradius++){
-       std::tie(s13_hData_binned[iradius], s13_hData_binned_syst[iradius], s13_hData_binned_ratio[iradius], s13_hData_binned_ratio_syst[iradius])
-               =GetData(fFiles[iradius],"hData_binned","haeData_binned_syst","hData_binned_ratio","haeData_binned_syst_ratio");
-       PlaceOnPadData(Pad[0],s13_hData_binned_syst[iradius],s13_hData_binned[iradius],0.9,markers[iradius],plotScale[iradius]);
-       PlaceOnPadData(Pad[2*(iradius+1)],s13_hData_binned_ratio_syst[iradius],s13_hData_binned_ratio[iradius],0,markers[iradius],-999);
-   }
+    TH1D *s13_hData_binned[3],*s13_hData_binned_ratio[3];
+    TGraphAsymmErrors *s13_hData_binned_syst[3],*s13_hData_binned_ratio_syst[3];
+    for(Int_t iradius = 0; iradius < 3;iradius++){
+        std::tie(s13_hData_binned[iradius], s13_hData_binned_syst[iradius], s13_hData_binned_ratio[iradius], s13_hData_binned_ratio_syst[iradius])
+                =GetData(fFiles[iradius],"hData_binned","haeData_binned_syst","hData_binned_ratio","haeData_binned_syst_ratio");
+        PlaceOnPadData(Pad[0],s13_hData_binned_syst[iradius],nullptr,0.75,markers[iradius],plotScale[iradius]);
+        PlaceOnPadData(Pad[2*(iradius+1)],s13_hData_binned_ratio_syst[iradius],nullptr,0,markers[iradius],-999);
+    }
 
-   TH1D *s5_hData_binned[3],*s5_hData_binned_ratio[3];
-   TGraphAsymmErrors *s5_hData_binned_syst[3],*s5_hData_binned_ratio_syst[3];
-   for(Int_t iradius = 0; iradius < 3;iradius++){
-       std::tie(s5_hData_binned[iradius], s5_hData_binned_syst[iradius], s5_hData_binned_ratio[iradius], s5_hData_binned_ratio_syst[iradius])
-               =GetData(fFiles2[iradius],"hData_binned","haeData_binned_syst","hData_binned_ratio","haeData_binned_syst_ratio");
-       PlaceOnPadData(Pad[1],s5_hData_binned_syst[iradius],s5_hData_binned[iradius],0.9,markers[iradius],plotScale[iradius]);
-       PlaceOnPadData(Pad[2*(iradius+1)+1],s5_hData_binned_ratio_syst[iradius],s5_hData_binned_ratio[iradius],0,markers[iradius],-999);
-   }
-
+    TH1D *s5_hData_binned[3],*s5_hData_binned_ratio[3];
+    TGraphAsymmErrors *s5_hData_binned_syst[3],*s5_hData_binned_ratio_syst[3];
+    for(Int_t iradius = 0; iradius < 3;iradius++){
+        std::tie(s5_hData_binned[iradius], s5_hData_binned_syst[iradius], s5_hData_binned_ratio[iradius], s5_hData_binned_ratio_syst[iradius])
+                =GetData(fFiles2[iradius],"hData_binned","haeData_binned_syst","hData_binned_ratio","haeData_binned_syst_ratio");
+        PlaceOnPadData(Pad[1],s5_hData_binned_syst[iradius],nullptr,0.75,markers[iradius],plotScale[iradius]);
+        PlaceOnPadData(Pad[2*(iradius+1)+1],s5_hData_binned_ratio_syst[iradius],nullptr,0,markers[iradius],-999);
+    }
 
 
     TGraphAsymmErrors *s13_PowhegPythia8[3],*s13_PowhegPythia8_ratio[3];
@@ -259,6 +259,18 @@ void finalJetSpectraInvUpdatedRatio(
         }
     }
 
+    for(Int_t iradius = 0; iradius < 3;iradius++){
+        PlaceOnPadData(Pad[0],nullptr,s13_hData_binned[iradius],0.75,markers[iradius],plotScale[iradius]);
+        PlaceOnPadData(Pad[2*(iradius+1)],nullptr,s13_hData_binned_ratio[iradius],0,markers[iradius],-999);
+    }
+
+    for(Int_t iradius = 0; iradius < 3;iradius++){
+        PlaceOnPadData(Pad[1],nullptr,s5_hData_binned[iradius],0.75,markers[iradius],plotScale[iradius]);
+        PlaceOnPadData(Pad[2*(iradius+1)+1],nullptr,s5_hData_binned_ratio[iradius],0,markers[iradius],-999);
+    }
+
+
+
     TLegend *leg =nullptr;
     //Double_t shift = 0.06*(2+ePowhegPythia6+ePowhegPythia8+ePythia6+ePythia8+ePythia8SoftMode2+ePowhegPythia6dijet);
     Double_t shift = 0.06*(2+3);
@@ -308,7 +320,7 @@ void finalJetSpectraInvUpdatedRatio(
     ptInfo->SetTextFont(43);
     ptInfo->SetTextSize(18);
     ptInfo->AddText("Charged jets, Anti-#it{k}_{T}");
-    ptInfo->AddText(Form("|#eta_{ch. jet}| < 0.9 - R, with D^{0} %d < #it{p}_{T,D^{0}} < %d GeV/#it{c}",static_cast<int>(2),static_cast<int>(36)));
+    ptInfo->AddText(Form("|#it{#eta}_{ch. jet}| < 0.9 - R, with D^{0} %d < #it{p}_{T,D^{0}} < %d GeV/#it{c}",static_cast<int>(2),static_cast<int>(36)));
 
     TPaveText *ptRadius[3];
     ptRadius[0] = new TPaveText(0.19,0.88,0.95,0.95,"NB NDC");
@@ -344,7 +356,10 @@ void finalJetSpectraInvUpdatedRatio(
 
     TerminateCanvas8Pad(Pad,placeholder);
 
+    canvas->SaveAs("xsecF.pdf");
+    canvas->SaveAs("xsecF.png");
 
+return;
 
    //*************************************************************************************************
    //******************************************DATA***************************************************
@@ -374,13 +389,6 @@ void finalJetSpectraInvUpdatedRatio(
    std::tie(s13_hData_binned24_ratio, s13_hData_binned_syst24_ratio) = CalculateDataRRatio(s13_forR_hData_binned_ratio[0],s13_forR_hData_binned_ratio_syst[0],s13_forR_hData_binned_CutSys[0],s13_forR_hData_binned_ratio[1],s13_forR_hData_binned_ratio_syst[1],s13_forR_hData_binned_CutSys[1],s13_forR_hData_binned_JESSys_R24,-999);
    std::tie(s13_hData_binned26_ratio, s13_hData_binned_syst26_ratio) = CalculateDataRRatio(s13_forR_hData_binned_ratio[0],s13_forR_hData_binned_ratio_syst[0],s13_forR_hData_binned_CutSys[0],s13_forR_hData_binned_ratio[2],s13_forR_hData_binned_ratio_syst[2],s13_forR_hData_binned_CutSys[2],s13_forR_hData_binned_JESSys_R26,-999);
 
-   PlaceOnPadData(Pad2[0],s13_hData_binned_syst24,s13_hData_binned24,0.9,20,0.5,"+");
-   PlaceOnPadData(Pad2[0],s13_hData_binned_syst26,s13_hData_binned26,0.9,21,-999);
-   PlaceOnPadData(Pad2[2],s13_hData_binned_syst24_ratio,s13_hData_binned24_ratio,0,20,-999);
-   PlaceOnPadData(Pad2[4],s13_hData_binned_syst26_ratio,s13_hData_binned26_ratio,0,21,-999);
-
-
-
 
    TH1D *s5_forR_hData_binned[3],*s5_forR_hData_binned_ratio[3];
    TGraphAsymmErrors *s5_forR_hData_binned_syst[3],*s5_forR_hData_binned_ratio_syst[3];
@@ -400,10 +408,15 @@ void finalJetSpectraInvUpdatedRatio(
    std::tie(s5_hData_binned24_ratio, s5_hData_binned_syst24_ratio) = CalculateDataRRatio(s5_forR_hData_binned_ratio[0],s5_forR_hData_binned_ratio_syst[0],s5_forR_hData_binned_CutSys[0],s5_forR_hData_binned_ratio[1],s5_forR_hData_binned_ratio_syst[1],s5_forR_hData_binned_CutSys[1],s5_forR_hData_binned_JESSys_R24,-999);
    std::tie(s5_hData_binned26_ratio, s5_hData_binned_syst26_ratio) = CalculateDataRRatio(s5_forR_hData_binned_ratio[0],s5_forR_hData_binned_ratio_syst[0],s5_forR_hData_binned_CutSys[0],s5_forR_hData_binned_ratio[2],s5_forR_hData_binned_ratio_syst[2],s5_forR_hData_binned_CutSys[2],s5_forR_hData_binned_JESSys_R26,-999);
 
-   PlaceOnPadData(Pad2[1],s5_hData_binned_syst24,s5_hData_binned24,0.9,20,0.5,"+");
-   PlaceOnPadData(Pad2[1],s5_hData_binned_syst26,s5_hData_binned26,0.9,21,-999);
-   PlaceOnPadData(Pad2[3],s5_hData_binned_syst24_ratio,s5_hData_binned24_ratio,0,20,-999);
-   PlaceOnPadData(Pad2[5],s5_hData_binned_syst26_ratio,s5_hData_binned26_ratio,0,21,-999);
+   PlaceOnPadData(Pad2[0],s13_hData_binned_syst24,nullptr,0.75,20,0.5,"+");
+   PlaceOnPadData(Pad2[0],s13_hData_binned_syst26,nullptr,0.75,21,-999);
+   PlaceOnPadData(Pad2[2],s13_hData_binned_syst24_ratio,nullptr,0,20,-999);
+   PlaceOnPadData(Pad2[4],s13_hData_binned_syst26_ratio,nullptr,0,21,-999);
+
+   PlaceOnPadData(Pad2[1],s5_hData_binned_syst24,nullptr,0.75,20,0.5,"+");
+   PlaceOnPadData(Pad2[1],s5_hData_binned_syst26,nullptr,0.75,21,-999);
+   PlaceOnPadData(Pad2[3],s5_hData_binned_syst24_ratio,nullptr,0,20,-999);
+   PlaceOnPadData(Pad2[5],s5_hData_binned_syst26_ratio,nullptr,0,21,-999);
 
 
     //******************************************POWHEG+PYTHIA8***************************************************
@@ -495,6 +508,18 @@ void finalJetSpectraInvUpdatedRatio(
         PlaceOnPad(Pad2[3],s5_Pythia8SoftMode224_ratio,kGreen+2,-1,7,"same1",-1);
         PlaceOnPad(Pad2[5],s5_Pythia8SoftMode226_ratio,kGreen+2,-1,7,"same1",-1);
     }
+
+    PlaceOnPadData(Pad2[0],nullptr,s13_hData_binned24,0.75,20,0.5,"+");
+    PlaceOnPadData(Pad2[0],nullptr,s13_hData_binned26,0.75,21,-999);
+    PlaceOnPadData(Pad2[2],nullptr,s13_hData_binned24_ratio,0,20,-999);
+    PlaceOnPadData(Pad2[4],nullptr,s13_hData_binned26_ratio,0,21,-999);
+
+    PlaceOnPadData(Pad2[1],nullptr,s5_hData_binned24,0.75,20,0.5,"+");
+    PlaceOnPadData(Pad2[1],nullptr,s5_hData_binned26,0.75,21,-999);
+    PlaceOnPadData(Pad2[3],nullptr,s5_hData_binned24_ratio,0,20,-999);
+    PlaceOnPadData(Pad2[5],nullptr,s5_hData_binned26_ratio,0,21,-999);
+
+
     TLegend *leg2=nullptr;
     //Double_t shift = 0.06*(2+ePowhegPythia6+ePowhegPythia8+ePythia6+ePythia8+ePythia8SoftMode2+ePowhegPythia6dijet);
     //leg2 = new TLegend(0.35,0.85-(0.06*5),0.85,0.85,nullptr,"NB NDC");
@@ -542,13 +567,15 @@ void finalJetSpectraInvUpdatedRatio(
     pratio[1]->Draw();
     TerminateCanvas6Pad(Pad2,placeholder2);
 
+    canvas2->SaveAs("xsecRF.pdf");
+    canvas2->SaveAs("xsecRF.png");
 
 
     TCanvas *canvas3;
     TPad **Pad3;
     TH1D **placeholder3;
     //std::tie(canvas3,Pad3,placeholder3) = PrepareCanvas4Pad(xAxisBins_rebin,xAxis_rebin);
-    std::tie(canvas3,Pad3,placeholder3) = PrepareCanvas3x2Pad(xAxisBins_rebin,xAxis_rebinl,xAxis_rebinr);
+    std::tie(canvas3,Pad3,placeholder3) = PrepareCanvas3x2Pad(xAxisBins_rebin+2,xAxis_rebinl,xAxis_rebinr);
 
 
     TH1D *s13_forE_hData_binned[3],*s13_forE_hData_binned_ratio[3];
@@ -587,9 +614,8 @@ void finalJetSpectraInvUpdatedRatio(
         std::cout<<"d"<<std::endl;
         std::tie(s13s5_hData_binned[iEn], s13s5_hData_binned_syst[iEn]) = CalculateDataRRatio(s13_forE_hData_REbinned[iEn],s13_forE_hData_REbinned_syst[iEn],nullptr,s5_forE_hData_binned[iEn],s5_forE_hData_binned_syst[iEn],nullptr,nullptr,-999);
         std::tie(s13s5_hData_binned_ratio[iEn], s13s5_hData_binned_syst_ratio[iEn]) = CalculateDataRRatio(s13_forE_hData_REbinned_ratio[iEn],s13_forE_hData_REbinned_ratio_syst[iEn],nullptr,s5_forE_hData_binned_ratio[iEn],s5_forE_hData_binned_ratio_syst[iEn],nullptr,nullptr,-999);
-std::cout<<"e"<<std::endl;
-        PlaceOnPadData(Pad3[iEn],s13s5_hData_binned_syst[iEn],s13s5_hData_binned[iEn],0.9,markers[iEn],shift2[iEn],-999);
-        PlaceOnPadData(Pad3[iEn+3],s13s5_hData_binned_syst_ratio[iEn],s13s5_hData_binned_ratio[iEn],0,markers[iEn],-999);
+        PlaceOnPadData(Pad3[iEn],s13s5_hData_binned_syst[iEn],nullptr,0.75,markers[iEn],shift2[iEn],-999);
+        PlaceOnPadData(Pad3[iEn+3],s13s5_hData_binned_syst_ratio[iEn],nullptr,0,markers[iEn],-999);
     }
 
 
@@ -638,6 +664,13 @@ std::cout<<"e"<<std::endl;
       PlaceOnPad(Pad3[iEn+3],s13s5_Pythia6_ratio[iEn],kGreen+2,-1,7,"same1",-999);
       }
 
+      for(Int_t iEn = 0;iEn<3;iEn++){
+          PlaceOnPadData(Pad3[iEn],nullptr,s13s5_hData_binned[iEn],0.75,markers[iEn],shift2[iEn],-999);
+          PlaceOnPadData(Pad3[iEn+3],nullptr,s13s5_hData_binned_ratio[iEn],0,markers[iEn],-999);
+      }
+
+
+
       TPaveText *ptInfo2 = new TPaveText(0.2,0.69,0.85,0.85,"NB NDC");
       ptInfo2->SetBorderSize(0);
       ptInfo2->SetFillStyle(0);
@@ -645,7 +678,7 @@ std::cout<<"e"<<std::endl;
       ptInfo2->SetTextFont(43);
       ptInfo2->SetTextSize(16);
       ptInfo2->AddText("Charged jets, Anti-#it{k}_{T}");
-      ptInfo2->AddText(Form("|#eta_{ch. jet}| < 0.9 - R, with D^{0} %d < #it{p}_{T,D^{0}} < %d GeV/#it{c}",static_cast<int>(2),static_cast<int>(36)));
+      ptInfo2->AddText(Form("|#it{#eta}_{ch. jet}| < 0.9 - R, with D^{0} %d < #it{p}_{T,D^{0}} < %d GeV/#it{c}",static_cast<int>(2),static_cast<int>(36)));
 
       TPaveText *ptRadius2[3];
       ptRadius2[0] = new TPaveText(0.82,0.85,0.95,0.92,"NB NDC");
@@ -701,6 +734,9 @@ std::cout<<"e"<<std::endl;
       //ptRadius2[2]->Draw();
 
       TerminateCanvas3x2Pad(Pad3,placeholder3);
+
+      canvas3->SaveAs("xsecEF.pdf");
+      canvas3->SaveAs("xsecEF.png");
 
 return;
 
@@ -1137,8 +1173,8 @@ void PlaceOnPad(TPad* pad,TGraphAsymmErrors* histo, Color_t ci, Style_t style, S
    if(style!=-1) histo->SetMarkerStyle(style);
     if(linestyle!=-1)histo->SetLineStyle(linestyle);
    // histo->SetFillStyle(3005);
-   // histo->SetMarkerSize(markersize); //add up
-    histo->SetLineWidth(2);
+    histo->SetMarkerSize(0.75); //add up
+    histo->SetLineWidth(1);
     if(scale>-1){
         TString tmp = "";
         TGraphAsymmErrors* histo_tmp = dynamic_cast<TGraphAsymmErrors*>(histo->Clone(tmp+histo->GetName()+"_plotCp"));
@@ -1165,8 +1201,8 @@ void PlaceOnPad(TPad* pad,TH1D* histo, Color_t ci, Style_t style, Style_t linest
     histo->SetMarkerStyle(style);
     histo->SetLineStyle(linestyle);
    // histo->SetFillStyle(3005);
-   // histo->SetMarkerSize(markersize); //add up
-    histo->SetLineWidth(2);
+    histo->SetMarkerSize(0.75); //add up
+    histo->SetLineWidth(1);
     if(scale>-1){
         TString tmp = "";
         TH1D* histo_tmp = dynamic_cast<TH1D*>(histo->Clone(tmp+histo->GetName()+"_plotCp"));
@@ -1187,12 +1223,15 @@ void PlaceOnPadData(TPad* pad,TGraphAsymmErrors* histo1, TH1D* histo2, Size_t ma
     Color_t ci;// = static_cast<Color_t>(TColor::GetColor("#990000"));
     //histo1->SetLineColor(ci);
     //histo1->SetMarkerColor(ci);
+  if(histo1){
     histo1->SetMarkerStyle(markerstyle);
     histo1->SetMarkerSize(markersize);
     ci = static_cast<Color_t>(TColor::GetColor("#cccccc"));
     histo1->SetFillColor(ci);
     histo1->SetLineColor(ci);
     histo1->SetLineWidth(0);
+    histo1->SetMarkerColor(kRed+2);
+    histo1->SetLineColor(kRed+2);
     if(scale>-999){
         TString tmp = "";
         TGraphAsymmErrors* histo_tmp = dynamic_cast<TGraphAsymmErrors*>(histo1->Clone(tmp+histo1->GetName()+"_plotCp"));
@@ -1206,8 +1245,13 @@ void PlaceOnPadData(TPad* pad,TGraphAsymmErrors* histo1, TH1D* histo2, Size_t ma
         histo_tmp->Draw("2p same");
     }    else histo1->Draw("2p same");
     //data central w stat. unc.
+   }
+  if(histo2){
     histo2->SetMarkerStyle(markerstyle);
     histo2->SetMarkerSize(markersize);
+    histo2->SetMarkerColor(kRed+2);
+    histo2->SetLineColor(kRed+2);
+    histo2->SetLineWidth(1);
     if(scale>-999){
         TString tmp = "";
         TH1D* histo_tmp = dynamic_cast<TH1D*>(histo2->Clone(tmp+histo2->GetName()+"_plotCp"));
@@ -1221,6 +1265,7 @@ void PlaceOnPadData(TPad* pad,TGraphAsymmErrors* histo1, TH1D* histo2, Size_t ma
         //}
         histo_tmp->Draw("same p  e0 x0");
     }    else histo2->Draw("same p  e0 x0");
+  }
 };
 
 std::tuple<TCanvas*, TPad**, TH1D**> PrepareCanvas8Pad(UInt_t xAxisBins, Double_t *xAxisl, Double_t *xAxisr){
@@ -1305,6 +1350,8 @@ std::tuple<TCanvas*, TPad**, TH1D**> PrepareCanvas8Pad(UInt_t xAxisBins, Double_
             pad[ipad]->SetTopMargin(0.);
         }
 
+        //if(ipad==0 || ipad==1) pad[ipad]->SetTicky(0.5);
+
         FinalSpectrum->cd();
     }
 
@@ -1335,16 +1382,16 @@ std::tuple<TCanvas*, TPad**, TH1D**> PrepareCanvas8Pad(UInt_t xAxisBins, Double_
         //left
         if(ipad<2){
            placeholder[ipad]->SetMinimum(50E-9);
-           placeholder[ipad]->SetMaximum(800);
+           placeholder[ipad]->SetMaximum(1750);
         }
         //right
         else{
            placeholder[ipad]->SetMinimum(0.05);
-           placeholder[ipad]->SetMaximum(3.3);
+           placeholder[ipad]->SetMaximum(3.45);
         }
 
         if(ipad>5)placeholder[ipad]->GetXaxis()->SetTitle("#it{p}_{T,ch. jet} (GeV/#it{c})");
-        if(ipad<2)placeholder[ipad]->GetYaxis()->SetTitle("#frac{d^{2}#it{#sigma}}{d#it{p}_{T,ch. jet}d#it{#eta_{T,ch. jet}}} [mb (GeV/#it{c})^{#minus1}]");
+        if(ipad<2)placeholder[ipad]->GetYaxis()->SetTitle("#frac{d^{2}#it{#sigma}}{d#it{p}_{T,ch. jet}d#it{#eta}_{ch. jet}} [mb (GeV/#it{c})^{#minus1}]");
         if(ipad==4)placeholder[ipad]->GetYaxis()->SetTitle("MC/Data");
         if(ipad==4)placeholder[ipad]->GetYaxis()->CenterTitle();
 
@@ -1367,7 +1414,9 @@ std::tuple<TCanvas*, TPad**, TH1D**> PrepareCanvas8Pad(UInt_t xAxisBins, Double_
         placeholder[ipad]->GetYaxis()->SetDecimals();
         }
         if(ipad>1)placeholder[ipad]->GetYaxis()->SetNdivisions(5, 5, 0, kTRUE);
+        else placeholder[ipad]->GetYaxis()->SetNdivisions(5, 0, 0, kTRUE);
         if(ipad==6 || ipad==7) placeholder[ipad]->GetYaxis()->SetTickLength(0.04);
+
 
         placeholder[ipad]->Draw();
     }
@@ -1428,6 +1477,7 @@ std::tuple<TCanvas*, TPad**, TH1D**> PrepareCanvas6Pad(UInt_t xAxisBins, Double_
         if(ipad ==5) pad[ipad] = new TPad("pad5", "pad5",innerPadWidth+marginLeft-marginLeftForXAxis ,0  ,1     ,innerPadHeight+marginBottom);
         pad[ipad]->Draw();
         pad[ipad]->cd();
+        //pad[ipad]->SetLogx();
 
         //left column
         if(ipad%2==0){
@@ -1497,7 +1547,7 @@ std::tuple<TCanvas*, TPad**, TH1D**> PrepareCanvas6Pad(UInt_t xAxisBins, Double_
             }
 
             if(ipad>3)placeholder[ipad]->GetXaxis()->SetTitle("#it{p}_{T,ch. jet} (GeV/#it{c})");
-            if(ipad<2)placeholder[ipad]->GetYaxis()->SetTitle("#frac{d^{2}#it{#sigma^{R=0.2}}}{d#it{p}_{T,ch. jet}d#it{#eta_{T,ch. jet}}}/#frac{d^{2}#it{#sigma^{R=X}}}{d#it{p}_{T,ch. jet}d#it{#eta_{T,ch. jet}}}");
+            if(ipad<2)placeholder[ipad]->GetYaxis()->SetTitle("#frac{d^{2}#it{#sigma^{R=0.2}}}{d#it{p}_{T,ch. jet}d#it{#eta}_{ch. jet}}/#frac{d^{2}#it{#sigma^{R=X}}}{d#it{p}_{T,ch. jet}d#it{#eta}_{ch. jet}}");
             //else if(ipad==4)placeholder[ipad]->GetYaxis()->SetTitle("MC/Data");
 
             placeholder[ipad]->GetYaxis()->SetTitleFont(43);
@@ -1624,7 +1674,7 @@ std::tuple<TCanvas*, TPad**, TH1D**> PrepareCanvas3x2Pad(UInt_t xAxisBins, Doubl
             }
 
             if(ipad>2)placeholder[ipad]->GetXaxis()->SetTitle("#it{p}_{T,ch. jet} (GeV/#it{c})");
-            if(ipad==0)placeholder[ipad]->GetYaxis()->SetTitle("#frac{d^{2}#it{#sigma^{13 TeV}}}{d#it{p}_{T,ch. jet}d#it{#eta_{T,ch. jet}}}/#frac{d^{2}#it{#sigma^{5 TeV}}}{d#it{p}_{T,ch. jet}d#it{#eta_{T,ch. jet}}}");
+            if(ipad==0)placeholder[ipad]->GetYaxis()->SetTitle("#frac{d^{2}#it{#sigma^{13 TeV}}}{d#it{p}_{T,ch. jet}d#it{#eta}_{ch. jet}}/#frac{d^{2}#it{#sigma^{5 TeV}}}{d#it{p}_{T,ch. jet}d#it{#eta}_{ch. jet}}");
             if(ipad==3){placeholder[ipad]->GetYaxis()->SetTitle("MC/Data");
               placeholder[ipad]->GetYaxis()->CenterTitle();
             }
@@ -1734,7 +1784,7 @@ std::tuple<TCanvas*, TPad**, TH1D**> PrepareCanvas4Pad(UInt_t xAxisBins, Double_
             placeholder[ipad]->SetMaximum(1.99);
         }
         if(ipad==3)placeholder[ipad]->GetXaxis()->SetTitle("#it{p}_{T,ch. jet} (GeV/#it{c})");
-        if(ipad==0)placeholder[ipad]->GetYaxis()->SetTitle("#frac{d^{2}#it{#sigma^{13TeV}}}{d#it{p}_{T,ch. jet}d#it{#eta_{T,ch. jet}}}/#frac{d^{2}#it{#sigma^{5TeV}}}{d#it{p}_{T,ch. jet}d#it{#eta_{T,ch. jet}}}");
+        if(ipad==0)placeholder[ipad]->GetYaxis()->SetTitle("#frac{d^{2}#it{#sigma^{13TeV}}}{d#it{p}_{T,ch. jet}d#it{#eta}_{ch. jet}}/#frac{d^{2}#it{#sigma^{5TeV}}}{d#it{p}_{T,ch. jet}d#it{#eta}_{ch. jet}}");
         if(ipad==2)placeholder[ipad]->GetYaxis()->SetTitle("MC/Data");
         placeholder[ipad]->GetYaxis()->SetTitleFont(43);
         placeholder[ipad]->GetXaxis()->SetTitleFont(43);
