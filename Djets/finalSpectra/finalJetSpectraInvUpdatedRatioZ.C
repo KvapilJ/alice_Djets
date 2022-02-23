@@ -80,7 +80,7 @@ void drawFinal(TString outPlotDir);
     "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_z06F/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/finalSpectraNEW5/JetPtSpectrum_final_PDF_noneGlobal_addedCUTandJES.root",
     };*/
 //13tev
-/*
+
 static TString fFiles[12] = {
     "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_z02F/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/finalSpectraNEW2/JetPtSpectrum_final_PDF_noneGlobal_addedCUTandJES.root",
     "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_z02F/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/finalSpectraNEW3/JetPtSpectrum_final_PDF_noneGlobal_addedCUTandJES.root",
@@ -95,8 +95,10 @@ static TString fFiles[12] = {
     "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_z06F/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/finalSpectraNEW4/JetPtSpectrum_final_PDF_noneGlobal_addedCUTandJES.root",
     "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_z06F/Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/finalSpectraNEW5/JetPtSpectrum_final_PDF_noneGlobal_addedCUTandJES.root",
     };
-*/
 
+
+bool isfive = false;
+/*
 static TString fFiles[12] = {
     "/home/kvapil/Desktop/auro/Jakub_z_R02/Jetpt5_7JetPtSpectrum_final_PDF_noneGlobal_addedCUTandJES.root",
     "/home/kvapil/Desktop/auro/Jakub_z_R02/Jetpt7_10JetPtSpectrum_final_PDF_noneGlobal_addedCUTandJES.root",
@@ -111,7 +113,7 @@ static TString fFiles[12] = {
     "/home/kvapil/Desktop/auro/Jakub_z_R06/Jetpt10_15JetPtSpectrum_final_PDF_noneGlobal_addedCUTandJES.root",
     "/home/kvapil/Desktop/auro/Jakub_z_R06/Jetpt15_50JetPtSpectrum_final_PDF_noneGlobal_addedCUTandJES.root",
     };
-
+*/
 static TString fFiles2[9] = {
     "/home/kvapil/Desktop/auro/5TeV_forJakub_15Dec_v0/JetPtSpectrum_final_fullGlobal_addedCUTandJES_5TeVR02.root",
     "/home/kvapil/Desktop/auro/5TeV_forJakub_15Dec_v0/JetPtSpectrum_final_fullGlobal_addedCUTandJES_5TeVR04.root",
@@ -284,8 +286,8 @@ void finalJetSpectraInvUpdatedRatioZ(
         for(Int_t iradius = 0; iradius < 12;iradius++){
            std::tie(s13_Pythia8[iradius], s13_Pythia8_ratio[iradius], s13_Pythia8_var[iradius])
                    =GetSim(dummy+"13TeV"+Form("%d",iradius), fFiles[iradius],"Pythia8",0);
-           PlaceOnPad(Pad[2*iradius-iradius%4],s13_Pythia8[iradius],kViolet+2,-1,6,"same1",-999);
-           PlaceOnPad(Pad[2*iradius-iradius%4+4],s13_Pythia8_ratio[iradius],kViolet+2,-1,6,"same1",-999);
+           PlaceOnPad(Pad[2*iradius-iradius%4],s13_Pythia8[iradius],kOrange+7,-1,6,"same1",-999);
+           PlaceOnPad(Pad[2*iradius-iradius%4+4],s13_Pythia8_ratio[iradius],kOrange+7,-1,6,"same1",-999);
         }
      /*   for(Int_t iradius = 0; iradius < 3;iradius++){
            std::tie(s5_Pythia8[iradius], s5_Pythia8_ratio[iradius], s5_Pythia8_var[iradius])
@@ -304,8 +306,8 @@ void finalJetSpectraInvUpdatedRatioZ(
         for(Int_t iradius = 0; iradius < 12;iradius++){
            std::tie(s13_Pythia8SoftMode2[iradius], s13_Pythia8SoftMode2_ratio[iradius], s13_Pythia8SoftMode2_var[iradius])
                    =GetSim(dummy+"13TeV"+Form("%d",iradius), fFiles[iradius],"Pythia8Soft2",0);
-           PlaceOnPad(Pad[2*iradius-iradius%4],s13_Pythia8SoftMode2[iradius],kGreen+2,-1,7,"same1",-999);
-           PlaceOnPad(Pad[2*iradius-iradius%4+4],s13_Pythia8SoftMode2_ratio[iradius],kGreen+2,-1,7,"same1",-999);
+           PlaceOnPad(Pad[2*iradius-iradius%4],s13_Pythia8SoftMode2[iradius],kGreen+3,-1,2,"same1",-999);
+           PlaceOnPad(Pad[2*iradius-iradius%4+4],s13_Pythia8SoftMode2_ratio[iradius],kGreen+3,-1,2,"same1",-999);
         }
       /*  for(Int_t iradius = 0; iradius < 3;iradius++){
            std::tie(s5_Pythia8SoftMode2[iradius], s5_Pythia8SoftMode2_ratio[iradius], s5_Pythia8SoftMode2_var[iradius])
@@ -347,15 +349,15 @@ void finalJetSpectraInvUpdatedRatioZ(
         ptRadius[s]->SetTextFont(43);
         ptRadius[s]->SetTextSize(19);
     }
-    ptRadius[0]->AddText("R=0.2");
-    ptRadius[1]->AddText("R=0.4");
-    ptRadius[2]->AddText("R=0.6");
+    ptRadius[0]->AddText("#it{R}=0.2");
+    ptRadius[1]->AddText("#it{R}=0.4");
+    ptRadius[2]->AddText("#it{R}=0.6");
 
     TPaveText *ptRadius2[12];
     ptRadius2[0] = new TPaveText(0.25,0.4,0.95,0.8,"NB NDC");
     ptRadius2[1] = new TPaveText(0.1,0.75,0.95,0.8,"NB NDC");
     ptRadius2[2] = new TPaveText(0.09,0.75,0.95,0.8,"NB NDC");
-    ptRadius2[3] = new TPaveText(0.08,0.75,0.95,0.8,"NB NDC");
+    ptRadius2[3] = new TPaveText(0.06,0.75,0.95,0.8,"NB NDC");
 
     ptRadius2[4] = new TPaveText(0.25,0.9,0.95,0.95,"NB NDC");
     ptRadius2[5] = new TPaveText(0.1,0.9,0.95,0.95,"NB NDC");
@@ -370,43 +372,43 @@ void finalJetSpectraInvUpdatedRatioZ(
         ptRadius2[s]->SetFillStyle(0);
         ptRadius2[s]->SetTextAlign(13);
         ptRadius2[s]->SetTextFont(43);
-        ptRadius2[s]->SetTextSize(15);
+        ptRadius2[s]->SetTextSize(19);
     }
 
     TPaveText *ptRadius3[12];
     ptRadius3[0] = new TPaveText(0.25,0.3,0.95,0.68,"NB NDC");
     ptRadius3[1] = new TPaveText(0.1,0.6,0.95,0.72,"NB NDC");
     ptRadius3[2] = new TPaveText(0.09,0.6,0.95,0.72,"NB NDC");
-    ptRadius3[3] = new TPaveText(0.55,0.75,0.95,0.8,"NB NDC");
+    ptRadius3[3] = new TPaveText(0.09,0.6,0.95,0.72,"NB NDC");
     for(Int_t s = 0; s<4;s++){
         ptRadius3[s]->SetBorderSize(0);
         ptRadius3[s]->SetFillStyle(0);
         ptRadius3[s]->SetTextAlign(13);
         ptRadius3[s]->SetTextFont(43);
-        ptRadius3[s]->SetTextSize(15);
+        ptRadius3[s]->SetTextSize(19);
     }
 
    // ptRadius2[0]->AddText("5 < p_{T,jet} < 7 GeV/#it{c} (p_{T,D} > 2 GeV/#it{c})");
    // ptRadius2[1]->AddText("7 < p_{T,jet} < 10 GeV/#it{c} (p_{T,D} > 4 GeV/#it{c})");
    // ptRadius2[2]->AddText("10 < p_{T,jet} < 15 GeV/#it{c} (p_{T,D} > 5 GeV/#it{c})");
    // ptRadius2[3]->AddText("15 < p_{T,jet} < 50 GeV/#it{c} (p_{T,D} > 10 GeV/#it{c})");
-    ptRadius2[0]->AddText("5 < p_{T,jet} < 7 GeV/#it{c}");
-    ptRadius2[1]->AddText("7 < p_{T,jet} < 10 GeV/#it{c}");
-    ptRadius2[2]->AddText("10 < p_{T,jet} < 15 GeV/#it{c}");
-    ptRadius2[3]->AddText("15 < p_{T,jet} < 50 GeV/#it{c}");
-    ptRadius3[0]->AddText("p_{T,D} > 2 GeV/#it{c}");
-    ptRadius3[1]->AddText("p_{T,D} > 4 GeV/#it{c}");
-    ptRadius3[2]->AddText("p_{T,D} > 5 GeV/#it{c}");
-    ptRadius3[3]->AddText("p_{T,D} > 10 GeV/#it{c}");
+    ptRadius2[0]->AddText("5 < #it{p}_{T,ch. jet} < 7 GeV/#it{c}");
+    ptRadius2[1]->AddText("7 < #it{p}_{T,ch. jet} < 10 GeV/#it{c}");
+    ptRadius2[2]->AddText("10 < #it{p}_{T,ch. jet} < 15 GeV/#it{c}");
+    ptRadius2[3]->AddText("15 < #it{p}_{T,ch. jet} < 50 GeV/#it{c}");
+    ptRadius3[0]->AddText("#it{p}_{T,D^{0}} > 2 GeV/#it{c}");
+    ptRadius3[1]->AddText("#it{p}_{T,D^{0}} > 4 GeV/#it{c}");
+    ptRadius3[2]->AddText("#it{p}_{T,D^{0}} > 5 GeV/#it{c}");
+    ptRadius3[3]->AddText("#it{p}_{T,D^{0}} > 10 GeV/#it{c}");
 
-    ptRadius2[4]->AddText("p_{T,D} > 2 GeV/#it{c}");
-    ptRadius2[5]->AddText("p_{T,D} > 3 GeV/#it{c}");
-    ptRadius2[6]->AddText("p_{T,D} > 5 GeV/#it{c}");
-    ptRadius2[7]->AddText("p_{T,D} > 5 GeV/#it{c}");
-    ptRadius2[8]->AddText("p_{T,D} > 2 GeV/#it{c}");
-    ptRadius2[9]->AddText("p_{T,D} > 3 GeV/#it{c}");
-    ptRadius2[10]->AddText("p_{T,D} > 5 GeV/#it{c}");
-    ptRadius2[11]->AddText("p_{T,D} > 5 GeV/#it{c}");
+    ptRadius2[4]->AddText("#it{p}_{T,D^{0}} > 2 GeV/#it{c}");
+    ptRadius2[5]->AddText("#it{p}_{T,D^{0}} > 3 GeV/#it{c}");
+    ptRadius2[6]->AddText("#it{p}_{T,D^{0}} > 5 GeV/#it{c}");
+    ptRadius2[7]->AddText("#it{p}_{T,D^{0}} > 5 GeV/#it{c}");
+    ptRadius2[8]->AddText("#it{p}_{T,D^{0}} > 2 GeV/#it{c}");
+    ptRadius2[9]->AddText("#it{p}_{T,D^{0}} > 3 GeV/#it{c}");
+    ptRadius2[10]->AddText("#it{p}_{T,D^{0}} > 5 GeV/#it{c}");
+    ptRadius2[11]->AddText("#it{p}_{T,D^{0}} > 5 GeV/#it{c}");
 
     TPaveText *ptEnergy[3];
     ptEnergy[0] = new TPaveText(0.45,0.72,0.95,0.9,"NB NDC");
@@ -417,13 +419,15 @@ void finalJetSpectraInvUpdatedRatioZ(
         ptEnergy[s]->SetFillStyle(0);
         ptEnergy[s]->SetTextAlign(13);
         ptEnergy[s]->SetTextFont(43);
-        ptEnergy[s]->SetTextSize(20);
+        ptEnergy[s]->SetTextSize(19);
     }
-    ptEnergy[0]->AddText("pp, #sqrt{#it{s}} = 5.02 TeV");
+
+   if(isfive) ptEnergy[0]->AddText("pp, #sqrt{#it{s}} = 5.02 TeV");
+   else ptEnergy[0]->AddText("pp, #sqrt{#it{s}} = 13 TeV");
 
     TLegend *leg =nullptr;
     Double_t shift = 0.06*(5);
-    leg = new TLegend(0.08,0.72-shift,0.72,0.675,nullptr,"NB NDC");
+    leg = new TLegend(0.08,0.64-shift,0.52,0.539,nullptr,"NB NDC");
     leg->SetBorderSize(0);
     leg->SetTextFont(43);
     leg->SetTextSize(14);
@@ -433,15 +437,15 @@ void finalJetSpectraInvUpdatedRatioZ(
     leg->SetFillColor(0);
     leg->SetFillStyle(0);
     leg->AddEntry(s13_PowhegPythia8[0],"POWHEG hvq + PYTHIA 8","pf");
-    leg->AddEntry(s13_Pythia8[0],"PYTHIA 8 Monash 2013","l");
-    leg->AddEntry(s13_Pythia8SoftMode2[0],"PYTHIA 8 Monash 2013 Soft mode 2","l");
+    leg->AddEntry(s13_Pythia8[0],"PYTHIA 8 HardQCD Monash 2013","l");
+    leg->AddEntry(s13_Pythia8SoftMode2[0],"PYTHIA 8 SoftQCD Mode 2","l");
 
     TLegend *leg4 =nullptr;
-    shift = 0.06*(5.0/4);
-    leg4 = new TLegend(0.27,0.4-shift,0.72,0.4,nullptr,"NB NDC");
+    shift = 0.08*(5.0/4);
+    leg4 = new TLegend(0.27,0.4-shift,0.72,0.38,nullptr,"NB NDC");
     leg4->SetBorderSize(0);
     leg4->SetTextFont(43);
-    leg4->SetTextSize(14);
+    leg4->SetTextSize(19);
     leg4->SetLineColor(1);
     leg4->SetLineStyle(1);
     leg4->SetLineWidth(1);
@@ -450,11 +454,11 @@ void finalJetSpectraInvUpdatedRatioZ(
     leg4->AddEntry(s13_hData_binned_syst[0],"R=0.2","fp");
 
     TLegend *leg2 =nullptr;
-    shift = 0.06*(5.0/4);
-    leg2 = new TLegend(0.27,0.82-shift,0.72,0.82,nullptr,"NB NDC");
+    shift = 0.08*(5.0/4);
+    leg2 = new TLegend(0.27,0.82-shift,0.72,0.8,nullptr,"NB NDC");
     leg2->SetBorderSize(0);
     leg2->SetTextFont(43);
-    leg2->SetTextSize(14);
+    leg2->SetTextSize(19);
     leg2->SetLineColor(1);
     leg2->SetLineStyle(1);
     leg2->SetLineWidth(1);
@@ -464,11 +468,11 @@ void finalJetSpectraInvUpdatedRatioZ(
 
 
     TLegend *leg3 =nullptr;
-    shift = 0.06*(5.0/4);
-    leg3 = new TLegend(0.27,0.82-shift,0.72,0.82,nullptr,"NB NDC");
+    shift = 0.08*(5.0/4);
+    leg3 = new TLegend(0.27,0.82-shift,0.72,0.8,nullptr,"NB NDC");
     leg3->SetBorderSize(0);
     leg3->SetTextFont(43);
-    leg3->SetTextSize(14);
+    leg3->SetTextSize(19);
     leg3->SetLineColor(1);
     leg3->SetLineStyle(1);
     leg3->SetLineWidth(1);
@@ -529,7 +533,8 @@ void finalJetSpectraInvUpdatedRatioZ(
     leg3->Draw();
 
     TerminateCanvas4x6Pad(Pad,placeholder);
-    canvas->SaveAs("PDFF5.pdf");
+    if (isfive)canvas->SaveAs("PDFF5.pdf");
+    else canvas->SaveAs("PDFF13.pdf");
 
 
 /*
@@ -1369,7 +1374,7 @@ void TerminateCanvas3x2Pad(TPad **pad, TH1D** histo){
 void TerminateCanvas4x6Pad(TPad **pad, TH1D** histo){
     std::cout<<"ipad0"<<std::endl;
     TLine *line = new TLine(0.4,1,1,1);
-    line->SetLineStyle(2);
+    line->SetLineStyle(3);
     for(Int_t ipad = 0; ipad<24;ipad++){
         if(ipad%8==4 || ipad%8==5 || ipad%8==6 || ipad%8==7){
             pad[ipad]->cd();
@@ -1398,7 +1403,8 @@ void PlaceOnPad(TPad* pad,TGraphAsymmErrors* histo, Color_t ci, Style_t style, S
     if(linestyle!=-1)histo->SetLineStyle(linestyle);
    // histo->SetFillStyle(3005);
    // histo->SetMarkerSize(markersize); //add up
-    histo->SetLineWidth(1);
+    if(opt != "same2p")histo->SetLineWidth(2);
+    else histo->SetLineWidth(1);
     histo->SetMarkerSize(0.75);
     if(scale>-1){
         TString tmp = "";
@@ -1807,21 +1813,30 @@ std::tuple<TCanvas*, TPad**, TH1D**> PrepareCanvas4x6Pad(UInt_t xAxisBins, Doubl
             //left
             if(ipad/4 == 1){
                //placeholder[ipad]->SetMinimum(0.2);// 13TEV
-               placeholder[ipad]->SetMinimum(0.05);
-               placeholder[ipad]->SetMaximum(2.2);
+               if(isfive)placeholder[ipad]->SetMinimum(0.01);
+               else placeholder[ipad]->SetMinimum(0.05);
+               if(isfive)placeholder[ipad]->SetMaximum(5.99);
+               else placeholder[ipad]->SetMaximum(2.2);
+               placeholder[ipad]->GetXaxis()->SetTickLength(0.055f);
             }
             else if(ipad/4 == 3){
                placeholder[ipad]->SetMinimum(0.05);
-               placeholder[ipad]->SetMaximum(2.2);
+               if(isfive)placeholder[ipad]->SetMaximum(2.2);
+               else placeholder[ipad]->SetMaximum(2.2);
+               placeholder[ipad]->GetXaxis()->SetTickLength(0.055f);
             }
             else if(ipad/4 == 5){
                placeholder[ipad]->SetMinimum(0.05);
-               placeholder[ipad]->SetMaximum(2.2);
+               if(isfive)placeholder[ipad]->SetMaximum(2.2);
+               else placeholder[ipad]->SetMaximum(2.2);
+               placeholder[ipad]->GetXaxis()->SetTickLength(0.055f);
             }
             //right
             else if(ipad == 0 ||ipad == 1 ||ipad == 2 ||ipad == 3){
               // placeholder[ipad]->SetMinimum(0.1);// 13TEV
-               placeholder[ipad]->SetMinimum(0.01);
+               //placeholder[ipad]->SetMinimum(0.01);
+               if(isfive)placeholder[ipad]->SetMinimum(0.001);
+               else placeholder[ipad]->SetMinimum(0.01);
                //placeholder[ipad]->SetMaximum(7.8);
                placeholder[ipad]->SetMaximum(8.8);
             }
@@ -1836,7 +1851,7 @@ std::tuple<TCanvas*, TPad**, TH1D**> PrepareCanvas4x6Pad(UInt_t xAxisBins, Doubl
 
             if(ipad > 19)placeholder[ipad]->GetXaxis()->SetTitle("#it{z}_{||}^{ch}");
             //if(ipad%8==0)placeholder[ipad]->GetYaxis()->SetTitle("1/N_{jets}dN/dz_{#parallel}");
-            if(ipad%8==0)placeholder[ipad]->GetYaxis()->SetTitle("#frac{1}{#it{N}_{jets}} #frac{d^{2}#it{N}}{d#it{z}_{||}^{ch} d#it{#eta}_{T,ch. jet}}");
+            if(ipad%8==0)placeholder[ipad]->GetYaxis()->SetTitle("1/#it{N}_{jets}d#it{N}/d#it{z}^{ch}_{||}");
             if(ipad%8==4){placeholder[ipad]->GetYaxis()->SetTitle("MC/Data");
               placeholder[ipad]->GetYaxis()->CenterTitle();
             }
@@ -1846,13 +1861,13 @@ std::tuple<TCanvas*, TPad**, TH1D**> PrepareCanvas4x6Pad(UInt_t xAxisBins, Doubl
             placeholder[ipad]->GetYaxis()->SetLabelFont(43);
             placeholder[ipad]->GetXaxis()->SetLabelFont(43);
             if(ipad/4 == 1|| ipad/4 == 3 || ipad/4 == 5)placeholder[ipad]->GetYaxis()->SetTitleSize(16);
-            else placeholder[ipad]->GetYaxis()->SetTitleSize(19);
-            placeholder[ipad]->GetXaxis()->SetTitleSize(19);
+            else placeholder[ipad]->GetYaxis()->SetTitleSize(22);
+            placeholder[ipad]->GetXaxis()->SetTitleSize(22);
             placeholder[ipad]->GetYaxis()->SetLabelSize(19);
             placeholder[ipad]->GetXaxis()->SetLabelSize(19);
 
-            placeholder[ipad]->GetYaxis()->SetTitleOffset(6.5f);//0.95*(gPad->GetHNDC())/scaleHeightPads/resizeTextFactor);
-            if(ipad%8==4)placeholder[ipad]->GetYaxis()->SetTitleOffset(7.5f);
+            placeholder[ipad]->GetYaxis()->SetTitleOffset(5.1f);//0.95*(gPad->GetHNDC())/scaleHeightPads/resizeTextFactor);
+            if(ipad%8==4)placeholder[ipad]->GetYaxis()->SetTitleOffset(4.5f);
             placeholder[ipad]->GetXaxis()->SetTitleOffset(45*innerPadHeight/0.4);// not number before, no number was optimized before font 43 was introduced
             if(ipad%4!=0){
             placeholder[ipad]->GetYaxis()->SetTitleSize(0);

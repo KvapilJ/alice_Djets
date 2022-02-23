@@ -116,6 +116,9 @@ Project {
              pDfinal+"finalJetSpectraInvUpdatedRatio.C",
             pDfinal+"finalJetSpectraInvUpdatedRatioThesis.C",
             pDfinal+"finalJetSpectraInvUpdatedRatioZ.C",
+            pDfinal+"pdfratio.C",
+
+            pDfinal+"finalJetSpectraInvUpdatedLc.C",
 
                 pDsys+"rawYield_reflections.C",
                 pDsys+"BkgSRangesComparison.C",
@@ -141,8 +144,9 @@ Project {
              pDsys+"UnfTrial.cxx",
              pDsys+"UnfTrialZ.cxx",
             pDsys+"JESratioSys.cxx",
+            pDsys+"UnfTrialZLc.cxx",
 
-
+pDsys+"runSysRatioLc.cxx",
                 pDsys+"SysRatio.cxx",
                 pDsys+"SysRatio.h",
                 pDsys+"runSysRatio.cxx",

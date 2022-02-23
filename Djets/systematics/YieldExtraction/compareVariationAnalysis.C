@@ -60,8 +60,8 @@ TString tit = ": 15 < p_{T,jet} < 50 GeV/#it{c} (p_{T,D} > 5 GeV/#it{c}), R = 0.
 //R=0.6
 //jet pt 5-7
 
-TString jetDataFile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_z06F/Default_AnalysisResults_Run2w18b.root/signalExtraction/JetPtSpectra_SB_eff2.root";
-TString tit = ": 5 < p_{T,jet} < 7 GeV/#it{c} (p_{T,D} > 2 GeV/#it{c}), R = 0.6";
+//TString jetDataFile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_z06F/Default_AnalysisResults_Run2w18b.root/signalExtraction/JetPtSpectra_SB_eff2.root";
+//TString tit = ": 5 < p_{T,jet} < 7 GeV/#it{c} (p_{T,D} > 2 GeV/#it{c}), R = 0.6";
 
 //jet pt 7-10
 /*
@@ -79,7 +79,10 @@ TString jetDataFile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts_z06F/De
 TString tit = ": 15 < p_{T,jet} < 50 GeV/#it{c} (p_{T,D} > 5 GeV/#it{c}), R = 0.6";
 */
 
+//Lc
 
+TString jetDataFile = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/Default_AnalysisResults_Run2w18b.root/signalExtraction/JetPtSpectra_SB_eff2.root";
+TString tit = ": 7 < p_{T,jet} < 15 GeV/#it{c} (p_{T,D} > 3 GeV/#it{c}), R = 0.4";
 
 
 

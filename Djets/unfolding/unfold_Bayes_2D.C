@@ -952,7 +952,7 @@ std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MC
           //DpT cuts
           for(Int_t z = 0;z < fzptJetMeasN;z++){
               if(fzptJetMeasA[z] <= jmatch[1] && jmatch[1] < fzptJetMeasA[z+1]){ //jet det
-                  if(2 <= jmatch[6] && jmatch[6] < 50){ //jet mc
+                  if(5 <= jmatch[6] && jmatch[6] < 35){ //jet mc
                   if(fzptbinsDA[z][0] <= jmatch[2] && jmatch[2] < fzptbinsDA[z][fzptbinsDN[z]]){ //D det
                     if(fzptbinsDA[z][0] <= jmatch[7] && jmatch[7] < fzptbinsDA[z][fzptbinsDN[z]]){ //D mc
                         if(jmatch[0]>=fzbinsJetMeasA[z][0] && jmatch[5]>=fzbinsJetTrueAPrompt[z][0]){ //z det, z mc
@@ -1025,7 +1025,7 @@ std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MC
               hTrain->Fill (jmatch[0],jmatch[1],bincontent*priorWeight/peff);
               response->Fill (jmatch[0],jmatch[1],zShiftTrue,jmatch[6],bincontent*priorWeight/peff);
               if(jmatch[0]<0.2 || zShiftTrue <0.2)std::cout<<"z bellow 0.4 "<<std::endl;
-              if(jmatch[1]<2 || jmatch[6] <2)std::cout<<"pt bellow 2 "<<std::endl;
+              if(jmatch[1]<5 || jmatch[6] <5)std::cout<<"pt bellow 2 "<<std::endl;
               //std::cout<<display<<" "<<jmatch[1]<<" "<<jmatch[2]<<" "<<jmatch[0]<<" "<<jmatch[6]<<" "<<jmatch[7]<<" "<<jmatch[5]<<" "<<bincontent<<std::endl;
               //std::cout<<display<<std::endl;
               //display++;
@@ -1068,7 +1068,7 @@ std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MC
               else zShiftDet = jmatch[0];
               for(Int_t z = 0;z < fzptJetMeasN;z++){
                   if(fzptJetMeasA[z] <= jmatch[6] && jmatch[6] < fzptJetMeasA[z+1]){ //jet mc
-                      if(fzbinsJetMeasA[z][0] <= zShiftDet && zShiftDet <= fzbinsJetMeasA[z][fzbinsJetMeasN[z]] && 2 <= jmatch[1] && jmatch[1] < 50){ //z det
+                      if(fzbinsJetMeasA[z][0] <= zShiftDet && zShiftDet <= fzbinsJetMeasA[z][fzbinsJetMeasN[z]] && 5 <= jmatch[1] && jmatch[1] < 35){ //z det
                          fTrueSpectrumKineNum->Fill(zShiftTrue,jmatch[6]);
                       }
                   }
@@ -1086,7 +1086,7 @@ std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MC
               if(jmatch[5]>1.0) zShiftTrue = jmatch[5] - 0.02;
               else zShiftTrue = jmatch[5];
 
-              if(2 <= jmatch[6] && jmatch[6] < 50 && 0.4 <= zShiftTrue){
+              if(5 <= jmatch[6] && jmatch[6] < 35 && 0.4 <= zShiftTrue){
                   //std::cout<<fzptJetMeasA[0]<<" "<<jmatch[1]<<" "<<fzptJetMeasA[fzptJetMeasN]<<" "<<zShiftTrue<<" "<<jmatch[6]<<std::endl;
                   fMeasSpectrumKineNum->Fill(jmatch[0],jmatch[1]);
               }
@@ -1124,7 +1124,7 @@ std::tuple<RooUnfoldResponse*, RooUnfoldResponse*> LoadDetectorMatrix(TString MC
       Bool_t okokrec = false;
       for(Int_t z = 0;z < fzptJetMeasN;z++){
           if(fzptJetMeasA[z] <= jmatch[1] && jmatch[1] <= fzptJetMeasA[z+1]){ //jet det
-              if(2 <= jmatch[6] && jmatch[6] <= 50){ //jet mc
+              if(5 <= jmatch[6] && jmatch[6] <= 35){ //jet mc
               if(fzptbinsDA[z][0] <= jmatch[2] && jmatch[2] <= fzptbinsDA[z][fzptbinsDN[z]]){ //D det
                   if(fzptbinsDA[z][0] <= jmatch[7] && jmatch[7] <= fzptbinsDA[z][fzptbinsDN[z]]){ //D mc
                          okokrec = true;

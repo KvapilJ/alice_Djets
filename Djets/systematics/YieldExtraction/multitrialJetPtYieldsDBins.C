@@ -57,11 +57,11 @@ int Rpar = 2;
 //int Rpar = 4;
 //int Rpar = 6;
 
-
+/*
     const int ptbinsJetN = 5;
     int ptbinsmin[] = {2,3,4,5,6};
    int ptbinsmax[] = {3,4,5,6,7};
-
+*/
 //jet 7-10
 /*
     const int ptbinsJetN = 6;
@@ -80,6 +80,12 @@ int Rpar = 2;
     int ptbinsmin[] = {5,6,7,8,10,12,16,24};
     int ptbinsmax[] = {6,7,8,10,12,16,24,36};
 */
+
+    //Lc
+
+    const int ptbinsJetN = 5;
+    int ptbinsmin[] = {3,4,6,8,12};
+   int ptbinsmax[] = {4,6,8,12,15};
 
 
 

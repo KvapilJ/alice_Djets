@@ -837,7 +837,7 @@ RooUnfoldResponse* LoadDetectorMatrix(TString MCfile, TString out, Bool_t isPost
           //DpT cuts
           for(Int_t z = 0;z < fzptJetMeasN;z++){
               if(fzptJetMeasA[z] <= jmatch[1] && jmatch[1] < fzptJetMeasA[z+1]){ //jet det
-                  if(2 <= jmatch[6] && jmatch[6] < 50){ //jet mc
+                  if(5 <= jmatch[6] && jmatch[6] < 35){ //jet mc
                   if(fzptbinsDA[z][0] <= jmatch[2] && jmatch[2] < fzptbinsDA[z][fzptbinsDN[z]]){ //D det
                     if(fzptbinsDA[z][0] <= jmatch[7] && jmatch[7] < fzptbinsDA[z][fzptbinsDN[z]]){ //D mc
                         if(jmatch[0]>=fzbinsJetMeasA[z][0] && jmatch[5]>=fzbinsJetTrueAPrompt[z][0]){
@@ -895,7 +895,7 @@ RooUnfoldResponse* LoadDetectorMatrix(TString MCfile, TString out, Bool_t isPost
 
               for(Int_t z = 0;z < fzptJetMeasN;z++){
                   if(fzptJetMeasA[z] <= jmatch[6] && jmatch[6] <=fzptJetMeasA[z+1]){ //jet mc
-                      if(fzbinsJetMeasA[z][0] <= jmatch[0] && jmatch[0] <= fzbinsJetMeasA[z][fzbinsJetMeasN[z]] && 2 <= jmatch[1] && jmatch[1] < 50){ //z det
+                      if(fzbinsJetMeasA[z][0] <= jmatch[0] && jmatch[0] <= fzbinsJetMeasA[z][fzbinsJetMeasN[z]] && 5 <= jmatch[1] && jmatch[1] < 35){ //z det
                          fTrueSpectrumKineNum->Fill(jmatch[5],jmatch[6]);
                       }
                   }
@@ -910,7 +910,7 @@ RooUnfoldResponse* LoadDetectorMatrix(TString MCfile, TString out, Bool_t isPost
           if(cutKineMCOK == true){
               //for z_true shift values z=1 into previous bin
 
-              if(2 <= jmatch[6] && jmatch[6] < 50 && 0.4 <= jmatch[5]){
+              if(5 <= jmatch[6] && jmatch[6] < 35 && 0.4 <= jmatch[5]){
                   //std::cout<<fzptJetMeasA[0]<<" "<<jmatch[1]<<" "<<fzptJetMeasA[fzptJetMeasN]<<" "<<zShiftTrue<<" "<<jmatch[6]<<std::endl;
                   fMeasSpectrumKineNum->Fill(jmatch[0],jmatch[1]);
               }

@@ -113,7 +113,7 @@ void PlaceOnPadSim(TPad* pad, TGraphAsymmErrors* histo, Color_t ci, Style_t styl
 void TerminateCanvas(TPad* pad1,TPad* pad2,TH1D* histo1,TH1D* histo2);
 
 
-void finalJetSpectraInvUpdated(
+void finalJetSpectraInvUpdatedLc(
 Int_t type = 0, //0 - pt x-section, 1 - z x-section, 2 - z PDF
 Int_t radius = 4, // 2, 4 or 6
 Int_t z = 0, //which z jet pT bin 1,2,3,4,5
@@ -166,9 +166,9 @@ TString histBase = "unfoldedSpectrumKineEff"
     // ----------------------------------------------------------------
     // ------------------- ENABLE SIMULATIONS HERE --------------------
     // ----------------------------------------------------------------
-    Bool_t ePowhegPythia6 = false;
+    Bool_t ePowhegPythia6 = true;
     Bool_t ePowhegPythia8 = true;
-    Bool_t ePythia6 = false;
+    Bool_t ePythia6 = true;
     Bool_t ePythia8 = true;
     Bool_t ePythia8SoftMode2 = true;
     Bool_t ePowhegPythia6dijet = false;
@@ -177,11 +177,11 @@ TString histBase = "unfoldedSpectrumKineEff"
     // ----------------------------------------------------------------
     // --------------- SET PARAMETERS + BINNING HERE ------------------
     // ----------------------------------------------------------------
-    Double_t sigma_in = 0.057894;
+    Double_t sigma_in = 0.0578;
     const Double_t  BRDzero = 0.0395;
     Double_t BRDzeroUnc = 0.008;
     Double_t DtrackingUnc = 0.05;
-    Double_t LumiUnc = 0.017;
+    Double_t LumiUnc = 0.05;
     if(type ==0){//x-section
         xAxisBins = 8;
         xAxis = new Double_t[xAxisBins+1]{5,6,8,10,12,14,20,30,50};
@@ -190,11 +190,11 @@ TString histBase = "unfoldedSpectrumKineEff"
     else if(type ==1 || type ==2){ //Z x-section or Z PDF
         xAxisBins = 5;
         xAxis = new Double_t[xAxisBins+1]{0.4,0.6,0.7,0.8,0.9,1.0};
-        jetpTbins = new Int_t[6]{2,5,7,10,15,50};
-        if(radius ==4 || radius ==6)DpTbins[0] = new Int_t[5]{2,2,3,5,5};
-        if(radius ==4 || radius ==6)DpTbins[1] = new Int_t[5]{5,7,10,15,36};
-        if(radius ==2)DpTbins[0] = new Int_t[5]{2,2,4,5,10};
-        if(radius ==2)DpTbins[1] = new Int_t[5]{5,7,10,15,36};
+        jetpTbins = new Int_t[6]{5,7,15,35};
+        if(radius ==4 || radius ==6)DpTbins[0] = new Int_t[5]{3,3,3};
+        if(radius ==4 || radius ==6)DpTbins[1] = new Int_t[5]{7,15,24};
+     //   if(radius ==2)DpTbins[0] = new Int_t[5]{2,2,4,5,10};
+     //   if(radius ==2)DpTbins[1] = new Int_t[5]{5,7,10,15,36};
         simDir+=Form("%d",zBin);
         histBase+=Form("%d",zBin);
         outSpectraDir+=Form("%d",zBin);
@@ -284,17 +284,17 @@ TString histBase = "unfoldedSpectrumKineEff"
     else if(type ==1 || type ==2){//Z x-section
         //note: JES and CUT systematics already added in the total one as no separation for R comparison is needed
         if(type ==2) pdf = true;
-        if(radius == 2){
+        if(radius == 4){
             dy = 2*(0.9 - 0.2);
             if(zBin ==2){
                 std::cout<<"settting type "<<type<<std::endl;
                 plotRanges[0]=0.01; plotRanges[1]=1.55; plotRanges[2]=0.0006; plotRanges[3]=4;
                 if(type ==2){ plotRanges[0]=0.3; plotRanges[1]=1.45; plotRanges[2]=0.001; plotRanges[3]=10;}
                 //if(type == 2)
-                systUncD_up = new Double_t[xAxisBins]{0.168,0.12,0.081,0.071,0.058};
-                systUncD_down = new Double_t[xAxisBins]{0.187,0.142,0.095,0.08,0.066};
+                systUncD_up = new Double_t[xAxisBins]{0.143,0.065,0.066,0.039,0.064};
+                systUncD_down = new Double_t[xAxisBins]{0.173,0.073,0.071,0.047,0.069};
             }
-            else if(zBin ==3){
+          /*  else if(zBin ==3){
                 plotRanges[0]=0.01; plotRanges[1]=2.15; plotRanges[2]=0.0006; plotRanges[3]=4;
                 if(type ==2){ plotRanges[0]=0.55; plotRanges[1]=1.9; plotRanges[2]=0.001; plotRanges[3]=9;}
                 systUncD_up = new Double_t[xAxisBins]{0.281,0.091,0.078,0.082,0.040};
@@ -311,9 +311,9 @@ TString histBase = "unfoldedSpectrumKineEff"
                 if(type ==2){ plotRanges[0]=0.55; plotRanges[1]=1.5; plotRanges[2]=0.001; plotRanges[3]=6;}
                 systUncD_up = new Double_t[xAxisBins]{0.309,0.111,0.064,0.061,0.090};
                 systUncD_down = new Double_t[xAxisBins]{0.335,0.121,0.069,0.068,0.095};
-            }
+            }*/
         }
-        else if(radius == 4){
+     /*   else if(radius == 4){
             dy = 2*(0.9 - 0.4);
             if(zBin ==2){
                 plotRanges[0]=0; plotRanges[1]=1.68; plotRanges[2]=0.003; plotRanges[3]=5;
@@ -366,7 +366,7 @@ TString histBase = "unfoldedSpectrumKineEff"
                 systUncD_up = new Double_t[xAxisBins]{0.113,0.066,0.060,0.086,0.108};
                 systUncD_down = new Double_t[xAxisBins]{0.146,0.070,0.064,0.088,0.108};
             }
-        }
+        }*/
     }
 
     // ----------------------------------------------------------------

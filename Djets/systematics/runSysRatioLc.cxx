@@ -1,47 +1,15 @@
 #include "SysRatio.h"
 
-void runSysRatio(){
+void runSysRatioLc(){
     gROOT->LoadMacro("SysRatio.cxx++g");
-  /*  TString zbin[5] = {": 2 < p_{T,jet} < 5 GeV/#it{c} (p_{T,D} > 2 GeV/#it{c})",
-                       ": 5 < p_{T,jet} < 7 GeV/#it{c} (p_{T,D} > 2 GeV/#it{c})",
-                       ": 7 < p_{T,jet} < 10 GeV/#it{c} (p_{T,D} > 2 GeV/#it{c})",
-                       ": 10 < p_{T,jet} < 15 GeV/#it{c} (p_{T,D} > 2 GeV/#it{c})",
-                       ": 15 < p_{T,jet} < 50 GeV/#it{c} (p_{T,D} > 3 GeV/#it{c})"};
 
-    TString defaulfile = "Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/unfoldedSpectrum_unfoldedJetSpectrum.root";
-    TString path = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/";
-
-    //B Feed-Down systematics
-        SysRatio *UNFClosure = new SysRatio(1,"Unfolding Bayes Closure");
-        UNFClosure->SetPath(path);
-        UNFClosure->SetOutPath(path+"systematics");
-
-        TString UNFClosurelegendlist[1] ={"True projection"};
-        TString UNFClosurefilelist[1] = {"Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/unfoldedSpectrum_unfoldedJetSpectrum.root"
-                                 };
-
-        UNFClosure->SetDefaultFile("Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/unfoldedSpectrum_unfoldedJetSpectrum.root");
-        UNFClosure->SetVarFilelist(UNFClosurefilelist);
-        UNFClosure->SetVarLegendDesc(UNFClosurelegendlist);
-        UNFClosure->SetMethod(SysRatio::Method::kMax);
-
-        for(Int_t z = 1; z <= 5; z++){
-            UNFClosure->SetOutFolder(Form("UNFClosure%d",z));
-            UNFClosure->SetTitle("BFD variation up"+zbin[z-1]);
-            UNFClosure->SetDefHistoName(Form("unfoldedSpectrumClosure%d",z));
-            UNFClosure->SetHistoName(Form("TrueSpectrumClosure%d",z));
-            UNFClosure->SetAxisTitle("z_{#parallel}","Yield");
-            UNFClosure->SetRatioRangesY(0.8,1.2);
-            UNFClosure->Run();
-        }
-*/
     TString zbin[5] = {": 5 < p_{T,jet} < 7 GeV/#it{c} (p_{T,D} > 3 GeV/#it{c})",
                        ": 7 < p_{T,jet} < 15 GeV/#it{c} (p_{T,D} > 3 GeV/#it{c})",
                        ": 15 < p_{T,jet} < 35 GeV/#it{c} (p_{T,D} > 3 GeV/#it{c})"};
 
     TString defaulfile = "Default_AnalysisResults_Run2w18b.root/unfolding_2D_5/unfoldedSpectrum_unfoldedJetSpectrum.root";
     TString path = "/home/kvapil/work/analysis/pp_run2/D0jet/BaseCuts/";
-
+/*
     //B Feed-Down systematics
         SysRatio *UNFClosure = new SysRatio(1,"Unfolding Bayes Closure");
         UNFClosure->SetPath(path);
@@ -66,7 +34,7 @@ void runSysRatio(){
             UNFClosure->Run();
         }
         return;
-
+*/
 //B Feed-Down systematics
     SysRatio *BFDu = new SysRatio(1,"B meson Feed-Down up");
     BFDu->SetPath(path);
@@ -80,7 +48,7 @@ void runSysRatio(){
     BFDu->SetVarLegendDesc(BFDlegendlistu);
     BFDu->SetMethod(SysRatio::Method::kMax);
 
-    for(Int_t z = 1; z <= 5; z++){
+    for(Int_t z = 1; z <= 3; z++){
         BFDu->SetOutFolder(Form("BFDup%d",z));
         BFDu->SetTitle("BFD variation up"+zbin[z-1]);
         BFDu->SetHistoName(Form("unfoldedSpectrumKineEff%d",z));
@@ -101,7 +69,7 @@ void runSysRatio(){
     BFDd->SetVarLegendDesc(BFDlegendlistd);
     BFDd->SetMethod(SysRatio::Method::kMax);
 
-    for(Int_t z = 1; z <= 5; z++){
+    for(Int_t z = 1; z <= 3; z++){
         BFDd->SetOutFolder(Form("BFDdown%d",z));
         BFDd->SetTitle("BFD variation down"+zbin[z-1]);
         BFDd->SetHistoName(Form("unfoldedSpectrumKineEff%d",z));
@@ -118,7 +86,7 @@ void runSysRatio(){
                                    "Reflection +50%"};
 
 
-    for(Int_t z = 1; z <= 5; z++){
+    for(Int_t z = 1; z <= 3; z++){
         TString REFLdefaulfile = Form("Default_AnalysisResults_Run2w18b.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z);
         REFL->SetDefaultFile(REFLdefaulfile);
         TString REFLfilelist[2];
@@ -135,11 +103,11 @@ void runSysRatio(){
     }
 
 //SB range variation
-    SysRatio *SBRANGE = new SysRatio(5,"Signal and Background range variation");
+    SysRatio *SBRANGE = new SysRatio(6,"Signal and Background range variation");
     SBRANGE->SetPath(path);
     SBRANGE->SetOutPath(path+"systematics");
 
-    TString SBRANGElegendlist[6] ={//"S:2#sigma, B:3-8#sigma",
+    TString SBRANGElegendlist[6] ={"S:2#sigma, B:3-8#sigma",
                                    "S:2#sigma, B:4-10#sigma",
                                    "S:2#sigma, B:4-12#sigma",
                                    "S:2#sigma, B:4-15#sigma",
@@ -147,15 +115,16 @@ void runSysRatio(){
                                    "S:3#sigma, B:4-12#sigma"};
 
 
-    for(Int_t z = 1; z <= 5; z++){
+    for(Int_t z = 1; z <= 3; z++){
         TString SBRANGEdefaulfile = Form("Default_AnalysisResults_Run2w18b.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z);
         SBRANGE->SetDefaultFile(SBRANGEdefaulfile);
         TString SBRANGEfilelist[6];
-        SBRANGEfilelist[0]= Form("S2SB410_AnalysisResults_Run2w18b.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z);
-        SBRANGEfilelist[1]= Form("S2SB412_AnalysisResults_Run2w18b.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z);
-        SBRANGEfilelist[2]= Form("S2SB415_AnalysisResults_Run2w18b.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z);
-        SBRANGEfilelist[3]= Form("S3SB49_AnalysisResults_Run2w18b.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z);
-        SBRANGEfilelist[4]= Form("S3SB412_AnalysisResults_Run2w18b.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z);
+        SBRANGEfilelist[0]= Form("S2SB38_AnalysisResults_Run2w18b.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z);
+        SBRANGEfilelist[1]= Form("S2SB410_AnalysisResults_Run2w18b.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z);
+        SBRANGEfilelist[2]= Form("S2SB412_AnalysisResults_Run2w18b.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z);
+        SBRANGEfilelist[3]= Form("S2SB415_AnalysisResults_Run2w18b.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z);
+        SBRANGEfilelist[4]= Form("S3SB49_AnalysisResults_Run2w18b.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z);
+        SBRANGEfilelist[5]= Form("S3SB412_AnalysisResults_Run2w18b.root/signalExtraction/JetPtSpectra_SB_eff%d.root",z);
 
         SBRANGE->SetVarFilelist(SBRANGEfilelist);
         SBRANGE->SetVarLegendDesc(SBRANGElegendlist);
@@ -200,7 +169,7 @@ void runSysRatio(){
     JES->SetVarFilelist(JESfilelist);
     JES->SetVarLegendDesc(JESlegendlist);
 
-    for(Int_t z = 1; z <= 5; z++){
+    for(Int_t z = 1; z <= 3; z++){
         JES->SetOutFolder(Form("JES%d",z));
         JES->SetTitle("JES"+zbin[z-1]);
         JES->SetAxisTitle("z_{#parallel}","Yield");
@@ -231,7 +200,7 @@ void runSysRatio(){
     CUTS->SetVarLegendDesc(CUTSlegendlist);
     CUTS->SetMethod(SysRatio::Method::kError);
 
-    for(Int_t z = 1; z <= 5; z++){
+    for(Int_t z = 1; z <= 3; z++){
         CUTS->SetOutFolder(Form("CUTS%d",z));
         CUTS->SetTitle("CUTS"+zbin[z-1]);
         CUTS->SetAxisTitle("z_{#parallel}","Yield");
@@ -384,11 +353,11 @@ void runSysRatio(){
                                     "Tighter 2"
                                };
 
-    const char *pt[6] = {"2.00","5.00","7.00","10.00","15.00","50.00"};
+    const char *pt[6] = {"5.00","7.00","15.00","35.00"};
     const char *promp[2] = {"nonPrompt","prompt"};
 
     for(Int_t prompt = 0; prompt <=1; prompt++){
-        for(Int_t z = 1; z <= 5; z++){
+        for(Int_t z = 1; z <= 3; z++){
             TString CUTSEFFdefaulfile = Form("Default_AnalysisResults_Run2w18b.root/efficiency/DjetEff_%s_jetpt%s_%s.root",promp[prompt],pt[z-1],pt[z]);
             CUTSEFF->SetDefaultFile(CUTSEFFdefaulfile);
             TString CUTSEFFfilelist[4];
